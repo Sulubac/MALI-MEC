@@ -46,6 +46,12 @@ This repository is both an **active project workspace** (MALI-MEC Mobile App) an
 | 32 | [Archive](./32_ARCHIVE/) | Completed or superseded material |
 | 33 | [Needs Review](./33_NEEDS_REVIEW/) | Uncertain classification — review required |
 
+## Interactive Portal
+
+**[→ Open Knowledge System Navigator](https://claude.ai/code/artifact/cb84d6be-e516-4d9c-9bc3-c7011c85b330)**
+
+Browse all 33 folders, search, expand subfolders, and access dashboards & maps in one click.
+
 ## Quick Start
 
 1. **New note?** → Drop it in [`01_INBOX/`](./01_INBOX/) immediately
