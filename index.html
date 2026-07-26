@@ -1,3 +1,6 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Djibouti Event Intelligence & Management Platform</title>
@@ -236,6 +239,8 @@ table.tbl{width:100%;border-collapse:collapse;font-size:13px}
 .overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:55;display:none} .overlay.on{display:block}
 .hamburger{display:none} @media(max-width:860px){.hamburger{display:grid}}
 </style>
+</head>
+<body>
 
 <!-- ================= LOGIN ================= -->
 <div class="login" id="login">
@@ -1179,3 +1184,5 @@ if(DB.theme==='light') document.documentElement.setAttribute('data-theme','light
 // auto-login if session exists
 if(DB.user){ selRole=DB.user.role; CUR=DB.user; $('#login').style.display='none'; $('#app').classList.add('on'); const r=ROLES.find(x=>x.id===CUR.role); $('#userNm').textContent=r.name; $('#userRl').textContent=r.roleName; $('#userAv').textContent=initials(r.name); buildNav(); go('dashboard'); }
 </script>
+</body>
+</html>
