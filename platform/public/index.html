@@ -1,0 +1,1243 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Djibouti Event Intelligence & Management Platform</title>
+<meta name="description" content="Plateforme IA multi-agents de détection, prospection, organisation et suivi des événements à Djibouti." />
+<style>
+/* ============================================================
+   DESIGN SYSTEM
+   ============================================================ */
+:root{
+  --bg:#0c1220; --bg2:#111a2e; --panel:#151f38; --panel2:#1b294a;
+  --line:#26365e; --line-soft:#213154;
+  --txt:#e8edf7; --muted:#9aabc9; --faint:#6b7bda;
+  --brand:#3b82f6; --brand2:#6366f1; --brand-soft:#1e2f56;
+  --green:#22c55e; --green-bg:#0f2c1e;
+  --amber:#f59e0b; --amber-bg:#2e2410;
+  --red:#ef4444; --red-bg:#2e1616;
+  --cyan:#06b6d4; --violet:#8b5cf6; --pink:#ec4899; --teal:#14b8a6;
+  --radius:14px; --radius-sm:9px;
+  --shadow:0 10px 30px rgba(0,0,0,.35);
+  --font:'Segoe UI',system-ui,-apple-system,Roboto,Helvetica,Arial,sans-serif;
+}
+:root[data-theme="light"]{
+  --bg:#eef2f9; --bg2:#e5ebf5; --panel:#ffffff; --panel2:#f4f7fc;
+  --line:#dde5f1; --line-soft:#e7edf6;
+  --txt:#0f1b30; --muted:#556387; --faint:#7d89a5;
+  --brand-soft:#e8f0ff;
+  --green-bg:#e7f7ee; --amber-bg:#fdf3e0; --red-bg:#fdeaea;
+  --shadow:0 10px 30px rgba(30,50,90,.10);
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{background:var(--bg);color:var(--txt);font-family:var(--font);font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased}
+a{color:inherit}
+button{font-family:inherit}
+::-webkit-scrollbar{width:10px;height:10px}
+::-webkit-scrollbar-thumb{background:var(--line);border-radius:20px}
+::-webkit-scrollbar-track{background:transparent}
+
+/* ============ LAYOUT ============ */
+.app{display:none;grid-template-columns:248px 1fr;min-height:100vh}
+.app.on{display:grid}
+.sidebar{background:linear-gradient(180deg,var(--bg2),var(--bg));border-right:1px solid var(--line);display:flex;flex-direction:column;position:sticky;top:0;height:100vh;overflow:hidden}
+.brand{padding:18px 18px 14px;border-bottom:1px solid var(--line);display:flex;gap:11px;align-items:center}
+.brand .logo{width:38px;height:38px;border-radius:11px;background:linear-gradient(135deg,var(--brand),var(--brand2));display:grid;place-items:center;font-weight:800;color:#fff;font-size:17px;flex:none;box-shadow:0 6px 16px rgba(59,130,246,.4)}
+.brand h1{font-size:14.5px;margin:0;font-weight:700;letter-spacing:.2px}
+.brand p{margin:1px 0 0;font-size:10.5px;color:var(--muted);text-transform:uppercase;letter-spacing:1.4px}
+.nav{flex:1;overflow-y:auto;padding:10px 10px 20px}
+.nav .grp{font-size:10px;text-transform:uppercase;letter-spacing:1.3px;color:var(--faint);padding:14px 12px 6px;font-weight:700}
+.nav a{display:flex;align-items:center;gap:11px;padding:9px 12px;border-radius:10px;color:var(--muted);text-decoration:none;font-weight:600;font-size:13.2px;cursor:pointer;margin-bottom:1px;transition:.14s}
+.nav a .ico{width:19px;text-align:center;font-size:15px}
+.nav a:hover{background:var(--panel);color:var(--txt)}
+.nav a.active{background:linear-gradient(90deg,var(--brand-soft),transparent);color:var(--txt);box-shadow:inset 2px 0 0 var(--brand)}
+.nav a .badge{margin-left:auto;background:var(--brand);color:#fff;font-size:10px;padding:1px 7px;border-radius:20px;font-weight:700}
+.nav a .badge.warn{background:var(--amber)} .nav a .badge.red{background:var(--red)}
+
+.main{display:flex;flex-direction:column;min-width:0}
+.topbar{height:60px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:14px;padding:0 22px;background:var(--bg2);position:sticky;top:0;z-index:30}
+.topbar .page-title{font-size:17px;font-weight:700}
+.topbar .sub{font-size:12px;color:var(--muted);font-weight:500}
+.spacer{flex:1}
+.search{display:flex;align-items:center;gap:8px;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:7px 12px;width:280px;max-width:32vw}
+.search input{background:none;border:none;outline:none;color:var(--txt);width:100%;font-size:13px}
+.icon-btn{width:38px;height:38px;border-radius:10px;border:1px solid var(--line);background:var(--panel);color:var(--muted);cursor:pointer;display:grid;place-items:center;font-size:16px;transition:.15s;position:relative}
+.icon-btn:hover{color:var(--txt);border-color:var(--brand)}
+.icon-btn .dot{position:absolute;top:6px;right:7px;width:8px;height:8px;border-radius:50%;background:var(--red);border:2px solid var(--bg2)}
+.user-chip{display:flex;align-items:center;gap:9px;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:5px 11px 5px 6px;cursor:pointer}
+.avatar{width:30px;height:30px;border-radius:8px;background:linear-gradient(135deg,var(--violet),var(--pink));display:grid;place-items:center;font-weight:700;color:#fff;font-size:12px}
+.user-chip .nm{font-size:12.5px;font-weight:700;line-height:1.1}
+.user-chip .rl{font-size:10.5px;color:var(--muted)}
+
+.content{padding:22px;overflow-y:auto;flex:1}
+.view{display:none;animation:fade .25s ease} .view.on{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+/* ============ COMPONENTS ============ */
+.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:18px}
+.card-h{display:flex;align-items:center;gap:10px;margin:0 0 14px}
+.card-h h3{margin:0;font-size:15px;font-weight:700}
+.card-h .desc{font-size:12px;color:var(--muted);font-weight:500}
+.grid{display:grid;gap:16px}
+.g-kpi{grid-template-columns:repeat(auto-fill,minmax(215px,1fr))}
+.g-2{grid-template-columns:1fr 1fr} .g-3{grid-template-columns:repeat(3,1fr)}
+@media(max-width:1100px){.g-2,.g-3{grid-template-columns:1fr}}
+
+.kpi{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:16px 17px;position:relative;overflow:hidden}
+.kpi::after{content:'';position:absolute;right:-20px;top:-20px;width:80px;height:80px;border-radius:50%;background:var(--accent,var(--brand));opacity:.09}
+.kpi .kl{font-size:12px;color:var(--muted);font-weight:600;display:flex;align-items:center;gap:7px}
+.kpi .kl .ki{width:26px;height:26px;border-radius:8px;background:var(--accent,var(--brand));display:grid;place-items:center;font-size:13px;color:#fff;opacity:.95}
+.kpi .kv{font-size:27px;font-weight:800;margin:9px 0 3px;letter-spacing:-.5px}
+.kpi .kd{font-size:11.5px;color:var(--muted);font-weight:600}
+.kpi .kd .up{color:var(--green)} .kpi .kd .dn{color:var(--red)}
+
+.badge-s{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;padding:3px 9px;border-radius:20px;border:1px solid transparent;white-space:nowrap}
+.b-blue{background:var(--brand-soft);color:var(--brand);border-color:var(--brand)}
+.b-green{background:var(--green-bg);color:var(--green);border-color:var(--green)}
+.b-amber{background:var(--amber-bg);color:var(--amber);border-color:var(--amber)}
+.b-red{background:var(--red-bg);color:var(--red);border-color:var(--red)}
+.b-gray{background:var(--panel2);color:var(--muted);border-color:var(--line)}
+.b-violet{background:#2a1e4a;color:var(--violet);border-color:var(--violet)}
+:root[data-theme="light"] .b-violet{background:#efe9ff}
+
+.btn{display:inline-flex;align-items:center;gap:7px;padding:9px 15px;border-radius:10px;border:1px solid var(--line);background:var(--panel2);color:var(--txt);font-weight:700;font-size:13px;cursor:pointer;transition:.14s;white-space:nowrap}
+.btn:hover{border-color:var(--brand);transform:translateY(-1px)}
+.btn.primary{background:linear-gradient(135deg,var(--brand),var(--brand2));border-color:transparent;color:#fff;box-shadow:0 6px 16px rgba(59,130,246,.35)}
+.btn.green{background:var(--green);border-color:transparent;color:#04210f}
+.btn.ghost{background:transparent}
+.btn.sm{padding:6px 11px;font-size:12px}
+.btn.danger{border-color:var(--red);color:var(--red)}
+.btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+
+table.tbl{width:100%;border-collapse:collapse;font-size:13px}
+.tbl th{text-align:left;padding:10px 12px;font-size:11px;text-transform:uppercase;letter-spacing:.6px;color:var(--faint);font-weight:700;border-bottom:1px solid var(--line);position:sticky;top:0;background:var(--panel)}
+.tbl td{padding:11px 12px;border-bottom:1px solid var(--line-soft);vertical-align:middle}
+.tbl tr:hover td{background:var(--panel2)}
+.tbl .name{font-weight:700}
+.tbl-wrap{overflow-x:auto;border-radius:var(--radius);border:1px solid var(--line)}
+
+.score{display:inline-grid;place-items:center;width:38px;height:38px;border-radius:10px;font-weight:800;font-size:13px;color:#fff}
+.score.hi{background:linear-gradient(135deg,#16a34a,#22c55e)}
+.score.mid{background:linear-gradient(135deg,#d97706,#f59e0b)}
+.score.lo{background:linear-gradient(135deg,#64748b,#94a3b8)}
+
+.progress{height:7px;background:var(--panel2);border-radius:20px;overflow:hidden}
+.progress > i{display:block;height:100%;background:linear-gradient(90deg,var(--brand),var(--brand2));border-radius:20px}
+
+.chip{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:20px;background:var(--panel2);border:1px solid var(--line);font-size:12px;font-weight:600;cursor:pointer}
+.chip.on{background:var(--brand);color:#fff;border-color:transparent}
+.chip .x{opacity:.6;font-weight:700}
+
+.field{margin-bottom:13px}
+.field label{display:block;font-size:12px;font-weight:700;color:var(--muted);margin-bottom:5px}
+.field input,.field select,.field textarea{width:100%;padding:9px 11px;background:var(--bg);border:1px solid var(--line);border-radius:9px;color:var(--txt);font-size:13px;font-family:inherit;outline:none}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--brand)}
+.field textarea{resize:vertical;min-height:80px}
+.row{display:flex;gap:12px} .row>*{flex:1}
+
+/* Kanban */
+.kanban{display:flex;gap:14px;overflow-x:auto;padding-bottom:12px}
+.kcol{flex:0 0 268px;background:var(--bg2);border:1px solid var(--line);border-radius:var(--radius);padding:11px;max-height:72vh;display:flex;flex-direction:column}
+.kcol h4{margin:0 0 10px;font-size:12px;font-weight:700;display:flex;align-items:center;gap:8px;padding:2px 4px}
+.kcol h4 .cnt{margin-left:auto;background:var(--panel2);color:var(--muted);font-size:11px;padding:1px 8px;border-radius:20px}
+.kcol .cards{overflow-y:auto;display:flex;flex-direction:column;gap:9px;flex:1}
+.kcard{background:var(--panel);border:1px solid var(--line);border-radius:11px;padding:11px;cursor:grab;transition:.14s}
+.kcard:hover{border-color:var(--brand);transform:translateY(-2px)}
+.kcard.drag{opacity:.4}
+.kcard .kt{font-weight:700;font-size:13px;margin-bottom:4px}
+.kcard .ko{font-size:11.5px;color:var(--muted);margin-bottom:8px}
+.kcard .kf{display:flex;align-items:center;gap:6px;justify-content:space-between}
+.kcard .val{font-size:12px;font-weight:800;color:var(--green)}
+
+/* Modal */
+.modal-bg{position:fixed;inset:0;background:rgba(4,8,18,.72);backdrop-filter:blur(4px);display:none;align-items:flex-start;justify-content:center;z-index:200;padding:36px 16px;overflow-y:auto}
+.modal-bg.on{display:flex}
+.modal{background:var(--panel);border:1px solid var(--line);border-radius:16px;width:100%;max-width:720px;box-shadow:var(--shadow);animation:pop .22s}
+.modal.wide{max-width:940px}
+@keyframes pop{from{opacity:0;transform:scale(.96) translateY(10px)}to{opacity:1;transform:none}}
+.modal-h{padding:17px 20px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:12px}
+.modal-h h3{margin:0;font-size:16px;flex:1}
+.modal-b{padding:20px;max-height:70vh;overflow-y:auto}
+.modal-f{padding:14px 20px;border-top:1px solid var(--line);display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap}
+.close-x{width:32px;height:32px;border-radius:8px;border:1px solid var(--line);background:var(--panel2);color:var(--muted);cursor:pointer;font-size:17px}
+
+/* Agent cards */
+.agent{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:15px;display:flex;flex-direction:column;gap:9px;transition:.15s}
+.agent:hover{border-color:var(--brand)}
+.agent .ah{display:flex;align-items:center;gap:11px}
+.agent .aic{width:42px;height:42px;border-radius:11px;display:grid;place-items:center;font-size:19px;color:#fff;flex:none}
+.agent .an{font-weight:700;font-size:13.5px;line-height:1.2}
+.agent .num{font-size:10.5px;color:var(--faint);font-weight:700}
+.agent .adesc{font-size:12px;color:var(--muted);line-height:1.45;flex:1}
+.agent .afoot{display:flex;align-items:center;gap:8px;justify-content:space-between;border-top:1px solid var(--line-soft);padding-top:9px}
+.pulse{width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 0 0 rgba(34,197,94,.6);animation:pulse 2s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(34,197,94,.5)}70%{box-shadow:0 0 0 7px rgba(34,197,94,0)}100%{box-shadow:0 0 0 0 rgba(34,197,94,0)}}
+
+/* timeline / activity */
+.tl{position:relative;padding-left:22px}
+.tl::before{content:'';position:absolute;left:6px;top:4px;bottom:4px;width:2px;background:var(--line)}
+.tl-item{position:relative;padding:0 0 15px}
+.tl-item::before{content:'';position:absolute;left:-19px;top:3px;width:11px;height:11px;border-radius:50%;background:var(--brand);border:2px solid var(--panel)}
+.tl-item.g::before{background:var(--green)} .tl-item.a::before{background:var(--amber)} .tl-item.r::before{background:var(--red)}
+.tl-item .tt{font-weight:700;font-size:13px}
+.tl-item .tm{font-size:11.5px;color:var(--muted)}
+
+.empty{text-align:center;padding:48px 20px;color:var(--muted)}
+.empty .big{font-size:40px;margin-bottom:10px;opacity:.5}
+
+/* Login */
+.login{position:fixed;inset:0;display:grid;place-items:center;background:radial-gradient(1200px 600px at 20% -10%,#1a2c52,transparent),radial-gradient(1000px 500px at 110% 110%,#2a1e4a,transparent),var(--bg);z-index:100;padding:20px}
+.login-card{width:100%;max-width:410px;background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:30px;box-shadow:var(--shadow)}
+.login-card .lg{width:56px;height:56px;border-radius:15px;background:linear-gradient(135deg,var(--brand),var(--brand2));display:grid;place-items:center;font-weight:800;color:#fff;font-size:24px;margin:0 auto 16px;box-shadow:0 8px 22px rgba(59,130,246,.45)}
+.login-card h2{text-align:center;margin:0 0 4px;font-size:20px}
+.login-card p.s{text-align:center;color:var(--muted);font-size:12.5px;margin:0 0 22px}
+.role-pick{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px}
+.role-opt{border:1px solid var(--line);border-radius:10px;padding:9px;text-align:center;cursor:pointer;font-size:12px;font-weight:600}
+.role-opt.on{border-color:var(--brand);background:var(--brand-soft);color:var(--brand)}
+.divider{height:1px;background:var(--line);margin:16px 0}
+
+.note{background:var(--amber-bg);border:1px solid var(--amber);border-radius:10px;padding:11px 13px;font-size:12px;color:var(--txt);display:flex;gap:9px}
+.note .i{color:var(--amber);font-size:15px}
+.note.blue{background:var(--brand-soft);border-color:var(--brand)} .note.blue .i{color:var(--brand)}
+.note.green{background:var(--green-bg);border-color:var(--green)} .note.green .i{color:var(--green)}
+
+.seg{display:inline-flex;background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:3px}
+.seg button{border:none;background:none;color:var(--muted);padding:6px 14px;border-radius:7px;cursor:pointer;font-weight:700;font-size:12.5px}
+.seg button.on{background:var(--brand);color:#fff}
+
+/* toast */
+.toast-wrap{position:fixed;bottom:20px;right:20px;display:flex;flex-direction:column;gap:9px;z-index:300}
+.toast{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--green);border-radius:11px;padding:12px 16px;box-shadow:var(--shadow);min-width:280px;animation:slidein .3s;font-size:13px;display:flex;gap:10px;align-items:center}
+.toast.err{border-left-color:var(--red)} .toast.warn{border-left-color:var(--amber)} .toast.info{border-left-color:var(--brand)}
+@keyframes slidein{from{transform:translateX(120%)}to{transform:none}}
+
+.stat-row{display:flex;align-items:center;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--line-soft);font-size:13px}
+.stat-row:last-child{border:none}
+.stat-row .lbl{color:var(--muted);font-weight:600}
+.stat-row .v{font-weight:800}
+.mini-bar{height:6px;border-radius:20px;background:var(--panel2);overflow:hidden;flex:1;margin:0 12px}
+.mini-bar > i{display:block;height:100%;border-radius:20px}
+
+.list-pick{border:1px solid var(--line);border-radius:10px;max-height:200px;overflow-y:auto}
+.list-pick label{display:flex;align-items:center;gap:9px;padding:8px 11px;border-bottom:1px solid var(--line-soft);cursor:pointer;font-size:12.5px}
+.list-pick label:last-child{border:none}
+.list-pick input{width:auto}
+
+.check-item{display:flex;align-items:center;gap:10px;padding:9px 11px;border:1px solid var(--line-soft);border-radius:9px;margin-bottom:6px;font-size:13px}
+.check-item input{width:18px;height:18px;accent-color:var(--green)}
+.check-item.done{opacity:.55;text-decoration:line-through}
+
+.tag{font-size:10.5px;padding:2px 7px;border-radius:6px;background:var(--panel2);color:var(--muted);font-weight:600}
+
+@media(max-width:860px){
+  .app.on{grid-template-columns:1fr}
+  .sidebar{position:fixed;left:-260px;z-index:60;width:248px;transition:.25s} .sidebar.open{left:0}
+  .search{display:none}
+}
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:55;display:none} .overlay.on{display:block}
+.hamburger{display:none} @media(max-width:860px){.hamburger{display:grid}}
+</style>
+</head>
+<body>
+
+<!-- ================= LOGIN ================= -->
+<div class="login" id="login">
+  <div class="login-card">
+    <div class="lg">DE</div>
+    <h2>Djibouti Event Intelligence</h2>
+    <p class="s">Plateforme IA multi-agents · Détection · CRM · Organisation · Suivi</p>
+    <div class="field"><label>Adresse email</label><input id="li-email" value="dg@djib-events.dj" onkeydown="if(event.key==='Enter')doLogin()" /></div>
+    <div class="field"><label>Mot de passe</label><input id="li-pass" type="password" value="demo1234" onkeydown="if(event.key==='Enter')doLogin()" /></div>
+    <div id="loginErr" style="display:none;color:var(--red);font-size:12.5px;font-weight:700;margin-bottom:10px"></div>
+    <button class="btn primary" style="width:100%;justify-content:center" id="loginBtn" onclick="doLogin()">🔓 Se connecter</button>
+    <div class="divider"></div>
+    <div class="note blue"><span class="i">👥</span><span><b>Espace de travail partagé.</b> Comptes de démonstration (mot de passe <b>demo1234</b>) :<br>• dg@djib-events.dj — Directeur Général<br>• commercial@djib-events.dj — Commercial<br>• finance@djib-events.dj — Responsable Financier<br>• lecteur@djib-events.dj — Lecteur (lecture seule)</span></div>
+  </div>
+</div>
+
+<!-- ================= APP ================= -->
+<div class="app" id="app">
+  <div class="overlay" id="overlay" onclick="toggleSidebar(false)"></div>
+  <aside class="sidebar" id="sidebar">
+    <div class="brand">
+      <div class="logo">DE</div>
+      <div><h1>Djibouti Events</h1><p>Intelligence Platform</p></div>
+    </div>
+    <nav class="nav" id="nav"></nav>
+  </aside>
+
+  <div class="main">
+    <div class="topbar">
+      <button class="icon-btn hamburger" onclick="toggleSidebar(true)">☰</button>
+      <div>
+        <div class="page-title" id="pgTitle">Tableau de bord</div>
+        <div class="sub" id="pgSub">Vue d'ensemble commerciale et opérationnelle</div>
+      </div>
+      <div class="spacer"></div>
+      <div class="search"><span>🔎</span><input placeholder="Rechercher prospect, opportunité, événement…" id="globalSearch" onkeydown="if(event.key==='Enter')globalSearchGo()" /></div>
+      <button class="icon-btn" onclick="go('validation')" title="Validations en attente"><span>✅</span><span class="dot" id="valDot" style="display:none"></span></button>
+      <button class="icon-btn" onclick="toggleTheme()" title="Thème">🌓</button>
+      <div class="user-chip" onclick="go('parametres')">
+        <div class="avatar" id="userAv">DG</div>
+        <div><div class="nm" id="userNm">Directeur</div><div class="rl" id="userRl">Directeur Général</div></div>
+      </div>
+    </div>
+    <div class="content" id="content"></div>
+  </div>
+</div>
+
+<div class="modal-bg" id="modalBg"><div class="modal" id="modalEl"></div></div>
+<div class="toast-wrap" id="toasts"></div>
+
+<script>
+/* ============================================================
+   DJIBOUTI EVENT INTELLIGENCE & MANAGEMENT PLATFORM
+   Single-file client app. Simulated multi-agent orchestration.
+   ============================================================ */
+
+/* ---------- GLOBAL ERROR REPORTER ----------
+   Guarantees the app never fails silently: any uncaught error is shown
+   on screen instead of leaving a blank/frozen page. */
+function showFatal(msg){
+  try{
+    var b=document.getElementById('errBanner');
+    if(!b){ b=document.createElement('div'); b.id='errBanner';
+      b.style.cssText='position:fixed;left:0;right:0;bottom:0;z-index:9999;background:#7f1d1d;color:#fff;font:13px/1.5 system-ui;padding:12px 16px;box-shadow:0 -4px 16px rgba(0,0,0,.4)';
+      document.body.appendChild(b); }
+    b.innerHTML='⚠️ <b>Détail technique :</b> '+String(msg)+' &nbsp; <span style="opacity:.8">(signalez-moi ce message pour correction)</span>';
+  }catch(e){}
+}
+window.addEventListener('error', function(e){ showFatal((e && e.message) || 'Erreur inconnue'); });
+window.addEventListener('unhandledrejection', function(e){ showFatal((e && e.reason && e.reason.message) || 'Promesse rejetée'); });
+
+/* ---------- ROLES ---------- */
+const ROLES = [
+  {id:'super',   name:'Super administrateur'},
+  {id:'dg',      name:'Directeur Général'},
+  {id:'dc',      name:'Directeur Commercial'},
+  {id:'com',     name:'Commercial'},
+  {id:'event',   name:'Event Manager'},
+  {id:'projet',  name:'Chef de projet'},
+  {id:'finance', name:'Responsable Financier'},
+  {id:'comm',    name:'Resp. Communication'},
+  {id:'op',      name:'Opérateur'},
+  {id:'lecteur', name:'Lecteur'},
+];
+
+/* ---------- 12 AGENTS ---------- */
+const AGENTS = [
+  {n:1, id:'opportunity', name:"Opportunity Intelligence", icon:'🛰️', color:'#3b82f6', mission:"Détecte les opportunités événementielles à partir de sources publiques autorisées, attribue un score 0–100 et transmet au CRM."},
+  {n:2, id:'lead',        name:"Lead Research & Qualification", icon:'🔍', color:'#06b6d4', mission:"Enrichit et qualifie chaque prospect (décideurs, secteur, budget estimé) à partir de sources publiques."},
+  {n:3, id:'strategy',    name:"Proposal Strategy", icon:'♟️', color:'#8b5cf6', mission:"Transforme l'opportunité en stratégie commerciale : concept, besoins, 3 offres (Essentielle / Pro / Premium)."},
+  {n:4, id:'planning',    name:"Planning & Operations", icon:'🗂️', color:'#14b8a6', mission:"Crée le plan complet de l'événement : tâches, RACI, budget, checklists jour-J, registre des risques."},
+  {n:5, id:'writing',     name:"Commercial Proposal Writing", icon:'✍️', color:'#ec4899', mission:"Rédige la proposition commerciale (PDF/Word/Email/PPT) multilingue et multi-ton, personnalisée."},
+  {n:6, id:'compliance',  name:"Approval & Compliance", icon:'🛡️', color:'#f59e0b', mission:"Contrôle chaque contenu avant envoi : exactitude, marge, conformité, anti-spam, consentement. Validation humaine obligatoire."},
+  {n:7, id:'outreach',    name:"Customer Outreach", icon:'📤', color:'#22c55e', mission:"Prépare et envoie les communications après approbation (email, WhatsApp officiel, SMS). Jamais de masse non sollicité."},
+  {n:8, id:'followup',    name:"Follow-up & Email", icon:'🔁', color:'#0ea5e9', mission:"Suit les réponses, résume, propose des relances, suspend la séquence dès réponse, met à jour le CRM."},
+  {n:9, id:'negotiation', name:"Negotiation Support", icon:'🤝', color:'#a855f7', mission:"Assiste la négociation : objections, options budgétaires, marge, prix minimum, concessions non financières."},
+  {n:10,id:'execution',   name:"Event Execution Monitoring", icon:'📡', color:'#ef4444', mission:"Suit la préparation et l'exécution : tâches, fournisseurs, paiements, incidents, briefing jour-J."},
+  {n:11,id:'finance',     name:"Finance & Profitability", icon:'💰', color:'#eab308', mission:"Contrôle la rentabilité par événement/client/service et déclenche des alertes de marge et de dépassement."},
+  {n:12,id:'supervisor',  name:"Supervisor & Orchestration", icon:'🧠', color:'#6366f1', mission:"Coordonne tous les agents, gère priorités et blocages, exige la validation humaine, suspend en cas d'anomalie."},
+];
+
+/* ---------- PIPELINE ---------- */
+const STAGES = [
+  {id:'detect', name:'Opportunité détectée', color:'#3b82f6'},
+  {id:'qualif', name:'Prospect qualifié', color:'#06b6d4'},
+  {id:'contact', name:'Contact envoyé', color:'#8b5cf6'},
+  {id:'reponse', name:'Réponse reçue', color:'#14b8a6'},
+  {id:'prop', name:'Proposition envoyée', color:'#f59e0b'},
+  {id:'nego', name:'Négociation', color:'#a855f7'},
+  {id:'gagne', name:'Gagné', color:'#22c55e'},
+  {id:'perdu', name:'Perdu', color:'#ef4444'},
+];
+const STATUSES = ['Brouillon IA','À vérifier','À corriger','Validé','Autorisé à envoyer','Envoyé','En attente','Réponse reçue','Négociation','Gagné','Perdu','À relancer','Archivé'];
+
+const EVENT_TYPES = ['Conférence','Forum','Séminaire','Atelier','Salon professionnel','Exposition','Lancement de produit','Inauguration','Cérémonie officielle','Dîner de gala','Cocktail','Réception diplomatique','Mariage','Graduation','Concert','Festival','Événement sportif','Team building','Assemblée générale','Formation','Journée portes ouvertes','Activation de marque','Visite de délégation','Événement hybride','Webinaire','Événement scolaire'];
+
+const CLIENT_SECTORS = ['Ministère','Institution publique','Ambassade','Organisation internationale','ONG','Télécom','Banque','Assurance','Compagnie pétrolière','Port / Zone franche','Logistique','Hôtel','École / Université','Hôpital / Clinique','Agence de voyage','Compagnie aérienne','Association','Construction','Industrie','Grande famille','Agence de communication','Média','Club sportif'];
+
+const KEYWORDS_DEFAULT = ['Djibouti conference','Djibouti forum','Djibouti seminar','Djibouti summit','Djibouti inauguration','Djibouti gala','Djibouti embassy event','Djibouti corporate event','Djibouti graduation','Djibouti wedding','Djibouti exhibition','Djibouti delegation','مؤتمر جيبوتي','ملتقى جيبوتي'];
+
+const INTEGRATIONS = [
+  {id:'gmail',name:'Gmail',icon:'📧',cat:'Email'},{id:'outlook',name:'Microsoft Outlook',icon:'📨',cat:'Email'},
+  {id:'gcal',name:'Google Calendar',icon:'📅',cat:'Agenda'},{id:'mscal',name:'Microsoft Calendar',icon:'🗓️',cat:'Agenda'},
+  {id:'gdrive',name:'Google Drive',icon:'📁',cat:'Stockage'},{id:'onedrive',name:'OneDrive',icon:'☁️',cat:'Stockage'},
+  {id:'wa',name:'WhatsApp Business API',icon:'💬',cat:'Messagerie'},{id:'sms',name:'SMS Provider',icon:'📱',cat:'Messagerie'},
+  {id:'linkedin',name:'LinkedIn (autorisé)',icon:'💼',cat:'Social'},{id:'meta',name:'Facebook / Instagram API',icon:'📷',cat:'Social'},
+  {id:'maps',name:'Google Maps / OSM',icon:'🗺️',cat:'Carto'},{id:'pdf',name:'Génération PDF',icon:'📄',cat:'Documents'},
+  {id:'esign',name:'Signature électronique',icon:'🖊️',cat:'Documents'},{id:'pay',name:'Système de paiement',icon:'💳',cat:'Finance'},
+  {id:'accounting',name:'Comptabilité',icon:'🧾',cat:'Finance'},{id:'n8n',name:'n8n',icon:'🔗',cat:'Automatisation'},
+  {id:'make',name:'Make',icon:'⚙️',cat:'Automatisation'},{id:'zapier',name:'Zapier',icon:'⚡',cat:'Automatisation'},
+  {id:'openai',name:'API OpenAI',icon:'🤖',cat:'IA'},{id:'anthropic',name:'API Anthropic',icon:'🧠',cat:'IA'},
+  {id:'local',name:'Modèles IA locaux',icon:'🖥️',cat:'IA'},{id:'translate',name:'Service de traduction',icon:'🌐',cat:'IA'},
+];
+
+/* ---------- STATE / STORAGE ---------- */
+/* ---------- API CLIENT (shared workspace backend) ---------- */
+let DB = { opportunities:[], prospects:[], proposals:[], approvals:[], events:[], tasks:[], audit:[], agentLog:[], settings:{}, keywords:[], integrations:{} };
+let TOKEN = null;
+try{ TOKEN = localStorage.getItem('djib_token'); }catch(e){}
+async function api(method, path, body){
+  const headers = {'content-type':'application/json'};
+  if(TOKEN) headers.authorization = 'Bearer '+TOKEN;
+  const r = await fetch('/api'+path, {method, headers, body: body!==undefined ? JSON.stringify(body) : undefined});
+  if(r.status===401){ TOKEN=null; try{localStorage.removeItem('djib_token')}catch(e){} throw new Error('unauthorized'); }
+  const j = await r.json().catch(()=>({}));
+  if(!r.ok) throw new Error(j.error || ('Erreur '+r.status));
+  return j;
+}
+function _legacySeed(){
+  const now = Date.now(), D = 86400000;
+  const mk = (d)=> new Date(now + d*D).toISOString();
+  return {
+    user:null, theme:'dark',
+    keywords: [...KEYWORDS_DEFAULT],
+    integrations: {gmail:true, gcal:true, pdf:true, anthropic:true, wa:false, maps:true},
+    settings:{ dailyLimit:40, hourlyLimit:8, marginMin:22, followupDelays:[3,7,14], defaultLang:'Français', defaultTone:'Commercial' },
+    opportunities: [
+      {id:'op1', org:'Ministère de l\'Économie et des Finances', type:'Forum', title:'Forum National sur l\'Investissement', source:'Site officiel du ministère', sourceUrl:'https://economie.gouv.dj', found:mk(-2), eventDate:mk(28), score:88, budget:9500000, participants:400, urgency:'Haute', contact:'Direction de la Communication', converted:true, summary:"Le ministère annonce un forum d'investissement de grande ampleur ; besoin probable d'un prestataire événementiel complet (scénographie, protocole, audiovisuel).", signals:['Appel public','Délégations étrangères','Budget institutionnel']},
+      {id:'op2', org:'Djibouti Telecom', type:'Lancement de produit', title:'Lancement offre Fibre 5G', source:'Communiqué de presse', sourceUrl:'https://djiboutitelecom.dj', found:mk(-1), eventDate:mk(21), score:81, budget:6200000, participants:250, urgency:'Haute', contact:'Responsable Marketing', converted:true, summary:"Lancement d'une nouvelle offre grand public ; forte probabilité d'activation de marque et soirée presse.", signals:['Activation marque','Presse','Grand public']},
+      {id:'op3', org:'Ambassade de France', type:'Réception diplomatique', title:'Fête nationale du 14 juillet', source:'Calendrier public ambassade', sourceUrl:'https://dj.ambafrance.org', found:mk(-3), eventDate:mk(40), score:76, budget:4800000, participants:300, urgency:'Moyenne', contact:'Service protocole', converted:false, summary:"Réception diplomatique annuelle ; besoins protocole, traiteur haut de gamme, sécurité.", signals:['Diplomatique','Protocole','Récurrent']},
+      {id:'op4', org:'Université de Djibouti', type:'Graduation', title:'Cérémonie de remise des diplômes 2026', source:'Page publique université', sourceUrl:'https://univ.edu.dj', found:mk(-4), eventDate:mk(55), score:64, budget:2800000, participants:600, urgency:'Basse', contact:'Secrétariat général', converted:false, summary:"Cérémonie de graduation de fin d'année ; sonorisation, scène, gestion de foule.", signals:['Récurrent','Grand public']},
+      {id:'op5', org:'CAC Bank Djibouti', type:'Assemblée générale', title:'AG annuelle des actionnaires', source:'Communiqué financier', sourceUrl:'#', found:mk(0), eventDate:mk(33), score:71, budget:3600000, participants:180, urgency:'Moyenne', contact:'Secrétariat de direction', converted:false, summary:"AG annuelle ; salle de conférence, traduction simultanée, captation.", signals:['Institutionnel','Confidentiel']},
+      {id:'op6', org:'Chambre de Commerce de Djibouti', type:'Salon professionnel', title:'Salon de l\'Entrepreneuriat', source:'Réseau CCD', sourceUrl:'#', found:mk(0), eventDate:mk(60), score:69, budget:7100000, participants:800, urgency:'Moyenne', contact:'Département événements', converted:false, summary:"Salon B2B multi-exposants ; stands, signalétique, programme conférences.", signals:['Multi-exposants','B2B','Sponsors']},
+      {id:'op7', org:'Groupe Coubèche', type:'Team building', title:'Séminaire annuel des cadres', source:'LinkedIn public', sourceUrl:'#', found:mk(-1), eventDate:mk(25), score:58, budget:2100000, participants:120, urgency:'Moyenne', contact:'RH', converted:false, summary:"Séminaire interne + team building ; logistique transport, restauration, animation.", signals:['Interne','RH']},
+    ],
+    prospects: [
+      {id:'pr1', opId:'op1', org:'Ministère de l\'Économie et des Finances', contact:'Mme Amina H.', fonction:'Directrice Communication', sector:'Ministère', email:'communication@economie.gouv.dj', phone:'+253 21 35 00 00', wa:'', site:'economie.gouv.dj', address:'Boulevard du Nil, Djibouti', priority:'Très prioritaire', score:88, stage:'prop', owner:'Directeur Commercial', lastContact:mk(-2), nextAction:'Relance J+3', consent:'Intérêt légitime B2B', status:'Envoyé', value:9500000, notes:'Décideur direct identifié. Budget institutionnel confirmé par appel public.', history:[{d:mk(-2),t:'Proposition Premium envoyée après validation DG'}]},
+      {id:'pr2', opId:'op2', org:'Djibouti Telecom', contact:'M. Kamil O.', fonction:'Responsable Marketing', sector:'Télécom', email:'marketing@djiboutitelecom.dj', phone:'+253 21 30 12 12', wa:'+253 77 00 00 00', site:'djiboutitelecom.dj', address:'Avenue Maréchal Foch', priority:'Très prioritaire', score:81, stage:'nego', owner:'Commercial', lastContact:mk(-1), nextAction:'Envoyer offre révisée', consent:'Contact commercial existant', status:'Négociation', value:6200000, notes:'Négociation sur le volet activation de marque. Demande une remise de 8%.', history:[{d:mk(-4),t:'1er contact validé et envoyé'},{d:mk(-1),t:'Réponse reçue — demande de rendez-vous'}]},
+      {id:'pr3', opId:'op3', org:'Ambassade de France', contact:'Service Protocole', fonction:'Chef de protocole', sector:'Ambassade', email:'protocole@ambafrance-dj.org', phone:'+253 21 35 09 63', wa:'', site:'dj.ambafrance.org', address:'45 Boulevard du Maréchal Joffre', priority:'Prioritaire', score:76, stage:'qualif', owner:'Directeur Commercial', lastContact:mk(-3), nextAction:'Préparer 1er contact', consent:'À obtenir', status:'À vérifier', value:4800000, notes:'Événement récurrent — historique probablement chez un concurrent.', history:[]},
+      {id:'pr4', opId:'op5', org:'CAC Bank Djibouti', contact:'M. Idriss A.', fonction:'Secrétaire de direction', sector:'Banque', email:'direction@cacbank.dj', phone:'+253 21 25 11 00', wa:'', site:'cacbank.dj', address:'Place Lagarde', priority:'Prioritaire', score:71, stage:'contact', owner:'Commercial', lastContact:mk(0), nextAction:'Attendre réponse', consent:'Intérêt légitime B2B', status:'Envoyé', value:3600000, notes:'AG confidentielle — insister sur discrétion et traduction simultanée.', history:[{d:mk(0),t:'Email de prise de contact validé et envoyé'}]},
+      {id:'pr5', opId:'op6', org:'Chambre de Commerce de Djibouti', contact:'Mme Fatouma D.', fonction:'Resp. Événements', sector:'Institution publique', email:'events@ccd.dj', phone:'+253 21 35 10 70', wa:'', site:'ccd.dj', address:'Place Lagarde', priority:'À développer', score:69, stage:'qualif', owner:'Directeur Commercial', lastContact:mk(-1), nextAction:'Qualifier le budget', consent:'À obtenir', status:'À vérifier', value:7100000, notes:'Gros potentiel récurrent (salon annuel).', history:[]},
+      {id:'pr6', opId:'op7', org:'Groupe Coubèche', contact:'Mme Sahra M.', fonction:'DRH', sector:'Industrie', email:'rh@coubeche.dj', phone:'+253 21 34 00 00', wa:'', site:'#', address:'Zone Industrielle', priority:'À surveiller', score:58, stage:'detect', owner:'—', lastContact:null, nextAction:'Enrichir contact', consent:'À obtenir', status:'Brouillon IA', value:2100000, notes:'Contact RH indirect — chercher décideur.', history:[]},
+    ],
+    proposals: [
+      {id:'prop1', prospectId:'pr1', title:'Forum National sur l\'Investissement — Proposition Premium', tier:'Premium', lang:'Français', tone:'Institutionnel', value:9500000, margin:26, status:'Envoyé', createdBy:'Agent Writing', validatedBy:'Directeur Général', validatedAt:mk(-2), sentAt:mk(-2)},
+      {id:'prop2', prospectId:'pr2', title:'Lancement Fibre 5G — Proposition Professionnelle', tier:'Professionnelle', lang:'Français', tone:'Commercial', value:6200000, margin:24, status:'Négociation', createdBy:'Agent Writing', validatedBy:'Directeur Commercial', validatedAt:mk(-4), sentAt:mk(-4)},
+      {id:'prop3', prospectId:'pr4', title:'AG CAC Bank — Proposition Essentielle', tier:'Essentielle', lang:'Français', tone:'Formel', value:3600000, margin:23, status:'À vérifier', createdBy:'Agent Writing', validatedBy:null, validatedAt:null, sentAt:null},
+    ],
+    approvals: [
+      {id:'ap1', kind:'Proposition', ref:'AG CAC Bank — Essentielle', prospect:'CAC Bank Djibouti', agent:'Writing + Compliance', preparedBy:'IA', checks:{name:true,contact:true,margin:true,antispam:true,consent:false,legal:true}, status:'À vérifier', created:mk(0), risk:'Consentement à confirmer'},
+      {id:'ap2', kind:'Email de relance', ref:'Relance J+3 — Ministère Économie', prospect:'Ministère de l\'Économie', agent:'Follow-up + Compliance', preparedBy:'IA', checks:{name:true,contact:true,margin:true,antispam:true,consent:true,legal:true}, status:'Autorisé à envoyer', created:mk(0), risk:'—'},
+      {id:'ap3', kind:'Offre révisée', ref:'Remise 8% — Djibouti Telecom', prospect:'Djibouti Telecom', agent:'Negotiation + Compliance', preparedBy:'IA', checks:{name:true,contact:true,margin:false,antispam:true,consent:true,legal:true}, status:'À corriger', created:mk(0), risk:'Marge sous le seuil (18% < 22%)'},
+    ],
+    events: [
+      {id:'ev1', prospectId:'pr1', name:'Forum National sur l\'Investissement', type:'Forum', date:mk(28), venue:'Palais du Peuple', participants:400, budget:9500000, spent:0, progress:34, status:'En préparation', tasksDone:11, tasksTotal:32, risks:2, suppliersConfirmed:5, suppliersTotal:9},
+      {id:'ev2', prospectId:'pr2', name:'Lancement Fibre 5G', type:'Lancement de produit', date:mk(21), venue:'Djibouti Palace Kempinski', participants:250, budget:6200000, spent:0, progress:18, status:'En préparation', tasksDone:5, tasksTotal:28, risks:1, suppliersConfirmed:2, suppliersTotal:7},
+    ],
+    tasks: [
+      {id:'t1', eventId:'ev1', name:'Réserver le Palais du Peuple', owner:'Chef de projet', due:mk(5), done:true, phase:'Avant'},
+      {id:'t2', eventId:'ev1', name:'Confirmer traiteur protocole', owner:'Event Manager', due:mk(9), done:true, phase:'Avant'},
+      {id:'t3', eventId:'ev1', name:'Plan audiovisuel + captation', owner:'Opérateur', due:mk(14), done:false, phase:'Avant'},
+      {id:'t4', eventId:'ev1', name:'Signalétique et badges VIP', owner:'Resp. Communication', due:mk(18), done:false, phase:'Avant'},
+      {id:'t5', eventId:'ev1', name:'Briefing sécurité jour-J', owner:'Chef de projet', due:mk(27), done:false, phase:'Jour J'},
+      {id:'t6', eventId:'ev2', name:'Concept activation de marque', owner:'Event Manager', due:mk(6), done:true, phase:'Avant'},
+      {id:'t7', eventId:'ev2', name:'Réserver la salle Kempinski', owner:'Chef de projet', due:mk(8), done:false, phase:'Avant'},
+    ],
+    audit: [
+      {d:mk(-2), who:'Directeur Général', act:'Validation', obj:'Proposition Premium — Ministère Économie', detail:'Validé et autorisé à envoyer'},
+      {d:mk(-2), who:'Agent Outreach', act:'Envoi', obj:'Email + PDF — Ministère Économie', detail:'Envoyé après validation humaine'},
+      {d:mk(-1), who:'Agent Follow-up', act:'Détection', obj:'Réponse — Djibouti Telecom', detail:'Séquence de relance suspendue'},
+      {d:mk(0), who:'Agent Compliance', act:'Blocage', obj:'Offre révisée — Djibouti Telecom', detail:'Marge sous le seuil, envoi bloqué'},
+    ],
+    agentLog: [
+      {d:mk(0), agent:'Opportunity Intelligence', msg:'3 nouvelles opportunités détectées, 2 doublons éliminés'},
+      {d:mk(0), agent:'Supervisor', msg:'Priorisation : 2 prospects "Très prioritaires" escaladés au Directeur Commercial'},
+      {d:mk(0), agent:'Finance', msg:'Alerte : marge offre révisée Djibouti Telecom sous le seuil de 22%'},
+      {d:mk(-1), agent:'Lead Research', msg:'Enrichissement de 4 fiches prospects (décideurs + secteur)'},
+    ],
+  };
+}
+/* Debounced sync of the shared state to the server (one PUT per burst). */
+let _saveTimer=null, _saving=false, _dirty=false;
+function save(){
+  _dirty=true;
+  if(_saveTimer) clearTimeout(_saveTimer);
+  _saveTimer=setTimeout(pushState, 350);
+}
+async function pushState(){
+  if(_saving || !TOKEN) return;
+  _saving=true; _dirty=false;
+  try{ const {user, ...state} = DB; await api('PUT','/state', state); }
+  catch(e){ if(e.message!=='unauthorized') toast('Synchronisation échouée : '+e.message,'warn'); }
+  _saving=false;
+  if(_dirty) pushState();
+}
+async function loadState(){
+  const state = await api('GET','/state');
+  DB = Object.assign({ user:CUR }, state);
+}
+async function reset(){
+  if(!confirm('Réinitialiser toutes les données de démo ? (réservé au DG / administrateur)')) return;
+  try{ await api('POST','/admin/reset'); await loadState(); render(); toast('Données réinitialisées','info'); }
+  catch(e){ toast(e.message,'err'); }
+}
+/* Light polling so teammates' changes appear (paused while a modal is open). */
+function startPolling(){
+  setInterval(async ()=>{
+    if(!TOKEN || document.getElementById('modalBg').classList.contains('on') || _saving) return;
+    try{ const before=JSON.stringify(DB.prospects)+JSON.stringify(DB.approvals)+JSON.stringify(DB.opportunities);
+      await loadState();
+      const after=JSON.stringify(DB.prospects)+JSON.stringify(DB.approvals)+JSON.stringify(DB.opportunities);
+      if(before!==after) render();
+    }catch(e){}
+  }, 12000);
+}
+
+/* ---------- HELPERS ---------- */
+const $ = s => document.querySelector(s);
+const money = n => (n||0).toLocaleString('fr-FR') + ' DJF';
+const moneyShort = n => n>=1000000 ? (n/1000000).toFixed(1)+'M' : n>=1000 ? Math.round(n/1000)+'k' : (n||0);
+const dateFR = s => s ? new Date(s).toLocaleDateString('fr-FR',{day:'2-digit',month:'short',year:'numeric'}) : '—';
+const dateShort = s => s ? new Date(s).toLocaleDateString('fr-FR',{day:'2-digit',month:'2-digit'}) : '—';
+const daysUntil = s => Math.round((new Date(s)-Date.now())/86400000);
+const initials = s => s.split(' ').map(w=>w[0]).slice(0,2).join('').toUpperCase();
+const uid = p => p + Math.random().toString(36).slice(2,8);
+function toast(msg,type='ok'){ const t=document.createElement('div'); t.className='toast '+(type==='ok'?'':type); t.innerHTML=`<span>${type==='err'?'⛔':type==='warn'?'⚠️':type==='info'?'ℹ️':'✅'}</span><span>${msg}</span>`; $('#toasts').appendChild(t); setTimeout(()=>{t.style.opacity='0';t.style.transition='.3s';setTimeout(()=>t.remove(),300)},3200); }
+function scoreClass(s){ return s>=75?'hi':s>=60?'mid':'lo'; }
+function priBadge(p){ const m={'Très prioritaire':'b-red','Prioritaire':'b-amber','À développer':'b-blue','À surveiller':'b-gray','Non pertinent':'b-gray','Information insuffisante':'b-gray'}; return `<span class="badge-s ${m[p]||'b-gray'}">${p}</span>`; }
+function statusBadge(s){ const g={'Gagné':'b-green','Réponse reçue':'b-green','Validé':'b-green','Autorisé à envoyer':'b-green','Envoyé':'b-blue','Négociation':'b-violet','À vérifier':'b-amber','À corriger':'b-red','En attente':'b-amber','À relancer':'b-amber','Perdu':'b-red','Archivé':'b-gray','Brouillon IA':'b-gray'}; return `<span class="badge-s ${g[s]||'b-gray'}">${s}</span>`; }
+
+/* ---------- LOGIN (real auth against the API) ---------- */
+let CUR = null;
+async function doLogin(){
+  const btn=$('#loginBtn'), errEl=$('#loginErr');
+  errEl.style.display='none';
+  btn.disabled=true; btn.textContent='⏳ Connexion…';
+  try{
+    const email=$('#li-email').value.trim(), password=$('#li-pass').value;
+    const {token, user} = await api('POST','/auth/login', {email, password});
+    TOKEN = token; try{ localStorage.setItem('djib_token', token); }catch(e){}
+    await enterApp(user);
+  }catch(err){
+    errEl.textContent = err.message==='unauthorized' ? 'Email ou mot de passe incorrect' : err.message;
+    errEl.style.display='block';
+  }finally{ btn.disabled=false; btn.textContent='🔓 Se connecter'; }
+}
+async function enterApp(user){
+  CUR = user;
+  await loadState();
+  $('#login').style.display='none';
+  $('#app').classList.add('on');
+  $('#userNm').textContent = user.name;
+  $('#userRl').textContent = user.roleName + (user.role==='lecteur' ? ' (lecture seule)' : '');
+  $('#userAv').textContent = initials(user.name);
+  buildNav(); go('dashboard');
+  startPolling();
+  toast('Bienvenue, '+user.name);
+  if(user.role==='lecteur') toast('Compte en lecture seule : les modifications sont désactivées.','info');
+}
+function logout(){ TOKEN=null; try{localStorage.removeItem('djib_token')}catch(e){} CUR=null; $('#app').classList.remove('on'); $('#login').style.display='grid'; }
+
+/* ---------- NAV ---------- */
+const NAV = [
+  {grp:'Pilotage', items:[
+    {id:'dashboard', ic:'📊', name:'Tableau de bord'},
+    {id:'agents', ic:'🧠', name:'Agents IA', badge:'12'},
+  ]},
+  {grp:'Acquisition', items:[
+    {id:'veille', ic:'🛰️', name:'Veille & Opportunités', badgeKey:'opps'},
+    {id:'crm', ic:'👥', name:'CRM & Pipeline'},
+    {id:'proposals', ic:'📝', name:'Propositions'},
+    {id:'outreach', ic:'📤', name:'Prospection & Relances'},
+  ]},
+  {grp:'Opérations', items:[
+    {id:'events', ic:'🎪', name:'Événements'},
+    {id:'finance', ic:'💰', name:'Finance & Rentabilité'},
+  ]},
+  {grp:'Gouvernance', items:[
+    {id:'validation', ic:'✅', name:'Validation humaine', badgeKey:'appr', warn:true},
+    {id:'audit', ic:'🗒️', name:'Journal d\'audit'},
+    {id:'parametres', ic:'⚙️', name:'Paramètres & Sécurité'},
+  ]},
+];
+function pendingApprovals(){ return DB.approvals.filter(a=>a.status==='À vérifier'||a.status==='À corriger').length; }
+function newOpps(){ return DB.opportunities.filter(o=>daysUntil(o.found)>=-1).length; }
+function buildNav(){
+  $('#nav').innerHTML = NAV.map(g=>`<div class="grp">${g.grp}</div>`+g.items.map(it=>{
+    let badge='';
+    if(it.badge) badge=`<span class="badge">${it.badge}</span>`;
+    if(it.badgeKey==='appr'){ const n=pendingApprovals(); if(n) badge=`<span class="badge red">${n}</span>`; }
+    if(it.badgeKey==='opps'){ const n=DB.opportunities.filter(o=>!o.converted).length; if(n) badge=`<span class="badge">${n}</span>`; }
+    return `<a data-view="${it.id}" onclick="go('${it.id}')"><span class="ico">${it.ic}</span><span>${it.name}</span>${badge}</a>`;
+  }).join('')).join('');
+  const n=pendingApprovals(); $('#valDot').style.display = n?'block':'none';
+}
+
+let CURRENT='dashboard';
+const TITLES = {
+  dashboard:['Tableau de bord','Vue d\'ensemble commerciale et opérationnelle'],
+  agents:['Équipe d\'agents IA','12 agents spécialisés coordonnés par un superviseur'],
+  veille:['Veille & Détection d\'opportunités','Agent 1 — Sources publiques autorisées uniquement'],
+  crm:['CRM & Pipeline commercial','Prospects, qualification et suivi (Agents 2, 8)'],
+  proposals:['Propositions commerciales','Stratégie et rédaction (Agents 3, 5)'],
+  outreach:['Prospection & Relances','Envoi validé et séquences (Agents 6, 7, 8)'],
+  events:['Organisation d\'événements','Planning, exécution et suivi (Agents 4, 10)'],
+  finance:['Finance & Rentabilité','Marges et alertes (Agent 11)'],
+  validation:['Validation humaine obligatoire','Conformité et approbation (Agent 6, 12)'],
+  audit:['Journal d\'audit','Traçabilité de toutes les actions'],
+  parametres:['Paramètres & Sécurité','Intégrations, rôles, anti-spam, conformité'],
+};
+function go(v){
+  CURRENT=v;
+  document.querySelectorAll('#nav a').forEach(a=>a.classList.toggle('active', a.dataset.view===v));
+  $('#pgTitle').textContent = TITLES[v][0]; $('#pgSub').textContent = TITLES[v][1];
+  render(); toggleSidebar(false);
+}
+function render(){
+  try{ buildNav(); }catch(e){ showFatal('buildNav: '+e.message); }
+  try{ $('#content').innerHTML = VIEWS[CURRENT] ? VIEWS[CURRENT]() : '<div class="empty">Vue introuvable</div>'; }
+  catch(e){ $('#content').innerHTML='<div class="empty"><div class="big">⚠️</div>Cette section a rencontré un souci.<br><small>'+e.message+'</small></div>'; showFatal('render '+CURRENT+': '+e.message); }
+  try{ if(AFTER[CURRENT]) AFTER[CURRENT](); }catch(e){ showFatal('after '+CURRENT+': '+e.message); }
+}
+function toggleSidebar(open){ $('#sidebar').classList.toggle('open',open); $('#overlay').classList.toggle('on',open); }
+function toggleTheme(){ const l=document.documentElement.getAttribute('data-theme')==='light'; document.documentElement.setAttribute('data-theme', l?'dark':'light'); try{ localStorage.setItem('djib_theme', l?'dark':'light'); }catch(e){} }
+
+/* ============================================================
+   VIEWS
+   ============================================================ */
+const VIEWS={}, AFTER={};
+
+/* ---------- DASHBOARD ---------- */
+VIEWS.dashboard = () => {
+  const opps=DB.opportunities, pros=DB.prospects, props=DB.proposals, evts=DB.events;
+  const pipeVal = pros.filter(p=>!['perdu','gagne'].includes(p.stage)).reduce((s,p)=>s+p.value,0);
+  const signed = pros.filter(p=>p.stage==='gagne').reduce((s,p)=>s+p.value,0) + props.filter(p=>p.status==='Envoyé').reduce((s,p)=>s+0,0);
+  const won = evts.reduce((s,e)=>s+e.budget,0);
+  const kpis=[
+    {l:'Opportunités actives',v:opps.filter(o=>!o.converted).length,d:`+${newOpps()} détectées récemment`,i:'🛰️',c:'#3b82f6'},
+    {l:'Valeur du pipeline',v:moneyShort(pipeVal)+' DJF',d:pros.length+' prospects actifs',i:'📈',c:'#8b5cf6'},
+    {l:'CA signé (événements)',v:moneyShort(won)+' DJF',d:evts.length+' événements confirmés',i:'💰',c:'#22c55e'},
+    {l:'Validations en attente',v:pendingApprovals(),d:'Action humaine requise',i:'✅',c:'#f59e0b'},
+  ];
+  const upcoming = [...evts].sort((a,b)=>new Date(a.date)-new Date(b.date));
+  const priProspects = [...pros].sort((a,b)=>b.score-a.score).slice(0,5);
+  return `
+  <div class="grid g-kpi" style="margin-bottom:16px">
+    ${kpis.map(k=>`<div class="kpi" style="--accent:${k.c}"><div class="kl"><span class="ki" style="background:${k.c}">${k.i}</span>${k.l}</div><div class="kv">${k.v}</div><div class="kd">${k.d}</div></div>`).join('')}
+  </div>
+
+  <div class="grid g-2" style="margin-bottom:16px">
+    <div class="card">
+      <div class="card-h"><h3>🎯 Entonnoir commercial</h3><span class="desc">Répartition des prospects par étape</span></div>
+      ${STAGES.filter(s=>s.id!=='perdu').map(s=>{ const c=pros.filter(p=>p.stage===s.id).length; const max=Math.max(1,...STAGES.map(x=>pros.filter(p=>p.stage===x.id).length)); return `<div class="stat-row"><span class="lbl" style="min-width:150px">${s.name}</span><div class="mini-bar"><i style="width:${c/max*100}%;background:${s.color}"></i></div><span class="v">${c}</span></div>`; }).join('')}
+    </div>
+    <div class="card">
+      <div class="card-h"><h3>🗓️ Événements à venir</h3><span class="desc">Prochaines échéances</span></div>
+      ${upcoming.map(e=>{ const d=daysUntil(e.date); return `<div class="stat-row"><div><div style="font-weight:700">${e.name}</div><div style="font-size:11.5px;color:var(--muted)">${e.type} · ${e.venue}</div></div><div style="text-align:right"><span class="badge-s ${d<14?'b-red':d<30?'b-amber':'b-blue'}">J-${d}</span><div style="font-size:11px;color:var(--muted);margin-top:3px">${e.progress}% prêt</div></div></div>`; }).join('')||'<div class="empty">Aucun événement</div>'}
+    </div>
+  </div>
+
+  <div class="grid g-2" style="margin-bottom:16px">
+    <div class="card">
+      <div class="card-h"><h3>🔥 Prospects prioritaires</h3><span class="desc">Score le plus élevé</span></div>
+      <div class="tbl-wrap" style="border:none">
+      <table class="tbl"><thead><tr><th>Prospect</th><th>Type</th><th>Score</th><th>Valeur</th><th>Statut</th></tr></thead><tbody>
+      ${priProspects.map(p=>`<tr onclick="openProspect('${p.id}')" style="cursor:pointer"><td class="name">${p.org}<div style="font-size:11px;color:var(--muted);font-weight:400">${p.contact}</div></td><td><span class="tag">${(DB.opportunities.find(o=>o.id===p.opId)||{}).type||'—'}</span></td><td><span class="score ${scoreClass(p.score)}">${p.score}</span></td><td style="font-weight:700">${moneyShort(p.value)}</td><td>${statusBadge(p.status)}</td></tr>`).join('')}
+      </tbody></table></div>
+    </div>
+    <div class="card">
+      <div class="card-h"><h3>🧠 Activité des agents IA</h3><span class="desc">Flux d'orchestration</span></div>
+      <div class="tl">
+        ${DB.agentLog.slice(0,6).map(l=>`<div class="tl-item"><div class="tt">${l.agent}</div><div class="tm">${l.msg} · ${dateFR(l.d)}</div></div>`).join('')}
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-h"><h3>⚡ Actions rapides</h3><span class="desc">Lancer un cycle ou une tâche</span></div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap">
+      <button class="btn primary" onclick="go('veille');setTimeout(runScan,300)">🛰️ Lancer une veille</button>
+      <button class="btn" onclick="go('crm')">👥 Ouvrir le CRM</button>
+      <button class="btn" onclick="openNewProposal()">📝 Nouvelle proposition</button>
+      <button class="btn" onclick="go('validation')">✅ Validations (${pendingApprovals()})</button>
+      <button class="btn" onclick="go('finance')">💰 Rentabilité</button>
+    </div>
+  </div>`;
+};
+
+/* ---------- AGENTS ---------- */
+VIEWS.agents = () => {
+  return `
+  <div class="note blue" style="margin-bottom:16px"><span class="i">🧩</span><span><b>Architecture multi-agents.</b> Chaque agent est spécialisé et supervisé par l'agent d'orchestration (n°12). Toute action externe (email, devis, engagement financier) exige une <b>validation humaine explicite</b>. Dans cette démo, les agents sont simulés côté navigateur ; en production, ils s'exécutent côté serveur avec clés API sécurisées.</span></div>
+  <div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(310px,1fr))">
+    ${AGENTS.map(a=>`
+      <div class="agent">
+        <div class="ah"><div class="aic" style="background:${a.color}">${a.icon}</div><div><div class="num">AGENT ${a.n}</div><div class="an">${a.name}</div></div></div>
+        <div class="adesc">${a.mission}</div>
+        <div class="afoot"><span class="badge-s b-green"><span class="pulse"></span> Actif</span><button class="btn sm ghost" onclick="runAgent('${a.id}')">▶ Exécuter</button></div>
+      </div>`).join('')}
+  </div>`;
+};
+async function runAgent(id){
+  const a=AGENTS.find(x=>x.id===id);
+  modal(`${a.icon} Agent ${a.n} — ${a.name}`, `<div class="note blue"><span class="i">⏳</span><span>Exécution en cours…</span></div>`, [{t:'Fermer',c:'ghost',fn:'closeModal()'}]);
+  try{
+    const res = await api('POST','/agents/'+id+'/run', {context:'Cycle manuel depuis le tableau de bord'});
+    await loadState();
+    modal(`${a.icon} Agent ${a.n} — ${a.name}`, `
+      <div class="note green"><span class="i">✅</span><span><b>Exécution terminée${res.live?' (IA temps réel)':' (simulée)'}.</b></span></div>
+      <div style="margin-top:14px;padding:14px;background:var(--bg);border:1px solid var(--line);border-radius:10px;font-size:13px">${res.output}</div>
+      <div class="note" style="margin-top:14px"><span class="i">🔒</span><span>Aucune action externe n'a été déclenchée. Toute communication passe par la file de validation humaine.</span></div>
+    `, [{t:'Fermer',c:'primary',fn:'closeModal()'}]);
+    if(CURRENT!=='agents') render();
+  }catch(e){ toast(e.message,'err'); closeModal(); }
+}
+
+/* ---------- VEILLE ---------- */
+VIEWS.veille = () => {
+  const opps = [...DB.opportunities].sort((a,b)=>b.score-a.score);
+  return `
+  <div class="note" style="margin-bottom:16px"><span class="i">⚖️</span><span><b>Conformité :</b> collecte d'informations <b>publiques et autorisées</b> uniquement. Pas de scraping illégal, pas de contournement de sécurité, respect des conditions d'utilisation des sources. Chaque opportunité conserve sa source et sa date de découverte.</span></div>
+
+  <div class="grid g-3" style="grid-template-columns:2fr 1fr;margin-bottom:16px">
+    <div class="card">
+      <div class="card-h"><h3>🛰️ Moteur de veille</h3><span class="desc">Agent 1 — Opportunity Intelligence</span></div>
+      <div class="field"><label>Mots-clés suivis (FR / EN / AR / SO)</label>
+        <div id="kwList" style="display:flex;flex-wrap:wrap;gap:7px;margin-bottom:8px"></div>
+        <div class="row"><input id="kwNew" placeholder="Ajouter un mot-clé…" onkeydown="if(event.key==='Enter')addKw()" /><button class="btn" style="flex:none" onclick="addKw()">+ Ajouter</button></div>
+      </div>
+      <button class="btn primary" onclick="runScan()" id="scanBtn">🔎 Lancer une recherche de veille</button>
+      <button class="btn ghost" onclick="go('parametres')">⚙️ Sources & fréquence</button>
+    </div>
+    <div class="card">
+      <div class="card-h"><h3>📊 Détection</h3></div>
+      <div class="stat-row"><span class="lbl">Opportunités totales</span><span class="v">${DB.opportunities.length}</span></div>
+      <div class="stat-row"><span class="lbl">Non converties</span><span class="v">${DB.opportunities.filter(o=>!o.converted).length}</span></div>
+      <div class="stat-row"><span class="lbl">Score moyen</span><span class="v">${Math.round(DB.opportunities.reduce((s,o)=>s+o.score,0)/DB.opportunities.length)}</span></div>
+      <div class="stat-row"><span class="lbl">Budget potentiel</span><span class="v">${moneyShort(DB.opportunities.reduce((s,o)=>s+o.budget,0))}</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-h"><h3>🎯 Opportunités détectées</h3><span class="desc">Triées par score</span></div>
+    <div class="tbl-wrap" style="border:none">
+    <table class="tbl"><thead><tr><th>Score</th><th>Organisation / Événement</th><th>Type</th><th>Date</th><th>Budget est.</th><th>Urgence</th><th>Source</th><th></th></tr></thead><tbody>
+    ${opps.map(o=>`<tr>
+      <td><span class="score ${scoreClass(o.score)}">${o.score}</span></td>
+      <td class="name">${o.org}<div style="font-size:11.5px;color:var(--muted);font-weight:400">${o.title}</div></td>
+      <td><span class="tag">${o.type}</span></td>
+      <td><span class="badge-s ${daysUntil(o.eventDate)<25?'b-amber':'b-blue'}">J-${daysUntil(o.eventDate)}</span></td>
+      <td style="font-weight:700">${moneyShort(o.budget)}</td>
+      <td><span class="badge-s ${o.urgency==='Haute'?'b-red':o.urgency==='Moyenne'?'b-amber':'b-gray'}">${o.urgency}</span></td>
+      <td style="font-size:11.5px;color:var(--muted)">${o.source}</td>
+      <td><button class="btn sm" onclick="openOpp('${o.id}')">Ouvrir</button></td>
+    </tr>`).join('')}
+    </tbody></table></div>
+  </div>`;
+};
+AFTER.veille = () => renderKw();
+function renderKw(){ const el=$('#kwList'); if(!el)return; el.innerHTML = DB.keywords.map((k,i)=>`<span class="chip on">${k}<span class="x" onclick="rmKw(${i})">✕</span></span>`).join(''); }
+function addKw(){ const v=$('#kwNew').value.trim(); if(v){ DB.keywords.push(v); $('#kwNew').value=''; save(); renderKw(); } }
+function rmKw(i){ DB.keywords.splice(i,1); save(); renderKw(); }
+async function runScan(){
+  const btn=$('#scanBtn'); if(btn){ btn.disabled=true; btn.textContent='⏳ Analyse des sources publiques…'; }
+  try{
+    const res = await api('POST','/veille/scan');
+    await loadState();
+    if(res.added) toast(`Nouvelle opportunité détectée : ${res.opportunity.org} (score ${res.score})`);
+    else toast(res.reason || 'Aucune nouvelle opportunité','info');
+  }catch(e){ toast(e.message,'err'); }
+  render();
+}
+function openOpp(id){
+  const o=DB.opportunities.find(x=>x.id===id);
+  const converted = DB.prospects.some(p=>p.opId===id);
+  modal(`🛰️ ${o.title}`, `
+    <div style="display:flex;gap:10px;align-items:center;margin-bottom:14px"><span class="score ${scoreClass(o.score)}" style="width:48px;height:48px;font-size:16px">${o.score}</span><div><div style="font-weight:800;font-size:15px">${o.org}</div><div style="color:var(--muted);font-size:12px">${o.type} · ${o.participants} participants estimés</div></div></div>
+    <div style="padding:13px;background:var(--bg);border:1px solid var(--line);border-radius:10px;font-size:13px;margin-bottom:14px">${o.summary}</div>
+    <div class="grid g-2" style="gap:10px">
+      <div class="stat-row"><span class="lbl">Date événement</span><span class="v">${dateFR(o.eventDate)} (J-${daysUntil(o.eventDate)})</span></div>
+      <div class="stat-row"><span class="lbl">Budget estimé</span><span class="v">${money(o.budget)}</span></div>
+      <div class="stat-row"><span class="lbl">Urgence</span><span class="v">${o.urgency}</span></div>
+      <div class="stat-row"><span class="lbl">Contact public</span><span class="v">${o.contact}</span></div>
+      <div class="stat-row"><span class="lbl">Découverte</span><span class="v">${dateFR(o.found)}</span></div>
+      <div class="stat-row"><span class="lbl">Source</span><span class="v" style="font-size:12px">${o.source}</span></div>
+    </div>
+    <div style="margin-top:12px"><span class="lbl" style="font-size:12px;color:var(--muted);font-weight:700">Signaux commerciaux</span><div style="margin-top:6px;display:flex;gap:6px;flex-wrap:wrap">${(o.signals||[]).map(s=>`<span class="tag">${s}</span>`).join('')}</div></div>
+    <div class="note blue" style="margin-top:14px"><span class="i">🔗</span><span>Source publique : ${o.sourceUrl} · Dernière vérification : ${dateFR(o.found)} · Fiabilité estimée : élevée</span></div>
+  `, converted ? [{t:'Voir le prospect',c:'primary',fn:`closeModal();goProspectByOpp('${id}')`}] : [{t:'Annuler',c:'ghost',fn:'closeModal()'},{t:'➡️ Convertir en prospect',c:'primary',fn:`convertOpp('${id}')`}]);
+}
+function goProspectByOpp(opId){ const p=DB.prospects.find(x=>x.opId===opId); if(p){ go('crm'); setTimeout(()=>openProspect(p.id),200); } }
+function convertOpp(id){
+  const o=DB.opportunities.find(x=>x.id===id);
+  o.converted=true;
+  const p={id:uid('pr'), opId:id, org:o.org, contact:o.contact, fonction:'À qualifier', sector:CLIENT_SECTORS[0], email:'', phone:'', wa:'', site:o.sourceUrl, address:'Djibouti', priority:'À développer', score:o.score, stage:'detect', owner:'—', lastContact:null, nextAction:'Enrichir la fiche (Agent 2)', consent:'À obtenir', status:'Brouillon IA', value:o.budget, notes:'Créé depuis la veille. '+o.summary, history:[]};
+  DB.prospects.unshift(p);
+  DB.agentLog.unshift({d:new Date().toISOString(), agent:'Lead Research', msg:`Prospect créé depuis opportunité : ${o.org}`});
+  save(); closeModal(); toast('Opportunité convertie en prospect'); go('crm'); setTimeout(()=>openProspect(p.id),200);
+}
+
+/* ---------- CRM ---------- */
+let crmView='kanban';
+VIEWS.crm = () => {
+  return `
+  <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;flex-wrap:wrap">
+    <div class="seg"><button class="${crmView==='kanban'?'on':''}" onclick="crmView='kanban';render()">Kanban</button><button class="${crmView==='table'?'on':''}" onclick="crmView='table';render()">Tableau</button></div>
+    <div class="spacer"></div>
+    <button class="btn" onclick="runAgent('lead')">🔍 Enrichir (Agent 2)</button>
+    <button class="btn primary" onclick="openNewProspect()">+ Nouveau prospect</button>
+  </div>
+  ${crmView==='kanban'?renderKanban():renderCrmTable()}`;
+};
+function renderKanban(){
+  return `<div class="kanban">${STAGES.map(s=>{
+    const items=DB.prospects.filter(p=>p.stage===s.id);
+    return `<div class="kcol" ondragover="event.preventDefault()" ondrop="dropCard(event,'${s.id}')">
+      <h4><span style="width:9px;height:9px;border-radius:50%;background:${s.color};display:inline-block"></span>${s.name}<span class="cnt">${items.length}</span></h4>
+      <div class="cards">
+      ${items.map(p=>`<div class="kcard" draggable="true" ondragstart="dragCard(event,'${p.id}')" ondragend="event.target.classList.remove('drag')" onclick="openProspect('${p.id}')">
+        <div class="kt">${p.org}</div>
+        <div class="ko">${p.contact} · ${p.sector}</div>
+        <div class="kf"><span class="score ${scoreClass(p.score)}" style="width:30px;height:30px;font-size:11px">${p.score}</span>${priBadge(p.priority)}</div>
+        <div class="kf" style="margin-top:8px"><span class="val">${moneyShort(p.value)} DJF</span><span class="tag">${p.owner}</span></div>
+      </div>`).join('')||'<div style="text-align:center;color:var(--faint);font-size:11.5px;padding:14px">—</div>'}
+      </div>
+    </div>`;
+  }).join('')}</div>`;
+}
+function renderCrmTable(){
+  return `<div class="card"><div class="tbl-wrap" style="border:none">
+  <table class="tbl"><thead><tr><th>Organisation</th><th>Contact</th><th>Secteur</th><th>Score</th><th>Priorité</th><th>Étape</th><th>Valeur</th><th>Statut</th><th>Prochaine action</th></tr></thead><tbody>
+  ${DB.prospects.map(p=>`<tr onclick="openProspect('${p.id}')" style="cursor:pointer">
+    <td class="name">${p.org}</td><td>${p.contact}<div style="font-size:11px;color:var(--muted)">${p.fonction}</div></td>
+    <td><span class="tag">${p.sector}</span></td><td><span class="score ${scoreClass(p.score)}" style="width:30px;height:30px;font-size:11px">${p.score}</span></td>
+    <td>${priBadge(p.priority)}</td><td><span class="badge-s b-blue">${(STAGES.find(s=>s.id===p.stage)||{}).name}</span></td>
+    <td style="font-weight:700">${moneyShort(p.value)}</td><td>${statusBadge(p.status)}</td><td style="font-size:12px;color:var(--muted)">${p.nextAction}</td>
+  </tr>`).join('')}
+  </tbody></table></div></div>`;
+}
+let dragId=null;
+function dragCard(e,id){ dragId=id; e.target.classList.add('drag'); }
+function dropCard(e,stage){ e.preventDefault(); const p=DB.prospects.find(x=>x.id===dragId); if(p){ p.stage=stage; if(stage==='gagne'){p.status='Gagné';} if(stage==='perdu'){p.status='Perdu';} save(); toast(`${p.org} → ${(STAGES.find(s=>s.id===stage)||{}).name}`); render(); } }
+function openProspect(id){
+  const p=DB.prospects.find(x=>x.id===id);
+  const o=DB.opportunities.find(x=>x.id===p.opId);
+  modal(`👤 ${p.org}`, `
+    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px">${priBadge(p.priority)}${statusBadge(p.status)}<span class="badge-s b-gray">Étape : ${(STAGES.find(s=>s.id===p.stage)||{}).name}</span><span class="score ${scoreClass(p.score)}" style="width:30px;height:30px;font-size:11px">${p.score}</span></div>
+    <div class="grid g-2" style="gap:8px 20px">
+      <div class="stat-row"><span class="lbl">Contact</span><span class="v">${p.contact}</span></div>
+      <div class="stat-row"><span class="lbl">Fonction</span><span class="v">${p.fonction}</span></div>
+      <div class="stat-row"><span class="lbl">Email</span><span class="v" style="font-size:12px">${p.email||'—'}</span></div>
+      <div class="stat-row"><span class="lbl">Téléphone</span><span class="v" style="font-size:12px">${p.phone||'—'}</span></div>
+      <div class="stat-row"><span class="lbl">Secteur</span><span class="v">${p.sector}</span></div>
+      <div class="stat-row"><span class="lbl">Site</span><span class="v" style="font-size:12px">${p.site||'—'}</span></div>
+      <div class="stat-row"><span class="lbl">Valeur estimée</span><span class="v">${money(p.value)}</span></div>
+      <div class="stat-row"><span class="lbl">Responsable</span><span class="v">${p.owner}</span></div>
+      <div class="stat-row"><span class="lbl">Dernier contact</span><span class="v">${dateFR(p.lastContact)}</span></div>
+      <div class="stat-row"><span class="lbl">Consentement</span><span class="v" style="font-size:12px">${p.consent}</span></div>
+    </div>
+    <div style="margin-top:12px"><span class="lbl" style="color:var(--muted);font-weight:700;font-size:12px">Notes</span><div style="margin-top:5px;padding:11px;background:var(--bg);border:1px solid var(--line);border-radius:9px;font-size:13px">${p.notes}</div></div>
+    ${p.history.length?`<div style="margin-top:14px"><span class="lbl" style="color:var(--muted);font-weight:700;font-size:12px">Historique</span><div class="tl" style="margin-top:8px">${p.history.map(h=>`<div class="tl-item"><div class="tt" style="font-size:12.5px">${h.t}</div><div class="tm">${dateFR(h.d)}</div></div>`).join('')}</div></div>`:''}
+    <div class="note blue" style="margin-top:14px"><span class="i">🎯</span><span><b>Angle commercial recommandé (Agent 3) :</b> ${o?o.summary:'Personnaliser selon le besoin détecté.'}</span></div>
+  `, [
+    {t:'Fermer',c:'ghost',fn:'closeModal()'},
+    {t:'📝 Créer proposition',c:'',fn:`closeModal();openNewProposal('${p.id}')`},
+    {t:'📤 Préparer contact',c:'primary',fn:`closeModal();prepareOutreach('${p.id}')`},
+  ]);
+}
+function openNewProspect(){
+  modal('➕ Nouveau prospect', `
+    <div class="row"><div class="field"><label>Organisation *</label><input id="np-org" /></div><div class="field"><label>Secteur</label><select id="np-sector">${CLIENT_SECTORS.map(s=>`<option>${s}</option>`).join('')}</select></div></div>
+    <div class="row"><div class="field"><label>Contact</label><input id="np-contact" /></div><div class="field"><label>Fonction</label><input id="np-fonction" /></div></div>
+    <div class="row"><div class="field"><label>Email</label><input id="np-email" /></div><div class="field"><label>Téléphone</label><input id="np-phone" /></div></div>
+    <div class="row"><div class="field"><label>Valeur estimée (DJF)</label><input id="np-value" type="number" value="2000000" /></div><div class="field"><label>Priorité</label><select id="np-priority"><option>Très prioritaire</option><option>Prioritaire</option><option selected>À développer</option><option>À surveiller</option></select></div></div>
+    <div class="field"><label>Notes</label><textarea id="np-notes"></textarea></div>
+    <div class="note"><span class="i">⚖️</span><span>Consentement / intérêt légitime à documenter avant toute prospection (voir Conformité).</span></div>
+  `, [{t:'Annuler',c:'ghost',fn:'closeModal()'},{t:'Enregistrer',c:'primary',fn:'saveProspect()'}]);
+}
+function saveProspect(){
+  const org=$('#np-org').value.trim(); if(!org){ toast('Organisation requise','err'); return; }
+  const p={id:uid('pr'), opId:null, org, contact:$('#np-contact').value||'À qualifier', fonction:$('#np-fonction').value||'—', sector:$('#np-sector').value, email:$('#np-email').value, phone:$('#np-phone').value, wa:'', site:'', address:'Djibouti', priority:$('#np-priority').value, score:60, stage:'detect', owner:CUR.roleName, lastContact:null, nextAction:'Qualifier', consent:'À obtenir', status:'Brouillon IA', value:+$('#np-value').value||0, notes:$('#np-notes').value, history:[]};
+  DB.prospects.unshift(p); save(); closeModal(); toast('Prospect créé'); render();
+}
+
+/* ---------- PROPOSALS ---------- */
+VIEWS.proposals = () => {
+  return `
+  <div style="display:flex;gap:12px;margin-bottom:16px;flex-wrap:wrap;align-items:center">
+    <div class="note blue" style="flex:1;margin:0"><span class="i">🔒</span><span><b>Aucun prix final n'est envoyé automatiquement.</b> Chaque proposition passe par l'Agent Compliance (n°6) puis par une validation humaine.</span></div>
+    <button class="btn primary" style="flex:none" onclick="openNewProposal()">+ Nouvelle proposition</button>
+  </div>
+  <div class="card"><div class="tbl-wrap" style="border:none">
+  <table class="tbl"><thead><tr><th>Proposition</th><th>Client</th><th>Formule</th><th>Langue / Ton</th><th>Valeur</th><th>Marge</th><th>Statut</th><th></th></tr></thead><tbody>
+  ${DB.proposals.map(pr=>{ const p=DB.prospects.find(x=>x.id===pr.prospectId)||{}; return `<tr>
+    <td class="name">${pr.title}</td><td>${p.org||'—'}</td>
+    <td><span class="badge-s ${pr.tier==='Premium'?'b-violet':pr.tier==='Professionnelle'?'b-blue':'b-gray'}">${pr.tier}</span></td>
+    <td style="font-size:12px">${pr.lang} · ${pr.tone}</td><td style="font-weight:700">${moneyShort(pr.value)}</td>
+    <td><span class="badge-s ${pr.margin>=DB.settings.marginMin?'b-green':'b-red'}">${pr.margin}%</span></td>
+    <td>${statusBadge(pr.status)}</td>
+    <td><button class="btn sm" onclick="openProposal('${pr.id}')">Ouvrir</button></td>
+  </tr>`; }).join('')}
+  </tbody></table></div></div>`;
+};
+function openNewProposal(prospectId){
+  const opts = DB.prospects.map(p=>`<option value="${p.id}" ${p.id===prospectId?'selected':''}>${p.org} — ${p.contact}</option>`).join('');
+  modal('📝 Générer une proposition commerciale', `
+    <div class="note blue"><span class="i">♟️</span><span>L'Agent 3 (Stratégie) définit le concept et 3 formules ; l'Agent 5 (Rédaction) produit le document. Vous restez décisionnaire.</span></div>
+    <div class="field" style="margin-top:14px"><label>Prospect / Client</label><select id="pp-prospect">${opts}</select></div>
+    <div class="row">
+      <div class="field"><label>Formule recommandée</label><select id="pp-tier"><option>Essentielle</option><option selected>Professionnelle</option><option>Premium</option></select></div>
+      <div class="field"><label>Type d'événement</label><select id="pp-type">${EVENT_TYPES.map(t=>`<option>${t}</option>`).join('')}</select></div>
+    </div>
+    <div class="row">
+      <div class="field"><label>Langue</label><select id="pp-lang"><option>Français</option><option>Anglais</option><option>Arabe</option><option>Somali</option></select></div>
+      <div class="field"><label>Ton</label><select id="pp-tone"><option>Institutionnel</option><option selected>Commercial</option><option>Diplomatique</option><option>Premium</option><option>Créatif</option><option>Direct</option><option>Formel</option></select></div>
+    </div>
+    <div class="field"><label>Formats à générer</label>
+      <div style="display:flex;gap:7px;flex-wrap:wrap">${['PDF','Word','Email','WhatsApp','PowerPoint','Devis','Budget Excel'].map((f,i)=>`<span class="chip ${i<3?'on':''}" onclick="this.classList.toggle('on')">${f}</span>`).join('')}</div>
+    </div>
+  `, [{t:'Annuler',c:'ghost',fn:'closeModal()'},{t:'⚡ Générer (Agents 3+5)',c:'primary',fn:'generateProposal()'}]);
+}
+function generateProposal(){
+  const pid=$('#pp-prospect').value; const p=DB.prospects.find(x=>x.id===pid);
+  const tier=$('#pp-tier').value; const lang=$('#pp-lang').value; const tone=$('#pp-tone').value; const type=$('#pp-type').value;
+  const mult = tier==='Premium'?1.35:tier==='Professionnelle'?1:0.72;
+  const value = Math.round((p.value*mult)/1000)*1000;
+  const margin = tier==='Premium'?27:tier==='Professionnelle'?24:22;
+  const pr={id:uid('prop'), prospectId:pid, title:`${type} — ${p.org} — ${tier}`, tier, lang, tone, value, margin, status:'À vérifier', createdBy:'Agent Writing', validatedBy:null, validatedAt:null, sentAt:null, type};
+  DB.proposals.unshift(pr);
+  DB.approvals.unshift({id:uid('ap'), kind:'Proposition', ref:pr.title, prospect:p.org, agent:'Writing + Compliance', preparedBy:'IA', checks:{name:true,contact:!!p.email,margin:margin>=DB.settings.marginMin,antispam:true,consent:p.consent!=='À obtenir',legal:true}, status:'À vérifier', created:new Date().toISOString(), risk: margin<DB.settings.marginMin?'Marge sous le seuil':(p.consent==='À obtenir'?'Consentement à confirmer':'—')});
+  DB.agentLog.unshift({d:new Date().toISOString(), agent:'Proposal Strategy + Writing', msg:`Proposition ${tier} générée pour ${p.org} (${lang}, ${tone})`});
+  save(); closeModal(); toast('Proposition générée — en attente de validation'); openProposal(pr.id);
+}
+function openProposal(id){
+  const pr=DB.proposals.find(x=>x.id===id); const p=DB.prospects.find(x=>x.id===pr.prospectId)||{};
+  const tiers={
+    'Essentielle':{price:Math.round(pr.value*0.72),feat:['Coordination de base','Sonorisation & éclairage standard','Accueil & signalétique','1 régisseur','Rapport simple'],excl:['Captation vidéo','Traduction simultanée','Décoration premium']},
+    'Professionnelle':{price:pr.value,feat:['Coordination complète','Audiovisuel professionnel + captation','Scénographie & décoration','Équipe dédiée (4 pers.)','Gestion des invitations & badges','Rapport détaillé'],excl:['Diffusion live multi-caméras','Sécurité renforcée VIP']},
+    'Premium':{price:Math.round(pr.value*1.35),feat:['Direction artistique complète','Diffusion live multi-caméras','Traduction simultanée (2 langues)','Protocole & gestion VIP','Sécurité dédiée','Couverture presse & réseaux','Rapport exécutif + vidéo aftermovie'],excl:[]},
+  };
+  const t=tiers[pr.tier];
+  modal(`📄 ${pr.title}`, `
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px">${statusBadge(pr.status)}<span class="badge-s ${pr.tier==='Premium'?'b-violet':pr.tier==='Professionnelle'?'b-blue':'b-gray'}">${pr.tier}</span><span class="badge-s b-gray">${pr.lang} · ${pr.tone}</span><span class="badge-s ${pr.margin>=DB.settings.marginMin?'b-green':'b-red'}">Marge ${pr.margin}%</span></div>
+    <div style="text-align:center;padding:16px;background:var(--bg);border:1px solid var(--line);border-radius:12px;margin-bottom:14px">
+      <div style="font-size:12px;color:var(--muted);font-weight:700">MONTANT PROPOSÉ (${pr.tier})</div>
+      <div style="font-size:30px;font-weight:800;margin-top:4px">${money(t.price)}</div>
+      <div style="font-size:11px;color:var(--muted)">Prix estimatif — soumis à validation humaine</div>
+    </div>
+    <div class="grid g-2" style="gap:14px">
+      <div><div class="lbl" style="color:var(--green);font-weight:700;font-size:12px;margin-bottom:6px">✅ Services inclus</div>${t.feat.map(f=>`<div style="font-size:12.5px;padding:4px 0">• ${f}</div>`).join('')}</div>
+      <div><div class="lbl" style="color:var(--red);font-weight:700;font-size:12px;margin-bottom:6px">➖ Non inclus</div>${t.excl.length?t.excl.map(f=>`<div style="font-size:12.5px;padding:4px 0">• ${f}</div>`).join(''):'<div style="font-size:12.5px;color:var(--muted)">Formule tout inclus</div>'}</div>
+    </div>
+    <div style="margin-top:14px"><div class="lbl" style="font-weight:700;font-size:12px;margin-bottom:6px">📋 Structure du document généré</div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap">${['Couverture','Contexte','Compréhension du besoin','Concept','Programme','Méthodologie','Périmètre','Planning','Équipe','Budget','Conditions','Validité','Prochaines étapes'].map(s=>`<span class="tag">${s}</span>`).join('')}</div>
+    </div>
+    ${pr.validatedBy?`<div class="note green" style="margin-top:14px"><span class="i">✅</span><span>Validé par <b>${pr.validatedBy}</b> le ${dateFR(pr.validatedAt)}${pr.sentAt?` · Envoyé le ${dateFR(pr.sentAt)}`:''}</span></div>`:`<div class="note" style="margin-top:14px"><span class="i">⏳</span><span>En attente de validation humaine avant tout envoi.</span></div>`}
+  `, [
+    {t:'📄 Exporter PDF',c:'ghost',fn:`exportDoc('${pr.id}')`},
+    {t:'Fermer',c:'ghost',fn:'closeModal()'},
+    pr.status==='À vérifier' ? {t:'✅ Envoyer en validation',c:'primary',fn:`sendToApproval('${pr.id}')`} : {t:'📤 Préparer l\'envoi',c:'primary',fn:`closeModal();prepareOutreach('${pr.prospectId}')`},
+  ]);
+}
+function exportDoc(id){ const pr=DB.proposals.find(x=>x.id===id); toast(`Export ${pr.lang} généré (simulation) : PDF prêt`,'info'); }
+function sendToApproval(id){ const pr=DB.proposals.find(x=>x.id===id); toast('Proposition envoyée dans la file de validation','info'); closeModal(); go('validation'); }
+
+/* ---------- OUTREACH ---------- */
+VIEWS.outreach = () => {
+  const seq=DB.settings.followupDelays;
+  const pendingSeqs = DB.prospects.filter(p=>['contact','prop','reponse','nego'].includes(p.stage));
+  return `
+  <div class="note" style="margin-bottom:16px"><span class="i">🚫</span><span><b>Anti-spam by design.</b> Pas d'envoi de masse non sollicité. Limites : <b>${DB.settings.dailyLimit}/jour</b>, <b>${DB.settings.hourlyLimit}/heure</b>. Désabonnements et liste noire respectés. Chaque envoi requiert une validation humaine (sauf séquence explicitement acceptée par le client).</span></div>
+
+  <div class="grid g-3" style="grid-template-columns:1fr 1fr 1fr;margin-bottom:16px">
+    <div class="kpi" style="--accent:#22c55e"><div class="kl"><span class="ki" style="background:#22c55e">📤</span>Envois autorisés (jour)</div><div class="kv">${DB.approvals.filter(a=>a.status==='Autorisé à envoyer').length} / ${DB.settings.dailyLimit}</div><div class="kd">Sous validation</div></div>
+    <div class="kpi" style="--accent:#0ea5e9"><div class="kl"><span class="ki" style="background:#0ea5e9">🔁</span>Séquences actives</div><div class="kv">${pendingSeqs.length}</div><div class="kd">Suspendues dès réponse</div></div>
+    <div class="kpi" style="--accent:#f59e0b"><div class="kl"><span class="ki" style="background:#f59e0b">⏳</span>Relances à faire</div><div class="kv">${DB.prospects.filter(p=>p.nextAction && p.nextAction.toLowerCase().includes('relance')).length}</div><div class="kd">À valider</div></div>
+  </div>
+
+  <div class="grid g-2">
+    <div class="card">
+      <div class="card-h"><h3>🔁 Séquence de relance recommandée</h3><span class="desc">Agent 8 — configurable</span></div>
+      <div class="tl">
+        <div class="tl-item g"><div class="tt">Jour 0 — Envoi de la proposition</div><div class="tm">Après validation humaine</div></div>
+        <div class="tl-item a"><div class="tt">Jour ${seq[0]} — 1ʳᵉ relance courtoise</div><div class="tm">Suspendue si réponse reçue</div></div>
+        <div class="tl-item a"><div class="tt">Jour ${seq[1]} — 2ᵉ relance (valeur ajoutée)</div><div class="tm">Étude de cas / témoignage</div></div>
+        <div class="tl-item r"><div class="tt">Jour ${seq[2]} — Dernière relance</div><div class="tm">Puis arrêt automatique</div></div>
+      </div>
+      <button class="btn ghost" onclick="go('parametres')">⚙️ Configurer les délais</button>
+    </div>
+    <div class="card">
+      <div class="card-h"><h3>📤 File d'envoi (validation requise)</h3></div>
+      ${DB.prospects.filter(p=>p.email).slice(0,6).map(p=>`<div class="stat-row"><div><div style="font-weight:700">${p.org}</div><div style="font-size:11.5px;color:var(--muted)">${p.email} · ${p.nextAction}</div></div><button class="btn sm" onclick="prepareOutreach('${p.id}')">Préparer</button></div>`).join('')}
+    </div>
+  </div>`;
+};
+function prepareOutreach(pid){
+  const p=DB.prospects.find(x=>x.id===pid);
+  const o=DB.opportunities.find(x=>x.id===p.opId);
+  const body = `Objet : ${o?o.type:'Votre événement'} à Djibouti — proposition d'accompagnement\n\nBonjour ${p.contact},\n\nNous avons identifié votre projet « ${o?o.title:'événement'} » et serions honorés d'accompagner ${p.org} dans son organisation.\n\nNotre équipe conçoit des événements clé en main à Djibouti : scénographie, audiovisuel, protocole, restauration et logistique complète.\n\nSeriez-vous disponible pour un échange de 20 minutes cette semaine ?\n\nBien cordialement,\n${CUR.roleName}\nDjibouti Event Intelligence`;
+  modal('📤 Préparer une communication', `
+    <div class="row"><div class="field"><label>Canal</label><select id="ou-chan"><option>Email</option><option>WhatsApp Business (officiel)</option><option>SMS</option><option>Lettre commerciale</option></select></div><div class="field"><label>Destinataire</label><input value="${p.email||p.phone||p.org}" disabled /></div></div>
+    <div class="field"><label>Objet</label><input id="ou-subj" value="${o?o.type:'Votre événement'} à Djibouti — proposition d'accompagnement" /></div>
+    <div class="field"><label>Message (généré par Agent 7)</label><textarea id="ou-body" style="min-height:180px">${body}</textarea></div>
+    <div class="field"><label>Pièces jointes validées</label><div style="display:flex;gap:7px;flex-wrap:wrap"><span class="chip on">Proposition.pdf</span><span class="chip">Portfolio.pdf</span></div></div>
+    <div class="note"><span class="i">🛡️</span><span>L'Agent Compliance vérifiera : exactitude du contact, objet, ton, doublons, fréquence de relance, désabonnement, consentement. <b>Envoi impossible sans validation humaine.</b></span></div>
+  `, [{t:'Annuler',c:'ghost',fn:'closeModal()'},{t:'✅ Envoyer en validation',c:'primary',fn:`queueOutreach('${pid}')`}]);
+}
+function queueOutreach(pid){
+  const p=DB.prospects.find(x=>x.id===pid);
+  DB.approvals.unshift({id:uid('ap'), kind:'Email de prospection', ref:$('#ou-subj').value, prospect:p.org, agent:'Outreach + Compliance', preparedBy:'IA', checks:{name:true,contact:!!p.email,margin:true,antispam:true,consent:p.consent!=='À obtenir',legal:true}, status:'À vérifier', created:new Date().toISOString(), risk: p.consent==='À obtenir'?'Consentement à confirmer':'—'});
+  DB.audit.unshift({d:new Date().toISOString(), who:'Agent Outreach', act:'Mise en file', obj:$('#ou-subj').value, detail:'En attente de validation humaine'});
+  save(); closeModal(); toast('Communication mise en file de validation','info'); go('validation');
+}
+
+/* ---------- VALIDATION ---------- */
+VIEWS.validation = () => {
+  const CHECKS=[['name','Nom client'],['contact','Contacts'],['margin','Marge'],['antispam','Anti-spam'],['consent','Consentement'],['legal','Conformité']];
+  return `
+  <div class="note" style="margin-bottom:16px"><span class="i">🛡️</span><span><b>Point de contrôle humain obligatoire (Agent 6).</b> Aucun email, devis, proposition, remise, engagement financier ou publication n'est exécuté sans validation explicite. Chaque décision est tracée (qui a préparé, quel agent, qui a validé, quand).</span></div>
+  <div class="card">
+    <div class="card-h"><h3>✅ File de validation</h3><span class="desc">${DB.approvals.length} éléments</span></div>
+    <div class="tbl-wrap" style="border:none">
+    <table class="tbl"><thead><tr><th>Élément</th><th>Client</th><th>Agents</th><th>Contrôles automatiques</th><th>Risque</th><th>Statut</th><th>Décision</th></tr></thead><tbody>
+    ${DB.approvals.map(a=>`<tr>
+      <td class="name">${a.ref}<div style="font-size:11px;color:var(--muted);font-weight:400">${a.kind}</div></td>
+      <td>${a.prospect}</td>
+      <td style="font-size:11.5px;color:var(--muted)">${a.agent}</td>
+      <td><div style="display:flex;gap:4px;flex-wrap:wrap">${CHECKS.map(([k,l])=>`<span class="badge-s ${a.checks[k]?'b-green':'b-red'}" style="font-size:9.5px;padding:2px 6px" title="${l}">${a.checks[k]?'✓':'✕'} ${l}</span>`).join('')}</div></td>
+      <td>${a.risk==='—'?'<span class="badge-s b-green">Aucun</span>':`<span class="badge-s b-red">${a.risk}</span>`}</td>
+      <td>${statusBadge(a.status)}</td>
+      <td>${a.status==='Envoyé'?'<span class="badge-s b-blue">Traité</span>':`<div style="display:flex;gap:5px"><button class="btn sm green" onclick="approve('${a.id}')" ${Object.values(a.checks).every(Boolean)?'':'disabled title=\"Corriger les contrôles\"'}>Valider</button><button class="btn sm danger" onclick="reject('${a.id}')">Refuser</button></div>`}</td>
+    </tr>`).join('')||'<tr><td colspan="7"><div class="empty"><div class="big">🎉</div>Aucune validation en attente</div></td></tr>'}
+    </tbody></table></div>
+  </div>`;
+};
+function approve(id){
+  const a=DB.approvals.find(x=>x.id===id);
+  if(!Object.values(a.checks).every(Boolean)){ toast('Tous les contrôles doivent être au vert','err'); return; }
+  a.status='Envoyé';
+  DB.audit.unshift({d:new Date().toISOString(), who:CUR.roleName, act:'Validation', obj:a.ref, detail:`Validé et exécuté par ${CUR.roleName}`});
+  DB.audit.unshift({d:new Date().toISOString(), who:'Agent Outreach', act:'Envoi', obj:a.ref, detail:'Exécuté après validation humaine'});
+  // update linked proposal
+  const pr=DB.proposals.find(x=>x.title===a.ref); if(pr){ pr.status='Envoyé'; pr.validatedBy=CUR.roleName; pr.validatedAt=new Date().toISOString(); pr.sentAt=new Date().toISOString(); }
+  save(); toast('Validé et exécuté ✅'); render();
+}
+function reject(id){
+  const a=DB.approvals.find(x=>x.id===id); a.status='À corriger';
+  DB.audit.unshift({d:new Date().toISOString(), who:CUR.roleName, act:'Refus', obj:a.ref, detail:'Renvoyé pour correction'});
+  save(); toast('Renvoyé pour correction','warn'); render();
+}
+
+/* ---------- EVENTS ---------- */
+let curEvent=null;
+VIEWS.events = () => {
+  if(curEvent){ return renderEventDetail(curEvent); }
+  return `
+  <div class="grid g-2">
+    ${DB.events.map(e=>{ const d=daysUntil(e.date); return `<div class="card" style="cursor:pointer" onclick="curEvent='${e.id}';render()">
+      <div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:12px"><div><div style="font-weight:800;font-size:16px">${e.name}</div><div style="color:var(--muted);font-size:12px">${e.type} · ${e.venue}</div></div><span class="badge-s ${d<14?'b-red':d<30?'b-amber':'b-blue'}">J-${d}</span></div>
+      <div class="progress" style="margin-bottom:6px"><i style="width:${e.progress}%"></i></div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:12px">${e.progress}% de préparation · ${e.tasksDone}/${e.tasksTotal} tâches</div>
+      <div class="grid g-2" style="gap:8px">
+        <div class="stat-row"><span class="lbl">Participants</span><span class="v">${e.participants}</span></div>
+        <div class="stat-row"><span class="lbl">Budget</span><span class="v">${moneyShort(e.budget)}</span></div>
+        <div class="stat-row"><span class="lbl">Fournisseurs</span><span class="v">${e.suppliersConfirmed}/${e.suppliersTotal}</span></div>
+        <div class="stat-row"><span class="lbl">Risques ouverts</span><span class="v" style="color:${e.risks?'var(--red)':'var(--green)'}">${e.risks}</span></div>
+      </div>
+    </div>`; }).join('')}
+  </div>`;
+};
+function renderEventDetail(id){
+  const e=DB.events.find(x=>x.id===id);
+  const tasks=DB.tasks.filter(t=>t.eventId===id);
+  const phases=['Avant','Jour J','Après'];
+  return `
+  <button class="btn ghost" onclick="curEvent=null;render()" style="margin-bottom:14px">← Retour aux événements</button>
+  <div class="card" style="margin-bottom:16px">
+    <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;align-items:center">
+      <div><div style="font-size:20px;font-weight:800">${e.name}</div><div style="color:var(--muted)">${e.type} · ${e.venue} · ${dateFR(e.date)} (J-${daysUntil(e.date)})</div></div>
+      <div style="display:flex;gap:8px"><button class="btn" onclick="runAgent('execution')">📡 Rapport jour-J</button><button class="btn primary" onclick="go('finance')">💰 Rentabilité</button></div>
+    </div>
+  </div>
+  <div class="grid g-kpi" style="margin-bottom:16px">
+    <div class="kpi" style="--accent:#3b82f6"><div class="kl"><span class="ki">📋</span>Avancement</div><div class="kv">${e.progress}%</div><div class="kd">${e.tasksDone}/${e.tasksTotal} tâches</div></div>
+    <div class="kpi" style="--accent:#22c55e"><div class="kl"><span class="ki" style="background:#22c55e">🤝</span>Fournisseurs</div><div class="kv">${e.suppliersConfirmed}/${e.suppliersTotal}</div><div class="kd">Confirmés</div></div>
+    <div class="kpi" style="--accent:#ef4444"><div class="kl"><span class="ki" style="background:#ef4444">⚠️</span>Risques</div><div class="kv">${e.risks}</div><div class="kd">Ouverts</div></div>
+    <div class="kpi" style="--accent:#8b5cf6"><div class="kl"><span class="ki" style="background:#8b5cf6">👥</span>Participants</div><div class="kv">${e.participants}</div><div class="kd">Attendus</div></div>
+  </div>
+  <div class="grid g-2">
+    <div class="card">
+      <div class="card-h"><h3>✅ Checklist & tâches</h3><span class="desc">Agent 4 — Planning</span></div>
+      ${phases.map(ph=>{ const pt=tasks.filter(t=>t.phase===ph); if(!pt.length)return''; return `<div style="font-size:11px;font-weight:700;color:var(--faint);text-transform:uppercase;letter-spacing:.6px;margin:12px 0 7px">${ph}</div>`+pt.map(t=>`<div class="check-item ${t.done?'done':''}"><input type="checkbox" ${t.done?'checked':''} onchange="toggleTask('${t.id}')"><div style="flex:1"><div style="font-weight:600">${t.name}</div><div style="font-size:11px;color:var(--muted)">${t.owner} · échéance ${dateShort(t.due)}</div></div></div>`).join(''); }).join('')}
+    </div>
+    <div class="card">
+      <div class="card-h"><h3>📋 Plan opérationnel</h3><span class="desc">Éléments couverts</span></div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap">${['Fiche projet','Organigramme','RACI','Chronogramme','Budget détaillé','Plan du lieu','Plan audiovisuel','Plan électrique','Plan sécurité','Plan restauration','Plan protocole','Plan média','Invitations','Badges & QR','Gestion VIP','Plan B','Registre risques','Rapport post-événement'].map(x=>`<span class="tag">${x}</span>`).join('')}</div>
+      <div class="note" style="margin-top:14px"><span class="i">🤝</span><span>Chaque prestataire proposé doit être <b>validé manuellement</b> avant tout contact ou engagement (Agent 6).</span></div>
+      <div class="card-h" style="margin-top:16px"><h3 style="font-size:13px">⚠️ Registre des risques</h3></div>
+      <div class="stat-row"><span class="lbl">Retard livraison scène</span><span class="badge-s b-amber">Moyen</span></div>
+      <div class="stat-row"><span class="lbl">Coupure électrique</span><span class="badge-s b-red">Élevé — Plan B groupe électrogène</span></div>
+    </div>
+  </div>`;
+}
+function toggleTask(id){
+  const t=DB.tasks.find(x=>x.id===id); t.done=!t.done;
+  const e=DB.events.find(x=>x.id===t.eventId);
+  const evTasks=DB.tasks.filter(x=>x.eventId===e.id);
+  e.tasksDone=evTasks.filter(x=>x.done).length; e.tasksTotal=evTasks.length;
+  e.progress=Math.round(e.tasksDone/Math.max(1,evTasks.length)*100);
+  save(); render();
+}
+
+/* ---------- FINANCE ---------- */
+VIEWS.finance = () => {
+  const evts=DB.events;
+  const rows = evts.map(e=>{
+    const cost=Math.round(e.budget*(0.70+Math.random()*0));
+    const costFixed = Math.round(e.budget*0.74);
+    const margin=Math.round((e.budget-costFixed)/e.budget*100);
+    const acompte=Math.round(e.budget*0.4);
+    return {...e, cost:costFixed, margin, acompte, paid:e.id==='ev1'?acompte:0};
+  });
+  const totalCA=rows.reduce((s,r)=>s+r.budget,0);
+  const totalCost=rows.reduce((s,r)=>s+r.cost,0);
+  const totalMargin=Math.round((totalCA-totalCost)/totalCA*100);
+  const alerts=[];
+  rows.forEach(r=>{ if(r.margin<DB.settings.marginMin) alerts.push(`Marge ${r.name} : ${r.margin}% < seuil ${DB.settings.marginMin}%`); if(!r.paid) alerts.push(`Acompte non reçu : ${r.name}`); });
+  const costLines=[['Fournisseurs',38],['Location lieu',14],['Audiovisuel',12],['Restauration',11],['Décoration',8],['Main-d\'œuvre',7],['Sécurité',4],['Transport',3],['Communication',2],['Imprévus',1]];
+  return `
+  <div class="grid g-kpi" style="margin-bottom:16px">
+    <div class="kpi" style="--accent:#22c55e"><div class="kl"><span class="ki" style="background:#22c55e">💰</span>CA prévisionnel</div><div class="kv">${moneyShort(totalCA)}</div><div class="kd">${rows.length} événements</div></div>
+    <div class="kpi" style="--accent:#ef4444"><div class="kl"><span class="ki" style="background:#ef4444">📉</span>Coûts estimés</div><div class="kv">${moneyShort(totalCost)}</div><div class="kd">Fournisseurs + internes</div></div>
+    <div class="kpi" style="--accent:#3b82f6"><div class="kl"><span class="ki">📊</span>Marge brute moyenne</div><div class="kv">${totalMargin}%</div><div class="kd">Seuil : ${DB.settings.marginMin}%</div></div>
+    <div class="kpi" style="--accent:#f59e0b"><div class="kl"><span class="ki" style="background:#f59e0b">⚠️</span>Alertes financières</div><div class="kv">${alerts.length}</div><div class="kd">Marge / paiements</div></div>
+  </div>
+
+  ${alerts.length?`<div class="note" style="margin-bottom:16px"><span class="i">⚠️</span><span><b>Alertes (Agent 11) :</b> ${alerts.join(' · ')}</span></div>`:''}
+
+  <div class="grid g-2" style="margin-bottom:16px">
+    <div class="card">
+      <div class="card-h"><h3>💼 Rentabilité par événement</h3></div>
+      <div class="tbl-wrap" style="border:none"><table class="tbl"><thead><tr><th>Événement</th><th>Vente</th><th>Coût</th><th>Marge</th><th>Acompte</th></tr></thead><tbody>
+      ${rows.map(r=>`<tr><td class="name">${r.name}</td><td>${moneyShort(r.budget)}</td><td>${moneyShort(r.cost)}</td><td><span class="badge-s ${r.margin>=DB.settings.marginMin?'b-green':'b-red'}">${r.margin}%</span></td><td>${r.paid?`<span class="badge-s b-green">Reçu</span>`:`<span class="badge-s b-red">En attente</span>`}</td></tr>`).join('')}
+      </tbody></table></div>
+    </div>
+    <div class="card">
+      <div class="card-h"><h3>🧾 Répartition des coûts</h3><span class="desc">Structure type</span></div>
+      ${costLines.map(([l,v])=>`<div class="stat-row"><span class="lbl" style="min-width:120px">${l}</span><div class="mini-bar"><i style="width:${v*2.4}%;background:linear-gradient(90deg,var(--brand),var(--brand2))"></i></div><span class="v">${v}%</span></div>`).join('')}
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-h"><h3>🚨 Règles d'alerte automatiques</h3><span class="desc">Agent 11 — Finance & Profitability</span></div>
+    <div class="grid g-2" style="gap:9px">
+      ${['Marge sous le seuil défini','Coût dépassant le budget','Acompte client non reçu','Paiement fournisseur imprévu','Dépense non justifiée'].map(x=>`<div class="check-item"><span style="color:var(--red)">⚠️</span><span>${x}</span></div>`).join('')}
+    </div>
+  </div>`;
+};
+
+/* ---------- AUDIT ---------- */
+VIEWS.audit = () => {
+  return `
+  <div class="note blue" style="margin-bottom:16px"><span class="i">🗒️</span><span>Traçabilité complète : qui a préparé le contenu, quel agent IA a participé, qui a validé et quand. Journal immuable pour la conformité.</span></div>
+  <div class="grid g-2">
+    <div class="card">
+      <div class="card-h"><h3>📜 Journal d'audit</h3><span class="desc">Actions humaines & système</span></div>
+      <div class="tl">
+        ${DB.audit.map(a=>{ const cls=a.act==='Blocage'||a.act==='Refus'?'r':a.act==='Validation'?'g':a.act==='Détection'?'a':''; return `<div class="tl-item ${cls}"><div class="tt">${a.act} — ${a.obj}</div><div class="tm">${a.who} · ${a.detail} · ${dateFR(a.d)}</div></div>`; }).join('')}
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-h"><h3>🧠 Journal des agents IA</h3><span class="desc">Orchestration</span></div>
+      <div class="tl">
+        ${DB.agentLog.map(l=>`<div class="tl-item"><div class="tt">${l.agent}</div><div class="tm">${l.msg} · ${dateFR(l.d)}</div></div>`).join('')}
+      </div>
+    </div>
+  </div>`;
+};
+
+/* ---------- PARAMETRES ---------- */
+VIEWS.parametres = () => {
+  const cats=[...new Set(INTEGRATIONS.map(i=>i.cat))];
+  return `
+  <div class="grid g-2" style="margin-bottom:16px">
+    <div class="card">
+      <div class="card-h"><h3>👤 Compte & rôle</h3></div>
+      <div class="stat-row"><span class="lbl">Utilisateur</span><span class="v">${CUR.name}</span></div>
+      <div class="stat-row"><span class="lbl">Email</span><span class="v" style="font-size:12px">${CUR.email}</span></div>
+      <div class="stat-row"><span class="lbl">Rôle</span><span class="v">${CUR.roleName}</span></div>
+      <div style="margin-top:12px;display:flex;gap:8px"><button class="btn danger" onclick="logout()">Déconnexion</button><button class="btn ghost" onclick="reset()">Réinitialiser la démo</button></div>
+    </div>
+    <div class="card">
+      <div class="card-h"><h3>🛡️ Sécurité</h3><span class="desc">Contrôles actifs</span></div>
+      <div class="grid g-2" style="gap:7px">
+        ${['Connexion sécurisée','Gestion des rôles & permissions','2FA optionnelle','Journal d\'audit','Chiffrement des données','Expiration de session','Protection CSRF / XSS','Anti-injection SQL','Limitation des requêtes','Masquage données sensibles'].map(x=>`<div class="check-item done" style="opacity:1;text-decoration:none"><span style="color:var(--green)">✓</span><span>${x}</span></div>`).join('')}
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-bottom:16px">
+    <div class="card-h"><h3>⚖️ Anti-spam, consentement & conformité</h3><span class="desc">Règles opposables aux automatisations</span></div>
+    <div class="grid g-3" style="grid-template-columns:repeat(3,1fr);gap:12px">
+      <div class="field"><label>Limite quotidienne d'envois</label><input type="number" id="set-daily" value="${DB.settings.dailyLimit}" onchange="setNum('dailyLimit',this.value)"></div>
+      <div class="field"><label>Limite horaire d'envois</label><input type="number" id="set-hourly" value="${DB.settings.hourlyLimit}" onchange="setNum('hourlyLimit',this.value)"></div>
+      <div class="field"><label>Marge minimale (%)</label><input type="number" id="set-margin" value="${DB.settings.marginMin}" onchange="setNum('marginMin',this.value)"></div>
+    </div>
+    <div class="grid g-3" style="grid-template-columns:repeat(3,1fr);gap:9px;margin-top:6px">
+      ${['Gestion des désabonnements','Liste d\'exclusion','Liste noire','Journal de consentement','Détection des doublons','Règles anti-spam'].map(x=>`<div class="check-item" style="text-decoration:none"><span style="color:var(--green)">✓</span><span>${x}</span></div>`).join('')}
+    </div>
+    <div class="field" style="margin-top:12px"><label>Délais de relance (jours, séparés par virgule)</label><input id="set-delays" value="${DB.settings.followupDelays.join(', ')}" onchange="setDelays(this.value)"></div>
+  </div>
+
+  <div class="card" style="margin-bottom:16px">
+    <div class="card-h"><h3>🔌 Intégrations</h3><span class="desc">Clés API stockées côté serveur — jamais exposées au navigateur</span></div>
+    ${cats.map(c=>`<div style="font-size:11px;font-weight:700;color:var(--faint);text-transform:uppercase;letter-spacing:.6px;margin:14px 0 8px">${c}</div><div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:9px">${INTEGRATIONS.filter(i=>i.cat===c).map(i=>{ const on=DB.integrations[i.id]; return `<div class="check-item" style="text-decoration:none;justify-content:space-between"><span style="display:flex;align-items:center;gap:9px"><span style="font-size:16px">${i.icon}</span>${i.name}</span><span class="badge-s ${on?'b-green':'b-gray'}" style="cursor:pointer" onclick="toggleInt('${i.id}')">${on?'Connecté':'Inactif'}</span></div>`; }).join('')}</div>`).join('')}
+    <div class="note" style="margin-top:14px"><span class="i">🔒</span><span>Aucune clé API n'est stockée ni exposée côté client. LinkedIn / Facebook / Instagram uniquement via API officielle autorisée.</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-h"><h3>👥 Rôles & permissions</h3></div>
+    <div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px">
+      ${ROLES.map(r=>`<div class="check-item" style="text-decoration:none"><span style="color:var(--brand)">👤</span><span>${r.name}</span></div>`).join('')}
+      <div class="check-item" style="text-decoration:none"><span style="color:var(--brand)">🔗</span><span>Fournisseur externe (accès limité)</span></div>
+    </div>
+  </div>`;
+};
+function setNum(k,v){ DB.settings[k]=+v||0; save(); toast('Paramètre enregistré','info'); }
+function setDelays(v){ DB.settings.followupDelays=v.split(',').map(x=>parseInt(x.trim())).filter(x=>!isNaN(x)); save(); toast('Délais mis à jour','info'); }
+function toggleInt(id){ DB.integrations[id]=!DB.integrations[id]; save(); render(); }
+
+/* ---------- GLOBAL SEARCH ---------- */
+function globalSearchGo(){
+  const q=$('#globalSearch').value.trim().toLowerCase(); if(!q) return;
+  const pros=DB.prospects.filter(p=>p.org.toLowerCase().includes(q)||p.contact.toLowerCase().includes(q));
+  const opps=DB.opportunities.filter(o=>o.org.toLowerCase().includes(q)||o.title.toLowerCase().includes(q));
+  modal(`🔎 Résultats pour « ${q} »`, `
+    ${pros.length?`<div class="lbl" style="font-weight:700;margin-bottom:6px">Prospects (${pros.length})</div>${pros.map(p=>`<div class="stat-row" style="cursor:pointer" onclick="closeModal();go('crm');setTimeout(()=>openProspect('${p.id}'),200)"><span>${p.org} — ${p.contact}</span>${priBadge(p.priority)}</div>`).join('')}`:''}
+    ${opps.length?`<div class="lbl" style="font-weight:700;margin:14px 0 6px">Opportunités (${opps.length})</div>${opps.map(o=>`<div class="stat-row" style="cursor:pointer" onclick="closeModal();go('veille');setTimeout(()=>openOpp('${o.id}'),200)"><span>${o.org} — ${o.title}</span><span class="score ${scoreClass(o.score)}" style="width:28px;height:28px;font-size:11px">${o.score}</span></div>`).join('')}`:''}
+    ${!pros.length&&!opps.length?'<div class="empty">Aucun résultat</div>':''}
+  `, [{t:'Fermer',c:'primary',fn:'closeModal()'}]);
+}
+
+/* ---------- MODAL ENGINE ---------- */
+function modal(title, body, actions){
+  $('#modalEl').className='modal'+((body||'').length>1400?' wide':'');
+  $('#modalEl').innerHTML=`
+    <div class="modal-h"><h3>${title}</h3><button class="close-x" onclick="closeModal()">✕</button></div>
+    <div class="modal-b">${body}</div>
+    ${actions?`<div class="modal-f">${actions.map(a=>`<button class="btn ${a.c||''}" onclick="${a.fn}">${a.t}</button>`).join('')}</div>`:''}`;
+  $('#modalBg').classList.add('on');
+}
+function closeModal(){ $('#modalBg').classList.remove('on'); }
+$('#modalBg').addEventListener('click',e=>{ if(e.target.id==='modalBg') closeModal(); });
+document.addEventListener('keydown',e=>{ if(e.key==='Escape') closeModal(); });
+/* Redundant binding for the login button (in addition to inline onclick). */
+(function(){ var b=document.querySelector('#login .btn.primary'); if(b){ b.addEventListener('click',function(ev){ ev.preventDefault(); doLogin(); }); } })();
+
+/* ---------- BOOT ---------- */
+try{ if(localStorage.getItem('djib_theme')==='light') document.documentElement.setAttribute('data-theme','light'); }catch(e){}
+// Restore session from a stored token if present.
+(async function boot(){
+  if(!TOKEN) return; // show login
+  try{
+    const {user} = await api('GET','/auth/me');
+    await enterApp(user);
+  }catch(e){ TOKEN=null; try{localStorage.removeItem('djib_token')}catch(_){} /* show login */ }
+})();
+</script>
+</body>
+</html>
