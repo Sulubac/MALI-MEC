@@ -299,6 +299,21 @@ table.tbl{width:100%;border-collapse:collapse;font-size:13px}
    Single-file client app. Simulated multi-agent orchestration.
    ============================================================ */
 
+/* ---------- GLOBAL ERROR REPORTER ----------
+   Guarantees the app never fails silently: any uncaught error is shown
+   on screen instead of leaving a blank/frozen page. */
+function showFatal(msg){
+  try{
+    var b=document.getElementById('errBanner');
+    if(!b){ b=document.createElement('div'); b.id='errBanner';
+      b.style.cssText='position:fixed;left:0;right:0;bottom:0;z-index:9999;background:#7f1d1d;color:#fff;font:13px/1.5 system-ui;padding:12px 16px;box-shadow:0 -4px 16px rgba(0,0,0,.4)';
+      document.body.appendChild(b); }
+    b.innerHTML='⚠️ <b>Détail technique :</b> '+String(msg)+' &nbsp; <span style="opacity:.8">(signalez-moi ce message pour correction)</span>';
+  }catch(e){}
+}
+window.addEventListener('error', function(e){ showFatal((e && e.message) || 'Erreur inconnue'); });
+window.addEventListener('unhandledrejection', function(e){ showFatal((e && e.reason && e.reason.message) || 'Promesse rejetée'); });
+
 /* ---------- ROLES ---------- */
 const ROLES = [
   {id:'super',   name:'Super administrateur'},
@@ -542,7 +557,12 @@ function go(v){
   $('#pgTitle').textContent = TITLES[v][0]; $('#pgSub').textContent = TITLES[v][1];
   render(); toggleSidebar(false);
 }
-function render(){ buildNav(); $('#content').innerHTML = VIEWS[CURRENT] ? VIEWS[CURRENT]() : '<div class="empty">Vue introuvable</div>'; if(AFTER[CURRENT]) AFTER[CURRENT](); }
+function render(){
+  try{ buildNav(); }catch(e){ showFatal('buildNav: '+e.message); }
+  try{ $('#content').innerHTML = VIEWS[CURRENT] ? VIEWS[CURRENT]() : '<div class="empty">Vue introuvable</div>'; }
+  catch(e){ $('#content').innerHTML='<div class="empty"><div class="big">⚠️</div>Cette section a rencontré un souci.<br><small>'+e.message+'</small></div>'; showFatal('render '+CURRENT+': '+e.message); }
+  try{ if(AFTER[CURRENT]) AFTER[CURRENT](); }catch(e){ showFatal('after '+CURRENT+': '+e.message); }
+}
 function toggleSidebar(open){ $('#sidebar').classList.toggle('open',open); $('#overlay').classList.toggle('on',open); }
 function toggleTheme(){ const l=document.documentElement.getAttribute('data-theme')==='light'; document.documentElement.setAttribute('data-theme', l?'dark':'light'); DB.theme=l?'dark':'light'; save(); }
 
@@ -1196,11 +1216,15 @@ function modal(title, body, actions){
 function closeModal(){ $('#modalBg').classList.remove('on'); }
 $('#modalBg').addEventListener('click',e=>{ if(e.target.id==='modalBg') closeModal(); });
 document.addEventListener('keydown',e=>{ if(e.key==='Escape') closeModal(); });
+/* Redundant binding for the login button (in addition to inline onclick). */
+(function(){ var b=document.querySelector('#login .btn.primary'); if(b){ b.addEventListener('click',function(ev){ ev.preventDefault(); doLogin(); }); } })();
 
 /* ---------- BOOT ---------- */
 if(DB.theme==='light') document.documentElement.setAttribute('data-theme','light');
 // auto-login if session exists
-if(DB.user){ selRole=DB.user.role; CUR=DB.user; $('#login').style.display='none'; $('#app').classList.add('on'); const r=ROLES.find(x=>x.id===CUR.role); $('#userNm').textContent=r.name; $('#userRl').textContent=r.roleName; $('#userAv').textContent=initials(r.name); buildNav(); go('dashboard'); }
+try{
+  if(DB.user){ selRole=DB.user.role; CUR=DB.user; $('#login').style.display='none'; $('#app').classList.add('on'); const r=ROLES.find(x=>x.id===CUR.role)||ROLES[1]; $('#userNm').textContent=r.name; $('#userRl').textContent=r.roleName; $('#userAv').textContent=initials(r.name); buildNav(); go('dashboard'); }
+}catch(e){ showFatal('Boot: '+e.message); }
 </script>
 </body>
 </html>
