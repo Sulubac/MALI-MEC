@@ -428,8 +428,16 @@ function seed(){
     ],
   };
 }
-function load(){ try{ DB = JSON.parse(localStorage.getItem(DB_KEY)) || seed(); }catch(e){ DB = seed(); } }
-function save(){ localStorage.setItem(DB_KEY, JSON.stringify(DB)); }
+let STORAGE_OK = true;
+function load(){
+  try{ DB = JSON.parse(localStorage.getItem(DB_KEY)) || seed(); }
+  catch(e){ STORAGE_OK = false; DB = seed(); }
+}
+function save(){
+  // Never let a storage failure (file:// protocol, private mode, quota) break the app.
+  try{ localStorage.setItem(DB_KEY, JSON.stringify(DB)); }
+  catch(e){ STORAGE_OK = false; }
+}
 function reset(){ if(confirm('Réinitialiser toutes les données de démo ?')){ DB = seed(); DB.user = CUR; save(); render(); toast('Données réinitialisées','info'); } }
 load();
 
@@ -455,17 +463,27 @@ function renderRolePick(){
 }
 renderRolePick();
 function doLogin(){
-  const r = ROLES.find(x=>x.id===selRole);
-  CUR = {email:$('#li-email').value, role:r.id, roleName:r.name, name:r.name.split(' ').slice(-2).join(' ')};
-  DB.user = CUR; save();
-  $('#login').style.display='none';
-  $('#app').classList.add('on');
-  $('#userNm').textContent = r.name;
-  $('#userRl').textContent = r.roleName;
-  $('#userAv').textContent = initials(r.name);
-  if(DB.theme==='light') document.documentElement.setAttribute('data-theme','light');
-  buildNav(); go('dashboard');
-  toast('Bienvenue, '+r.name);
+  try{
+    const r = ROLES.find(x=>x.id===selRole) || ROLES[1];
+    CUR = {email:($('#li-email').value||'demo@djib-events.dj'), role:r.id, roleName:r.name, name:r.name.split(' ').slice(-2).join(' ')};
+    DB.user = CUR; save();
+    // Show the app first so nothing below can block it.
+    $('#login').style.display='none';
+    $('#app').classList.add('on');
+    $('#userNm').textContent = r.name;
+    $('#userRl').textContent = r.roleName;
+    $('#userAv').textContent = initials(r.name);
+    if(DB.theme==='light') document.documentElement.setAttribute('data-theme','light');
+    buildNav(); go('dashboard');
+    toast('Bienvenue, '+r.name);
+    if(!STORAGE_OK) toast('Mode local restreint : vos données ne seront pas conservées après fermeture.','warn');
+  }catch(err){
+    // Absolute fallback: force the app open even if something unexpected fails.
+    $('#login').style.display='none';
+    $('#app').classList.add('on');
+    try{ buildNav(); go('dashboard'); }catch(e){}
+    alert('Connexion effectuée. (Détail technique : '+err.message+')');
+  }
 }
 function logout(){ $('#app').classList.remove('on'); $('#login').style.display='grid'; }
 
