@@ -191,6 +191,17 @@ app.use((req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
+/* Open the user's default browser to the app (skipped when headless/disabled). */
+function openBrowser(url){
+  if(process.env.NO_OPEN === '1' || !process.stdout.isTTY) return;
+  try{
+    const { spawn } = require('child_process');
+    const cmd = process.platform === 'win32' ? 'cmd' : process.platform === 'darwin' ? 'open' : 'xdg-open';
+    const args = process.platform === 'win32' ? ['/c', 'start', '""', url] : [url];
+    spawn(cmd, args, { stdio: 'ignore', detached: true }).on('error', () => {}).unref();
+  }catch(e){}
+}
+
 /* Start on PORT; if it is already used by another app, automatically try the next ports. */
 function start(port, attemptsLeft){
   const server = app.listen(port, () => {
@@ -202,6 +213,7 @@ function start(port, attemptsLeft){
     console.log(`      dg@djib-events.dj · commercial@djib-events.dj · finance@djib-events.dj`);
     console.log(`   IA temps réel : ${process.env.ANTHROPIC_API_KEY ? 'activée (Anthropic)' : 'désactivée (agents simulés)'}`);
     console.log(`   (Arrêter le serveur : Ctrl + C)\n`);
+    openBrowser(`http://localhost:${port}`);
   });
   server.on('error', (err) => {
     if(err.code === 'EADDRINUSE' && attemptsLeft > 0){

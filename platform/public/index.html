@@ -1077,9 +1077,9 @@ function renderEventDetail(id){
 function toggleTask(id){
   const t=DB.tasks.find(x=>x.id===id); t.done=!t.done;
   const e=DB.events.find(x=>x.id===t.eventId);
-  const evTasks=DB.tasks.filter(x=>x.eventId===e.id);
-  e.tasksDone=evTasks.filter(x=>x.done).length; e.tasksTotal=evTasks.length;
-  e.progress=Math.round(e.tasksDone/Math.max(1,evTasks.length)*100);
+  // Adjust the event's planning counter by ±1 (the plan has more tasks than the sample set shown).
+  e.tasksDone = Math.max(0, Math.min(e.tasksTotal, (e.tasksDone||0) + (t.done?1:-1)));
+  e.progress = Math.round(e.tasksDone/Math.max(1,e.tasksTotal)*100);
   save(); render();
 }
 

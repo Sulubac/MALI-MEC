@@ -23,12 +23,31 @@ Pour vérifier, ouvrez un terminal et tapez :
 node -v
 ```
 
-## 2. Installation (une seule fois)
+## 2. Lancement en un clic (le plus simple)
+
+Ouvrez le dossier `platform/` et **double-cliquez** sur le fichier correspondant à votre système :
+
+| Système | Fichier à double-cliquer |
+|---|---|
+| **Windows** | `DEMARRER-Windows.bat` |
+| **macOS** | `DEMARRER-Mac.command` |
+| **Linux** | `DEMARRER-Linux.sh` |
+
+Ce fichier installe automatiquement les composants (la 1ʳᵉ fois), démarre le serveur,
+et **ouvre le navigateur tout seul** à la bonne adresse. Laissez la fenêtre ouverte
+pendant l'utilisation ; pour arrêter, fermez-la (ou Ctrl + C).
+
+> Sur macOS, au premier lancement : clic droit sur le fichier → « Ouvrir » → « Ouvrir »
+> (pour autoriser un fichier téléchargé).
+
+---
+
+### Ou, en ligne de commande
 
 Dans un terminal, placez-vous dans ce dossier `platform/` puis :
 
 ```bash
-npm install
+npm install   # une seule fois
 ```
 
 ## 3. (Optionnel) Configuration
