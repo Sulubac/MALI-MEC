@@ -1,0 +1,19 @@
+{
+  "name": "djibouti-event-intelligence",
+  "version": "1.0.0",
+  "description": "Plateforme IA multi-agents de détection, prospection, organisation et suivi des événements à Djibouti — espace de travail partagé (backend Node.js + SQLite).",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "better-sqlite3": "^13.0.1",
+    "express": "^4.22.2",
+    "jsonwebtoken": "^9.0.3"
+  }
+}
