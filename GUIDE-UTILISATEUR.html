@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Guide utilisateur — Djibouti Event Intelligence</title>
+<style>
+  :root{
+    --ink:#1a2338; --muted:#5b6b8c; --faint:#8a97b3;
+    --brand:#2f5cff; --brand2:#6b4bff; --line:#e4e9f4; --bg:#f6f8fd; --card:#ffffff;
+    --green:#12915a; --amber:#b7791f; --red:#c02b2b; --soft:#eef2fe;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{font-family:'Segoe UI',system-ui,-apple-system,Roboto,Arial,sans-serif;color:var(--ink);background:var(--bg);line-height:1.62;font-size:16px}
+  .wrap{max-width:840px;margin:0 auto;padding:0 22px 80px}
+  header{background:linear-gradient(135deg,var(--brand),var(--brand2));color:#fff;padding:46px 22px;margin-bottom:34px}
+  header .inner{max-width:840px;margin:0 auto}
+  header .logo{display:inline-flex;align-items:center;gap:12px;font-weight:800;font-size:14px;letter-spacing:1.5px;text-transform:uppercase;opacity:.9}
+  header .logo .lg{width:36px;height:36px;border-radius:10px;background:rgba(255,255,255,.2);display:grid;place-items:center;font-size:18px}
+  header h1{font-size:30px;margin:16px 0 6px;line-height:1.15;text-wrap:balance}
+  header p{margin:0;font-size:16px;opacity:.92;max-width:600px}
+  h2{font-size:21px;margin:38px 0 10px;padding-top:14px;border-top:2px solid var(--line);display:flex;align-items:center;gap:11px}
+  h2 .n{flex:none;width:30px;height:30px;border-radius:9px;background:var(--brand);color:#fff;display:grid;place-items:center;font-size:15px;font-weight:800}
+  h3{font-size:16px;margin:20px 0 6px;color:var(--ink)}
+  p{margin:9px 0}
+  a{color:var(--brand)}
+  .lead{font-size:17px;color:var(--muted)}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin:16px 0;box-shadow:0 6px 22px rgba(30,50,90,.05)}
+  .steps{counter-reset:s;list-style:none;padding:0;margin:14px 0}
+  .steps li{counter-increment:s;position:relative;padding:10px 0 10px 44px;border-bottom:1px solid var(--line)}
+  .steps li:last-child{border-bottom:none}
+  .steps li::before{content:counter(s);position:absolute;left:0;top:9px;width:28px;height:28px;border-radius:50%;background:var(--soft);color:var(--brand);font-weight:800;display:grid;place-items:center;font-size:13px}
+  .steps li b{color:var(--ink)}
+  .callout{border-left:4px solid var(--brand);background:var(--soft);border-radius:0 12px 12px 0;padding:14px 18px;margin:16px 0}
+  .callout.gold{border-color:var(--amber);background:#fdf6e8}
+  .callout.green{border-color:var(--green);background:#e9f7ef}
+  .callout .t{font-weight:800;display:block;margin-bottom:3px}
+  table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14.5px}
+  th,td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{background:var(--soft);font-size:12.5px;text-transform:uppercase;letter-spacing:.4px;color:var(--muted)}
+  code{background:#eef1f8;border:1px solid var(--line);border-radius:6px;padding:1px 7px;font-size:14px;font-family:ui-monospace,Menlo,Consolas,monospace}
+  .pill{display:inline-block;font-size:12px;font-weight:700;padding:2px 10px;border-radius:20px;background:var(--soft);color:var(--brand);border:1px solid var(--line)}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  @media(max-width:640px){.grid{grid-template-columns:1fr}}
+  .mini{border:1px solid var(--line);border-radius:12px;padding:13px 15px;background:var(--card)}
+  .mini .ic{font-size:20px}
+  .mini b{display:block;margin:5px 0 2px}
+  .mini span{font-size:13.5px;color:var(--muted)}
+  .toc{columns:2;gap:20px;font-size:14.5px}
+  @media(max-width:640px){.toc{columns:1}}
+  .toc a{display:block;padding:4px 0;text-decoration:none;color:var(--ink)}
+  footer{margin-top:44px;padding-top:18px;border-top:2px solid var(--line);font-size:13.5px;color:var(--faint);text-align:center}
+  .print-btn{position:fixed;top:16px;right:16px;background:#fff;color:var(--brand);border:1px solid var(--line);border-radius:10px;padding:9px 15px;font-weight:700;cursor:pointer;box-shadow:0 6px 18px rgba(0,0,0,.12);font-size:14px}
+  @media print{ .print-btn{display:none} header{background:var(--brand)!important;-webkit-print-color-adjust:exact;print-color-adjust:exact} body{background:#fff} .card,.mini{box-shadow:none} }
+</style>
+</head>
+<body>
+<button class="print-btn" onclick="window.print()">🖨️ Imprimer / PDF</button>
+<header>
+  <div class="inner">
+    <div class="logo"><span class="lg">🎪</span> Djibouti Event Intelligence</div>
+    <h1>Guide d'utilisation — pour bien démarrer</h1>
+    <p>Plateforme IA multi-agents de détection, prospection, organisation et suivi des événements à Djibouti. Ce guide vous accompagne pas à pas.</p>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <div class="card">
+    <b>Sommaire</b>
+    <div class="toc" style="margin-top:8px">
+      <a href="#connexion">1 · Se connecter</a>
+      <a href="#tableau">2 · Le tableau de bord</a>
+      <a href="#veille">3 · Détecter des opportunités</a>
+      <a href="#crm">4 · Gérer les prospects (CRM)</a>
+      <a href="#proposition">5 · Créer une proposition</a>
+      <a href="#validation">6 · Valider avant d'envoyer</a>
+      <a href="#relances">7 · Prospection & relances</a>
+      <a href="#evenements">8 · Organiser un événement</a>
+      <a href="#finance">9 · Suivre la rentabilité</a>
+      <a href="#agents">10 · Les 12 agents IA</a>
+      <a href="#roles">11 · Rôles & droits</a>
+      <a href="#faq">12 · Questions fréquentes</a>
+    </div>
+  </div>
+
+  <p class="lead">L'application fonctionne comme une <b>équipe virtuelle</b> : des agents intelligents préparent le travail (opportunités, propositions, relances), et <b>vous gardez toujours la décision finale</b> avant tout envoi.</p>
+
+  <h2 id="connexion"><span class="n">1</span> Se connecter</h2>
+  <ol class="steps">
+    <li>Ouvrez l'application (double-clic sur le fichier, ou l'adresse de votre serveur d'équipe).</li>
+    <li>Saisissez votre <b>email</b> et votre <b>mot de passe</b>.</li>
+    <li>Cliquez sur <b>« Se connecter »</b>.</li>
+  </ol>
+  <div class="callout">
+    <span class="t">Comptes de démonstration</span>
+    Mot de passe pour tous : <code>demo1234</code><br>
+    <code>dg@djib-events.dj</code> (Directeur) · <code>commercial@djib-events.dj</code> · <code>finance@djib-events.dj</code> · <code>lecteur@djib-events.dj</code> (lecture seule)
+  </div>
+
+  <h2 id="tableau"><span class="n">2</span> Le tableau de bord</h2>
+  <p>C'est votre vue d'ensemble à l'ouverture. Vous y voyez d'un coup d'œil :</p>
+  <div class="grid">
+    <div class="mini"><div class="ic">🛰️</div><b>Opportunités actives</b><span>Les affaires détectées à traiter.</span></div>
+    <div class="mini"><div class="ic">📈</div><b>Valeur du pipeline</b><span>Le chiffre d'affaires potentiel en cours.</span></div>
+    <div class="mini"><div class="ic">✅</div><b>Validations en attente</b><span>Ce qui attend votre approbation.</span></div>
+    <div class="mini"><div class="ic">🗓️</div><b>Événements à venir</b><span>Les prochaines échéances.</span></div>
+  </div>
+  <p>Le menu de gauche donne accès à toutes les sections. Utilisez la <b>barre de recherche</b> en haut pour retrouver un prospect ou une opportunité.</p>
+
+  <h2 id="veille"><span class="n">3</span> Détecter des opportunités (Veille)</h2>
+  <ol class="steps">
+    <li>Ouvrez <b>Veille &amp; Opportunités</b> dans le menu.</li>
+    <li>Ajoutez ou modifiez les <b>mots-clés</b> à surveiller (français, anglais, arabe, somali).</li>
+    <li>Cliquez sur <b>« Lancer une recherche de veille »</b> : de nouvelles opportunités apparaissent, avec un <b>score de 0 à 100</b>.</li>
+    <li>Cliquez sur <b>« Ouvrir »</b> pour voir le détail, puis <b>« Convertir en prospect »</b> pour la suivre dans le CRM.</li>
+  </ol>
+  <div class="callout"><span class="t">💡 Le score</span> Plus il est élevé, plus l'opportunité est intéressante (budget, urgence, taille, contact disponible…). Traitez les scores les plus hauts en priorité.</div>
+
+  <h2 id="crm"><span class="n">4</span> Gérer les prospects (CRM &amp; Pipeline)</h2>
+  <p>Le CRM suit chaque client potentiel, de la détection jusqu'à la signature.</p>
+  <ul>
+    <li><b>Vue Kanban</b> : faites <b>glisser une carte</b> d'une colonne à l'autre pour faire avancer le prospect (Opportunité → Qualifié → Contact envoyé → Négociation → Gagné).</li>
+    <li><b>Vue Tableau</b> : la même information sous forme de liste triable.</li>
+    <li><b>+ Nouveau prospect</b> : ajoutez manuellement un client.</li>
+    <li>Cliquez sur une carte pour voir la <b>fiche complète</b> (contact, budget, historique, notes).</li>
+  </ul>
+
+  <h2 id="proposition"><span class="n">5</span> Créer une proposition commerciale</h2>
+  <ol class="steps">
+    <li>Depuis une fiche prospect ou la section <b>Propositions</b>, cliquez sur <b>« Nouvelle proposition »</b>.</li>
+    <li>Choisissez la <b>formule</b> (Essentielle / Professionnelle / Premium), la <b>langue</b> et le <b>ton</b>.</li>
+    <li>Cliquez sur <b>« Générer »</b> : l'IA rédige la proposition (concept, services inclus, budget, planning).</li>
+    <li>Relisez, puis envoyez-la en <b>validation</b>.</li>
+  </ol>
+  <div class="callout gold"><span class="t">⚠️ Important</span> Aucun prix n'est envoyé automatiquement au client. Une proposition générée reste un <b>brouillon</b> tant qu'un responsable ne l'a pas validée.</div>
+
+  <h2 id="validation"><span class="n">6</span> Valider avant d'envoyer <span class="pill">Règle d'or</span></h2>
+  <p>La section <b>Validation humaine</b> est le point de contrôle obligatoire. Rien ne part vers un client sans votre feu vert.</p>
+  <ol class="steps">
+    <li>Ouvrez <b>Validation humaine</b> (un badge rouge indique le nombre d'éléments en attente).</li>
+    <li>Vérifiez les <b>contrôles automatiques</b> (nom, contact, marge, anti-spam, consentement, conformité) — ils doivent être au vert.</li>
+    <li>Cliquez sur <b>« Valider »</b> pour autoriser l'envoi, ou <b>« Refuser »</b> pour renvoyer en correction.</li>
+  </ol>
+  <div class="callout green"><span class="t">✅ Traçabilité</span> Chaque décision est enregistrée dans le <b>Journal d'audit</b> : qui a préparé, quel agent a participé, qui a validé et quand.</div>
+
+  <h2 id="relances"><span class="n">7</span> Prospection &amp; relances</h2>
+  <p>Dans <b>Prospection &amp; Relances</b>, l'application prépare les emails et une séquence de relance :</p>
+  <ul>
+    <li><b>Jour 0</b> : envoi de la proposition (après validation).</li>
+    <li><b>Jours 3, 7, 14</b> : relances automatiques — <b>suspendues dès qu'une réponse arrive</b>.</li>
+  </ul>
+  <p>Les limites anti-spam (nombre d'envois par jour/heure) et les désabonnements sont respectés. Les délais sont réglables dans les Paramètres.</p>
+
+  <h2 id="evenements"><span class="n">8</span> Organiser un événement</h2>
+  <ol class="steps">
+    <li>Ouvrez <b>Événements</b> et cliquez sur une carte pour voir le détail.</li>
+    <li>Suivez l'avancement : <b>cochez les tâches</b> réalisées (Avant / Jour J / Après).</li>
+    <li>Consultez le plan opérationnel, les fournisseurs et le <b>registre des risques</b>.</li>
+  </ol>
+  <div class="callout"><span class="t">🤝 Fournisseurs</span> Chaque prestataire proposé doit être <b>validé manuellement</b> avant tout contact ou engagement.</div>
+
+  <h2 id="finance"><span class="n">9</span> Suivre la rentabilité</h2>
+  <p>La section <b>Finance &amp; Rentabilité</b> montre, pour chaque événement : prix de vente, coûts, <b>marge</b> et paiements. Des <b>alertes</b> se déclenchent si la marge passe sous le seuil ou si un acompte n'est pas reçu.</p>
+
+  <h2 id="agents"><span class="n">10</span> Les 12 agents IA</h2>
+  <p>La section <b>Agents IA</b> présente l'équipe virtuelle. Cliquez sur <b>« Exécuter »</b> pour lancer un agent. Chacun a une spécialité :</p>
+  <table>
+    <tr><th>Agent</th><th>Rôle</th></tr>
+    <tr><td>Opportunity Intelligence</td><td>Détecte les opportunités</td></tr>
+    <tr><td>Lead Research</td><td>Enrichit et qualifie les prospects</td></tr>
+    <tr><td>Proposal Strategy</td><td>Définit le concept et les 3 offres</td></tr>
+    <tr><td>Planning &amp; Operations</td><td>Crée le plan de l'événement</td></tr>
+    <tr><td>Commercial Writing</td><td>Rédige la proposition</td></tr>
+    <tr><td>Approval &amp; Compliance</td><td>Contrôle tout avant envoi</td></tr>
+    <tr><td>Customer Outreach</td><td>Prépare les communications</td></tr>
+    <tr><td>Follow-up</td><td>Gère les relances et réponses</td></tr>
+    <tr><td>Negotiation Support</td><td>Assiste la négociation</td></tr>
+    <tr><td>Execution Monitoring</td><td>Suit la préparation jour-J</td></tr>
+    <tr><td>Finance &amp; Profitability</td><td>Surveille la rentabilité</td></tr>
+    <tr><td>Supervisor</td><td>Coordonne tous les agents</td></tr>
+  </table>
+
+  <h2 id="roles"><span class="n">11</span> Rôles &amp; droits</h2>
+  <table>
+    <tr><th>Rôle</th><th>Peut faire</th></tr>
+    <tr><td>Directeur Général / Admin</td><td>Tout, y compris réinitialiser les données</td></tr>
+    <tr><td>Directeur Commercial / Commercial</td><td>Créer, modifier, valider les propositions</td></tr>
+    <tr><td>Responsable Financier</td><td>Suivi financier et rentabilité</td></tr>
+    <tr><td>Lecteur</td><td>Consulter uniquement (aucune modification)</td></tr>
+  </table>
+
+  <h2 id="faq"><span class="n">12</span> Questions fréquentes</h2>
+  <h3>Est-ce que l'application envoie de vrais emails ?</h3>
+  <p>Pas encore. Elle <b>prépare et valide</b> les messages. L'envoi réel (Gmail, WhatsApp) se branche dans une étape ultérieure avec les connecteurs officiels.</p>
+  <h3>La veille cherche-t-elle vraiment sur internet ?</h3>
+  <p>Dans cette version, la veille propose des opportunités d'exemple. La recherche web réelle nécessite l'activation des connecteurs et d'une clé IA (côté serveur).</p>
+  <h3>Mes données sont-elles partagées avec l'équipe ?</h3>
+  <p>Avec la <b>version serveur</b> (dossier <code>platform</code>) : oui, tout le monde partage la même base. Avec le <b>fichier HTML seul</b> : les données restent sur votre appareil.</p>
+  <h3>Comment repartir de zéro ?</h3>
+  <p>Dans <b>Paramètres</b>, un responsable peut cliquer sur <b>« Réinitialiser »</b> pour effacer les données de démonstration et commencer avec vos vraies données.</p>
+
+  <footer>
+    Djibouti Event Intelligence &amp; Management Platform — Guide utilisateur.<br>
+    Astuce : cliquez sur « 🖨️ Imprimer / PDF » en haut à droite pour en faire un PDF à distribuer.
+  </footer>
+</div>
+</body>
+</html>
