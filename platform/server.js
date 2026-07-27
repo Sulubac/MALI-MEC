@@ -27,7 +27,7 @@ const fs = require('fs');
 
 const store = require('./db');
 
-const PORT = process.env.PORT || 3000;
+const PORT = parseInt(process.env.PORT, 10) || 4300;
 const JWT_SECRET = process.env.JWT_SECRET || 'dev-secret-change-me-in-production';
 const TOKEN_TTL = '12h';
 
@@ -191,9 +191,26 @@ app.use((req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-app.listen(PORT, () => {
-  console.log(`\n  Djibouti Event Intelligence — serveur démarré`);
-  console.log(`  ➜  http://localhost:${PORT}`);
-  console.log(`  Comptes démo : dg@djib-events.dj / commercial@djib-events.dj / finance@djib-events.dj  (mot de passe : demo1234)`);
-  console.log(`  LLM temps réel : ${process.env.ANTHROPIC_API_KEY ? 'activé (Anthropic)' : 'désactivé (agents simulés)'}\n`);
-});
+/* Start on PORT; if it is already used by another app, automatically try the next ports. */
+function start(port, attemptsLeft){
+  const server = app.listen(port, () => {
+    console.log(`\n  ============================================================`);
+    console.log(`   Djibouti Event Intelligence — Plateforme IA événementielle`);
+    console.log(`  ============================================================`);
+    console.log(`   ➜  Ouvrez :  http://localhost:${port}`);
+    console.log(`   Comptes démo (mot de passe : demo1234) :`);
+    console.log(`      dg@djib-events.dj · commercial@djib-events.dj · finance@djib-events.dj`);
+    console.log(`   IA temps réel : ${process.env.ANTHROPIC_API_KEY ? 'activée (Anthropic)' : 'désactivée (agents simulés)'}`);
+    console.log(`   (Arrêter le serveur : Ctrl + C)\n`);
+  });
+  server.on('error', (err) => {
+    if(err.code === 'EADDRINUSE' && attemptsLeft > 0){
+      console.log(`  ⚠️  Le port ${port} est déjà utilisé par une autre application — essai sur ${port+1}…`);
+      start(port + 1, attemptsLeft - 1);
+    }else{
+      console.error(`  ⛔ Impossible de démarrer le serveur : ${err.message}`);
+      process.exit(1);
+    }
+  });
+}
+start(PORT, 15);

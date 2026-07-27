@@ -46,14 +46,18 @@ Pour activer les agents IA en temps réel, ajoutez votre `ANTHROPIC_API_KEY`.
 npm start
 ```
 
-Vous verrez :
+Vous verrez notamment la ligne de l'adresse à ouvrir, par exemple :
 
 ```
-  Djibouti Event Intelligence — serveur démarré
-  ➜  http://localhost:3000
+   ➜  Ouvrez :  http://localhost:4300
 ```
 
-Ouvrez **http://localhost:3000** dans votre navigateur.
+Ouvrez **exactement l'adresse affichée** dans votre terminal.
+
+> Le port par défaut est **4300** (et non 3000, pour éviter les conflits avec
+> d'autres applications comme un CRM déjà en cours). Si 4300 est occupé, le serveur
+> passe automatiquement au port suivant (4301, 4302, …) et affiche la bonne adresse.
+> Pour forcer un port précis : `PORT=8080 npm start`.
 
 ## 5. Comptes de démonstration
 
@@ -74,7 +78,7 @@ Mot de passe pour tous : **demo1234**
 Le serveur écoute sur votre machine (`localhost`). Pour que vos collègues y accèdent,
 choisissez l'une de ces options :
 
-1. **Réseau local** : ils ouvrent `http://VOTRE-IP-LOCALE:3000` (même Wi-Fi/bureau).
+1. **Réseau local** : ils ouvrent `http://VOTRE-IP-LOCALE:4300` (même Wi-Fi/bureau).
 2. **Hébergement cloud** : déployez ce dossier sur un service Node (Render, Railway,
    un VPS, etc.). Définissez alors `JWT_SECRET` et servez en HTTPS.
 
