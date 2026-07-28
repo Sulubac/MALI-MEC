@@ -320,7 +320,7 @@ const DATA = {
     },
     {
       name: "About MALI-MEC",
-      content: "MALI-MEC is a multi-entity organization encompassing:\n\n- **Techiftiin Institute** — professional training and upskilling programs\n- **MEC** (Main Entity / Consulting) — strategic consulting and AI integration\n- **Urban Beach** — lifestyle / event brand\n- **École Champion** — coaching and performance academy\n- **Advisory & Consulting arm** — B2B engagements, appels d’offres, institutional clients"
+      content: "MALI-MEC is a multi-entity organization encompassing:\n\n- **Techiftiin Institute** — professional training and upskilling programs\n- **MEC** (Main Entity / Consulting) — strategic consulting and AI integration\n- **Urban Beach** — lifestyle / event brand\n- **École Champion** — coaching and performance academy\n- **Advisory & Consulting arm** — B2B engagements, appels d'offres, institutional clients"
     },
     {
       name: "Target Audience",
@@ -344,11 +344,11 @@ const DATA = {
     },
     {
       name: "Current Video / Campaign Concept",
-      content: "**Working title:** «Si Vous Voulez Vous Enrichir Avec l’IA, Construisez Ce Système à 4 Agents»\n\n**Concept:** Live demonstration of four specialized Claude Code sub-agents transforming a business idea into:\n- Market validation\n- Monetizable offer\n- YouTube video strategy\n- Lead generation and conversion system\n\n**Duration:** Under 15 minutes\n\n**Revenue path:** Video → Revenue Agent Template download → Workshop enrollment → Advisory engagement"
+      content: "**Working title:** «Si Vous Voulez Vous Enrichir Avec l'IA, Construisez Ce Système à 4 Agents»\n\n**Concept:** Live demonstration of four specialized Claude Code sub-agents transforming a business idea into:\n- Market validation\n- Monetizable offer\n- YouTube video strategy\n- Lead generation and conversion system\n\n**Duration:** Under 15 minutes\n\n**Revenue path:** Video → Revenue Agent Template download → Workshop enrollment → Advisory engagement"
     },
     {
       name: "Strategic Phrase",
-      content: "> L’argent n’est pas dans les outils. Il est dans les systèmes."
+      content: "> L'argent n'est pas dans les outils. Il est dans les systèmes."
     },
     {
       name: "Constraints",
@@ -365,11 +365,11 @@ const KEY = ['Target Audience','Core Promise','Current Video / Campaign Concept'
 const CLEAR = ['Target Audience','Core Promise','Current Video / Campaign Concept','Strategic Phrase','Business Goals','Constraints','Proof Requirements'];
 const LABELS = {
   'Identity':'Identité',
-  'About MALI-MEC':'À Propos de l’Organisation',
+  'About MALI-MEC':'À Propos de l\'Organisation',
   'Target Audience':'Audience Cible',
   'Core Promise':'Promesse Centrale',
   'Business Goals':'Objectifs Business',
-  'Offer Ecosystem (Value Ladder)':'Écosystème d’Offres',
+  'Offer Ecosystem (Value Ladder)':'Écosystème d\'Offres',
   'Content Strategy':'Stratégie de Contenu',
   'Current Video / Campaign Concept':'Concept Vidéo / Campagne',
   'Strategic Phrase':'Phrase Stratégique',
@@ -378,7 +378,7 @@ const LABELS = {
 };
 const HINTS = {
   'Target Audience':'Qui exactement veux-tu atteindre ? Métier, marché, point de douleur.',
-  'Core Promise':'J’aide [audience] à obtenir [résultat] sans [obstacle] grâce à [mécanisme].',
+  'Core Promise':'J\'aide [audience] à obtenir [résultat] sans [obstacle] grâce à [mécanisme].',
   'Current Video / Campaign Concept':'Titre de travail, concept, durée cible, parcours de revenus.',
   'Strategic Phrase':'La phrase qui résume ton positionnement.',
   'Business Goals':'Numéroter les objectifs. Ex : 1. Valider la demande. 2. Construire une audience.'
@@ -601,7 +601,7 @@ function u8Find(buf,pat,start){
 }
 
 async function tryDecompress(data){
-  for(const fmt of[‘deflate’,’deflate-raw’]){
+  for(const fmt of['deflate','deflate-raw']){
     try{
       const ds=new DecompressionStream(fmt);
       const w=ds.writable.getWriter();w.write(data);w.close();
@@ -618,13 +618,13 @@ async function tryDecompress(data){
 function parseCMapText(s){
   const m=new Map();
   for(const b of(s.match(/beginbfrange([\s\S]*?)endbfrange/g)||[])){
-    for(const l of b.split(‘\n’)){
+    for(const l of b.split('\n')){
       const r=l.match(/<([0-9a-f]{2})><([0-9a-f]{2})><([0-9a-f]{4})>/i);
       if(r){const s2=parseInt(r[1],16),e=parseInt(r[2],16),u=parseInt(r[3],16);for(let x=s2;x<=e;x++)m.set(x,String.fromCodePoint(u+(x-s2)));}
     }
   }
   for(const b of(s.match(/beginbfchar([\s\S]*?)endbfchar/g)||[])){
-    for(const l of b.split(‘\n’)){
+    for(const l of b.split('\n')){
       const r=l.match(/<([0-9a-f]{2})>\s*<([0-9a-f]{4})>/i);
       if(r)m.set(parseInt(r[1],16),String.fromCodePoint(parseInt(r[2],16)));
     }
@@ -637,32 +637,32 @@ function decodeCMapStream(stream,cmap){
   while((m=btRe.exec(stream))!==null){
     const block=m[1];const tjRe=/\[([^\]]*)\]\s*TJ/g;let tj;
     while((tj=tjRe.exec(block))!==null){
-      let line=’’;
+      let line='';
       const itemRe=/\(([^)\\]|\\[\s\S])*\)|(-?[0-9]+(?:\.[0-9]*)?)/g;let item;
       while((item=itemRe.exec(tj[1]))!==null){
-        if(item[0][0]===’(‘){
-          const raw=item[0].slice(1,-1);let dec=’’;
+        if(item[0][0]==='('){
+          const raw=item[0].slice(1,-1);let dec='';
           for(let k=0;k<raw.length;k++){
             let code=raw.charCodeAt(k);
-            if(raw[k]===’\\’&&k+1<raw.length){k++;const nx=raw[k];
-              if(nx>=’0’&&nx<=’7’){let o=nx;if(k+1<raw.length&&raw[k+1]>=’0’&&raw[k+1]<=’7’){o+=raw[k+1];k++;if(k+1<raw.length&&raw[k+1]>=’0’&&raw[k+1]<=’7’){o+=raw[k+1];k++;}}code=parseInt(o,8);}
+            if(raw[k]==='\\'&&k+1<raw.length){k++;const nx=raw[k];
+              if(nx>='0'&&nx<='7'){let o=nx;if(k+1<raw.length&&raw[k+1]>='0'&&raw[k+1]<='7'){o+=raw[k+1];k++;if(k+1<raw.length&&raw[k+1]>='0'&&raw[k+1]<='7'){o+=raw[k+1];k++;}}code=parseInt(o,8);}
               else code=nx.charCodeAt(0);}
-            dec+=(cmap.get(code)||’’);
+            dec+=(cmap.get(code)||'');
           }
           line+=dec;
-        }else if(parseFloat(item[0])<-100)line+=’ ‘;
+        }else if(parseFloat(item[0])<-100)line+=' ';
       }
       if(line.trim())lines.push(line);
     }
     // Tj operator
     const simRe=/\(([^)\\]|\\[\s\S])*\)\s*Tj/g;let s2;
     while((s2=simRe.exec(block))!==null){
-      const raw=s2[0].slice(1,s2[0].lastIndexOf(‘)’));let dec=’’;
-      for(let k=0;k<raw.length;k++){let code=raw.charCodeAt(k);if(raw[k]===’\\’&&k+1<raw.length){k++;code=raw.charCodeAt(k);}dec+=(cmap.get(code)||’’);}
+      const raw=s2[0].slice(1,s2[0].lastIndexOf(')'));let dec='';
+      for(let k=0;k<raw.length;k++){let code=raw.charCodeAt(k);if(raw[k]==='\\'&&k+1<raw.length){k++;code=raw.charCodeAt(k);}dec+=(cmap.get(code)||'');}
       if(dec.trim())lines.push(dec);
     }
   }
-  return lines.join(‘\n’);
+  return lines.join('\n');
 }
 
 async function extractFromPDF(buf){
@@ -680,52 +680,52 @@ async function extractFromPDF(buf){
   }
   // Decompress
   let dec=[];
-  if(typeof DecompressionStream!==’undefined’){
+  if(typeof DecompressionStream!=='undefined'){
     dec=await Promise.all(raw.map(s=>tryDecompress(s)));
   }
-  const latin1=new TextDecoder(‘windows-1252’);
+  const latin1=new TextDecoder('windows-1252');
   const tstreams=dec.map(d=>d?latin1.decode(d):null);
   // Find CMap
   let cmap=new Map();
-  for(const s of tstreams)if(s&&s.includes(‘beginbfrange’)){cmap=parseCMapText(s);if(cmap.size>0)break;}
+  for(const s of tstreams)if(s&&s.includes('beginbfrange')){cmap=parseCMapText(s);if(cmap.size>0)break;}
   // Decode content
   if(cmap.size>0){
-    let all=’’;
-    for(const s of tstreams)if(s&&s.includes(‘BT’))all+=decodeCMapStream(s,cmap)+’\n’;
+    let all='';
+    for(const s of tstreams)if(s&&s.includes('BT'))all+=decodeCMapStream(s,cmap)+'\n';
     if(all.trim().length>50)return all;
   }
   // Fallback: raw BT/ET + hex extraction
-  const parts=[];const chunkSize=32768;let rawStr=’’;
+  const parts=[];const chunkSize=32768;let rawStr='';
   for(let i=0;i<bytes.length;i+=chunkSize)rawStr+=String.fromCharCode(...bytes.subarray(i,Math.min(i+chunkSize,bytes.length)));
   const btRe=/BT\b([\s\S]{1,3000}?)ET\b/g;let m;
   while((m=btRe.exec(rawStr))!==null){const pr=/\(([^)\\]|\\[\s\S])*\)/g;let pm;
-    while((pm=pr.exec(m[1]))!==null){const t=pm[0].slice(1,-1).replace(/\\n/g,’\n’).replace(/\\r/g,’\n’).replace(/\\t/g,’ ‘).replace(/\\\\/g,’\\’).replace(/\\./g,’’);if(t.trim())parts.push(t);}
+    while((pm=pr.exec(m[1]))!==null){const t=pm[0].slice(1,-1).replace(/\\n/g,'\n').replace(/\\r/g,'\n').replace(/\\t/g,' ').replace(/\\\\/g,'\\').replace(/\\./g,'');if(t.trim())parts.push(t);}
   }
   const hexRe=/<FEFF([0-9A-Fa-f]{4,})>/g;let hm;
-  while((hm=hexRe.exec(rawStr))!==null){const hex=hm[1];let d=’’;for(let i=0;i<hex.length-3;i+=4){const code=parseInt(hex.slice(i,i+4),16);if(code>0x20&&code<0xFFFD)d+=String.fromCharCode(code);}if(d.trim())parts.push(d);}
-  if(parts.length<3)return rawStr.replace(/[^\x20-\x7EÀ-ÿ\n]/g,’ ‘).replace(/ {4,}/g,’\n’);
-  return parts.join(‘ ‘);
+  while((hm=hexRe.exec(rawStr))!==null){const hex=hm[1];let d='';for(let i=0;i<hex.length-3;i+=4){const code=parseInt(hex.slice(i,i+4),16);if(code>0x20&&code<0xFFFD)d+=String.fromCharCode(code);}if(d.trim())parts.push(d);}
+  if(parts.length<3)return rawStr.replace(/[^\x20-\x7EÀ-ÿ\n]/g,' ').replace(/ {4,}/g,'\n');
+  return parts.join(' ');
 }
 
 // Compact-based section detection (works for both CMap-decoded and raw text)
 const SECTION_PATTERNS=[
-  [/PROPOSDEL.ORGANISATION/i,’About MALI-MEC’],
-  [/AUDIENCECIBLE/i,’Target Audience’],
-  [/PROMESSECENTRALE/i,’Core Promise’],
-  [/OBJECTIFSBUSINESS/i,’Business Goals’],
-  [/[EÉ]COSYST[EÈ]MED.OFFRES/i,’Offer Ecosystem (Value Ladder)’],
-  [/STRAT[EÉ]GIEDECONTENU/i,’Content Strategy’],
-  [/CONCEPTVID[EÉ]O/i,’Current Video / Campaign Concept’],
-  [/PHRASESTRAT[EÉ]GIQUE/i,’Strategic Phrase’],
-  [/CONTRAINTES/i,’Constraints’],
-  [/PREUVESREQUISES/i,’Proof Requirements’]
+  [/PROPOSDEL.ORGANISATION/i,'About MALI-MEC'],
+  [/AUDIENCECIBLE/i,'Target Audience'],
+  [/PROMESSECENTRALE/i,'Core Promise'],
+  [/OBJECTIFSBUSINESS/i,'Business Goals'],
+  [/[EÉ]COSYST[EÈ]MED.OFFRES/i,'Offer Ecosystem (Value Ladder)'],
+  [/STRAT[EÉ]GIEDECONTENU/i,'Content Strategy'],
+  [/CONCEPTVID[EÉ]O/i,'Current Video / Campaign Concept'],
+  [/PHRASESTRAT[EÉ]GIQUE/i,'Strategic Phrase'],
+  [/CONTRAINTES/i,'Constraints'],
+  [/PREUVESREQUISES/i,'Proof Requirements']
 ];
 
 function parseSectionText(text){
   // Build compacted string (no spaces/tabs) + position map back to original
   const compact=[];const posMap=[];
-  for(let i=0;i<text.length;i++){if(text[i]!==’ ‘&&text[i]!==’\t’){compact.push(text[i]);posMap.push(i);}}
-  const C=compact.join(‘’);
+  for(let i=0;i<text.length;i++){if(text[i]!==' '&&text[i]!=='\t'){compact.push(text[i]);posMap.push(i);}}
+  const C=compact.join('');
   const positions=[];
   for(const[pat,name]of SECTION_PATTERNS){
     pat.lastIndex=0;const m=pat.exec(C);
@@ -737,7 +737,7 @@ function parseSectionText(text){
     const{end,name}=positions[i];
     if(seen.has(name))continue;seen.add(name);
     const nextIdx=i+1<positions.length?positions[i+1].idx:text.length;
-    const content=text.slice(end,nextIdx).replace(/^\s*[:—\-\n]+/,’’).trim();
+    const content=text.slice(end,nextIdx).replace(/^\s*[:—\-\n]+/,'').trim();
     if(content)result[name]=content;
   }
   return result;
