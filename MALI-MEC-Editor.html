@@ -471,11 +471,19 @@ function save() {
 
 // ── Copy command ──────────────────────────────────────────────
 function copyCmd(){
-  navigator.clipboard.writeText(document.getElementById('cmd').textContent).then(()=>{
-    const b=document.getElementById('cpb');
-    b.textContent='✓ Copié'; b.classList.add('ok');
-    setTimeout(()=>{b.textContent='Copier';b.classList.remove('ok');},2200);
-  });
+  const text=document.getElementById('cmd').textContent;
+  const b=document.getElementById('cpb');
+  function ok(){b.textContent='✓ Copié';b.classList.add('ok');setTimeout(()=>{b.textContent='Copier';b.classList.remove('ok');},2200);}
+  if(navigator.clipboard&&navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).then(ok).catch(()=>legacyCopy(text,ok));
+  }else{legacyCopy(text,ok);}
+}
+function legacyCopy(text,cb){
+  const ta=document.createElement('textarea');
+  ta.value=text;ta.style.cssText='position:fixed;opacity:0;top:0;left:0;';
+  document.body.appendChild(ta);ta.focus();ta.select();
+  try{document.execCommand('copy');if(cb)cb();}catch(e){}
+  document.body.removeChild(ta);
 }
 
 // ── Modal ─────────────────────────────────────────────────────
