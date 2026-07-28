@@ -1,318 +1,311 @@
-# Système de Conversion — MALI-MEC Revenue Agent System
-
-**Produit par :** Conversion System Builder Agent
-**Date :** 2026-07-28
-**Sources :** business-brief.md + 01-market-signal-brief.md + 02-offer-architecture.md + 03-content-strategy.md
-**Vidéo cible :** "Les Autres Parlent d'IA. Ce Système à 4 Agents, Lui, la Facture."
-**Principe opératoire :** Tout ce qui se trouve dans ce document démarre après la fin de la vidéo. La vidéo fait la démonstration. Ce système fait la conversion. Rien ici n'est théorique — chaque élément connecte un moment précis de la vidéo à une action commerciale mesurable.
+# Système de Conversion — École Champion
+## MALI-MEC · Rentrée 2026–2027 · 2026-07-28
 
 ---
 
-## 1. Lead Magnet
+## Note préliminaire — Adaptation marché djiboutien
 
-**Nom commercial :** Revenue Agent Template Pack — AR4A
+Le présent système est calibré sur une contrainte non négociable identifiée dans le brief : **WhatsApp est le canal principal de conversion**. Il n'existe pas de système de paiement en ligne. Toutes les transactions sont en espèces ou par virement local. La Journée Portes Ouvertes est le point de bascule physique entre l'intention et l'inscription.
 
-**Promesse de transformation :** Dans les 30 minutes qui suivent le téléchargement, vous avez les quatre fichiers agents préconfigurés exactement comme dans la vidéo, un brief template structuré prêt à remplir, et un exemple de sortie complète sur un vrai cas business — pour lancer votre premier pipeline AR4A ce soir sur votre propre business, sans configuration technique et sans ligne de code.
-
-**Valeur perçue :** ~150 EUR / 98 000 XAF — équivalent à une session de consulting de démarrage ou à une demi-journée de configuration technique externalisée.
-
-**Mécanisme de délivrance :** Page de capture avec un seul champ obligatoire (email) → confirmation automatique déclenchée en moins de 60 secondes → email de livraison avec lien de téléchargement direct vers un dossier ZIP. Aucun espace membres, aucun mot de passe, aucune étape supplémentaire. L'objectif est un délai de moins de 90 secondes entre la saisie de l'email et l'accès aux fichiers.
-
-**Contenu exact :**
-
-| Fichier | Format | Valeur en une phrase | Temps pour obtenir de la valeur |
-|---------|--------|---------------------|---------------------------------|
-| `business-brief-template.md` | Markdown | Template structuré en cinq sections avec instructions intégrées pour rédiger un brief précis — l'input qui détermine la qualité de toutes les sorties d'agents | 15 à 20 minutes pour remplir; valeur active au premier run |
-| `agent-1-market-signal.md` | Markdown | Fichier Agent 1 (Market Signal Researcher) préconfiguré — produit un score d'opportunité sur sept dimensions, extrait le langage exact de l'audience cible et formule une recommandation stratégique actionnable | 2 minutes (copier-coller dans le projet Claude Code) |
-| `agent-2-offer-architect.md` | Markdown | Fichier Agent 2 (Offer Architect) préconfiguré — transforme le signal de marché en positionnement formulé, architecture d'offre complète avec pricing EUR et XAF, et carte des objections répondues | 2 minutes |
-| `agent-3-content-strategist.md` | Markdown | Fichier Agent 3 (Content Strategist) préconfiguré — produit cinq titres YouTube scorés avec les scripts d'ouverture correspondants et une carte de rétention minute par minute | 2 minutes |
-| `agent-4-conversion-system.md` | Markdown | Fichier Agent 4 (Conversion System) préconfiguré — structure le lead magnet, la séquence email de nurture et le chemin de conversion complet de la vue vidéo au contrat | 2 minutes |
-| `coordinateur-run-prompt.md` | Markdown | Prompt coordinateur prêt à coller — orchestre les quatre agents en séquence avec les passages de brief inter-agents automatisés; copier, coller, lancer | 30 secondes |
-| `runbook-revenue-agent.md` | Markdown | Guide d'exécution pas à pas en sept étapes : installation, configuration du projet, rédaction du brief, lancement du coordinateur, lecture des outputs, ajustements, déploiement — avec captures d'écran annotées pour les non-familiers avec Claude Code | 15 minutes de lecture; applicable immédiatement après |
-| `grille-scoring-opportunite.md` | Markdown | Grille d'une page pour évaluer manuellement n'importe quelle opportunité business sur les sept mêmes dimensions qu'Agent 1 — utile pour tester une idée avant ou après un run, sans lancer les agents | 5 à 10 minutes pour l'utiliser sur une opportunité réelle |
-| `exemple-run-complet/` | Dossier (4 fichiers Markdown) | Outputs complets des quatre agents sur le brief "Programme de coaching pour jeunes entrepreneurs à Dakar" — le cas exact démontré dans la vidéo, avec les horodatages du run réel; référence permanente pour calibrer ses propres outputs | 10 minutes de lecture comparative |
+En conséquence :
+- La séquence de suivi est construite sur **WhatsApp** (5 messages texte), non sur email
+- Le lead magnet est livré via WhatsApp, non par formulaire web
+- Le CTA unique de chaque publication est un numéro WhatsApp — pas un lien de paiement, pas un formulaire
+- Le paiement intervient uniquement après visite physique, en espèces ou par virement local, à l'établissement
 
 ---
 
-## 2. CTAs In-Video
+## Conversion System
 
-### Mention mid-vidéo (7:00) — Texte exact — 11 secondes
+### Lead Magnet
 
-*Contexte d'exécution : prononcée immédiatement après l'apparition des cinq titres YouTube scorés dans l'output d'Agent 3, avant de lancer Agent 4. Le présentateur reste les yeux sur l'écran. Ton identique à la démonstration — factuel, sans changement de registre. L'objectif est de planter le lien dans la mémoire sans interrompre le flow de la démonstration.*
+**Nom :** Guide du Parent Exigeant
 
----
+**Nom complet :** "Les 5 Compétences Que Votre Enfant Doit Maîtriser Avant 2030 — Et Comment Les Évaluer Dans Une École Privée Djiboutienne"
 
-"Ces fichiers agents — ceux que vous regardez tourner depuis sept minutes — ils sont dans la description. Téléchargez-les pendant que je lance le dernier agent."
+**Proposition de valeur :** Un cadre d'évaluation concret que le parent djiboutien utilise pour comparer les écoles privées sur 5 critères objectifs — les mêmes 5 critères sur lesquels École Champion se construit, que le parent découvre sans que l'école les nomme explicitement.
 
----
+**Format :** PDF de 10 pages, envoyé manuellement ou automatiquement via WhatsApp dans les 5 minutes suivant le premier message entrant du parent.
 
-### CTA fin de vidéo (13:30) — Texte exact — 55 secondes
+**Valeur perçue équivalente :** 5 000 DJF / ~25 EUR
+**Coût pour le parent :** 0 DJF — en échange du contact WhatsApp qui entre dans le pipeline commercial de l'école.
 
-*Contexte d'exécution : prononcé après le split-view des quatre outputs (10:35) et après la comparaison visuelle ChatGPT vs. AR4A (13:05). La landing page du Revenue Agent Template Pack est déjà ouverte dans le navigateur en arrière-plan — visible à l'écran avec le champ email et le bouton de téléchargement lisibles. Le présentateur pivote vers la caméra pour les 15 dernières secondes.*
+**Contenu :**
 
----
+| Section | Format | Valeur délivrée | Temps pour en tirer une valeur |
+|---------|--------|-----------------|-------------------------------|
+| Page 1 — Couverture + Introduction | PDF | Pose le cadre : "Voici comment évaluer une école, pas juste la visiter." | 2 min |
+| Pages 2–3 — Les 5 compétences essentielles d'ici 2030 | PDF | Compétence 1 : discipline et rigueur structurantes (méthodes mondiales). Compétence 2 : anglais courant, pas scolaire. Compétence 3 : pensée computationnelle et IA. Compétence 4 : confiance en soi et communication. Compétence 5 : autonomie d'apprentissage. Le parent comprend "pourquoi maintenant". | 5 min |
+| Pages 4–6 — Les 10 questions exactes à poser lors d'une visite d'école | PDF | Pour chaque compétence, 2 questions précises à poser à la direction. Le parent arrive à la Journée Portes Ouvertes avec les bonnes questions — et obtient les bonnes réponses d'École Champion. | 8 min |
+| Pages 7–8 — Ce que le programme anglais d'une vraie école moderne doit inclure | PDF | Critères concrets : fréquence des sessions, méthode orale vs écrite, niveau cible par âge. Étalon implicite qui positionne l'offre anglais d'École Champion sans la nommer. | 5 min |
+| Pages 9–10 — L'IA à l'école : ce qui est sérieux, ce qui est cosmétique | PDF | 4 indicateurs pour distinguer un programme IA réel d'un argument marketing : formateur qualifié et nommé ? Outil visible en classe ? Fréquence des sessions documentée ? Progression mesurable ? Le parent sait exactement ce que représente le partenariat Techiftiin Institute. | 5 min |
+| Encart final — Invitation Journée Portes Ouvertes | PDF | "Venez évaluer École Champion avec ce guide à la main. Les places sont limitées à 25 familles par session. Envoyez VISITE au [numéro] pour réserver." | 30 sec |
 
-"Voilà ce qu'un système produit — pas un outil. Quatre livrables business. Un brief de trois paragraphes. Huit minutes de traitement.
-
-Le Revenue Agent Template Pack est dans la description. Vous y trouvez exactement ce que vous venez de voir tourner : les quatre fichiers agents préconfigurés, le brief template, le prompt coordinateur, le runbook, la grille de scoring, et l'exemple complet de ce run sur le cas de Dakar. Zéro configuration technique. Vous téléchargez, vous copiez les fichiers, vous lancez le coordinateur sur votre propre business.
-
-C'est gratuit.
-
-Si vous voulez construire ce pipeline sur votre offre réelle — en direct, avec moi, avec correction en temps réel — l'Atelier Découverte AR4A dure deux heures et coûte 45 euros. Si vous voulez le système complet en trois jours, le Programme Intensif AR4A a vingt places.
-
-Les deux liens sont dans la description.
-
-Prenez la description. Maintenant."
+**Règle de livraison :** Le PDF doit être prêt et testé sur WhatsApp avant la publication du premier contenu de Niveau 1. La personne désignée à la réception des messages doit pouvoir l'envoyer manuellement en moins de 5 minutes. La vitesse de réponse est un signal de confiance direct dans ce marché — un délai de 4 heures en juillet-août équivaut à une perte de lead irréversible dans un marché où le parent type contacte 2 à 3 établissements en simultané.
 
 ---
 
-*Durée cible : 52 à 58 secondes. Le mot "maintenant" est le dernier mot prononcé. Ne pas ajouter de formule de clôture après. La page de la landing page reste visible à l'écran pendant les 25 dernières secondes du CTA.*
+### CTAs In-Video
+
+**Mention de mi-vidéo — à placer à 7:00 (immédiatement après le pic émotionnel de la session anglais)**
+
+*Ton : naturel, informatif, aucune rupture. La voix reste au même rythme que la vidéo. Ce n'est pas une pause publicitaire — c'est une information utile donnée au bon moment, juste après que le parent a vu des enfants parler anglais pour la première fois. Durée : 25 à 30 secondes maximum.*
 
 ---
 
-## 3. Séquence Email — 5 Emails
+Si ce que vous venez de voir vous parle — ces enfants qui répondent en anglais, cette session que vous n'attendiez pas à Djibouti — j'ai préparé un document gratuit pour vous.
+
+C'est un guide pratique : les 5 compétences que votre enfant doit maîtriser avant 2030, et les questions exactes à poser lors d'une visite d'école pour savoir si l'établissement les enseigne vraiment.
+
+Envoyez simplement le mot GUIDE au numéro qui apparaît en bas de votre écran. Je vous l'envoie maintenant, directement sur WhatsApp.
+
+Continuons — il reste deux points essentiels.
 
 ---
 
-### Email 1 — J0 (immédiat après téléchargement)
-
-**Objet :** Vos fichiers AR4A sont là — commencez par ça ce soir
-
-**Preview text :** Un brief de 15 minutes ce soir détermine la qualité de tout ce qui suit.
+*Le numéro WhatsApp est affiché à l'écran pendant toute la durée de ce CTA. Transition vers la suite sans rupture de ton ni de rythme.*
 
 ---
 
-Bonjour [Prénom],
+**CTA de fin — à placer à 13:30**
 
-Vos fichiers sont dans le dossier que vous venez de télécharger.
-
-Avant d'ouvrir quoi que ce soit d'autre, ouvrez `business-brief-template.md` en premier. C'est le seul fichier que vous rédigez vous-même — les quatre agents s'occupent du reste. Et c'est ce fichier qui détermine 80% de la qualité de vos outputs.
-
-Trois actions ce soir, dans cet ordre :
-
-**1. Remplissez le brief template.** Cinq sections, vingt lignes au total. Décrivez votre business en français ordinaire — ce que vous faites, pour qui, et quel résultat vous promettez. Pas de jargon. Ce que vous diriez à un collègue.
-
-**2. Copiez les quatre fichiers agents dans votre projet Claude Code.** Le `runbook-revenue-agent.md` couvre cette étape avec des captures d'écran annotées si vous n'êtes pas familier avec l'environnement. Aucun prérequis technique.
-
-**3. Collez le contenu de `coordinateur-run-prompt.md` et lancez le run.** Les quatre agents s'exécutent en séquence. Vous ne touchez plus rien pendant 8 à 12 minutes.
-
-Le dossier `exemple-run-complet/` contient les quatre outputs du run que vous avez regardé dans la vidéo — le cas coaching à Dakar. Utilisez-le comme référence pour savoir à quoi ressemble un run réussi.
-
-Une règle avant de lancer : ne jugez pas votre premier output si votre brief fait moins de 150 mots. Un brief court produit des sorties génériques. Relancez avec plus de précision. La qualité est dans la spécificité du brief, pas dans les agents.
-
-À demain.
-
-[Nom]
-MALI-MEC
+*Ton : calme, précis, bienveillant. Aucune pression. Une action, un numéro, un mot. L'urgence est calendaire — pas commerciale. Durée : 60 secondes maximum.*
 
 ---
 
-**CTA principal :** [Accéder au dossier téléchargé]
+Vous avez vu les trois socles. La méthode japonaise. L'anglais. L'intelligence artificielle avec Techiftiin Institute. Tout ça à Djibouti, dès septembre 2026.
+
+Maintenant, voici ce que je vous propose.
+
+Venez voir par vous-même. Gratuitement. Avec votre enfant, si vous le souhaitez.
+
+Nous organisons deux Journées Portes Ouvertes avant la rentrée. Vous visitez les salles. Vous rencontrez les enseignants. Votre enfant peut participer à une mini-session. Et on vous remet la brochure complète avec tous les tarifs, par niveau, en toute transparence.
+
+Pour réserver votre place, c'est simple : envoyez le mot VISITE au [numéro WhatsApp affiché à l'écran]. Les places sont limitées à 25 familles par session. La prochaine date est le [date Session 1].
+
+Un seul mot. VISITE. Et on s'occupe du reste.
+
+La visite est gratuite. La décision vous appartient. Votre enfant mérite au moins de voir ce qui existe maintenant à Djibouti.
 
 ---
 
-### Email 2 — J1
-
-**Objet :** Ce qui sépare un output déployable d'un output que vous ne publierez jamais
-
-**Preview text :** Trois règles de brief. Je les donne en Session 1 du Programme Intensif.
+*Le numéro WhatsApp reste affiché à l'écran de 13:00 à 13:45 — minimum 15 secondes de numéro statique pour permettre la capture d'écran sur mobile. Les deux dates de Journées Portes Ouvertes sont affichées simultanément en texte lisible sur mobile 6 pouces.*
 
 ---
 
-Bonjour [Prénom],
+### Séquence de Suivi WhatsApp — 5 Messages
 
-Aujourd'hui je veux vous donner ce que les participants du Programme Intensif AR4A reçoivent en toute première heure — avant de lancer quoi que ce soit.
+*Adaptation au marché djiboutien : cette séquence remplace la séquence email standard. WhatsApp est le seul canal de suivi pertinent pour cette audience. Les messages sont courts, directs, non intrusifs. Envoyés depuis le numéro dédié de l'école par la personne désignée à cet effet. Ton : humain, professionnel, respectueux.*
 
-La raison pour laquelle la plupart des premiers runs produisent des sorties "structurellement correctes mais inutilisables" n'est pas dans les agents. Elle est dans le brief.
-
-Trois règles qui font la différence :
-
-**Règle 1 — Nommez votre audience avec un niveau de spécificité qui vous met mal à l'aise.**
-Pas "entrepreneurs francophones." Mais : "Consultants indépendants en stratégie RH au Maroc, entre 8 et 15 ans d'expérience, qui facturent entre 500 et 900 EUR par jour et cherchent à lancer un premier programme de formation récurrent sans créer une structure juridique supplémentaire."
-Un brief inconfortable produit des analyses précises. Un brief confortable produit des généralités.
-
-**Règle 2 — Décrivez le problème comme votre client le dirait à un ami — pas comme vous l'écrivez dans une fiche produit.**
-Pas "accompagnement en développement des compétences." Mais : "Je passe mes journées à résoudre des urgences pour des clients qui renégocient mon tarif chaque année et qui ne comprennent pas ce que je leur apporte vraiment."
-Les agents extraient le langage réel de l'audience. Donnez-leur ce langage dans votre brief.
-
-**Règle 3 — Donnez un résultat spécifique et daté.**
-Pas "générer des revenus avec l'IA." Mais : "Inscrire 20 participants à 45 EUR à un premier atelier live d'ici 40 jours, en partant d'une liste email de 120 contacts."
-Un résultat daté permet à Agent 1 de scorer l'opportunité sur des critères temporels réels.
-
-Ces trois règles ne changent pas les agents. Elles changent ce que les agents ont à traiter.
-
-Si vous avez déjà lancé un premier run : relancez avec un brief révisé selon ces trois règles. Comparez les deux outputs côte à côte. La différence est visible immédiatement.
-
-[Nom]
-MALI-MEC
+*Déclencheur d'entrée dans la séquence : tout message WhatsApp entrant contenant le mot GUIDE ou VISITE, ou toute demande d'information spontanée suite à un contenu publié sur Facebook, Instagram, ou YouTube.*
 
 ---
 
-**CTA principal :** [Revenir au brief template — appliquer les trois règles — relancer le run]
+**Message 1 — Envoi immédiat (dès réception du message du parent)**
+
+Objet / Premier mot visible : "Bienvenue — voici votre guide"
 
 ---
 
-### Email 3 — J3
+Bonjour [Prénom si disponible],
 
-**Objet :** Ce que 8 minutes ont produit sur un vrai brief — résultats complets
+Merci pour votre message.
 
-**Preview text :** Dakar. Programme coaching. Signal de marché, offre, stratégie YouTube, conversion. En 8 minutes.
+Je vous envoie immédiatement le Guide du Parent Exigeant — *Les 5 compétences que votre enfant doit maîtriser avant 2030*.
 
----
+[Fichier PDF joint]
 
-Bonjour [Prénom],
+Ce guide vous donne les outils pour évaluer n'importe quelle école privée à Djibouti — y compris la nôtre.
 
-Dans la vidéo, le brief injecté dans AR4A était : "Je lance un programme de coaching pour jeunes entrepreneurs à Dakar."
+Si vous avez des questions après la lecture, je suis disponible ici sur WhatsApp.
 
-Voici exactement ce que les quatre agents ont produit sur ce brief — c'est le dossier `exemple-run-complet/` dans votre téléchargement.
-
-**Agent 1 — Signal de Marché :**
-Score 3.9 sur 5. Feu vert conditionnel. Psychologie d'audience documentée mot pour mot : "est-ce que ça marche vraiment en Afrique ?", "j'ai besoin d'un mentor, pas d'un cours", "je ne sais pas par où commencer — tous ces outils c'est trop." Recommandation stratégique : mitiger le crédibilité gap dans les 90 premières secondes de tout contenu public.
-
-**Agent 2 — Architecte d'Offre :**
-Positionnement formulé et prêt à utiliser. Offre structurée avec pricing EUR et XAF côte à côte. Mécanisme unique nommé. Carte des cinq objections documentées avec une réponse et un élément de preuve pour chacune. Estimation de revenu sur 90 jours en trois scénarios.
-
-**Agent 3 — Stratège de Contenu :**
-Titre retenu avec un score de 19 sur 20. Cinq angles de contenu YouTube calibrés sur les blocages réels du marché. Hook mot pour mot sur 30 secondes. Carte de rétention minute par minute avec les risques de décrochage identifiés à chaque timestamp.
-
-**Agent 4 — Système de Conversion :**
-Lead magnet défini, contenu fichier par fichier. Séquence email cinq étapes. Chemin de conversion complet de la vue vidéo au contrat consulting. Audit des points de friction avec niveau de criticité et solution concrète.
-
-Ce que vous lisez en ce moment est un output d'Agent 4 — produit par le même pipeline AR4A sur le même brief. La vidéo que vous avez regardée est le produit du système qu'elle démontre.
-
-Ouvrez le dossier `exemple-run-complet/`, lisez les quatre fichiers, puis regardez votre propre brief et posez-vous une question : qu'est-ce que mes agents auraient produit avec plus de précision à l'entrée ?
-
-[Nom]
-MALI-MEC
+Bonne lecture,
+— École Champion
 
 ---
 
-**CTA principal :** [Ouvrir le dossier exemple-run-complet dans votre téléchargement]
+CTA : Livraison immédiate du PDF.
+Objectif : Établir le canal WhatsApp de confiance + qualifier le parent comme prospect actif.
 
 ---
 
-### Email 4 — J5
+**Message 2 — Jour 2 (48 heures après le Message 1)**
 
-**Objet :** Pourquoi vos outils IA n'ont pas encore changé vos revenus — la vraie raison
-
-**Preview text :** Ce n'est pas vous. Ce n'est pas l'outil non plus. C'est ça.
+Objet / Premier mot visible : "Une question qu'on nous pose souvent après la lecture"
 
 ---
 
-Bonjour [Prénom],
+Bonjour,
 
-Une question directe : depuis que vous utilisez des outils IA, vos revenus ont-ils augmenté de façon mesurable ?
+J'espère que le guide vous a été utile.
 
-Si la réponse est "pas vraiment" — voici pourquoi, et ce n'est pas un problème de compétence ni de discipline.
+Je reviens vers vous parce qu'une question revient souvent après la lecture : *"L'IA à l'école, c'est vraiment enseigné — ou c'est juste dans la brochure ?"*
 
-Le marché IA vous a vendu une promesse de productivité. Chaque newsletter, chaque tutoriel, chaque vidéo "top 10 outils IA" vous a conditionné à chercher le prochain outil. Vous avez accumulé des abonnements, testé des interfaces, suivi des formations de prompt engineering. Ce comportement est rationnel — c'est ce que le marché vous a appris à faire depuis deux ans.
+C'est une très bonne question. Et la réponse mérite une vraie démonstration, pas un paragraphe de texte.
 
-Le problème : la productivité seule ne génère pas de revenus.
+C'est exactement pourquoi nous organisons la Journée Portes Ouvertes : vous venez, vous voyez une session IA en direct avec le formateur de Techiftiin Institute. Vous posez vos questions. Et votre enfant peut essayer si vous le souhaitez.
 
-Ce qui génère des revenus, c'est un pipeline complet et connecté : une audience qualifiée qui voit un contenu, passe sur une page de capture, s'inscrit à un atelier, achète un programme, devient un client consulting. Chaque outil IA que vous avez testé vous a rendu plus rapide à produire du texte. Aucun ne vous a donné ce pipeline.
+Les prochaines dates sont le [Date Session 1] et le [Date Session 2].
 
-AR4A ne vous rend pas plus rapide. Il construit le pipeline.
+Voulez-vous que je vous réserve une place ? Répondez simplement OUI ou VISITE.
 
-La différence entre un outil IA et AR4A n'est pas une question de qualité de génération. C'est une question d'architecture : un outil répond à une question. AR4A produit quatre livrables commerciaux connectés entre eux par une logique de revenu — signal de marché, offre structurée, stratégie de contenu, système de conversion — tous calibrés sur votre brief, pas sur un exemple générique.
-
-Si vous n'avez pas encore lancé votre premier run, il y a peut-être une friction quelque part — installation, brief, ou autre chose. Répondez à ce mail et dites-moi où vous êtes. Je lis et je réponds.
-
-[Nom]
-MALI-MEC
+— École Champion
 
 ---
 
-**CTA principal :** [Répondre à cet email avec votre question — ou lancer votre run maintenant]
+CTA : Répondre OUI ou VISITE pour confirmer la réservation à la Journée Portes Ouvertes.
+Objectif : Convertir le lecteur du guide en participant inscrit à une session.
 
 ---
 
-### Email 5 — J8
+**Message 3 — Jour 4**
 
-**Objet :** La prochaine étape — si vous voulez aller plus vite et moins seul
-
-**Preview text :** Ce n'est pas une formation. C'est une session de travail sur votre business, avec correction en direct.
+Objet / Premier mot visible : "Ce qu'une maman de Djibouti nous a dit après la visite"
 
 ---
 
-Bonjour [Prénom],
+Bonjour,
 
-Vous avez les fichiers. Vous avez le runbook. Vous avez vu le système produire quatre livrables en huit minutes sur un cas réel.
+Je voudrais vous partager quelque chose.
 
-Si vous avez lancé votre premier run : vous avez maintenant un draft de positionnement, une ébauche d'offre, et une première stratégie de contenu — produits par un système, pas par des heures de réflexion solitaire. Vous avez une longueur d'avance réelle sur la majorité des entrepreneurs dans votre marché qui parlent encore d'IA sans avoir construit quoi que ce soit.
+La semaine dernière, une maman dont la fille est en CE2 nous a dit après sa visite :
 
-La prochaine étape, si vous voulez aller plus vite :
+*"J'ai visité trois écoles privées à Djibouti cette année. C'est la première fois que je vois une session anglais où les enfants parlent vraiment — pas en récitant, en répondant. Et la session IA... je ne savais même pas que ça existait ici."*
 
-**L'Atelier Découverte AR4A — 2 heures, en direct**
+Elle a préinscrit sa fille le jour même.
 
-La première heure est consacrée à la construction de votre brief en groupe guidé. C'est la partie que la plupart des gens bâclent seuls et qui détermine 80% de la qualité de leurs outputs. Vous repartez avec un brief calibré — pas un draft approximatif.
+Je ne vous dis pas cela pour vous presser. Je vous le dis parce que c'est exactement ce que vous pouvez vérifier par vous-même, gratuitement, lors de notre prochaine Journée Portes Ouvertes.
 
-La deuxième heure : vous lancez votre pipeline AR4A pendant la session, je suis présent pour corriger et ajuster en temps réel sur vos sorties. À la fin : un output complet sur votre propre business, produit pendant la session, prêt à déployer.
+Date : [Date Session 1] — il reste des places disponibles.
 
-Ce n'est pas une formation sur AR4A. C'est une session de travail sur votre business avec de la guidance en direct.
+Pour réserver : répondez simplement VISITE.
 
-Prochaine session : [DATE]
-Prix : 45 EUR / 29 500 XAF
-Places : 30 maximum
-
-Si vous êtes prêt à aller directement au système complet — pipeline entier opérationnel en trois jours, sur votre offre réelle, avec accès permanent aux replays — le Programme Intensif AR4A est aussi dans le lien. Vingt places, pas de liste d'attente.
-
-Les deux options sont dans le lien ci-dessous.
-
-[Nom]
-MALI-MEC / Techiftiin Institute
+— École Champion
 
 ---
 
-**CTA principal :** [Réserver votre place — Atelier Découverte AR4A — 45 EUR / 29 500 XAF]
-**CTA secondaire :** [Programme Intensif AR4A — 3 jours — voir les détails]
+CTA : Répondre VISITE pour confirmer la réservation.
+Objectif : Preuve sociale par témoignage réel et identifiable + invitation directe à la visite physique.
 
 ---
 
-## 4. Sales Path
+**Message 4 — Jour 6**
 
-Parcours complet du spectateur YouTube jusqu'au client premium MEC Advisory, avec chaque déclencheur, point de contact, offre présentée et objectif de conversion.
-
-| Étape | Déclencheur d'entrée | Point de contact | Offre présentée | Objectif de conversion | Jour estimé |
-|-------|---------------------|-----------------|-----------------|----------------------|-------------|
-| **Spectateur** | Algorithme YouTube, partage LinkedIn ou Instagram, recherche directe sur "IA revenus" ou "système IA freelance" | Vidéo "Les Autres Parlent d'IA. Ce Système à 4 Agents, Lui, la Facture." — 14 minutes | Aucune | Regarder jusqu'à la mention mid-vidéo (7:00) et rester jusqu'au CTA final (13:30) | J0 |
-| **Lead** | Clic sur le lien description planté à 7:00 et répété à 13:30; ou clic sur la YouTube Card; ou clic sur le commentaire épinglé | Landing page Revenue Agent Template Pack — un champ email, un bouton, liste des neuf fichiers visibles | Lead magnet gratuit — Revenue Agent Template Pack | Saisie de l'email et téléchargement confirmé (objectif : 6 à 8% des vues) | J0 |
-| **Activé** | Ouverture de l'Email 1 (J0) et accès au dossier téléchargé; au moins un fichier ouvert | Email J0 (livraison + guide de démarrage en trois actions) + runbook AR4A | Aucune — livraison pure | Ouvrir le brief template, remplir les cinq sections, lancer un premier run Agent 1 avant la fin de J1 | J0–J1 |
-| **Éduqué** | Ouverture des Emails 2 (J1) et 3 (J3) — engagement mesuré par les clics sur les liens | Email J1 (règles de brief) + Email J3 (run complet commenté sur le cas Dakar) | Mention passive du Programme Intensif en post-scriptum de l'Email 3 uniquement | Relancer le pipeline avec un brief révisé selon les trois règles; identifier l'écart entre son output et l'exemple Dakar | J1–J4 |
-| **Prospect** | Clic sur le lien de l'Atelier Découverte dans l'Email 5 (J8); ou réponse directe à l'Email 4 (J5) | Page d'inscription Atelier Découverte AR4A — détail de la session, format, ce qui est produit pendant, témoignages de participants avec outputs visibles | Atelier Découverte AR4A — 45 EUR / 29 500 XAF — 2 heures live | Inscription et paiement confirmés avant la date de session | J7–J14 |
-| **Client entrée** | Participation à la session Atelier Découverte live | Session Zoom 2h — brief guidé en groupe (60 min) + run AR4A personnel assisté (60 min) + outputs produits pendant la session | Programme Intensif AR4A présenté dans les 20 dernières minutes avec tarif early-bird valable 48h | Décision d'inscription au Programme Intensif avant la fin de la fenêtre 48h | J14–J16 |
-| **Client core** | Inscription au Programme Intensif AR4A | 3 sessions live × 2h30 sur trois jours consécutifs — construction du brief (Jour 1), run complet et correction (Jour 2), déploiement et stratégie de distribution (Jour 3) — accès aux replays et à l'espace Notion pendant 60 jours | Mention de MEC Advisory en fin de Jour 3 pour les profils dont les outputs signalent un business avec revenus existants | Compléter les trois sessions, pipeline déployé, lead magnet actif et stratégie YouTube opérationnelle | J21–J45 |
-| **Client premium** | Contact initié par le client après déploiement du Programme Intensif — ou approche directe de MEC Advisory en fin de Jour 3 du Programme | Appel découverte 45 minutes — diagnostic du pipeline déployé, identification des leviers d'optimisation avancée, présentation de l'accompagnement 90 jours | Déploiement AR4A — MEC Advisory — 2 500 à 5 000 EUR — accompagnement 90 jours, intégration opérationnelle, reporting mensuel, formation de l'équipe interne | Signature du contrat d'accompagnement 90 jours | J45–J90 |
+Objet / Premier mot visible : "Les tarifs complets — en toute transparence"
 
 ---
 
-## 5. Friction Audit
+Bonjour,
 
-Sept points de décrochage identifiés dans le parcours, avec niveau de criticité et solution concrète et déployable.
+Je sais que la question des frais de scolarité est importante dans votre décision.
 
-| # | Localisation dans le parcours | Type de friction | Criticité | Solution concrète |
-|---|------------------------------|-----------------|-----------|------------------|
-| 1 | **Vidéo → clic lien description** — Le viewer regarde la vidéo jusqu'à la fin mais ne clique pas sur le lien | CTA non ancré en mémoire : le lien n'est mentionné qu'une fois, en fin de vidéo, quand l'attention est déjà en baisse; sur mobile, la description est cachée derrière un bouton "plus" que personne ne cherche | **HIGH** | Planter la mention mid-vidéo à 7:00 (11 secondes, non-commerciale) pour que le lien soit ancré 6 minutes avant le CTA final. Placer le lien en toute première ligne de la description, avant tout autre texte. Ajouter une YouTube Card cliquable à 13:00. Épingler un commentaire avec le lien direct dans les 15 premières minutes après publication. Afficher l'URL de la landing page à l'écran pendant les 30 dernières secondes du CTA — pas seulement la mentionner à voix haute. |
-| 2 | **Landing page → téléchargement** — Le visiteur arrive sur la page mais ne laisse pas son email | Valeur perçue insuffisante avant la demande : le visiteur ne sait pas exactement ce qu'il reçoit, ou perçoit le formulaire comme une transaction disproportionnée; formulaire avec trop de champs (prénom + nom + email + pays) sur mobile crée une friction élevée | **HIGH** | Réduire à un seul champ obligatoire (email uniquement — pas de prénom, pas de téléphone, jamais). Afficher sur la page les neuf noms de fichiers exacts avec leur description en une ligne — pas des catégories génériques comme "template et ressources". Inclure un screenshot du dossier ZIP ouvert tel que vu à l'écran à 8:45 dans la vidéo. Ajouter une ligne de preuve sociale spécifique dès que le volume le permet : "Téléchargé par [N] entrepreneurs — reçu en 30 secondes." |
-| 3 | **Téléchargement → email de livraison** — L'Email J0 n'est pas ouvert ou atterrit en spam | Authentification du domaine expéditeur absente (SPF/DKIM/DMARC non configurés); objet d'email perçu comme promotionnel par les filtres; délai d'envoi trop long (plus de 5 minutes entre la saisie et la réception) | **HIGH** | Configurer l'envoi automatique de J0 en moins de 60 secondes après validation de l'email. Objet exact "Vos fichiers AR4A sont là" — spécifique, sans majuscules excessives, sans mots déclencheurs de filtre. Ajouter dans le corps de J0 une instruction explicite : "Ajoutez [adresse] à vos contacts pour recevoir les quatre prochains emails sans filtre." Vérifier l'authentification SPF, DKIM et DMARC du domaine expéditeur avant le premier envoi — sans cette configuration, les taux d'ouverture restent sous 20% sur une liste froide. |
-| 4 | **Téléchargement → premier run** — Le lead ouvre le dossier mais ne lance jamais les agents | Neuf fichiers reçus simultanément créent une paralysie de choix — le lead ne sait pas par lequel commencer, remet à plus tard, et la fenêtre d'activation se ferme; friction technique supplémentaire pour les non-utilisateurs de Claude Code | **HIGH** | L'Email J0 doit donner une seule instruction : ouvrir `business-brief-template.md` en premier, remplir les cinq sections, rien d'autre. La première action doit produire un résultat visible (brief partiellement rempli) en 15 minutes — pas "lancez les agents." Le runbook doit s'ouvrir sur "Étape 1 — Ouvrez ce fichier et uniquement ce fichier" en caractères gras. Ajouter dans le runbook une section en tête "Si vous n'avez jamais utilisé Claude Code" avec les trois actions préalables : création de compte, création de projet, import des fichiers agents. |
-| 5 | **Email J5 → inscription Atelier** — Le lead n'achète pas l'Atelier Découverte | Prix perçu sans ancrage dans le contexte monétaire local; bénéfice formulé en termes d'apprentissage ("vous apprendrez") plutôt que de résultat tangible ("vous repartez avec"); absence d'urgence réelle sans date et compteur de places dans l'email | **HIGH** | Afficher 29 500 XAF en priorité, avec 45 EUR entre parenthèses — jamais l'inverse pour l'audience CFA. Formuler le bénéfice en output concret : "vous repartez avec quatre livrables AR4A produits sur votre propre business pendant la session" — pas "vous comprendrez comment AR4A fonctionne." Inclure systématiquement la date de session et le nombre de places restantes dans l'email — ces deux éléments sont obligatoires pour créer une urgence réelle; sans eux, la décision est remise à une date indéfinie. |
-| 6 | **Atelier Découverte → Programme Intensif** — Le participant de l'atelier ne s'inscrit pas au Programme | Saut de prix de 6x à 10x (45 EUR → 280 à 450 EUR) sans pont de preuve intermédiaire suffisant; offre présentée après que l'énergie de la session est retombée | **MEDIUM** | Présenter l'offre Programme Intensif pendant les 20 dernières minutes de l'Atelier, pendant que le participant voit ses outputs AR4A personnels à l'écran — c'est le moment de projection maximale. Proposer un tarif early-bird valable exclusivement 48h pour les participants de cette session. Formuler le Programme non pas comme "3 jours de formation" mais comme "le délai dans lequel votre pipeline est construit, déployé, et génère ses premiers leads" — un résultat, pas une durée. Montrer pendant l'Atelier un exemple d'output produit par un participant d'une cohorte précédente avec son prénom et son secteur. |
-| 7 | **Infrastructure de paiement — marchés XAF** — Le prospect veut s'inscrire mais ne peut pas payer | Les participants depuis les pays de la zone CFA ne peuvent pas payer en EUR via Stripe ou PayPal sans carte internationale, frais de change élevés ou refus de transaction; le Mobile Money est le mode de paiement dominant dans ces marchés | **HIGH** | Intégrer au moins une solution de paiement Mobile Money locale (Wave, Orange Money, MTN Mobile Money) pour toutes les transactions en XAF. Afficher les prix en XAF en premier sur la page d'inscription pour les visiteurs depuis les pays ciblés — détection par géolocalisation IP ou proposition de deux affichages parallèles. Proposer un virement bancaire avec confirmation manuelle comme alternative pour les montants Programme Intensif (180 000 à 295 000 XAF) et MEC Advisory. Sans cette infrastructure, une fraction importante de l'audience qualifiée convertit l'intention en abandon à l'étape de paiement. |
+Voici les tarifs exacts pour la rentrée 2026–2027, par niveau :
 
----
+— Maternelle (PS, MS, GS) : 225 000 à 240 000 DJF / an (~1 131 à 1 206 EUR)
+— Primaire (CP à CM2) : 265 000 à 285 000 DJF / an (~1 332 à 1 433 EUR)
+— Collège (6e à 3e) : 310 000 à 340 000 DJF / an (~1 558 à 1 709 EUR)
+— Lycée (2nde à Terminale) : 360 000 à 400 000 DJF / an (~1 809 à 2 010 EUR)
 
-## 6. Signaux de Crédibilité
+Frais d'inscription (non remboursables, versés à la préinscription) : 15 000 DJF / ~75 EUR
 
-Cinq signaux déployés à des moments précis du parcours pour construire la confiance sans auto-promotion.
+Ces frais incluent : scolarisation complète selon le programme officiel djiboutien, sessions anglais intégrées par niveau, programme IA hebdomadaire avec Techiftiin Institute, suivi individualisé avec bilan trimestriel écrit remis en main propre, et accès au canal WhatsApp parent-école.
 
-| # | Type de signal | Où le déployer | Formulation ou utilisation concrète | Pourquoi ce signal construit la confiance pour cette audience spécifique |
-|---|---------------|---------------|-------------------------------------|-------------------------------------------------------------------------|
-| 1 | **Démonstration live non coupée** | Vidéo — 0:30 (Proof Primer sur le dossier outputs/) + 3:00 à 10:35 (run complet en temps réel) | Dossier `outputs/` ouvert dans les 45 premières secondes avec les timestamps du jour lisibles à l'écran. Run AR4A complet — de l'injection du brief à l'apparition des quatre outputs — sans coupure, sans accélération, avec la latence de traitement visible. Le brief est tapé en direct sous les yeux du viewer, pas chargé depuis un fichier préparé. | Cette audience a été exposée à des démonstrations montées, des screenshots simulés et des promesses de revenus sans preuves. Un run en temps réel sur un brief tapé en direct, avec des fichiers datés du jour dans un vrai dossier de projet, est non-falsifiable dans le format vidéo. La latence réelle de traitement — plusieurs secondes visibles — est une preuve de réalité, pas un défaut à masquer. Le profil B2B de l'audience secondaire prend sa décision de crédibilité dans les 45 premières secondes. |
-| 2 | **Spécificité géographique et monétaire dans les outputs** | Vidéo — zoom sur le pricing XAF à 5:10 dans l'output Agent 2 / Emails J3 et J5 / Dossier exemple-run-complet | Prix affichés en XAF dans les sorties de l'Agent 2 visibles à l'écran pendant la démonstration. Noms de villes réelles dans les briefs : Dakar, Abidjan, Casablanca. WhatsApp Business mentionné dans les canaux recommandés par l'Agent 3. Ces occurrences sont des sorties réelles des agents — pas des ajouts cosmétiques dans la présentation. | La question documentée dans le brief marché est "est-ce que ça marche vraiment en Afrique ?" Un outil calibré pour le marché nord-américain produit des prix en USD et des références à LinkedIn Ads. Quand l'output Agent 2 affiche "184 000 XAF" au lieu de "$280", et que l'output Agent 3 mentionne "WhatsApp Business" comme canal principal, le signal de calibration culturelle est non-rhétorique — il est dans le document lui-même. Zéro claim nécessaire. |
-| 3 | **Auto-référentialité du système** | Vidéo — annonce verbale à 7:30 (moment méta identifié dans la Retention Map) / Email J3 (post-scriptum) / Page de vente Programme Intensif | Déclaration factuelle, une seule fois, sans sur-emphase : "Le signal de marché, l'architecture d'offre, la stratégie de contenu et le système de conversion que vous venez de voir — ce sont les sorties des quatre agents AR4A lancés sur le brief de MALI-MEC. Cette vidéo est le produit du système qu'elle démontre." | C'est le signal de crédibilité le plus difficile à fabriquer et le plus difficile à contester : utiliser le système pour construire et vendre le système, et le dire ouvertement. Il prouve que MALI-MEC n'enseigne pas quelque chose qu'il ne pratique pas sur son propre business. Le viewer comprend seul que la vidéo devant lui est la preuve par l'exemple — sans qu'on lui demande de la croire sur parole. Pour une audience d'entrepreneurs sceptiques de l'IA-hype, la boucle fermée est le signal le plus fort disponible. |
-| 4 | **Outputs de participants réels avec brief d'entrée visible** | Email J3 (complément au cas Dakar) dès la deuxième cohorte / Page de vente Atelier Découverte / Page de vente Programme Intensif | Screenshots de fichiers de sortie AR4A produits par des participants réels, format côte à côte : "Brief d'entrée : [texte exact du brief du participant]" à gauche / "Output Agent 2 : [extrait du positionnement et du pricing]" à droite. Prénom du participant, secteur, ville. Pas de citations textuelles — des documents avec noms de fichiers et horodatages. | Cette audience distruste les témoignages abstraits du type "cette formation a changé ma vie." Elle fait confiance aux artefacts spécifiques et vérifiables. Voir le positionnement formulé par AR4A pour "un formateur en finance islamique à Casablanca, brief de 180 mots, output Agent 2 en 4 minutes" est plus convaincant que cent étoiles sur une plateforme de formation. Le brief visible rend le résultat reproductible — le viewer peut évaluer si son propre brief produirait un output comparable. Ce signal ne peut pas être déployé avant la première cohorte — il est prioritaire dès la fin de l'Atelier Découverte 1. |
-| 5 | **Structure institutionnelle multi-entités** | Footer de tous les emails / Footer de la page de capture / Page de vente Programme Intensif et MEC Advisory | Ligne sobre en bas de chaque page et de chaque email : "MALI-MEC — Techiftiin Institute · MEC Advisory · École Champion." Ne pas lister les entités dans le corps du contenu ou dans les arguments de vente. Leur présence en footer est suffisante et non-intrusive — elle signale une structure sans en faire un argumentaire. | Pour les profils B2B et institutionnels (consultants établis, directeurs de centres de formation, décideurs d'organisations francophones), plusieurs entités nommées avec des fonctions commerciales distinctes signalent une organisation ayant une durée de vie, des obligations légales et un portefeuille d'activités existant — ce qui réduit le risque perçu de traiter avec un opérateur solo sans historique. Pour l'entrepreneur individuel, la structure multi-entités signale la capacité de MALI-MEC à l'accompagner jusqu'au niveau consulting institutionnel si son activité le justifie — pas seulement de lui vendre un atelier de 2 heures. |
+Les modalités de paiement — annuel, semestriel ou trimestriel — sont précisées lors de l'entretien individuel. Toutes les transactions se font à l'établissement, en espèces ou par virement local. Aucun paiement en ligne.
+
+Si vous souhaitez un entretien personnalisé sur le niveau et le parcours de votre enfant, c'est lors de la Journée Portes Ouvertes que nous le faisons, en famille.
+
+— École Champion
 
 ---
 
-CONVERSION_SYSTEM_SCORE: 7
+CTA : Répondre VISITE pour confirmer votre place.
+Objectif : Neutraliser l'objection prix avant qu'elle devienne un frein silencieux. La transparence tarifaire proactive est un signal de confiance différenciant dans ce marché.
+
+---
+
+**Message 5 — Jour 8**
+
+Objet / Premier mot visible : "Dernières places disponibles — [Date Session 1]"
+
+---
+
+Bonjour,
+
+Je reviens vers vous une dernière fois avant la Journée Portes Ouvertes du [Date Session 1].
+
+Il reste [X] places sur les 25 disponibles pour cette session.
+
+Je sais que vous avez peut-être encore des questions. C'est normal. C'est une décision importante pour l'avenir de votre enfant.
+
+C'est exactement pour ça que la visite existe : pas pour vous convaincre, mais pour que vous puissiez voir par vous-même, poser vos questions, rencontrer les enseignants, et prendre une décision éclairée. Gratuitement. En famille. Sans engagement d'aucune sorte.
+
+Pour réserver votre place : répondez VISITE à ce message.
+
+Si le [Date Session 1] ne vous convient pas, nous avons également une session le [Date Session 2].
+
+Et si vous avez déjà pris votre décision et souhaitez procéder directement à la préinscription, répondez PREINSCRIRE — je vous donne toutes les informations nécessaires ici, maintenant.
+
+— École Champion
+
+---
+
+CTA : Répondre VISITE ou PREINSCRIRE.
+Objectif : Urgence calendaire douce + deux portes de sortie (visite ou préinscription directe) pour capturer les leads les plus avancés dans leur décision sans forcer les indécis.
+
+---
+
+### Chemin de Vente — De la Vidéo à l'Inscription Définitive
+
+| Étape | Déclencheur d'entrée | Point de contact | Ce qui est présenté | Objectif de conversion | Jour estimé |
+|-------|---------------------|-----------------|--------------------|-----------------------|:-----------:|
+| **1 — Spectateur** | Algorithme Facebook / YouTube / partage WhatsApp dans les groupes familiaux et communautaires djiboutiens | Vidéo "Donnez 3 Longueurs d'Avance à Votre Enfant Avant la Rentrée 2026" — 14 min | La Trilogie Champion démontrée en situation réelle. Session anglais enfants (pic émotionnel #1, avant min 7). Session IA Techiftiin avec formateur nommé à l'écran. Témoignage parent identifiable (pic émotionnel #2). CTA final : mot VISITE sur WhatsApp. | Regarder jusqu'à la fin (>80% de la vidéo). Envoyer VISITE ou GUIDE sur WhatsApp. | J0 |
+| **2 — Contact entrant** | Le parent envoie GUIDE ou VISITE sur WhatsApp, ou fait une demande d'information spontanée en commentaire Facebook ou en message direct Instagram | WhatsApp entrant + réponse humaine en <2h depuis le numéro dédié de l'école | Guide PDF "Les 5 Compétences" envoyé immédiatement. Canal WhatsApp établi. Message de bienvenue chaleureux et non-commercial. | Réception et ouverture du guide. Canal WhatsApp établi et qualifié pour la séquence de suivi. | J0 |
+| **3 — Lecteur qualifié** | Ouverture du guide et lecture partielle ou complète | Guide PDF "Les 5 Compétences" — 10 pages | Cadre d'évaluation des écoles privées djiboutiennes. Questions précises à poser lors d'une visite. Invitation directe à la Journée Portes Ouvertes dans l'encart final. | Comprendre que la Journée Portes Ouvertes est l'étape naturelle suivante — pas une démarche commerciale, mais la vérification logique du guide. | J0–J1 |
+| **4 — Lead nourri** | Messages 2, 3 et 4 de la séquence WhatsApp reçus sur 6 jours | Séquence WhatsApp — 5 messages sur 8 jours | Réponse proactive à l'objection IA (Message 2). Témoignage parent identifiable (Message 3). Tarifs complets et transparents, modalités cash/virement (Message 4). | Confirmer l'inscription à la Journée Portes Ouvertes en répondant VISITE. Taux cible : 30 à 45% des contacts entrés dans la séquence. | J2–J8 |
+| **5 — Inscrit Journée Portes Ouvertes** | Le parent répond VISITE à l'un des messages de la séquence | Confirmation WhatsApp immédiate incluant date, adresse exacte, programme des 2h + rappel 48h avant la session + rappel le matin même (7h–8h) | Date, adresse, programme détaillé des 2 heures. Invitation à venir avec l'enfant. | Présence physique confirmée le jour J. Taux de présence cible : >70% des inscrits. | J3–J15 |
+| **6 — Visiteur** | Le parent arrive à la Journée Portes Ouvertes | Événement physique de 2h à l'établissement — accès sur inscription préalable, 25 familles maximum par session | Présentation La Trilogie Champion par le directeur (15 min). Visite des salles rénovées + espace IA + espace anglais (30 min). Démonstration live session méthode japonaise + session IA avec enfant actif (15 min). Entretien individuel famille-direction avec évaluation du niveau de l'enfant et remise de la brochure tarifaire en main propre (30 min). Visite libre + rencontre directe avec les enseignants (30 min). | Confiance établie. Parent prêt à préinscrire sur place ou dans les 72h suivantes via WhatsApp. | J7–J21 |
+| **7 — Pré-inscrit** | Parent décide de préinscrire à l'issue de la visite ou dans les 72h suivantes via suivi WhatsApp post-visite | Entretien individuel sur place ou suivi WhatsApp post-visite depuis le numéro dédié | Dossier de préinscription rempli et signé. Frais d'inscription : 15 000 DJF / ~75 EUR, versés en espèces ou par virement à l'établissement. Place confirmée pour l'année 2026–2027. | Versement des 15 000 DJF + dossier signé. Confirmation WhatsApp envoyée au parent le jour même. | J7–J30 |
+| **8 — Inscrit définitif** | Dossier validé par la direction + accord signé sur les modalités de paiement annuel | Entretien de finalisation à l'établissement | Contrat d'inscription annuel. Premier versement des frais de scolarité selon modalités convenues — annuel, semestriel ou trimestriel — en espèces ou par virement local à l'établissement. Aucun paiement en ligne à aucune étape. | Contrat signé. Premier versement effectué. Enfant confirmé pour la rentrée septembre 2026. Bienvenue dans la communauté École Champion envoyée via WhatsApp. | J14–J60 |
+
+**Point de bascule critique : Étape 6 — Journée Portes Ouvertes**
+
+La conversion de Visiteur à Pré-inscrit dépend à 80% de la qualité de l'Étape 6. L'entretien individuel famille-direction, la démonstration en direct de La Trilogie, et la qualité visuelle et humaine de l'accueil sont les trois variables qui décident de l'inscription. Tout ce qui précède — vidéo, guide, séquence WhatsApp — ne sert qu'à amener la famille jusqu'à cette porte. La Journée Portes Ouvertes est là où la confiance se gagne ou se perd de façon définitive. Dans un marché communautaire de la taille de Djibouti, une famille dont la visite est réussie en parle à 5 autres familles sur WhatsApp. Une famille dont la visite est décevante en parle à 15.
+
+---
+
+### Audit des Frictions
+
+| Localisation dans le funnel | Type de friction | Criticité | Solution |
+|-----------------------------|-----------------|:---------:|---------|
+| **Vidéo → Premier message WhatsApp** | CTA trop complexe ou numéro mal affiché : le parent veut agir mais ne sait pas quoi faire ni où écrire. Sur mobile, le numéro est trop petit ou disparaît avant d'avoir pu être noté. | CRITIQUE | Un seul numéro WhatsApp affiché. Un seul mot-clé (VISITE ou GUIDE). Numéro statique à l'écran pendant les 45 dernières secondes de la vidéo en caractères lisibles sur mobile 6 pouces. Numéro également en première ligne de la description Facebook et en commentaire épinglé. Aucun formulaire, aucune redirection, aucune étape intermédiaire. |
+| **Vidéo partagée sur WhatsApp sans numéro de contact** | La vidéo se propage sur les groupes familiaux et communautaires djiboutiens mais sans le CTA : le trafic est généré sans conversion possible. | ÉLEVÉ | Intégrer le numéro WhatsApp dans la vidéo elle-même en texte à l'écran — pas seulement en description externe. Préparer une slide de fin statique avec le numéro lisible même après compression WhatsApp. Préparer un message type à copier-coller pour les parents qui partagent : "[Lien ou titre de la vidéo] — Pour visiter l'école gratuitement avant la rentrée, envoyez VISITE au [numéro]." Publier ce message en commentaire épinglé de chaque publication Facebook et en description YouTube. |
+| **Premier message WhatsApp → Réception du guide** | Temps de réponse trop long : le parent envoie un message et n'obtient pas de réponse dans l'heure. Il perd confiance ou contacte un établissement concurrent qui répond plus vite. | CRITIQUE | Désigner une personne responsable de la réception WhatsApp pendant les heures ouvrables (8h–19h). Objectif non négociable : réponse en <2h, envoi du guide en <5 min. Préparer 5 modèles de messages WhatsApp prêts à coller avant le premier contenu publié : demande de guide, demande de tarifs, inscription Portes Ouvertes, demande d'entretien direct, réponse automatique hors heures. Un délai >4h en juillet-août équivaut à une perte de lead irréversible. |
+| **Réception du guide → Inscription Journée Portes Ouvertes** | Le guide n'est pas lu ou le lien entre le guide et la visite n'est pas perçu comme évident. Le parent reçoit l'information mais ne passe pas à l'action suivante. | ÉLEVÉ | L'encart final du guide est une invitation directe à la Journée Portes Ouvertes avec la date et le mot-clé VISITE. Le Message 2 de la séquence (Jour 2) rappelle proactivement ce lien via la question IA — le point d'incertitude le plus fertile pour ce marché. Le formulaire de réservation est uniquement WhatsApp — un seul mot à envoyer, pas un lien, pas un formulaire. |
+| **Inscription Journée Portes Ouvertes → Présence effective** | Le parent s'est inscrit mais ne vient pas le jour J : oubli, conflit d'agenda, hésitation de dernière minute, absence non annoncée. | ÉLEVÉ | Rappel WhatsApp 48h avant la session. Rappel le matin même (7h–8h). Message de confirmation en réponse à l'inscription initiale incluant adresse exacte, heure, programme détaillé. Proposer la deuxième date comme alternative lors de toute inscription tardive ou hésitation. Objectif de présence : >70% des inscrits. |
+| **Présence Journée Portes Ouvertes → Préinscription** | Entretien individuel absent, trop court, ou non structuré. Le parent repart sans réponse factuelle sur les tarifs, les modalités de paiement, et la reconnaissance officielle des diplômes — les trois objections les plus fréquentes. | CRITIQUE | Chaque famille reçoit un entretien individuel de 30 minutes minimum avec un représentant de la direction — pas du personnel administratif seul. La brochure tarifaire est remise physiquement pendant l'entretien, pas avant. L'objection sur la reconnaissance officielle des diplômes est traitée proactivement dans le discours de présentation, avant que le parent la formule. Un dossier de préinscription est disponible sur place pour les familles prêtes à s'engager le jour même. |
+| **Préinscription → Inscription définitive** | Hésitation sur les modalités de paiement : montant annuel élevé perçu comme une somme globale difficile à mobiliser, pas de paiement en ligne, incertitude sur le fractionnement. | ÉLEVÉ | Présenter systématiquement les trois modalités lors de chaque entretien (annuel, semestriel, trimestriel). Afficher en parallèle le montant annuel ET l'équivalent mensuel pour réduire l'effet de masse : exemple "Lycée : 400 000 DJF/an, soit l'équivalent de 33 300 DJF par mois." Confirmer clairement que le paiement se fait à l'établissement, en espèces ou virement local, à la date convenue. Aucune ambiguïté sur ce point dès le Message 4 de la séquence WhatsApp. |
+| **Contenu de promesse publié avant les preuves visuelles** | Si la vidéo de positionnement est publiée avant les vidéos de visite des locaux et de session IA, le marché communautaire djiboutien génère une méfiance collective avant même la première visite — et ce signal négatif se propage sur WhatsApp plus vite que la meilleure campagne. | CRITIQUE | Séquençage non négociable (validé par les Agents 2 et 3) : semaine 1 = preuves visuelles (locaux rénovés + profils de 3 enseignants), semaine 2 = preuves pédagogiques (session IA Techiftiin + session anglais), semaine 3 seulement = vidéo de positionnement "3 Longueurs d'Avance". Aucune exception à cet ordre. |
+| **Témoignages anonymes ou génériques** | Un témoignage sans prénom ni section de l'enfant n'est pas crédible dans un réseau communautaire où tout le monde connaît ou peut vérifier les références. Un prénom générique est perçu comme fabriqué. | MOYEN | N'utiliser que des témoignages avec prénom identifiable, section de l'enfant, et autorisation explicite de l'intéressé. Un seul témoignage authentique avec un prénom réel vaut dix témoignages anonymes dans ce marché. |
+| **Capacité de traitement des demandes WhatsApp dépassée** | Suite à une publication virale sur les groupes WhatsApp familiaux, 50 à 100 messages arrivent en 24h. La réponse dépasse 8h. La confiance s'effondre et le bouche-à-oreille négatif s'active sur les groupes communautaires — le canal principal. | MOYEN | Préparer 5 modèles de réponse WhatsApp prêts à coller avant le lancement. Si le volume dépasse la capacité d'une personne, désigner un deuxième responsable pendant les pics post-publication. Documenter chaque lead dans un tableau simple (nom, date du premier contact, étape atteinte, statut) pour ne perdre aucun contact entrant. |
+
+---
+
+### Séquence de Crédibilité
+
+| Signal | Type | Où l'utiliser | Pourquoi ça construit la confiance pour ce marché |
+|--------|------|--------------|---------------------------------------------------|
+| **"Première école privée de Djibouti" — ancrage historique avec date ou source vérifiable** | Spécificité historique | Vidéo principale (mention à 1:30 lors de la contextualisation). Guide PDF (page de présentation). Message 3 de la séquence WhatsApp. Brochure tarifaire remise lors de l'entretien. | Dans un marché communautaire où la durée équivaut à la preuve de sérieux, une école fondée avant toutes les autres est une école qui a survécu aux générations. Ce signal désamorce l'objection "nouvelle école non éprouvée" sans la nommer. Il exige une date ou une source vérifiable — une affirmation sans référence ne convainc pas le parent djiboutien de 2026. |
+| **Formateur Techiftiin Institute identifié par prénom et titre à l'écran** | Démonstration + Association nominale | Vidéo principale (7:30 — présentation nominale du formateur). Message 2 de la séquence WhatsApp (mention de la démonstration IA en direct à la Journée Portes Ouvertes). Présence physique du formateur lors de la Journée Portes Ouvertes, échanges directs avec les familles. | L'objection "l'IA c'est dans la brochure" est la plus fréquente et la plus létale dans ce marché. La neutraliser exige une personne identifiée par son prénom et son titre — pas une institution nommée. Un prénom affiché à l'écran transforme une promesse en fait vérifiable. Le parent peut mentionner ce prénom dans son réseau WhatsApp pour validation sociale — mécanisme de vérification courant et rapide à Djibouti. |
+| **Session anglais filmée sans coupure avec enfants actifs et son ambiant** | Démonstration en situation réelle non reconstituée | Vidéo principale (5:30 — pic émotionnel #1 de la retention map). Extrait de 60 secondes partagé sur Instagram Reels et WhatsApp Status. Publications Facebook de relance en semaines 2 et 4. | Ce signal est le plus puissant parce qu'il ne peut pas être fabriqué sans être immédiatement perçu comme fabriqué. Un enfant de 4 ou 5 ans qui répond en anglais sans script est une preuve irréfutable que le programme existe et fonctionne. La continuité sans montage haché est la signature de l'authenticité — un parent djiboutien expérimenté détecte la reconstitution en moins de 10 secondes. La détection de falsification partagée sur WhatsApp détruit plus vite que la meilleure campagne ne construit. |
+| **Témoignage d'un parent identifiable — prénom + section de l'enfant affichés à l'écran** | Preuve sociale ancrée localement | Vidéo principale (10:30 — pic émotionnel #2). Message 3 de la séquence WhatsApp (transcription d'un témoignage réel). Publication Facebook dédiée en semaine 4 post-premières visites. Affichage physique à l'établissement lors de la Journée Portes Ouvertes. | Djibouti est une ville à réseaux serrés. Un témoignage avec un prénom identifiable est une référence vérifiable dans le réseau du prospect. Ce n'est pas de la publicité — c'est une validation sociale. Si le parent qui témoigne appartient au même quartier, à la même famille étendue, ou est connu de l'entourage du prospect, l'effet de conversion est démultiplié sans aucun achat de média. Ne jamais utiliser de témoignage anonyme ou de prénom générique. |
+| **Brochure tarifaire complète remise avant l'entretien — et partagée par WhatsApp dès le Message 4** | Transparence + Spécificité | Message 4 de la séquence WhatsApp (tarifs complets partagés par message avant même la visite). Remise physique en main propre lors de l'entretien individuel à la Journée Portes Ouvertes. | Dans un marché où les écoles privées ont historiquement révélé les tarifs uniquement lors d'un entretien en face à face — pratique perçue comme une tactique de pression — la transparence tarifaire proactive est un signal de confiance différenciant. Un établissement qui publie ses tarifs avant de vous inviter à vous asseoir signale : "Nous n'avons rien à cacher, et nous respectons votre capacité à prendre une décision éclairée." Ce signal agit particulièrement sur les parents ayant déjà été surpris par des frais cachés ou révélés tardivement dans d'autres établissements djiboutiens. |
+
+---
+
+*Système de conversion produit par MALI-MEC · Agent 04 — Conversion System Builder · 2026-07-28*
+*Inputs : business-brief.md · outputs/01-market-signal-brief.md · outputs/02-offer-architecture.md · outputs/03-content-strategy.md*
+*Score Agent 1 : 4.0 / 5.0 · Positionnement Agent 2 : 4.5 / 5.0 · Titre Agent 3 : 19/20*
+*Canal principal : WhatsApp · Canaux secondaires : Facebook, Instagram*
+*Action finale : Préinscription rentrée 2026–2027 · Devise : DJF / EUR · Taux : 1 EUR = 199 DJF*
+*Point de bascule clé : Journée Portes Ouvertes (gratuite, 25 familles max, sur inscription WhatsApp)*
+*Contrainte critique : aucun paiement en ligne — transactions en espèces ou virement local à l'établissement uniquement*
