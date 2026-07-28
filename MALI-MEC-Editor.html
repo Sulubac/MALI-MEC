@@ -218,7 +218,7 @@ textarea:focus{background:var(--goldbg)}
       <div class="sh">Comment utiliser</div>
       <div class="steps">
         <div class="step"><div class="snum">1</div><span>Modifie les sections ci-contre, puis clique <strong style="color:var(--text)">Sauvegarder .md</strong></span></div>
-        <div class="step"><div class="snum">2</div><span>Remplace <code style="color:var(--gold);font-size:11px">business-brief.md</code> dans le projet par le fichier téléchargé</span></div>
+        <div class="step"><div class="snum">2</div><span>Remplace ton fichier <code style="color:var(--gold);font-size:11px">.md</code> dans le projet par le fichier enregistré</span></div>
         <div class="step"><div class="snum">3</div><span>Copie la commande ci-dessous et colle-la dans <strong style="color:var(--text)">Claude Code</strong></span></div>
         <div class="step"><div class="snum">4</div><span>Les 4 agents tournent et génèrent tes fichiers outputs</span></div>
       </div>
@@ -456,23 +456,44 @@ function buildMd() {
   return parts.join('\n');
 }
 
-// ── Save (download in all browsers) ──────────────────────────
-function save() {
-  const md   = buildMd();
-  const blob = new Blob([md],{type:'text/markdown;charset=utf-8'});
-  const url  = URL.createObjectURL(blob);
-  const a    = document.createElement('a');
-  // Derive filename from the project title field
+// ── Save ──────────────────────────────────────────────────────
+async function save() {
+  const md = buildMd();
   const rawTitle = (document.getElementById('ttl').value||'business-brief').trim();
   const slug = rawTitle.toLowerCase()
     .replace(/[àâä]/g,'a').replace(/[éèêë]/g,'e').replace(/[îï]/g,'i')
     .replace(/[ôö]/g,'o').replace(/[ùûü]/g,'u').replace(/ç/g,'c')
     .replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'');
-  a.href=url; a.download=(slug||'business-brief')+'.md';
+  const filename = (slug||'business-brief')+'.md';
+
+  // File System Access API — opens a real "Enregistrer sous" dialog (Chrome/Edge)
+  if(window.showSaveFilePicker){
+    try{
+      const handle=await window.showSaveFilePicker({
+        suggestedName:filename,
+        types:[{description:'Markdown (.md)',accept:{'text/markdown':['.md']}}]
+      });
+      const writable=await handle.createWritable();
+      await writable.write(md);
+      await writable.close();
+      isDirty=false; document.getElementById('dot').classList.remove('show');
+      toast('Enregistré : '+handle.name,'ok');
+      return;
+    }catch(e){
+      if(e.name==='AbortError')return; // user clicked Cancel
+      // fall through to download fallback
+    }
+  }
+
+  // Fallback for Firefox/Safari — goes to the Downloads folder
+  const blob=new Blob([md],{type:'text/markdown;charset=utf-8'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url; a.download=filename;
   document.body.appendChild(a); a.click();
   document.body.removeChild(a); URL.revokeObjectURL(url);
   isDirty=false; document.getElementById('dot').classList.remove('show');
-  toast('Téléchargé : '+(slug||'business-brief')+'.md','inf');
+  toast(filename+' enregistré dans le dossier Téléchargements','inf');
 }
 
 // ── Copy command ──────────────────────────────────────────────
