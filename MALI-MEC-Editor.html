@@ -462,11 +462,17 @@ function save() {
   const blob = new Blob([md],{type:'text/markdown;charset=utf-8'});
   const url  = URL.createObjectURL(blob);
   const a    = document.createElement('a');
-  a.href=url; a.download='business-brief.md';
+  // Derive filename from the project title field
+  const rawTitle = (document.getElementById('ttl').value||'business-brief').trim();
+  const slug = rawTitle.toLowerCase()
+    .replace(/[àâä]/g,'a').replace(/[éèêë]/g,'e').replace(/[îï]/g,'i')
+    .replace(/[ôö]/g,'o').replace(/[ùûü]/g,'u').replace(/ç/g,'c')
+    .replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'');
+  a.href=url; a.download=(slug||'business-brief')+'.md';
   document.body.appendChild(a); a.click();
   document.body.removeChild(a); URL.revokeObjectURL(url);
   isDirty=false; document.getElementById('dot').classList.remove('show');
-  toast('Téléchargé — remplace le fichier dans le projet','inf');
+  toast('Téléchargé : '+(slug||'business-brief')+'.md','inf');
 }
 
 // ── Copy command ──────────────────────────────────────────────
