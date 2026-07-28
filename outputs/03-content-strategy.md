@@ -1,10 +1,5 @@
-# Content Strategy — MALI-MEC Revenue Agent System
-
-**Produit par :** Content Angle Strategist Agent
-**Date :** 2026-07-28
-**Sources :** business-brief.md + 01-market-signal-brief.md + 02-offer-architecture.md
-**Score de positionnement reçu (Agent 2) :** 4.4 / 5.0
-**Principe cardinal :** Le titre parle du résultat, pas de l'outil. Chaque décision sert directement l'offre AR4A.
+# Content Strategy — École Champion
+## MALI-MEC · Rentrée 2026–2027 · 2026-07-28
 
 ---
 
@@ -12,147 +7,149 @@
 
 ### Viewer Desire State
 
-**Émotion au début de la vidéo :** Frustration teintée de honte. Ce spectateur n'est pas un débutant — il a déjà essayé. Il a installé ChatGPT, suivi des tutoriels en anglais, accumulé des abonnements. Ce qu'il ressent : beaucoup d'effort investi, zéro revenu incrémental, et la conviction croissante que l'IA "ne fonctionne pas pour lui." La honte vient du fait qu'il ne veut pas l'admettre. Il est à la limite de l'abandon — mais pas encore. Il regarde cette vidéo parce qu'il lui faut une explication, pas un outil de plus.
+**Émotion de départ :** Résignation anxieuse. Le parent djiboutien de classe moyenne à aisée veut le meilleur pour son enfant mais croit sincèrement que l'éducation de niveau mondial n'est accessible qu'à l'étranger. Il a souvent été déçu par des écoles privées locales qui ont vendu la modernité sans la livrer. Il est en plein pic décisionnel — la rentrée approche — mais il hésite à s'engager sans preuve concrète.
 
-**Émotion à la fin de la vidéo :** Capacité opérationnelle et urgence d'agir. Pas l'inspiration vague des vidéos de motivation — une clarté fonctionnelle précise. Il comprend pourquoi ses tentatives ont échoué (architecture vs. outils). Il a vu le système tourner en direct sur un vrai cas business. Il a un prochain pas concret : télécharger les fichiers agents. L'émotion dominante est "Je sais exactement quoi faire et je commence ce soir."
+**Émotion d'arrivée :** Urgence convaincue. Le parent a vu, pas juste entendu. Il sait exactement ce que son enfant vivra, qui l'encadre, et pourquoi c'est maintenant qu'il faut agir. La visite gratuite n'est plus une démarche — c'est une évidence.
 
 **La phrase qui arrête le scroll :**
-> "Pendant que vous testez des outils IA, quelqu'un dans votre marché construit le système qui vous remplace."
+> "Votre enfant peut accéder à la pédagogie des pays les plus avancés du monde sans quitter Djibouti — et les places pour la rentrée 2026 se remplissent maintenant."
 
 ---
 
 ### Title Candidates
 
-| Title | Emotional Pull | Specificity | Clickability | Offer Alignment | Total |
-|-------|:-------------:|:-----------:|:------------:|:---------------:|:-----:|
-| Les Autres Parlent d'IA. Ce Système à 4 Agents, Lui, la Facture. | 5 | 4 | 5 | 5 | **19** |
-| ChatGPT Ne Vous a Pas Rendu Riche — Ce Système Explique Pourquoi | 5 | 4 | 5 | 4 | **18** |
-| Construisez Ce Système à 4 Agents IA Avant d'Apprendre un Autre Outil | 4 | 4 | 5 | 5 | **18** |
-| Ce Système IA à 4 Agents Génère des Clients Pendant que Vous Dormez | 5 | 4 | 5 | 4 | **18** |
-| 4 Agents IA : Offre, Stratégie, Lead Magnet — 8 Minutes Chrono | 3 | 5 | 4 | 5 | **17** |
+| Titre | Émotionnel (1–5) | Spécificité (1–5) | Cliquabilité (1–5) | Alignement Offre (1–5) | Total |
+|-------|:---------------:|:-----------------:|:------------------:|:----------------------:|:-----:|
+| Donnez 3 Longueurs d'Avance à Votre Enfant Avant la Rentrée 2026 | 5 | 4 | 5 | 5 | **19** |
+| Anglais, IA et Méthode Japonaise : Votre Enfant Peut Avoir les Trois | 4 | 5 | 4 | 5 | **18** |
+| Votre Enfant N'a Pas Besoin d'Aller à l'Étranger Pour Réussir | 5 | 3 | 5 | 4 | **17** |
+| L'École qui Prouve ce qu'elle Promet — Visite Exclusive à Djibouti | 4 | 4 | 4 | 4 | **16** |
+| Le Système des Pays qui Réussissent — Maintenant à Djibouti | 4 | 3 | 4 | 4 | **15** |
 
-**Selected Title :**
-> Les Autres Parlent d'IA. Ce Système à 4 Agents, Lui, la Facture.
+**Titre retenu :** Donnez 3 Longueurs d'Avance à Votre Enfant Avant la Rentrée 2026
 
-**Justification :** Ce titre exécute mot pour mot l'argument économique central identifié par l'Agent 2 comme directive stratégique explicite : "construire les angles de contenu autour de 'Les autres parlent d'IA. Ce système la facture.'" Le verbe "facturer" fait un double travail commercial : il évoque la facture client (transaction réelle, revenu généré) et positionne AR4A non pas comme un générateur de texte mais comme une machine de facturation — une chaîne de production, pas un outil de réflexion. Le contraste "Les autres / Ce système" positionne MALI-MEC par opposition directe aux contenus IA génériques que le spectateur a déjà consommés sans résultat. Là où les autres titres du tableau parlent du spectateur ou de l'outil, celui-ci parle du marché — ce qui crée une pression sociale implicite sans être agressif. À 65 caractères, il est dans les limites d'affichage YouTube sans troncature. Agent 1 a confirmé que la discoverabilité dépend davantage de la distribution algorithmique que du volume de recherche par mot-clé — ce qui favorise un titre distinctif et émotionnellement chargé sur un titre SEO-optimisé générique.
+**Justification :** Ce titre exécute trois leviers psychologiques simultanément, tous critiques pour ce marché. Le verbe "Donnez" place le parent en position d'acteur — ce n'est pas ce que l'école fait, c'est ce que le parent choisit pour son enfant. Le chiffre 3 ancre directement La Trilogie Champion sans en nommer le mécanisme, créant la curiosité sur "quelles trois longueurs ?". La mention de la rentrée 2026 génère une urgence calendaire réelle correspondant au pic décisionnel de juillet-août identifié par l'Agent 1. À 65 caractères, il s'affiche entier sur mobile Facebook et YouTube sans troncature. Aucun autre candidat ne combine ces trois effets avec autant d'économie de mots.
 
 ---
 
 ### Backup Titles
 
-1. **[Question]** Et si Votre Système IA Générait des Leads sans Que Vous Ayez à Coder ?
-2. **[Erreur/contraste]** ChatGPT Ne Vous a Pas Rendu Riche — Ce Système Explique Pourquoi
-3. **[Nombre]** 4 Agents IA, 8 Minutes, 4 Livrables Business — Démonstration Complète
-4. **[Résultat]** De Zéro Revenu IA à Système Actif : Construisez l'AR4A en 3 Jours
-5. **[Autorité/système]** L'Architecture IA que j'Utilise pour Générer des Leads Chaque Semaine
+1. **[Format question]** Et si Votre Enfant Maîtrisait l'Anglais Courant Dès Cette Rentrée ?
+2. **[Format erreur / contraste]** L'Erreur des Parents qui Choisissent une École Sans Ces 3 Critères
+3. **[Numéro en avant]** 3 Compétences que 90% des Élèves Djiboutiens N'ont Pas Encore
+4. **[Résultat en avant]** Un Enfant Bilingue, Discipliné et Prêt pour l'IA — Rentrée 2026
+5. **[Autorité / système]** Le Système Pédagogique Japonais, l'Anglais et l'IA Arrivent à Djibouti
 
 ---
 
 ### Thumbnail Text Options
 
-1. **LA FACTURE** — Reprend le punchline du titre retenu. Crée une dissonance immédiate (pourquoi une facture sur une vidéo IA ?) qui se résout en faveur du clic. Lisible à 80px.
-2. **IDÉE → REVENUS** — La flèche de transformation est le langage visuel le plus universel pour une audience entrepreneuriale. Fonctionne à toutes les tailles d'écran.
-3. **4 AGENTS IA** — Nomme le mécanisme, crée la curiosité sur "pourquoi 4 ?" sans l'expliquer. Fort pour l'audience B2B qui recherche de la spécificité.
-4. **ZÉRO CODE** — Élimine l'objection principale avant même que la vidéo commence. Filtre naturellement vers les non-techniciens.
-5. **CE SYSTÈME D'ABORD** — L'urgence de "D'ABORD" positionne tout le reste comme secondaire et crée une hiérarchie de priorités favorable au clic.
+1. **3 LONGUEURS D'AVANCE** — chiffre + avantage compétitif, lisible à toute taille d'écran, crée immédiatement la question "lesquelles ?" dans l'esprit du parent ; s'associe naturellement au titre retenu sans le dupliquer
+2. **ANGLAIS · IA · JAPON** — les trois piliers de La Trilogie en cinq mots, format liste visuellement scannable, nomme chaque pilier sans explication
+3. **SANS QUITTER DJIBOUTI** — phrase courte qui neutralise directement la croyance centrale de l'audience ("pour réussir, il faut aller à l'étranger") ; fort comme texte de contraste sur une image d'enfants actifs
+4. **RENTRÉE 2026** — urgence calendaire pure ; associé à une image de salle de classe rénovée, déclenche la prise de conscience du délai
+5. **VOTRE ENFANT CHAMPION** — activation du nom de marque par la transformation souhaitée, pas par le nom institutionnel ; résonne directement avec l'aspiration parentale
 
-**Recommandation principale : IDÉE → REVENUS**
-La flèche de transformation communique le chemin complet en trois tokens visuels, s'associe naturellement au titre retenu sans le dupliquer, et fonctionne à toutes les tailles d'écran (téléphone, desktop, notification YouTube). Elle ne nomme pas l'outil — elle nomme la transformation. Pour la miniature : "IDÉE → REVENUS" en blanc sur fond sombre, visage du présentateur en premier plan avec expression de confiance, écran d'ordinateur montrant les outputs agents en arrière-plan.
-
----
-
-### Hook — Les 30 Premières Secondes
-
-*(Script exact — aucune introduction, aucun bonjour, aucun warm-up. La première syllabe est dans le vif. Rythme : trois phrases courtes, une pause, puis l'annonce précise du mécanisme.)*
+**Recommandation principale : 3 LONGUEURS D'AVANCE** en texte blanc sur fond sombre, avec visuel d'un enfant actif en classe en arrière-plan. Cette combinaison fonctionne nativement sur les écrans mobiles de Facebook et YouTube — les deux plateformes prioritaires.
 
 ---
 
-Vous avez essayé ChatGPT. Les tutoriels. Peut-être une formation aussi.
+### Hook — Premières 20 à 30 Secondes
 
-Et ce soir, vos revenus sont exactement là où ils étaient il y a six mois.
-
-Ce n'est pas l'IA qui ne fonctionne pas. C'est que vous avez des outils — pas un système.
-
-Dans les quatorze prochaines minutes, je vais construire ce système en direct devant vous. Quatre agents IA spécialisés — qui fonctionnent en chaîne, en français, sans une seule ligne de code — vont transformer un brief business en signal de marché validé, offre structurée, stratégie YouTube, et lead magnet prêt à déployer.
-
-Ce sont exactement les agents qu'on utilise chez MALI-MEC. Et les fichiers sont dans la description.
-
-Regardez jusqu'à la fin.
+*Script mot pour mot. Aucun générique. Aucune salutation. Aucune présentation. Premier mot = premier impact. Rythme posé, trois phrases courtes, une pause, puis l'annonce précise du mécanisme.*
 
 ---
 
-*(Durée cible : 28 à 32 secondes au rythme de parole naturel. Aucune musique pendant ces premières secondes — voix seule sur fond neutre. La tension vient de l'absence d'habillage, pas de son accumulation.)*
+Depuis des années, les parents djiboutiens ambitieux font face au même dilemme : donner à leur enfant une éducation de niveau mondial, ou rester ici. Comme si les deux étaient incompatibles.
+
+Ce que vous allez voir dans cette vidéo change cette croyance complètement.
+
+Dans quatorze minutes, je vais vous montrer — pas décrire, montrer — le seul système pédagogique à Djibouti qui combine la méthode japonaise, l'anglais intensif dès la maternelle, et une initiation à l'intelligence artificielle encadrée par des formateurs de Techiftiin Institute. Trois socles. Une seule école. Dès septembre 2026.
+
+Les places pour la prochaine Journée Portes Ouvertes se remplissent cette semaine. Regardez d'abord. Décidez ensuite.
+
+---
+
+*Note de mise en scène : Quatre paragraphes, quatre moments distincts. (1) Voix posée, face caméra, regard ancré — le dilemme nommé sans hésitation. (2) Légère pause d'une seconde avant "Ce que vous allez voir". (3) Le rythme s'accélère légèrement sur l'énumération des trois socles. (4) La voix ralentit sur "Regardez d'abord. Décidez ensuite." Ce sont les deux dernières phrases que le spectateur entend avant de décider de rester ou de partir. Aucune musique pendant ces premières secondes — la tension vient de l'absence d'habillage, pas de son accumulation.*
 
 ---
 
 ### Retention Map
 
-| Temps | Section | Ce qui se passe | État du viewer | Risque de décrochage |
-|-------|---------|-----------------|----------------|----------------------|
-| 0:00 | **Hook — La Douleur** | Voix seule, pas de générique. "Vous avez essayé ChatGPT. Les tutoriels. Et vos revenus n'ont pas bougé." Deuxième personne dès le premier mot. | RECONNAISSANCE — "C'est exactement moi." Identification immédiate. | CRITIQUE. Les 8 premières secondes décident de tout. Une seule phrase qui ne résonne pas et le scroll reprend. Ne pas commencer par "Bonjour", jamais. |
-| 0:30 | **Preuve avant l'explication** | Dossier outputs/ ouvert en direct. Fichiers horodatés du jour visibles : 01-market-signal-brief.md, 02-offer-architecture.md. Voix : "Ce que vous voyez là, c'est la sortie du système que je vais construire devant vous ce soir." | CONFIANCE ACTIVE — Une preuve physique (fichier, date) avant toute promesse réduit le signal marketing. Le sceptique reste. | ÉLEVÉ pour les profils B2B et institutionnels qui décident en 20 secondes. Le dossier horodaté du jour est la réponse directe à "est-ce que c'est réel ?" |
-| 1:15 | **Le Diagnostic** | "Voici pourquoi ChatGPT ne vous rapporte rien." Explication en 45 secondes du problème architectural : outil isolé vs. pipeline séquentiel. Visuel simple — texte ou schéma minimaliste. | ILLUMINATION — Ils comprennent pour la première fois pourquoi leurs tentatives ont échoué. Ce n'est pas eux, c'est l'architecture. | FAIBLE. Le "moment aha" est le verrou d'attention le plus puissant d'une vidéo pédagogique. Ne pas couper avec une transition brutale. |
-| 2:00 | **Introduction AR4A** | Diagram : 4 agents, flèche séquentielle, brief en entrée, 4 livrables en sortie. Brief business du cas live tapé en direct — "Je lance un programme de coaching pour jeunes entrepreneurs à Dakar." | ANTICIPATION — Ils voient la structure avant qu'elle tourne. Ils savent ce qu'ils vont regarder. | MOYEN. Si le diagram dépasse 4 boîtes et une flèche, la lisibilité s'effondre. Garder à l'essentiel. Annoncer Agent 1 immédiatement après. |
-| 3:00 | **Agent 1 en direct** | Agent 1 (Market Signal Researcher) lancé. Brief injecté. Output en français apparaît en temps réel : score 3.9/5, tableau des 7 dimensions, recommandation stratégique. Lire à voix haute les lignes les plus fortes. | FASCINATION — La machine produit quelque chose de structuré, en français, calibré sur un vrai business. Ce n'est plus de la théorie. | FAIBLE. La démonstration live est le pic de rétention le plus élevé. Ne pas interrompre avec des annotations ou des transitions. Laisser l'output apparaître. |
-| 5:00 | **Agent 2 en direct** | Agent 2 (Offer Architect) reçoit l'output d'Agent 1 comme brief. Positionnement formulé. Tableau d'offre structuré. Pricing en EUR et XAF côte à côte. | RECONNAISSANCE + ENVIE — "Ce positionnement... il pourrait s'appliquer à mon business." Le tableau de prix ancre la promesse de revenus dans du concret. | FAIBLE. Deuxième pic de fascination. Zoomer sur le pricing — la spécificité XAF est la preuve d'adaptation marché la plus forte disponible à cet instant. |
-| 7:00 | **Agent 3 en direct** | Agent 3 (Content Strategist) reçoit les outputs des Agents 1 et 2. Cinq candidats de titres YouTube apparaissent. Carte de rétention visible. Voix : "Attendez — cet agent est en train de construire la stratégie de la vidéo que vous regardez en ce moment." | MOMENT META — Le paradoxe d'auto-référence force l'attention. Le viewer ne peut pas décrocher parce qu'il est en train d'être analysé. | QUASI NUL. C'est le verrou de rétention le plus puissant de la vidéo. Signaler ce moment explicitement et à voix haute — ne pas le laisser passer sans le nommer. |
-| 9:00 | **Agent 4 en direct** | Agent 4 (Conversion System) reçoit tous les outputs précédents. Structure de lead magnet apparaît. Séquence email visible. Scripts CTA en français. | DÉSIR — Ils veulent ce lead magnet pour leur propre business. C'est le moment de projection maximale. | FAIBLE. Le désir verrouille l'attention. Ne pas révéler le lien du lead magnet ici — garder la récompense pour le CTA final. |
-| 10:30 | **Le Grand Reveal** | Les quatre fichiers output ouverts simultanément en split view. Trois secondes de silence. Voix : "Quatre livrables business. Un seul brief. Huit minutes de traitement. C'est ça, un système." | IMPACT — L'échelle de ce qui vient de se passer atterrit. Une page de positionnement, une stratégie YouTube, un lead magnet, une séquence de conversion. Tout ça, d'un texte de 300 mots. | MOYEN. Si les quatre fichiers sont illisibles à cette taille, l'impact s'effondre. Zoomer séquentiellement sur chaque titre de fichier avant de les montrer ensemble. |
-| 12:00 | **Le Pont Revenu** | Le parcours de conversion montré explicitement à l'écran : vidéo → téléchargement → atelier → programme → consulting. Fourchettes de prix visibles. Voix : "Je vous montre ça pour que vous voyiez la chaîne complète — pas pour vous vendre quelque chose maintenant." | DÉCISION — Le viewer calcule si c'est fait pour lui. Les sceptiques peuvent décrocher ici. | ÉLEVÉ. C'est le moment le plus commercial de la vidéo. Le traiter comme une preuve (montrer) plutôt que comme un argumentaire (vendre) protège la rétention. |
-| 13:00 | **Kill d'objection : ChatGPT** | Fenêtre ChatGPT ouverte sur le même brief à gauche, output AR4A à droite. Trente secondes de comparaison visuelle silencieuse. Voix minimale : "Même brief. Voyez la différence." | RE-ENGAGEMENT — Les viewers qui hésitaient sont rattrapés. La comparaison visuelle fait l'argument sans rhétorique. | MOYEN. Les viewers déjà convaincus peuvent trouver cette section redondante. 30 secondes maximum. La compacité respecte leur temps. |
-| 13:45 | **CTA Unique** | Un seul call-to-action, deux niveaux. Niveau 1 : "Téléchargez les fichiers agents — lien dans la description." Niveau 2 : "20 places dans le Programme Intensif AR4A — lien dans la description." Landing page montrée en direct, pas seulement mentionnée. | ACTION PRÊTE — Les viewers encore là ont déjà décidé. Ils ont besoin de la confirmation que le lien existe et fonctionne. | FAIBLE parmi les viewers retenus. Ne pas ajouter de troisième CTA — la dilution des appels à l'action réduit les conversions sur chacun. |
+| Temps | Section | Ce qui se passe | État du spectateur | Risque de décrochage |
+|-------|---------|-----------------|-------------------|----------------------|
+| 0:00 | **Hook — Le Dilemme** | La douleur nommée en trois phrases : excellence mondiale ou Djibouti, comme si les deux étaient incompatibles. Ni générique, ni bonjour, ni présentation. Premier mot = premier impact. | Reconnu, piqué — "c'est exactement ma situation" | CRITIQUE — si le dilemme n'est pas exprimé dans leur langage dans les 5 premières secondes, le parent mobile sur Facebook fait défiler. Nommer "parents djiboutiens" dans les deux premières secondes est non négociable. |
+| 0:45 | **La Promesse des 14 Minutes** | Annonce claire du plan : trois socles, quatorze minutes, pas de description — de la démonstration. Le spectateur sait exactement où il va et combien de temps il reste. | Engagé, veut comprendre — "il dit qu'il va montrer, pas juste parler" | MOYEN — si la promesse est vague ("je vais vous parler de notre école"), perte immédiate. La spécificité "montrer pas décrire" est l'élément de différenciation psychologique qui retient le sceptique. |
+| 1:30 | **Pourquoi les Autres Écoles N'y Arrivent Pas** | Observation factuelle, non agressive : les écoles privées djiboutiennes ont promis la modernité sans la livrer. Le spectateur a vécu cette déception. Elle est nommée. Ce n'est pas une attaque concurrentielle — c'est la reconnaissance d'une réalité partagée. | Sceptique activé positivement — "enfin quelqu'un qui nomme le vrai problème" | FAIBLE si la formulation est précise et neutre. Risque unique : une attaque nominative d'un concurrent — à éviter absolument dans un marché communautaire de la taille de Djibouti. |
+| 2:30 | **Présentation de La Trilogie Champion** | Vue d'ensemble du mécanisme : trois socles qui fonctionnent ensemble, pas trois cours séparés. Première image de l'intérieur de l'établissement à l'écran. Couloir ou salle principale, lumière naturelle, espace propre et organisé. | Curieux, compare à ce qu'il imaginait — premier test de confiance visuelle | MOYEN — la qualité de cette première image est le premier test de crédibilité. Un couloir mal éclairé ou une salle désorganisée annule instantanément tout ce qui a été dit avant. Cette image doit être filmée avec soin avant la production de la vidéo. |
+| 3:30 | **Socle 1 — La Méthode Japonaise** | Un enseignant nommé (prénom et spécialité affichés en sous-titre à l'écran) explique en 90 secondes un principe concret : routine matinale, discipline positive, règle des 3R. Puis démonstration immédiate avec 3 à 4 élèves dans une situation réelle. Le spectateur voit le principe en action, pas juste décrit. | Surpris, intrigué, commence à comparer à ce que son enfant vit actuellement | ÉLEVÉ — si l'enseignant parle seul face caméra sans démonstration avec les enfants, le spectateur décroche. La démonstration en situation réelle est obligatoire. Un enseignant qui enseigne est infiniment plus convaincant qu'un enseignant qui décrit comment il enseigne. |
+| 5:30 | **Socle 2 — L'Anglais Intensif** | Session anglais filmée en temps réel, sans coupure. Des enfants de maternelle ou de primaire répondent, participent, parlent. Son ambiant inclus. Aucun script visible. Les enfants sont actifs et visiblement à l'aise. Deux minutes minimum de session continue. | Ému, surpris — "ils parlent vraiment" — pic émotionnel numéro un de la vidéo | FAIBLE — un enfant de 4 ou 5 ans qui répond en anglais est le moment le plus puissant de la vidéo. Si ce moment est authentique et filmé sans coupure, le spectateur ne quitte plus la vidéo. Ce pic émotionnel doit impérativement arriver avant la minute 7 — après la mi-vidéo, il ne rattrape plus les décrochages. |
+| 7:30 | **Socle 3 — L'IA avec Techiftiin Institute** | Le formateur Techiftiin est présenté nominalement (prénom + titre affichés à l'écran). L'outil IA est visible sur la tablette ou l'ordinateur. Un enfant l'utilise activement — il clique, il répond, il interagit. Le formateur commente le bénéfice pédagogique en temps réel. | Fasciné, surpris — "je n'avais pas imaginé que ça existait ici" — pic de surprise | MOYEN — si l'outil n'est pas visible à l'écran ou si l'enfant est passif, la scène paraît mise en scène. L'authenticité de l'interaction enfant-outil est le seul critère qui compte dans ce segment. |
+| 9:30 | **Les Trois Socles en Système** | "Ce n'est pas trois cours séparés ajoutés les uns aux autres. C'est une architecture pédagogique construite autour du cerveau de l'enfant." Montage de 4 à 5 plans courts (5 secondes chacun) montrant la journée type d'un élève : salle de classe, session anglais, session IA, cour. Le rythme visuel s'accélère légèrement. | Convaincu, commence à se projeter — "mon enfant dans cette école" | FAIBLE — le spectateur qui arrive ici est engagé. Le seul risque est un discours trop abstrait. Le montage de la journée type maintient l'énergie et rend la promesse concrète et quotidienne. |
+| 10:30 | **La Preuve Externe** | Témoignage d'un parent identifiable (prénom et section de l'enfant affichés à l'écran). Une phrase sur ce qu'il observait avant, une phrase sur ce qu'il observe maintenant. Aucun script visible. Puis visite rapide d'une salle rénovée : lumière naturelle, matériel organisé, espace ordonné. | Rassuré, validé dans son désir — pic émotionnel numéro deux | FAIBLE — la preuve sociale active la décision. Un parent qui parle de son enfant en regardant la caméra est le second moment le plus puissant de la vidéo. La visite de salle rénovée est la preuve matérielle qui accompagne la preuve émotionnelle. |
+| 11:30 | **Les Objections Traitées Directement** | Trois objections nommées dans les mots exacts des parents et répondues en moins de 45 secondes chacune : (1) Les diplômes sont-ils officiellement reconnus ? (2) L'IA est-elle vraiment enseignée ou seulement dans la brochure ? (3) Comment se passe le suivi individualisé ? Réponses directes, factuelles, sans rhétorique. | Sécurisé, dernière résistance en train de se lever | MOYEN — si les objections sont éludées plutôt que répondues directement, la méfiance revient. Nommer l'objection dans les mots du parent ("Est-ce que les diplômes sont vraiment reconnus ?"), puis répondre en une phrase factuelle, puis passer à la suivante. |
+| 12:30 | **Récapitulatif des Trois Socles** | En 30 secondes : les trois mots-clés s'affichent à l'écran pendant que la voix les énonce. "Méthode Japonaise. Anglais Intensif. Intelligence Artificielle. Votre enfant peut avoir les trois. Dès septembre." Ton calme, pas de pression. | En mode décision — le spectateur sait ce qu'il doit faire | ÉLEVÉ — dernier point de friction. Le spectateur doit sentir l'urgence sans se sentir poussé. Le ton doit rester exactement celui du reste de la vidéo : informatif et bienveillant. |
+| 13:00 | **CTA — Réservez Votre Visite Gratuite** | Instructions exactes en 60 secondes maximum : comment réserver via WhatsApp. Le numéro est affiché à l'écran pendant au minimum 15 secondes. Les deux dates de Journée Portes Ouvertes sont annoncées. "La visite est gratuite. Les places sont limitées à 25 familles par session. Envoyez le mot VISITE au [numéro] pour réserver." | Prêt à agir — cherche le numéro à l'écran | FAIBLE si le CTA est clair, simple et visible. Une action, un numéro, un mot-clé. Chaque étape supplémentaire entre "je veux venir" et "j'ai envoyé le message" réduit le taux de conversion. |
+| 13:45 | **Fermeture — L'Urgence Douce** | "Les places pour la session du [date] sont encore disponibles. Venez voir par vous-même — pas pour vous convaincre, mais pour laisser votre enfant se voir dans cet environnement." Fin nette après la dernière phrase. Aucun générique long. | Motivé à agir maintenant, sans pression ressentie | FAIBLE — les spectateurs qui atteignent la 13e minute sont des leads chauds. La fermeture doit honorer leur attention en restant à la hauteur du ton de la vidéo entière. |
 
 ---
 
 ### Screen Recording Beats
 
-| Timestamp | Action à l'écran | Technique | Pourquoi |
-|-----------|-----------------|-----------|----------|
-| 0:32 | Ouvrir le dossier outputs/ en direct. Fichiers 01-market-signal-brief.md et 02-offer-architecture.md visibles avec leurs horodatages du jour. | Zoom progressif sur les noms de fichiers. Curseur immobile sur les dates pendant 3 secondes. | Preuve physique avant la première promesse. Les timestamps datés du jour rendent la preuve non contestable. Une capture d'écran fabriquée ne peut pas avoir les mêmes horodatages. |
-| 1:45 | Taper le brief "Je lance un programme de coaching pour jeunes entrepreneurs à Dakar" dans l'interface en texte clair, sans terminal ni ligne de commande. | Plein écran, vitesse normale, aucune coupure, aucun copier-coller. | Prouve la promesse "zéro code" par l'image, pas par les mots. Le viewer voit exactement ce qu'il devra faire lui-même : écrire du texte ordinaire. "Dakar" ancre immédiatement la pertinence géographique. |
-| 2:10 | Afficher la structure du dossier agents : coordinateur.md, agent-1.md, agent-2.md, agent-3.md, agent-4.md. | Panoramique lent sur les noms de fichiers, pause de 2 secondes sur chaque. | Rend le système visible avant qu'il tourne. Quatre fichiers nommés = une organisation lisible, pas du code opaque. Rassure les non-techniciens. |
-| 2:50 | Lancer l'agent coordinateur. La première ligne de traitement apparaît. | Plein écran. Aucune accélération. Temps réel, pas de coupe. | Le moment où la machine démarre. La latence réelle est une preuve de réalité, pas un défaut à masquer. Couper ici serait une erreur de crédibilité. |
-| 3:20 | Output Agent 1 apparaît : score 3.9/5, tableau des 7 dimensions scorées, recommandation stratégique en français. | Zoom sur le score dès qu'il apparaît. Lire à voix haute : "3.9 sur 5 — feu vert." Puis zoom sur la section psychologie d'audience. | Un score précis — pas "bon" ou "élevé" — signale une analyse structurée, pas une opinion. Premier signal chiffré que l'output est décisionnel. |
-| 4:30 | Copier la sortie d'Agent 1 et l'injecter visible à l'écran comme brief d'Agent 2. | Action de copier-coller visible, commentée à voix haute en simultané : "La sortie d'Agent 1 devient le brief d'Agent 2. C'est ça, l'inter-agent." | Rend physiquement visible le mécanisme de "passage de brief" qui est l'innovation centrale d'AR4A. Ce moment distingue AR4A de ChatGPT plus efficacement que n'importe quelle explication verbale. |
-| 5:10 | Output Agent 2 : positionnement formulé, tableau d'offre avec pricing EUR et XAF côte à côte. | Zoom sur la section positionnement. Pause de 4 secondes. Puis zoom sur la ligne de pricing en XAF. | La pause sur le positionnement permet au viewer de se projeter. Le zoom sur le pricing XAF est le signal d'adaptation marché le plus fort : un outil générique aurait produit des prix en USD. |
-| 6:15 | Les 5 candidats de titres YouTube avec leurs scores de clickabilité apparaissent dans l'output Agent 3. | Révélation ligne par ligne, rythme lent. Commenter brièvement le titre en tête de liste avant de continuer. | Le viewer veut lire chaque titre. Ralentir ici est contre-intuitif mais génère le plus haut niveau d'engagement de cette section. La lenteur signale que le contenu est dense. |
-| 7:30 | Les deux éléments côte à côte : l'output Agent 3 à droite, la vidéo en cours à gauche (ou annonce verbale explicite). Voix : "Ce que vous voyez à droite... c'est la stratégie de la vidéo que vous regardez en ce moment." | Pause complète, changement de ton de voix, regard caméra si applicable. | Le moment méta. Signal obligatoire à voix haute. Les viewers en mode passif ne font pas le lien seuls. Cette rupture de rythme est le verrou de rétention le plus puissant disponible dans ce format. |
-| 9:00 | Output Agent 4 : structure du lead magnet avec ses sections nommées, séquence email visible. | Zoom sur le titre du lead magnet et ses sous-sections. Défilement lent. | Premier aperçu du livrable que le viewer peut obtenir. Crée le désir avant que le lien soit donné. Ne pas donner le lien ici — attendre le CTA. |
-| 10:35 | Quatre outputs ouverts en split view simultanément. | Révélation progressive : ouvrir l'un après l'autre en 4 secondes, puis recul pour voir les quatre ensemble. Silence de 5 secondes. | L'impact visuel de la totalité. Le silence permet à l'échelle de l'output d'atterrir sans concurrence audio. Ne pas parler pendant ces 5 secondes. |
-| 12:00 | Schéma du funnel revenue à l'écran avec les prix indicatifs à chaque niveau. | Annotation surlignée étape par étape : une flèche par niveau, un chiffre par étape. | Connecte explicitement chaque output agent à une ligne de revenu potentielle. L'abstraction "système" devient "vidéo → leads → inscrits → revenus." |
-| 13:05 | Fenêtre ChatGPT à gauche, output AR4A à droite. Même brief dans les deux. | Split-screen fixe, 30 secondes. Voix minimale. Laisser la comparaison visuelle faire le travail. | L'argument commercial le plus fort n'est pas rhétorique — il est visuel. La densité et la cohérence commerciale de l'output AR4A vs. la généricité de ChatGPT se lit en 10 secondes. |
-| 13:50 | Ouvrir la landing page du Revenue Agent Template dans un navigateur depuis la barre d'adresse. Champ email et bouton de téléchargement visibles. | Plein écran. Cliquer sur le champ email pour montrer que la page est réelle et fonctionnelle. | Le CTA est montré, pas seulement annoncé. La page existe. Le formulaire existe. Le viewer voit sa prochaine action — il n'a pas à l'imaginer. |
+*Ces beats définissent ce que la caméra capture à chaque moment clé de cette vidéo de démonstration physique — ce que le spectateur voit à l'écran.*
+
+| Timestamp | Ce qui est visible à l'écran | Technique de tournage | Pourquoi ce plan est critique |
+|-----------|-----------------------------|-----------------------|-------------------------------|
+| 0:00–0:45 | Visage du présentateur en plan buste, ou voix-off sur vue extérieure du bâtiment scolaire, propre et reconnaissable | Plan serré sur le visage, fond neutre ou façade de l'école. Aucun décor chargé. | L'absence de générique et de titre animé signale immédiatement que ce contenu n'est pas un spot publicitaire. La présence humaine immédiate crée le lien de confiance. La façade ancre géographiquement le spectateur djiboutien. |
+| 2:30–3:00 | Premier plan intérieur : couloir principal ou salle de classe vue de l'entrée | Panoramique lent de 3 secondes. Lumière naturelle obligatoire. Aucun filtre. Aucun flou artistique. | C'est le premier test de réalité. Le spectateur compare ce qu'il voit à ce que d'autres écoles lui ont montré dans leurs publicités. Un espace propre, bien éclairé, ordonné communique en trois secondes ce qu'aucun discours ne peut communiquer. |
+| 3:30–3:50 | Enseignant nommé face caméra — prénom et spécialité affichés en sous-titre à l'écran pendant 5 secondes minimum | Plan buste, éclairage frontal naturel, fond identifiable comme une salle de classe. | Le nom affiché transforme une affirmation en preuve. "Notre enseignant est qualifié" est une affirmation. "Amina, professeure de pédagogie active, 9 ans d'expérience" affiché à l'écran est une preuve. |
+| 4:00–5:20 | Démonstration de la méthode japonaise avec 3 à 4 élèves en situation réelle — enseignant et enfants dans le même cadre | Plan large incluant l'enseignant ET les élèves. Zoom progressif sur un élève exécutant la tâche. Aucune coupure pendant la démonstration. | La continuité sans coupure est la signature de l'authenticité. Un plan coupé toutes les 3 secondes pendant une "démonstration pédagogique" signale immédiatement au spectateur que la scène est reconstituée. |
+| 5:30–7:20 | Session anglais filmée sans interruption — enfants actifs, son ambiant inclus | Plan large de toute la classe (15 secondes), puis zoom sur un enfant qui répond en anglais (10 secondes), puis retour plan large. Ce zoom est le seul montage autorisé dans ce segment. | L'enfant en gros plan qui parle en anglais est le moment émotionnel le plus fort de la vidéo. Le parent qui voit un enfant du même âge que le sien répondre en anglais avec aisance vit une preuve irréfutable. Ce plan ne peut pas être raté. |
+| 7:30–7:45 | Formateur Techiftiin présenté nominalement — prénom et institution affichés à l'écran pendant 5 secondes | Plan buste, même traitement visuel que l'enseignant de la méthode japonaise. | Même logique : nommer = prouver. Le spectateur qui doute que "l'IA c'est vraiment enseigné" voit un formateur identifié par son nom et son institution. L'objection est neutralisée avant d'être posée. |
+| 8:00–9:20 | Formateur Techiftiin + enfant + outil IA visible à l'écran (tablette ou ordinateur) — triangle formateur / enfant / écran | Plan composé sur trois points. Coup de zoom de 3 secondes sur l'écran pour rendre l'outil identifiable. | Le spectateur doit voir exactement ce que l'enfant voit. Sans ce plan serré sur l'écran, il ne peut pas confirmer que l'outil est réel et fonctionnel. Ce zoom est le moment de preuve technologique de la vidéo. |
+| 9:30–10:20 | Montage de 4 à 5 plans courts (5 secondes chacun) — journée type d'un élève : salle de classe, session anglais, session IA, cour | Rythme de montage légèrement accéléré. Coupe nette entre chaque plan. | L'accélération du rythme visuel à ce moment de la vidéo maintient l'énergie et rend l'expérience enfant concrète et quotidienne — pas une démonstration exceptionnelle, une journée normale. |
+| 10:30–11:20 | Témoignage d'un parent identifiable (prénom et section de l'enfant affichés à l'écran), puis visite d'une salle rénovée | Plan buste serré sur le parent — ne pas couper ses mots. Coupe nette vers un plan large de la salle rénovée, lumière naturelle, matériel visible. | Un parent filmé sans montage haché est perçu comme spontané. Un parent dont les mots sont remontés semble récité. Cette différence est perçue instinctivement en moins de 5 secondes. |
+| 12:30–12:55 | Trois mots-clés affichés à l'écran au rythme de la voix qui les énonce | Texte simple sur fond neutre. Trois lignes apparaissant séquentiellement : MÉTHODE JAPONAISE / ANGLAIS INTENSIF / INTELLIGENCE ARTIFICIELLE. Aucune animation complexe. | L'ancrage visuel à ce moment transforme la conviction en mémorisation. Ce sont les trois mots que le parent retient, répète à son conjoint, et utilise en partageant la vidéo sur WhatsApp. |
+| 13:00–13:45 | Numéro WhatsApp affiché à l'écran — dates des deux Journées Portes Ouvertes — mot-clé d'activation visible ("Envoyez VISITE au [numéro]") | Texte statique, fond uni (blanc ou couleur de l'école), caractères suffisamment grands pour être lisibles sur un écran mobile 6 pouces. Le numéro reste visible pendant minimum 15 secondes consécutives. | Un spectateur sur Facebook regarde sur téléphone. Il doit pouvoir faire une capture d'écran ou noter le numéro sans mettre la vidéo sur pause. 15 secondes de numéro statique = le minimum viable pour que l'action soit possible sans friction. |
 
 ---
 
 ### Retention Principles for This Video
 
-**1. La preuve avant l'explication — sans exception et sans délai**
+*Ces cinq principes sont spécifiques à une vidéo de démonstration pédagogique de 14 minutes, destinée à des parents djiboutiens de classe moyenne à aisée, diffusée principalement sur Facebook et YouTube avec distribution WhatsApp.*
 
-Dans une vidéo de démonstration technique pour une audience qui a déjà été déçue par des promesses IA, la crédibilité s'établit par le visible, pas par le déclaratif. Montrer le dossier outputs/ avec ses fichiers horodatés dans les 45 premières secondes n'est pas un choix stylistique — c'est le contrat de confiance qui autorise tout le reste de la vidéo à exister. Le profil B2B de l'audience secondaire (consultants institutionnels, organisations) prend sa décision de rester ou partir dans cet intervalle. Une preuve physique avant le premier argument commercial transforme la posture du viewer de "encore un vendeur d'IA" à "quelqu'un qui montre quelque chose de réel."
+**1. Nommer l'audience dans les deux premières secondes — sans exception.**
+"Parents djiboutiens" doit apparaître dans les quatre premières phrases, idéalement dans les deux premières. Sur Facebook, la vidéo est vue par un public hétérogène que l'algorithme pousse sans discrimination de pertinence. Le seul mécanisme qui transforme un spectateur passif en spectateur engagé est la reconnaissance immédiate : "cette vidéo parle de moi, de ma situation, de mon pays." Un parent de Djibouti qui s'entend nommer dans les deux premières secondes reste. Un spectateur anonyme fait défiler.
 
-**2. Annoncer le bénéfice avant l'output, jamais après**
+**2. Le ratio montrer / décrire doit être de 70% / 30% sur l'ensemble de la vidéo.**
+Chaque pilier de La Trilogie Champion doit être démontré en situation réelle, pas expliqué en commentaire. La tentation de la vidéo scolaire est de décrire les méthodes plutôt que de les montrer — parce que filmer en situation réelle est plus difficile à organiser. Mais le spectateur djiboutien qui a été déçu par des promesses non tenues détecte immédiatement la différence entre une école qui montre et une école qui décrit. Si aucun enfant actif n'est visible avant la minute 4, la moitié de l'audience a déjà été perdue.
 
-La convention pédagogique standard est de montrer le résultat puis d'expliquer sa valeur. Pour ce format et cette audience, inverser l'ordre augmente la rétention : annoncer le bénéfice précis en une phrase AVANT que l'output apparaisse, puis laisser l'output confirmer l'annonce. "Dans trente secondes, vous allez voir apparaître un tableau de pricing calibré pour le marché francophone africain — avec des prix en XAF." Puis l'output apparaît. La confirmation crée une micro-satisfaction qui conditionne le viewer à attendre le prochain bénéfice annoncé. Un viewer qui attend quelque chose de précis ne quitte pas.
+**3. Le pic émotionnel numéro un doit arriver avant la minute 7.**
+Le pic émotionnel de cette vidéo est la session anglais filmée avec des enfants de maternelle ou de primaire qui parlent réellement. Ce moment doit impérativement être visible avant la mi-vidéo. Sur mobile, la courbe d'attention d'une vidéo Facebook chute brutalement entre la minute 6 et la minute 8. Un enfant de 5 ans qui répond en anglais avec aisance à la minute 6 recourt la courbe — le spectateur veut voir la suite. Le même enfant à la minute 10 arrive trop tard pour rattraper les décrochages.
 
-**3. Le moment méta comme verrou de rétention à 7:30**
+**4. Chaque section se termine par une micro-promesse sur la suivante.**
+À la fin de chaque pilier, une phrase d'accroche annonce le suivant sans en révéler le contenu. Exemple à la fin du segment méthode japonaise : "Mais la discipline n'est que le premier socle. Ce que vous allez voir ensuite n'existe nulle part ailleurs à Djibouti." Cette technique de teasing interne est particulièrement efficace pour un public qui consomme du contenu sur téléphone mobile et peut interrompre à tout moment pour répondre à un message WhatsApp. La micro-promesse crée un coût de sortie psychologique : quitter maintenant, c'est ne jamais savoir ce qui vient ensuite.
 
-La séquence où Agent 3 produit la stratégie de cette même vidéo est le verrou de rétention le plus puissant disponible dans ce format spécifique. Mais il ne fonctionne que si le présentateur le signale explicitement avec une rupture de rythme — une pause, un changement de ton, une phrase qui force la prise de conscience. "Attendez. L'agent que vous regardez en ce moment est en train de construire la stratégie de la vidéo que vous regardez. Ces titres qui apparaissent à l'écran — c'est la stratégie de cette vidéo, produite ce matin par ce système." Le paradoxe d'auto-référence est cognitif et involontaire — il ne peut pas être ignoré. Mais il doit être signalé, parce que les viewers en mode observation passive ne font pas le lien seuls.
-
-**4. Maintenir la progression numérotée des agents tout au long de la vidéo**
-
-Une vidéo de live-building sans structure annoncée ressemble à regarder quelqu'un travailler. Avec une progression numérotée explicite — "Agent 1 sur 4", "Agent 2 sur 4" — elle ressemble à regarder un plan s'exécuter. Afficher un indicateur visuel de progression à chaque transition d'agent, annoncer le prochain bénéfice avant de lancer chaque agent, et promettre le Grand Reveal deux minutes avant qu'il arrive ("dans deux minutes, vous allez voir les quatre fichiers s'ouvrir côte à côte — restez") transforme la rétention passive en anticipation active. Un viewer qui attend un moment spécifique ne quitte pas avant de l'avoir vu.
-
-**5. Ancrer dans le contexte francophone à chaque occasion disponible**
-
-Une seconde de doute — "est-ce que ça marche vraiment dans mon contexte ?" — génère un décrochage immédiat. Pour une audience d'entrepreneurs francophones africains et MENA, cet ancrage n'est pas symbolique : il est fonctionnel. Utiliser des villes réelles dans le brief live (Dakar, Abidjan, Casablanca), zoomer sur les prix en XAF dans l'output Agent 2, mentionner WhatsApp Business dans les sorties de conversion, nommer les marchés locaux dans les exemples — chaque occurrence de contexte local réduit la friction d'identification et augmente la durée de visionnage. La généralité tue la rétention dans ce marché. La spécificité géographique et monétaire la protège.
+**5. L'objection sur la reconnaissance officielle des diplômes doit être traitée avant la minute 12 — de façon proactive, pas en réponse à une question.**
+Dans le contexte djiboutien, la question de la validation officielle par le Ministère de l'Éducation nationale est une source d'abandon silencieux. Le spectateur qui se la pose ne la formule pas à voix haute — il ferme la vidéo et cherche une autre école. L'adresser directement à la minute 11, avec une réponse de 45 secondes maximum, directe et factuelle ("École Champion suit intégralement le programme officiel djiboutien — vos enfants passent les mêmes examens nationaux que tous les élèves du pays, avec une préparation renforcée"), neutralise le seul frein capable d'empêcher un spectateur convaincu de prendre son téléphone pour réserver une visite.
 
 ---
 
-### Note d'exécution prioritaire
+### Note de Séquençage — Publication de Cette Vidéo
 
-Avant le tournage, un run complet du coordinateur sur un brief réel MALI-MEC doit être produit et sauvegardé dans outputs/ avec des horodatages authentiques datant de la semaine du tournage. Ce run doit être visible à l'écran à 0:30 (preuve avant l'explication). C'est la condition critique identifiée par l'Agent 1 pour faire passer le score de crédibilité de 3 à 4 et fermer le gap entre un feu vert conditionnel et un feu vert complet. Sans cet artefact, la vidéo commence par une promesse. Avec cet artefact, elle commence par une preuve.
+Cette vidéo de positionnement (14 minutes) ne doit pas être la première publication. Elle est conçue pour être publiée en semaine 3, après que les contenus de preuve (locaux rénovés, session IA Techiftiin, profils enseignants) ont été publiés en semaines 1 et 2. Publier cette vidéo en premier inverse la logique preuve-avant-promesse établie par les Agents 1 et 2 et réduit significativement le taux de conversion dans un marché communautaire où la confiance précède toujours l'engagement.
+
+| Semaine | Contenu | Objectif |
+|---------|---------|---------|
+| Semaine 1 | Visite filmée des locaux rénovés (12 min) + profils de 3 enseignants (3 × 90 sec) | Preuve matérielle et humaine avant toute promesse |
+| Semaine 2 | Session IA avec Techiftiin filmée (15 min) + session anglais courte (90 sec) | Preuve des deux piliers distinctifs de La Trilogie |
+| **Semaine 3** | **Cette vidéo — "Donnez 3 Longueurs d'Avance à Votre Enfant Avant la Rentrée 2026"** | **Positionnement et conversion — CTA Journée Portes Ouvertes** |
+| Semaine 4 | Témoignages de parents ayant visité + confirmation des préinscriptions ouvertes | Preuve sociale post-visite et fermeture du funnel |
 
 ---
 
-CONTENT_SCORE: 19.0/20
+*Stratégie produite par MALI-MEC · Agent 03 — Content Angle Strategist · 2026-07-28*
+*Inputs : business-brief.md · outputs/01-market-signal-brief.md · outputs/02-offer-architecture.md*
+*Score Agent 1 : 4.0 / 5.0 — Score positionnement Agent 2 : 4.5 / 5.0*
+*Plateformes : Facebook (prioritaire) · YouTube · WhatsApp (distribution)*
+*Langue : Français · CTA principal : "Réservez votre visite gratuite"*
