@@ -1,5 +1,5 @@
 # Revenue Agent Demo — Synthèse Coordinateur AR4A
-## MALI-MEC · Run 2 · 2026-07-28
+## MALI-MEC · Run 3 · 2026-07-28
 
 ---
 
@@ -7,23 +7,29 @@
 
 | Agent | Fichier de sortie | Score / Décision | Validé |
 |-------|-------------------|------------------|--------|
-| 1 — Market Signal Researcher | `01-market-signal-brief.md` | **3.9 / 5.0** → Proceed | ✅ |
-| 2 — Offer Architect | `02-offer-architecture.md` | **4.25 / 5.0** — Pas de réécriture requise | ✅ |
+| 1 — Market Signal Researcher | `01-market-signal-brief.md` | **3.9 / 5.0** → Proceed (conditions) | ✅ |
+| 2 — Offer Architect | `02-offer-architecture.md` | **4.4 / 5.0** positionnement — Pas de réécriture requise | ✅ |
 | 3 — Content Angle Strategist | `03-content-strategy.md` | Titre retenu : **19 / 20** | ✅ |
-| 4 — Conversion System Builder | `04-conversion-system.md` | Pipeline complet — audit 7 frictions | ✅ |
+| 4 — Conversion System Builder | `04-conversion-system.md` | Système complet — **7 frictions auditées** | ✅ |
 
-**Résultat global :** Feu vert complet. Les quatre livrables de production sont prêts. Le seul pré-requis restant avant tournage est un run coordinateur horodaté sur brief réel — le dossier `outputs/` actuel constitue déjà cette preuve.
+**Résultat global :** Feu vert complet. Quatre livrables de production prêts. Le dossier `outputs/` actuel horodaté du 2026-07-28 constitue le Proof Primer pour le tournage.
 
 ---
 
 ## Titre Final Retenu
 
-> **"ChatGPT Ne Vous a Pas Rendu Riche — Ce Système Explique Pourquoi"**
+> **"Les Autres Parlent d'IA. Ce Système à 4 Agents, Lui, la Facture."**
 
 - **Score :** 19 / 20
-- **Avantage SEO :** capture le trafic existant sur "ChatGPT" en français, volume élevé
-- **Mécanisme de clic :** valide l'échec exact de l'audience avant de proposer une solution — l'audience clique pour comprendre son propre diagnostic
-- **Thumbnail recommandé :** **CE SYSTÈME FACTURE** — contraste maximal dans le feed, association directe avec la phrase stratégique
+- **Logique :** Exécute mot pour mot l'argument économique central identifié par l'Agent 2 ("Les autres parlent d'IA. Ce système la facture."). Le verbe "facturer" positionne AR4A comme une machine de facturation — chaîne de production, pas générateur de texte.
+- **Avantage :** Distinctif dans le feed YouTube francophone, distribué par algorithme plus que par mot-clé
+- **Thumbnail recommandée :** **IDÉE → REVENUS** — flèche de transformation, trois tokens visuels, fonctionne à toutes tailles d'écran
+
+---
+
+## Phrase Qui Arrête le Scroll
+
+> **"Pendant que vous testez des outils IA, quelqu'un dans votre marché construit le système qui vous remplace."**
 
 ---
 
@@ -31,15 +37,21 @@
 
 **AR4A — Architecture Revenue à 4 Agents**
 
-Pipeline séquentiel de quatre agents Claude Code spécialisés. La sortie de chaque agent devient le brief structuré du suivant. Ce protocole de passage de brief inter-agents produit des livrables business cohérents et spécifiques à partir d'un brief en langue ordinaire. Aucun code requis, aucune configuration technique par le client.
+Pipeline séquentiel de quatre agents Claude Code spécialisés. La sortie de chaque agent devient le brief structuré du suivant. Ce protocole de passage de brief inter-agents produit des livrables business cohérents et spécifiques à partir d'un brief en langue ordinaire. Aucun code requis. Aucune configuration technique par le client.
 
 **Les quatre livrables en une session :**
-1. Signal de marché validé (7 dimensions scorées, langage d'audience extrait)
-2. Architecture d'offre complète (positionnement, core offer, value ladder, cartographie des objections)
-3. Stratégie de contenu YouTube (5 angles scorés, titres testés, script d'ouverture mot pour mot)
-4. Système de conversion (lead magnet structuré, séquence email, chemin de vente, audit de frictions)
+1. Signal de marché validé — 7 dimensions scorées, langage d'audience extrait, recommandation stratégique
+2. Architecture d'offre complète — positionnement, core offer, value ladder EUR/XAF, carte d'objections
+3. Stratégie de contenu YouTube — 5 angles scorés, titres testés, script d'ouverture mot pour mot, retention map
+4. Système de conversion — lead magnet structuré, séquence 5 emails, chemin de vente, audit de frictions
 
-**Positionnement :** "J'aide les entrepreneurs, coaches et consultants francophones à construire un système de génération de revenus sur mesure — sans recruter une équipe technique et sans passer des mois à apprendre à coder — grâce à l'Architecture Revenue à 4 Agents."
+---
+
+## Positioning Statement (Agent 2)
+
+> **"J'aide les entrepreneurs, coaches, consultants et formateurs francophones à construire un système IA qui génère des leads qualifiés et des revenus mesurables, chaque semaine, sans écrire une ligne de code et sans dépendre d'une équipe technique, grâce à l'Architecture Revenue à 4 Agents (AR4A)."**
+
+Score composite : **4.4 / 5.0** — Approuvé sans réécriture.
 
 ---
 
@@ -50,79 +62,96 @@ Pipeline séquentiel de quatre agents Claude Code spécialisés. La sortie de ch
 | Paramètre | Valeur |
 |-----------|--------|
 | Format | 3 sessions live × 2h30 sur 3 jours consécutifs |
-| Prix | 350 EUR / 210 000 XAF |
+| Prix | 280–450 EUR / 184 000–295 000 XAF |
 | Capacité | 20 participants maximum par cohorte |
 | Livrable J+3 | Pipeline AR4A opérationnel sur le brief réel du participant |
 
-**Value ladder complète :**
+---
+
+## Value Ladder Complète
 
 | Niveau | Produit | Prix |
 |--------|---------|------|
-| Gratuit | Vidéo YouTube principale | — |
-| Lead magnet | Revenue Agent Template Pack (9 fichiers) | Gratuit (email requis) |
-| Entrée | Atelier Découverte AR4A — session live 2h | 45 EUR / 27 000 XAF |
-| Core | Programme Intensif AR4A — 3 jours live | 350 EUR / 210 000 XAF |
-| Premium | Déploiement MEC Advisory — accompagnement 90 jours | 2 500–5 000 EUR |
+| 0 — Gratuit | Vidéo YouTube principale | — |
+| 1 — Lead Magnet | Revenue Agent Template Pack (9 fichiers) | Gratuit (email requis) |
+| 2 — Entrée | Atelier Découverte AR4A — 2h live | 45 EUR / 29 500 XAF |
+| 3 — Core | Programme Intensif AR4A — 3 jours live | 280–450 EUR / 184 000–295 000 XAF |
+| 4 — Premium | Déploiement MEC Advisory — 90 jours | 2 500–5 000 EUR |
 
 ---
 
 ## Structure Vidéo — 14 Minutes
 
-| Timestamp | Section | Livrable visible à l'écran |
-|-----------|---------|---------------------------|
-| 0:00 | Hook — validation de la douleur (mot pour mot) | Voix directe, aucun visuel distrayant |
-| 0:30 | **Proof Primer** — preuve physique avant toute explication | Dossier `outputs/` ouvert, 4 fichiers horodatés |
-| 1:15 | Architecture AR4A — le mécanisme en une vue | Arborescence des 4 agents dans Claude Code |
+| Timestamp | Section | Ce qui est visible à l'écran |
+|-----------|---------|------------------------------|
+| 0:00 | Hook — validation de la douleur | Voix directe, zéro visuel distrayant |
+| 0:30 | **Proof Primer** | Dossier `outputs/` ouvert, 4 fichiers horodatés |
+| 1:15 | Architecture AR4A | Arborescence des 4 agents dans Claude Code |
 | 2:00 | Lancement Agent 1 | Brief "coaching à Dakar" tapé en direct, output en streaming |
-| 3:00 | Output Agent 1 | Score 3.9/5, tableau 7 dimensions, verdict |
-| 4:15 | Passage de brief — le mécanisme visible | Copier-coller : sortie A1 → brief A2 |
-| 5:15 | Output Agent 2 | Offre avec prix EUR et XAF côte à côte |
+| 3:00 | Output Agent 1 | Score 3.9/5, tableau 7 dimensions, langage audience |
+| 4:15 | Passage de brief | Copier-coller visible : sortie A1 → brief A2 |
+| 5:15 | Output Agent 2 | Positionnement + pricing EUR et XAF côte à côte |
 | 6:30 | Output Agent 3 | 5 angles YouTube avec scores de cliquabilité |
-| 7:00 | **Mention mid-video** — non-commercial, 12 secondes | CTA soft lead magnet planté |
-| 7:45 | Output Agent 4 | Lead magnet + séquence email |
-| 8:45 | **Grand Reveal** — 4 fichiers côte à côte | Silence de 3 secondes. Laisser l'image parler. |
-| 10:00 | Chemin revenue — connecter le système à l'argent | Schéma funnel avec montants indicatifs par niveau |
-| 11:30 | Traitement des objections — 3 visuelles, 60s chacune | Pas de code / pas générique / pour le francophone |
-| 13:00 | **CTA final** — page de capture affichée | Revenue Agent Template Pack + Programme Intensif |
-| 13:45 | Teaser — pattern interrupt final | Prochain run annoncé (Casablanca, finance islamique) |
+| 7:00 | **Mention mid-vidéo** | CTA soft 11 secondes — "ces fichiers sont dans la description" |
+| 7:30 | **Moment méta** | Agent 3 a produit la stratégie de cette même vidéo |
+| 7:45 | Output Agent 4 | Lead magnet + séquence email structurés |
+| 8:45 | **Grand Reveal** | 4 fichiers côte à côte — 3 secondes de silence |
+| 10:00 | Chemin revenue | Schéma funnel avec montants indicatifs par niveau |
+| 11:30 | Objections visuelles | 3 objections, 60s chacune, traitement à l'écran |
+| 13:30 | **CTA final** | Page de capture affichée — Revenue Agent Template Pack |
+| 13:45 | Teaser | Prochain run annoncé (Casablanca, finance islamique, arabe/français) |
+
+---
+
+## Hook — Les 30 Premières Secondes (mot pour mot)
+
+> Vous avez essayé ChatGPT. Les tutoriels. Peut-être une formation aussi.
+>
+> Et ce soir, vos revenus sont exactement là où ils étaient il y a six mois.
+>
+> Ce n'est pas l'IA qui ne fonctionne pas. C'est que vous avez des outils — pas un système.
+>
+> Dans les quatorze prochaines minutes, je vais construire ce système en direct devant vous. Quatre agents IA spécialisés — qui fonctionnent en chaîne, en français, sans une seule ligne de code — vont transformer un brief business en signal de marché validé, offre structurée, stratégie YouTube, et lead magnet prêt à déployer.
+>
+> Ce sont exactement les agents qu'on utilise chez MALI-MEC. Et les fichiers sont dans la description. Regardez jusqu'à la fin.
 
 ---
 
 ## Lead Magnet
 
-**Revenue Agent Template Pack — AR4A** (9 fichiers, ZIP ou Google Drive)
+**Revenue Agent Template Pack — AR4A** (9 fichiers, ZIP)
 
-**Promesse :** premier signal de marché produit dans les 60 minutes suivant le téléchargement.
+**Promesse :** Premier pipeline AR4A lancé dans les 30 minutes suivant le téléchargement.
 
-**Contenu exact :**
-
-| Fichier | Valeur délivrée | Temps pour résultat |
-|---------|-----------------|---------------------|
-| `business-brief-template.md` | Brief structuré avec instructions intégrées — l'input qui détermine la qualité de toutes les sorties | 20–30 min |
-| `01-agent-market-signal.md` | Agent 1 pré-configuré | Immédiat |
-| `02-agent-offer-architect.md` | Agent 2 pré-configuré | Immédiat |
-| `03-agent-content-strategist.md` | Agent 3 pré-configuré | Immédiat |
-| `04-agent-conversion-system.md` | Agent 4 pré-configuré | Immédiat |
-| `coordinator-run-prompt.md` | Prompt coordinateur prêt à coller | Immédiat |
-| `runbooks/revenue-agent-runbook.md` | Guide d'exécution pas à pas | 5 min avant premier run |
-| `opportunity-scoring-grid.md` | Grille 7 dimensions utilisable sans agents | 10 min |
-| `exemple-run-complet/` | Sorties complètes — run "coaching à Dakar" | 15 min |
+| Fichier | Valeur en une phrase |
+|---------|---------------------|
+| `business-brief-template.md` | L'input qui détermine la qualité de toutes les sorties |
+| `agent-1-market-signal.md` | Agent 1 préconfiguré — score d'opportunité 7 dimensions |
+| `agent-2-offer-architect.md` | Agent 2 préconfiguré — offre + pricing EUR/XAF |
+| `agent-3-content-strategist.md` | Agent 3 préconfiguré — 5 titres scorés + script |
+| `agent-4-conversion-system.md` | Agent 4 préconfiguré — lead magnet + emails |
+| `coordinateur-run-prompt.md` | Lancer les 4 agents en séquence — copier-coller |
+| `runbook-revenue-agent.md` | Guide 7 étapes avec captures d'écran annotées |
+| `grille-scoring-opportunite.md` | Évaluer une idée sans agents — 10 minutes |
+| `exemple-run-complet/` | Outputs complets du run "coaching à Dakar" |
 
 ---
 
-## CTAs In-Video — Textes Exacts
+## CTAs — Textes Exacts
 
-**Mid-video (7:00) — 12 secondes, non-commercial :**
+**Mid-vidéo (7:00) — 11 secondes :**
+> "Ces fichiers agents — ceux que vous regardez tourner depuis sept minutes — ils sont dans la description. Téléchargez-les pendant que je lance le dernier agent."
 
-> "Avant de lancer l'Agent 4 — petite précision rapide : tous les fichiers que vous voyez à l'écran ce soir, les quatre agents configurés, le brief template, le runbook d'exécution — tout ça, c'est téléchargeable gratuitement, lien en description. On en reparle à la fin. Agent 4, on y va."
-
-**Fin de vidéo (13:00) — 45 à 60 secondes :**
-
-> "Le lien dans la description s'appelle Revenue Agent Template Pack. Vous rentrez votre email, vous recevez neuf fichiers en trente secondes : les quatre agents pré-configurés exactement comme vous venez de les voir tourner, le brief template, le runbook d'exécution, la grille de scoring des sept dimensions de marché, et l'exemple complet du run que vous avez regardé — le dossier outputs entier. C'est gratuit. Ça démarre ce soir si vous le décidez.
+**Fin de vidéo (13:30) — 55 secondes :**
+> "Voilà ce qu'un système produit — pas un outil. Quatre livrables business. Un brief de trois paragraphes. Huit minutes de traitement.
 >
-> Si vous voulez construire ce pipeline sur votre propre business — avec un groupe guidé, en trois jours, en partant de votre vrai brief — le Programme Intensif AR4A est aussi en description. Vingt places par cohorte.
+> Le Revenue Agent Template Pack est dans la description. Vous y trouvez exactement ce que vous venez de voir tourner : les quatre fichiers agents préconfigurés, le brief template, le prompt coordinateur, le runbook, la grille de scoring, et l'exemple complet de ce run sur le cas de Dakar. Zéro configuration technique. Vous téléchargez, vous copiez les fichiers, vous lancez le coordinateur sur votre propre business.
 >
-> Une décision à prendre ce soir. Le lien. Tout le reste se construit à partir de là."
+> C'est gratuit.
+>
+> Si vous voulez construire ce pipeline sur votre offre réelle — en direct, avec moi, avec correction en temps réel — l'Atelier Découverte AR4A dure deux heures et coûte 45 euros. Si vous voulez le système complet en trois jours, le Programme Intensif AR4A a vingt places.
+>
+> Les deux liens sont dans la description. Prenez la description. Maintenant."
 
 ---
 
@@ -130,37 +159,37 @@ Pipeline séquentiel de quatre agents Claude Code spécialisés. La sortie de ch
 
 | Email | Objet | Action demandée | Objectif de conversion |
 |-------|-------|-----------------|------------------------|
-| J0 | "Vos fichiers AR4A — accès immédiat" | Ouvrir `business-brief-template.md` en premier | Activation dans les 60 min |
-| J1 | "La seule chose que vos agents ne peuvent pas faire pour vous" | Remplir les 3 sections du brief | Brief prêt pour le premier run |
-| J3 | "Ce que 8 minutes ont produit pour un coach à Dakar" | Comparer avec son propre brief | Reconnaissance du diagnostic AR4A |
-| J5 | "Pourquoi la plupart des premiers runs AR4A produisent des sorties inutilisables" | S'inscrire à l'Atelier Découverte | **45 EUR / 27 000 XAF** |
-| J8 | "20 places — Votre pipeline AR4A opérationnel en 3 jours" | Rejoindre le Programme Intensif | **350 EUR / 210 000 XAF** |
+| J0 | "Vos fichiers AR4A sont là — commencez par ça ce soir" | Ouvrir `business-brief-template.md` uniquement | Activation dans les 24h |
+| J1 | "Ce qui sépare un output déployable d'un output que vous ne publierez jamais" | Relancer le run avec brief révisé (3 règles) | Brief calibré prêt |
+| J3 | "Ce que 8 minutes ont produit sur un vrai brief — résultats complets" | Comparer avec le dossier exemple-run-complet | Identification de l'écart |
+| J5 | "Pourquoi vos outils IA n'ont pas encore changé vos revenus — la vraie raison" | Répondre à l'email (signal d'intention) | Dialogue direct ouvert |
+| J8 | "La prochaine étape — si vous voulez aller plus vite et moins seul" | S'inscrire à l'Atelier Découverte | **45 EUR / 29 500 XAF** |
 
 ---
 
 ## Audit des 7 Frictions (criticité décroissante)
 
-| # | Friction | Criticité | Solution clé |
-|---|---------|-----------|--------------|
-| 1 | Drop-off avant 7:00 — viewer quitte avant de voir le mid-CTA | HIGH | Proof Primer à 0:30 obligatoire ; Grand Reveal annoncé à 6:45 |
-| 2 | Viewer ne clique pas sur le lien en description | HIGH | Lien en première ligne de description ; YouTube Card à 13:00 ; commentaire épinglé |
-| 3 | Visiteur arrive sur la page de capture mais ne laisse pas d'email | HIGH | 9 noms de fichiers exacts affichés ; formulaire à un seul champ |
-| 4 | Email J0 atterrit en spam | HIGH | SPF/DKIM/DMARC validés ; objet non-promotionnel ; envoi en < 60s |
-| 5 | Email J5 sans urgence — pas de clic sur l'Atelier | HIGH | Date de session + places restantes obligatoires dans l'email ; prix en XAF en premier |
-| 6 | Lead télécharge mais n'ouvre jamais les fichiers | MEDIUM | Email J0 : une seule instruction — ouvrir uniquement `business-brief-template.md` |
-| 7 | Participant Atelier ne s'inscrit pas au Programme en 48h | MEDIUM | Offre Programme dans les 20 dernières minutes ; tarif early-bird 48h ; résultats côte à côte |
+| # | Friction | Localisation | Criticité | Solution clé |
+|---|---------|-------------|-----------|--------------|
+| 1 | Viewer ne clique pas sur le lien description | Vidéo → landing page | **HIGH** | Mention 7:00 + lien ligne 1 description + YouTube Card + commentaire épinglé |
+| 2 | Visiteur ne laisse pas son email | Landing page | **HIGH** | 1 seul champ, 9 noms de fichiers exacts visibles, screenshot du dossier |
+| 3 | Email J0 en spam | Post-téléchargement | **HIGH** | SPF/DKIM/DMARC validés ; envoi < 60s ; objet non-promotionnel |
+| 4 | Lead télécharge mais ne lance pas | Activation | **HIGH** | Email J0 : une seule instruction — brief template en premier |
+| 5 | Email J5 sans clic Atelier | Nurture → prospect | **HIGH** | Prix en XAF d'abord ; date + places restantes obligatoires |
+| 6 | Infrastructure paiement XAF absente | Achat | **HIGH** | Wave / Orange Money / MTN Mobile Money + virement pour gros montants |
+| 7 | Participant Atelier ne s'inscrit pas au Programme | Atelier → core | **MEDIUM** | Offre Programme dans les 20 dernières minutes ; early-bird 48h |
 
 ---
 
 ## Exigences de Crédibilité Avant Publication
 
-| # | Exigence | Statut actuel |
-|---|----------|---------------|
-| 1 | Run coordinateur horodaté — dossier `outputs/` avec 4 fichiers datés affichables en 90s | **Disponible** — ce run constitue la preuve |
-| 2 | Prix en XAF visibles dans les sorties d'agents à l'écran | À vérifier à l'exécution du brief |
-| 3 | Page de capture Revenue Agent Template Pack en ligne, 9 noms de fichiers affichés | À déployer avant publication |
-| 4 | Domaine d'envoi email authentifié SPF/DKIM/DMARC | À vérifier |
-| 5 | Brief spécifique utilisé dans la démo — entreprise francophone réelle avec ville et secteur | À confirmer avant tournage |
+| # | Exigence | Statut |
+|---|----------|--------|
+| 1 | Run coordinateur horodaté — dossier `outputs/` affichable en 90s | **Disponible** — ce run (Run 3, 2026-07-28) |
+| 2 | Prix en XAF dans les sorties d'agents visibles à l'écran | À vérifier à l'exécution du brief de démo |
+| 3 | Page de capture Revenue Agent Template Pack en ligne, 9 fichiers affichés | **À déployer avant publication** |
+| 4 | Domaine d'expédition email authentifié SPF/DKIM/DMARC | À vérifier |
+| 5 | Solution de paiement Mobile Money opérationnelle pour zone XAF | **À déployer — friction #6 critique** |
 
 ---
 
@@ -172,30 +201,25 @@ Pipeline séquentiel de quatre agents Claude Code spécialisés. La sortie de ch
 | Modéré | ~19 550 EUR | 6 000 vues, 22 Programmes, 3 MEC Advisory |
 | Optimiste | ~53 050 EUR | 20 000 vues, 60 Programmes, 8 MEC Advisory |
 
-> **Disclaimer obligatoire :** Estimations illustratives — ratios standards pour ce type de funnel en marché francophone. Aucune garantie. Ne pas présenter à des partenaires sans ce disclaimer.
+> **Disclaimer obligatoire :** Estimations illustratives fondées sur des ratios standards pour ce type de funnel en marché francophone. Aucune garantie de résultat. Ne pas présenter à des partenaires sans ce disclaimer.
 
 ---
 
 ## Phrase Stratégique
 
-> **"Les autres parlent d'IA. Ce système la facture."**
-
-Utilisation recommandée : teaser LinkedIn, bio YouTube, slide d'ouverture de l'Atelier Découverte, footer de présentation institutionnelle.
+> **"L'argent n'est pas dans les outils. Il est dans les systèmes."**
 
 ---
 
-## Prochaine Action Requise — Une Seule
+## Prochaine Action Unique
 
-**Déployer la page de capture Revenue Agent Template Pack avec les 9 noms de fichiers exacts affichés.**
+**Déployer la solution de paiement Mobile Money (Wave / Orange Money / MTN) pour la zone XAF avant l'Atelier Découverte 1.**
 
-Cette action débloque :
-- Le CTA mid-video (7:00) qui pointe actuellement dans le vide
-- L'email J0 qui référence le lien de téléchargement
-- La friction #3 (visiteur sans email) qui est la plus corrigible par la page elle-même
+Cette action débloque la friction #6 — la seule qui peut tuer une conversion déjà décidée, après que l'audience a regardé la vidéo, téléchargé le pack, reçu les 5 emails, et cliqué sur "Réserver ma place."
 
-Le dossier `outputs/` actuel — ce run complet horodaté du 2026-07-28 — constitue déjà le Proof Primer et l'exemple de run inclus dans le pack. Aucun run supplémentaire n'est requis avant le tournage.
+En parallèle : **déployer la page de capture Revenue Agent Template Pack** avec les 9 noms de fichiers exacts affichés — débloque les frictions #1, #2, #3.
 
 ---
 
 *Synthèse produite par le coordinateur AR4A — MALI-MEC Revenue Agent System*
-*Run 2 · 2026-07-28 · Inputs : business-brief.md + outputs 01 à 04*
+*Run 3 · 2026-07-28 · Inputs : business-brief.md + outputs 01 à 04*
