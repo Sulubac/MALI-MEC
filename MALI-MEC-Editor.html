@@ -135,6 +135,36 @@ textarea:focus{background:var(--goldbg)}
   display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:800;flex-shrink:0}
 .ma{display:flex;gap:9px;justify-content:flex-end}
 
+/* ── Choice cards ── */
+.choice-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px}
+.choice-card{background:var(--card2);border:1px solid var(--border);border-radius:9px;
+  padding:20px 14px 18px;cursor:pointer;text-align:center;transition:all .18s;
+  font-family:var(--sans);color:var(--text);display:flex;flex-direction:column;
+  align-items:center;gap:8px;width:100%}
+.choice-card:hover{border-color:var(--gold);background:var(--goldbg)}
+.choice-card:active{transform:scale(.97)}
+.cc-icon{font-size:28px;line-height:1;display:block}
+.cc-title{font-size:13px;font-weight:700;display:block}
+.cc-desc{font-size:11.5px;color:var(--sub);line-height:1.45;display:block}
+.sc-nav{display:flex;align-items:center;gap:10px;margin-bottom:16px}
+.sc-nav .mt{margin:0}
+/* ── Drop zone ── */
+.drop-zone{border:2px dashed var(--border2);border-radius:9px;padding:30px 20px;
+  text-align:center;cursor:pointer;transition:all .18s;background:var(--card2);
+  margin-bottom:10px;user-select:none}
+.drop-zone:hover,.drop-zone.over{border-color:var(--gold);background:var(--goldbg)}
+.dz-icon{font-size:26px;color:var(--gold);margin-bottom:8px}
+.dz-main{font-size:14px;font-weight:700;margin-bottom:4px}
+.dz-sub{font-size:12.5px;color:var(--sub);margin-bottom:9px}
+.dz-link{color:var(--gold);text-decoration:underline;cursor:pointer}
+.dz-types{font-size:11px;color:var(--muted);font-family:var(--mono)}
+/* ── Upload status ── */
+.upload-status{border-radius:7px;padding:10px 13px;font-size:12.5px;
+  line-height:1.55;border:1px solid var(--border);margin-bottom:2px}
+.upload-status.ok{border-color:#34c07a55;background:#34c07a0d;color:var(--ok)}
+.upload-status.err{border-color:#e0505055;background:#e050500d;color:var(--err)}
+.upload-status.inf{border-color:#c8913a55;background:var(--goldbg);color:var(--gold)}
+
 /* ── Toast ── */
 #toasts{position:fixed;bottom:20px;right:20px;z-index:300;
   display:flex;flex-direction:column;gap:7px;pointer-events:none}
@@ -213,8 +243,32 @@ textarea:focus{background:var(--goldbg)}
 
 <!-- Modal Nouveau Projet -->
 <div class="overlay" id="modal" onclick="if(event.target===this)closeModal()">
-  <div class="modal">
+
+  <!-- Screen 1: Choice -->
+  <div class="modal" id="sc-choice">
     <div class="mt">Nouveau Projet</div>
+    <div class="md">Comment veux-tu démarrer ce nouveau brief ?</div>
+    <div class="choice-grid">
+      <button class="choice-card" onclick="showManual()">
+        <span class="cc-icon">✏️</span>
+        <span class="cc-title">Remplir le formulaire</span>
+        <span class="cc-desc">Nomme le projet et vide les sections de ton choix</span>
+      </button>
+      <button class="choice-card" onclick="showImport()">
+        <span class="cc-icon">📄</span>
+        <span class="cc-title">Importer un fichier</span>
+        <span class="cc-desc">Charge un brief pré-rempli en <strong>.md</strong> ou <strong>.pdf</strong> — les sections se remplissent automatiquement</span>
+      </button>
+    </div>
+    <div class="ma"><button class="btn ghost" onclick="closeModal()">Annuler</button></div>
+  </div>
+
+  <!-- Screen 2a: Manual -->
+  <div class="modal" id="sc-manual" style="display:none">
+    <div class="sc-nav">
+      <button class="btn ghost sm" onclick="showChoice()">← Retour</button>
+      <div class="mt">Remplir le formulaire</div>
+    </div>
     <div class="md">Donne un nom à ton projet et choisis les sections à vider. Les agents restent intacts.</div>
     <label class="ml" for="mn">Nom du projet</label>
     <input class="mi" id="mn" type="text" placeholder="Ex: Offre Coaching IA — Maroc 2026">
@@ -225,6 +279,32 @@ textarea:focus{background:var(--goldbg)}
       <button class="btn gold" onclick="applyNew()">Créer le projet</button>
     </div>
   </div>
+
+  <!-- Screen 2b: Import -->
+  <div class="modal" id="sc-import" style="display:none">
+    <div class="sc-nav">
+      <button class="btn ghost sm" onclick="showChoice()">← Retour</button>
+      <div class="mt">Importer un Brief</div>
+    </div>
+    <div class="md">Les sections détectées dans ton fichier rempliront automatiquement le formulaire.</div>
+    <div class="drop-zone" id="dz"
+         onclick="document.getElementById('fi').click()"
+         ondragover="dzDrag(event,true)"
+         ondragleave="dzDrag(event,false)"
+         ondrop="dzDrop(event)">
+      <div class="dz-icon">⬆</div>
+      <div class="dz-main">Glisse ton fichier ici</div>
+      <div class="dz-sub">ou <span class="dz-link">clique pour choisir</span></div>
+      <div class="dz-types">.md — .pdf</div>
+    </div>
+    <input type="file" id="fi" accept=".md,.pdf,.txt" style="display:none"
+           onchange="handleFileInput(this)">
+    <div class="upload-status" id="ustatus" style="display:none"></div>
+    <div class="ma" style="margin-top:8px">
+      <button class="btn ghost" onclick="closeModal()">Annuler</button>
+    </div>
+  </div>
+
 </div>
 
 <div id="toasts"></div>
@@ -400,6 +480,23 @@ function copyCmd(){
 
 // ── Modal ─────────────────────────────────────────────────────
 function openModal(){
+  showChoice();
+  document.getElementById('modal').classList.add('open');
+}
+function closeModal(){
+  document.getElementById('modal').classList.remove('open');
+  const fi=document.getElementById('fi');if(fi)fi.value='';
+  setUStatus('','');
+}
+function showChoice(){
+  document.getElementById('sc-choice').style.display='';
+  document.getElementById('sc-manual').style.display='none';
+  document.getElementById('sc-import').style.display='none';
+}
+function showManual(){
+  document.getElementById('sc-choice').style.display='none';
+  document.getElementById('sc-manual').style.display='';
+  document.getElementById('sc-import').style.display='none';
   const g=document.getElementById('cg');
   g.innerHTML='';
   CLEAR.forEach(name=>{
@@ -416,10 +513,13 @@ function openModal(){
     g.appendChild(el);
   });
   document.getElementById('mn').value='';
-  document.getElementById('modal').classList.add('open');
   setTimeout(()=>document.getElementById('mn').focus(),100);
 }
-function closeModal(){document.getElementById('modal').classList.remove('open');}
+function showImport(){
+  document.getElementById('sc-choice').style.display='none';
+  document.getElementById('sc-manual').style.display='none';
+  document.getElementById('sc-import').style.display='';
+}
 function applyNew(){
   const name=document.getElementById('mn').value.trim();
   const checked=Array.from(document.querySelectorAll('#cg .ci.on')).map(el=>el.dataset.s);
@@ -430,6 +530,120 @@ function applyNew(){
   });
   dirty(); closeModal(); stats();
   toast('Nouveau projet prêt — sections vidées ✓','ok');
+}
+
+// ── File Import ───────────────────────────────────────────────
+function dzDrag(e,over){e.preventDefault();document.getElementById('dz').classList.toggle('over',over);}
+function dzDrop(e){e.preventDefault();document.getElementById('dz').classList.remove('over');const f=e.dataTransfer.files[0];if(f)processFile(f);}
+function handleFileInput(inp){if(inp.files&&inp.files[0])processFile(inp.files[0]);}
+function setUStatus(msg,type){
+  const el=document.getElementById('ustatus');
+  if(!msg){el.style.display='none';return;}
+  el.style.display='';
+  el.className='upload-status '+(type||'inf');
+  el.innerHTML=msg;
+}
+
+async function processFile(file){
+  const ext=file.name.split('.').pop().toLowerCase();
+  const rawTitle=file.name.replace(/\.[^/.]+$/,'').replace(/^[0-9a-f]+-/i,'').replace(/[_-]+/g,' ').replace(/\s{2,}/g,' ').trim();
+  setUStatus('Lecture en cours…','inf');
+  try{
+    if(ext==='md'||ext==='txt'){
+      const text=await readFileText(file);
+      const parsed=parseMDFile(text);
+      applyImported(parsed.sections,parsed.title||rawTitle);
+    }else if(ext==='pdf'){
+      const buf=await file.arrayBuffer();
+      const extracted=extractFromPDF(buf);
+      if(!extracted||extracted.length<50)throw new Error('Le texte du PDF n\'a pas pu être extrait. Essaie de sauvegarder le brief en <strong>.md</strong> puis importe ce fichier.');
+      const sections=parseSectionText(extracted);
+      const filled=Object.values(sections).filter(v=>v&&v.trim()).length;
+      if(filled===0)throw new Error('Aucune section reconnue dans ce PDF. Le fichier doit contenir des en-têtes comme <strong>AUDIENCE CIBLE</strong>, <strong>OBJECTIFS BUSINESS</strong>, etc.');
+      applyImported(sections,rawTitle);
+    }else{
+      throw new Error('Format non supporté. Utilise un fichier <strong>.md</strong> ou <strong>.pdf</strong>.');
+    }
+  }catch(err){setUStatus('❌ '+(err.message||String(err)),'err');}
+}
+
+function readFileText(file){
+  return new Promise((res,rej)=>{const r=new FileReader();r.onload=e=>res(e.target.result);r.onerror=rej;r.readAsText(file,'utf-8');});
+}
+
+function parseMDFile(text){
+  const lines=text.split('\n');let title='';const sections={};let cur=null,buf=[];
+  for(const line of lines){
+    if(line.startsWith('# ')&&!title){title=line.slice(2).trim();}
+    else if(line.startsWith('## ')){if(cur!==null)sections[cur]=buf.join('\n').trim();cur=line.slice(3).trim();buf=[];}
+    else if(cur!==null){buf.push(line);}
+  }
+  if(cur!==null)sections[cur]=buf.join('\n').trim();
+  return{title,sections};
+}
+
+function extractFromPDF(buf){
+  const bytes=new Uint8Array(buf);const parts=[];const chunkSize=32768;let raw='';
+  for(let i=0;i<bytes.length;i+=chunkSize){raw+=String.fromCharCode(...bytes.subarray(i,Math.min(i+chunkSize,bytes.length)));}
+  const btRe=/BT\b([\s\S]{1,3000}?)ET\b/g;let m;
+  while((m=btRe.exec(raw))!==null){
+    const block=m[1];const pr=/\(([^)\\]|\\[\s\S])*\)/g;let pm;
+    while((pm=pr.exec(block))!==null){
+      const t=pm[0].slice(1,-1).replace(/\\n/g,'\n').replace(/\\r/g,'\n').replace(/\\t/g,' ').replace(/\\\\/g,'\\').replace(/\\./g,'');
+      if(t.trim().length>0)parts.push(t);
+    }
+  }
+  const hexRe=/<FEFF([0-9A-Fa-f]{4,})>/g;let hm;
+  while((hm=hexRe.exec(raw))!==null){
+    const hex=hm[1];let dec='';
+    for(let i=0;i<hex.length-3;i+=4){const code=parseInt(hex.slice(i,i+4),16);if(code>0x20&&code<0xFFFD)dec+=String.fromCharCode(code);}
+    if(dec.trim())parts.push(dec);
+  }
+  if(parts.length<3){return raw.replace(/[^\x20-\x7EÀ-ÿ\n]/g,' ').replace(/ {4,}/g,'\n');}
+  return parts.join(' ');
+}
+
+const SECTION_PATTERNS=[
+  [/PROPOS\s+DE\s+L['’]ORGANISATION/i,'About MALI-MEC'],
+  [/AUDIENCE\s+CIBLE/i,'Target Audience'],
+  [/PROMESSE\s+CENTRALE/i,'Core Promise'],
+  [/OBJECTIFS?\s+BUSINESS/i,'Business Goals'],
+  [/[EÉ]COSYST[EÈ]ME\s+D['’]OFFRES/i,'Offer Ecosystem (Value Ladder)'],
+  [/STRAT[EÉ]GIE\s+DE\s+CONTENU/i,'Content Strategy'],
+  [/CONCEPT\s+VID[EÉ]O\s*[/\/]\s*CAMP/i,'Current Video / Campaign Concept'],
+  [/PHRASE\s+STRAT[EÉ]GIQUE/i,'Strategic Phrase'],
+  [/CONTRAINTES/i,'Constraints'],
+  [/PREUVES?\s+REQUISES?/i,'Proof Requirements']
+];
+
+function parseSectionText(text){
+  const positions=[];
+  for(const[pat,name]of SECTION_PATTERNS){
+    pat.lastIndex=0;const m=pat.exec(text);
+    if(m)positions.push({idx:m.index,end:m.index+m[0].length,name});
+  }
+  positions.sort((a,b)=>a.idx-b.idx);
+  const result={};const seen=new Set();
+  for(let i=0;i<positions.length;i++){
+    const{end,name}=positions[i];
+    if(seen.has(name))continue;seen.add(name);
+    const nextIdx=i+1<positions.length?positions[i+1].idx:text.length;
+    const content=text.slice(end,nextIdx).replace(/^\s*[:—\-]\s*/,'').trim();
+    if(content)result[name]=content;
+  }
+  return result;
+}
+
+function applyImported(sections,title){
+  if(title)document.getElementById('ttl').value=title;
+  let filled=0;
+  document.querySelectorAll('textarea').forEach(ta=>{
+    const v=sections[ta.dataset.n];
+    if(v!==undefined&&v!==''){ta.value=v;grow(ta);count(ta);filled++;}
+  });
+  dirty();stats();closeModal();
+  const n=filled===1?'1 section remplie':filled+' sections remplies';
+  toast((title?'"'+title.slice(0,30)+(title.length>30?'…':'')+'" importé — ':'')+n+' ✓','ok');
 }
 
 // ── Toast ─────────────────────────────────────────────────────
