@@ -1,157 +1,191 @@
 # Offer Architecture — MALI-MEC Revenue Agent System
 
-**Date :** 2026-07-28
-**Basé sur :** business-brief.md + 01-market-signal-brief.md
-**Market Signal Score :** 3.9 / 5.0 — Seuil minimal (3.5) dépassé. Aucun flag de risque requis.
+**Produced by:** Offer Architect Agent
+**Date:** 2026-07-28
+**Based on:** business-brief.md + 01-market-signal-brief.md (Agent 1 output)
+**Market signal score:** 3.9 / 5.0 — Green light with conditions. Score exceeds the 3.5 minimum threshold. No flag required. Credibility mitigation is embedded structurally in the offer design below.
 
 ---
 
-## 1. Audience Crystallization
+## Step 1 — Audience Crystallization
 
-### Douleur exacte — dans leur propre langage
+### Exact Pain Point — In Their Language
 
-> "J'ai essayé ChatGPT mais ça ne m'a pas rapporté d'argent."
-> "Je ne sais pas par où commencer."
-> "C'est quoi concrètement l'IA pour mon business ?"
-> "J'ai pas le temps d'apprendre tout ça."
-> "Comment je monétise ça ?"
+> "J'ai essayé ChatGPT mais ca ne m'a pas rapporte d'argent."
+> "J'ai besoin d'un systeme, pas juste une formation."
+> "Je ne sais pas par ou commencer — tous ces outils c'est trop."
+> "Est-ce que ca marche vraiment en Afrique ?"
+> "Comment je monetise ca ?"
 
-Ce client n'est pas ignorant. Il a déjà essayé. Il a installé des outils, suivi des tutoriels, lu des fils sur les prompts. Ce qui l'a laissé avec zéro revenu supplémentaire et un sentiment d'avoir gaspillé du temps sur quelque chose qui "ne marche pas pour lui." La douleur n'est pas le manque de connaissance — c'est la déconnexion visible entre l'effort investi et le revenu généré.
+This prospect is not a beginner. They have already tried. They installed tools, watched tutorials, followed prompt guides. What they were left with is zero incremental revenue and a clear sense that AI "does not work for them." The pain is not ignorance — it is the visible gap between effort invested and revenue generated. They are busy. They are not productive. They are tool-aware but architecture-blind.
 
-### Transformation recherchée
+### Transformation They Are Actively Seeking
 
-Ils ne cherchent pas à "comprendre l'IA." Ils cherchent à lancer cette semaine un système qui produit des leads qualifiés et les convertit en clients payants — sans recruter un développeur, sans apprendre à coder, sans passer des mois dans des formations théoriques. Ils veulent voir un résultat business reconnaissable sorti d'une séance de travail concrète : un lead magnet opérationnel, une offre validée, un système de contenu. Pas un plan. Un livrable.
+They are not seeking to "understand AI." They are seeking a machine they can plug their existing knowledge and services into and have it produce qualified clients — this week, without hiring a developer, without learning to code, without spending months in theoretical training programs. They want to see a recognizable business deliverable produced from a concrete working session: an operational lead magnet, a validated offer, a content pipeline. Not a plan. A deployed system.
 
-### 3 raisons structurelles pour lesquelles ils n'ont pas encore résolu le problème
+### Three Structural Reasons They Have Not Solved It Yet
 
-**Raison 1 — L'offre disponible ne parle pas leur langue (ni commercialement, ni culturellement)**
-Les ressources avancées sur l'IA pour le business sont quasi exclusivement en anglais, calibrées pour des marchés nord-américains ou européens occidentaux. Les quelques ressources francophones existantes reproduisent les mêmes tutoriels d'outils sans les ancrer dans les réalités des marchés africains ou MENA : contexte contractuel local, pouvoir d'achat, cycles de décision à confiance élevée, canaux de distribution spécifiques. Le problème n'est pas la langue de surface — c'est le mapping business qui est absent.
+**Reason 1 — Available content does not speak their language, commercially or culturally.**
+Advanced AI-for-business content is nearly entirely in English and is calibrated for North American or Western European market conditions. The few francophone resources that exist reproduce the same tool tutorials without anchoring them in African or MENA business realities: local contractual context, purchasing power, high-trust decision cycles, specific distribution channels. The gap is not the surface language — it is the absent business mapping.
 
-**Raison 2 — Le marché les a conditionnés à chercher plus d'outils, pas une architecture**
-Chaque newsletter, chaque influenceur IA, chaque "top 10 outils" les a entraînés à croire que la solution est un outil supplémentaire. Ils ont donc accumulé des abonnements (ChatGPT, Midjourney, Notion AI, etc.) sans jamais construire la structure qui relie ces outils à un parcours client et à un revenu. Ils ont des pièces de puzzle sans la boîte qui montre l'image finale. Ce comportement est rationnel étant donné ce que le marché leur a vendu.
+**Reason 2 — The market trained them to seek more tools, not an architecture.**
+Every newsletter, every AI influencer, every "top 10 tools" thread conditioned them to believe the solution is one more tool. They accumulated subscriptions — ChatGPT, Notion AI, automated tools — without ever building the structure that connects those tools to a client journey and a transaction. They have puzzle pieces without the box that shows the final image. This behavior is rational given what the market sold them.
 
-**Raison 3 — La boucle feedback entre effort IA et revenu est invisible**
-Ils ne savent pas à quoi ressemble "ça marche." Aucun acteur de leur marché n'a montré en temps réel, de façon vérifiable, un système IA complet — entrée, traitement, sortie business déployable. Sans cette référence, ils ne peuvent pas diagnostiquer pourquoi leur tentative a échoué ni savoir quelle direction prendre. Le manque n'est pas motivationnel, il est architectural et visuel.
+**Reason 3 — The feedback loop between AI effort and revenue is invisible.**
+They do not know what "it is working" looks like. No actor in their market has shown, in real time and in verifiable form, a complete AI pipeline — input, processing, deployable business output. Without that reference point, they cannot diagnose why their attempt failed or know which direction to take. The deficit is not motivational. It is architectural and visual.
 
 ---
 
-## 2. Positioning Statement
+## Step 2 — Positioning Statement
 
-> **"J'aide les entrepreneurs, coaches et consultants francophones à construire un système de génération de revenus sur mesure — sans recruter une équipe technique et sans passer des mois à apprendre à coder — grâce à l'Architecture Revenue à 4 Agents."**
+```
+J'aide les entrepreneurs, coaches, consultants et formateurs francophones
+a construire un systeme IA qui genere des leads qualifies
+et des revenus mesurables, chaque semaine,
+sans ecrire une ligne de code et sans dependre d'une equipe technique,
+grace a l'Architecture Revenue a 4 Agents (AR4A).
+```
 
-### Scores d'évaluation
+### Evaluation Scores
 
-| Dimension | Score | Justification |
+| Criterion | Score | Justification |
 |-----------|-------|---------------|
-| **Audience specificity** | 4/5 | "Entrepreneurs, coaches, consultants francophones" est auto-identifiable et nommé. Un demi-point de marge existe en précisant le stade de revenu, mais ce n'est pas requis pour le positionnement de lancement. |
-| **Outcome concreteness** | 4/5 | "Système de génération de revenus" est mesurable en principe. La phrase ne quantifie pas encore un délai ou un volume — ces précisions appartiennent à l'offre, pas au positionnement. |
-| **Fear accuracy** | 5/5 | "Sans recruter une équipe technique ni passer des mois à apprendre à coder" capture exactement les deux peurs primaires identifiées dans le brief marché : dépendance technique et durée d'apprentissage. |
-| **Mechanism credibility** | 4/5 | "Architecture Revenue à 4 Agents" est nommé, spécifique, et directement lié à l'infrastructure existante de MALI-MEC. La crédibilité atteindra 5/5 une fois le run coordinateur visible publiquement. |
+| Audience specificity | 4.5/5 | "Entrepreneurs, coaches, consultants, formateurs francophones" is self-identifying, bounded, and excludes technical specialists, large enterprises, and pure beginners with no existing offer. |
+| Outcome concreteness | 4/5 | "Leads qualifies et revenus mesurables, chaque semaine" is verifiable in principle. The statement does not yet quantify a specific volume or a conversion number — those belong in the offer, not in the positioning statement. |
+| Fear accuracy | 5/5 | "Sans ecrire une ligne de code et sans dependre d'une equipe technique" names both documented primary fears precisely: technical complexity and team/budget dependency. Both are sourced verbatim from the market signal brief. |
+| Mechanism credibility | 4/5 | "Architecture Revenue a 4 Agents (AR4A)" is named, specific, and directly tied to MALI-MEC's working multi-agent infrastructure. Credibility reaches 5/5 once a complete coordinator run is publicly visible. |
 
-**Score composite : 4.25 / 5 — Pas de réécriture requise.**
+**Composite score: 4.4 / 5.0 — No rewrite required. Statement is approved.**
 
 ---
 
-## 3. Core Offer
+## Step 3 — Core Offer Design
 
-| Élément | Description |
+### Primary Revenue Offer
+
+| Element | Description |
 |---------|-------------|
-| **Nom** | Programme Intensif AR4A — "Votre Système à 4 Agents, Opérationnel en 3 Jours" |
-| **Format** | Programme live en ligne — 3 sessions de 2h30 sur 3 jours consécutifs |
-| **Durée** | 3 jours / 7h30 de live + accès asynchrone aux replays et aux fichiers agents |
-| **Prix indicatif** | 280–450 EUR (175 000 – 280 000 XAF) — justification ci-dessous |
-| **Transformation** | Avant : entrepreneur avec des outils épars, zéro système, zéro pipeline. Après : pipeline AR4A fonctionnel produisant signal de marché validé, architecture d'offre, stratégie de contenu YouTube, et lead magnet déployable en une seule session de travail. |
-| **Mode de livraison** | Live Zoom avec partage d'écran + exécution guidée par participant + dossier de fichiers agents remis à J+1 |
-| **Capacité** | 20 participants maximum par cohorte — plafond imposé par la qualité du suivi live et la bande passante de troubleshooting en temps réel |
+| **Name** | Programme Intensif AR4A — "Votre Systeme a 4 Agents, Operationnel en 3 Jours" |
+| **Format** | Live online programme — 3 sessions of 2h30 over 3 consecutive days |
+| **Duration** | 3 days / 7h30 live + async access to replays and agent files for 60 days |
+| **Price Point** | 280–450 EUR / 184,000–295,000 XAF. Justification: the target segment — coaches, consultants, trainers — regularly pays 200–500 EUR for high-level professional training. The lower bound (280 EUR) is consistent with 3-day intensive programs in the francophone market. The upper bound (450 EUR) applies to cohorts that include post-programme support. The range sits deliberately below the 500 EUR psychological threshold to reduce first-purchase friction with a new MALI-MEC audience. |
+| **Transformation** | BEFORE: Entrepreneur with scattered tools, no system, and no qualified lead pipeline. AFTER: A working AR4A pipeline configured on their specific business, producing a validated offer, a 90-day YouTube content strategy, and a deployable lead magnet — within a single working session. |
+| **Delivery** | Live Zoom with shared screen + guided execution by each participant + agent files delivered at Day 2 + async Notion workspace for resources and feedback |
+| **Capacity** | 20 participants maximum per cohort. Ceiling enforced by live troubleshooting bandwidth and quality of individualized feedback during sessions. |
 
-**Justification du prix :** Le segment cible — coaches, consultants, formateurs — est habitué à payer 200–500 EUR pour des formations professionnelles de haut niveau. La borne basse (280 EUR) est cohérente avec les programmes intensifs de 3 jours dans le marché francophone. La borne haute (450 EUR) est réservée aux cohortes incluant un accompagnement post-programme. Le prix est volontairement sous le seuil psychologique de 500 EUR pour réduire la friction d'achat sur le premier engagement payant avec MALI-MEC.
+### Secondary Entry Offer
+
+| Element | Description |
+|---------|-------------|
+| **Name** | Atelier Decouverte AR4A — "Votre Premier Pipeline en 2 Heures" |
+| **Format** | Live online workshop, demonstration + guided execution |
+| **Duration** | 2 hours |
+| **Price Point** | 35–55 EUR / 23,000–36,000 XAF. Eliminates financial risk for first-time buyers. Creates an experienced first cohort for upsell into the full programme. |
+| **Transformation** | BEFORE: Entrepreneur with no AI system. AFTER: Their first AR4A pipeline executed on their real business, with one concrete output — a market brief and a first offer structure — produced during the session. |
+| **Delivery** | Live Zoom, workshop format. Each participant works on their own real business during the session. |
+| **Capacity** | 30 participants maximum. |
 
 ---
 
-## 4. Unique Mechanism
+## Step 4 — Unique Mechanism
 
-**Nom :** Architecture Revenue à 4 Agents (AR4A)
+**Name:** AR4A — Architecture Revenue a 4 Agents
 
-**Description :** AR4A est un pipeline de quatre agents IA spécialisés (instances Claude Code), chacun affecté à une fonction revenue distincte — signal de marché, architecture d'offre, stratégie de contenu, génération et conversion de leads. Les agents ne travaillent pas en parallèle : la sortie de chaque agent devient l'entrée structurée du suivant. Ce protocole de passage de brief inter-agents crée un effet cascade où chaque couche est calibrée sur les conclusions de la précédente. Le résultat final n'est pas une réponse générique — c'est un système de revenus cohérent, spécifique au business du client, produit en une session de travail.
+**Description:** AR4A is a pipeline of four specialized AI agents (Claude Code instances), each assigned to a distinct revenue function: market signal validation, offer architecture, content strategy, and lead generation and conversion. The agents do not operate in parallel. The output of each agent becomes the structured input brief of the next. This inter-agent brief handoff protocol creates a cascade effect where each layer is calibrated against the conclusions of the previous one. The final output is not a generic AI response — it is a commercially coherent revenue system, specific to the client's business, produced in a single working session.
 
-**Pourquoi les concurrents ne peuvent pas le copier facilement :** Le mécanisme n'est pas "utiliser Claude Code." C'est l'architecture de brief inter-agents — les formats de sortie normalisés, les règles d'injection d'une sortie dans le brief suivant, les gardes-fous qui empêchent la dérive générique entre agents. Cette infrastructure prompt-brief-output a été construite et testée dans le contexte spécifique des marchés francophones africains et MENA. Un concurrent peut reproduire le concept en 48 heures. Il lui faudra des mois pour reproduire la calibration.
+**Why competitors cannot easily replicate it:** The mechanism is not "using Claude Code." It is the inter-agent brief architecture — the normalized output formats, the rules for injecting one agent's output as the next agent's input context, and the guardrails that prevent generic drift between agents. This prompt-brief-output infrastructure was built and calibrated specifically for francophone African and MENA market conditions. A competitor can reproduce the concept in 48 hours. Reproducing the calibration takes months and requires the same operational testing MALI-MEC has already done.
 
-**Comment le démontrer en 15 minutes — scénario minute par minute :**
+**How to demonstrate in 15 minutes — minute-by-minute:**
 
-| Minute | Action visible sur écran |
+| Minute | What is visible on screen |
 |--------|--------------------------|
-| 0:00 – 1:00 | Énoncé public d'un vrai problème business en direct : "Je lance un programme de coaching pour jeunes entrepreneurs à Dakar. Prouve-moi que ce système marche." |
-| 1:00 – 2:30 | Lancement Agent 1 (Market Signal Researcher). Brief injecté visible à l'écran. Sortie visible en temps réel : score d'opportunité, 7 dimensions scorées, langage de l'audience, recommandation stratégique. |
-| 2:30 – 4:30 | Lancement Agent 2 (Offer Architect). Brief = sortie Agent 1. Sortie visible : positionnement formulé, tableau d'offre core, mécanisme unique nommé, value ladder structuré. |
-| 4:30 – 6:30 | Lancement Agent 3 (Content Strategist). Brief = sorties Agents 1 + 2. Sortie visible : 5 angles de contenu YouTube calibrés, titres testés contre les critères de clic, scripts d'ouverture. |
-| 6:30 – 8:30 | Lancement Agent 4 (Conversion System). Brief = sorties Agents 1 + 2 + 3. Sortie visible : lead magnet structuré prêt à déployer, séquence email de nurture, scripts d'appel à l'action. |
-| 8:30 – 10:30 | Lecture rapide des 4 fichiers de sortie côte à côte. Commentaire voix : "Quatre livrables business, un problème réel, 8 minutes de traitement. Voilà ce que signifie un système." |
-| 10:30 – 13:00 | Chemin revenue rendu visible : comment ce pipeline devient une inscription au programme, une proposition de consulting, ou un téléchargement de lead magnet. |
-| 13:00 – 15:00 | Call to action unique et direct : "Téléchargez le Revenue Agent Template — lien en description. Si vous voulez l'implémenter avec moi en 3 jours, le Programme Intensif AR4A est ouvert à 20 places." |
+| 0:00 – 1:00 | A real business problem stated live: "I am launching a coaching programme for young entrepreneurs in Dakar. Show me the system working." Business brief visible on screen. |
+| 1:00 – 3:00 | Agent 1 (Market Signal Researcher) launched. Brief injected. Output produced in real time: opportunity score, 7 scored dimensions, audience language, strategic recommendation. |
+| 3:00 – 5:30 | Agent 2 (Offer Architect) launched. Input = Agent 1 output. Output visible: positioning statement, core offer table, named unique mechanism, structured value ladder. |
+| 5:30 – 8:00 | Agent 3 (Content Strategist) launched. Input = Agents 1 + 2 outputs. Output visible: 5 YouTube content angles, titles tested against click criteria, opening scripts. |
+| 8:00 – 10:30 | Agent 4 (Conversion System) launched. Input = Agents 1 + 2 + 3 outputs. Output visible: structured lead magnet ready to deploy, email nurture sequence, call-to-action scripts. |
+| 10:30 – 12:30 | All four output files displayed side by side. Voiceover: "Four business deliverables, one real problem, under 10 minutes of processing. That is what a system means." |
+| 12:30 – 14:00 | Revenue path made explicit on screen: this pipeline produces a workshop enrollment, a consulting proposal, and a lead magnet download — each connected to a transaction. |
+| 14:00 – 15:00 | Single direct call to action: "Download the Revenue Agent Template — link in description. To implement this with me in 3 days, the AR4A Intensive Programme has 20 seats." |
 
 ---
 
-## 5. Value Ladder
+## Step 5 — Value Ladder
 
-| Niveau | Nom | Type | Plateforme | Prix | Transformation délivrée |
-|--------|-----|------|------------|------|-------------------------|
-| **1 — Gratuit** | "Si Vous Voulez Vous Enrichir Avec l'IA, Construisez Ce Système à 4 Agents" | Vidéo YouTube | YouTube | Gratuit | Le spectateur comprend pourquoi les outils seuls ne génèrent pas de revenus, et voit AR4A fonctionner sur un cas réel en 15 minutes. |
-| **2 — Lead Magnet** | Revenue Agent Template | Dossier téléchargeable (email-gated) | Page de capture / lien description YouTube | Gratuit (email requis) | Le lead reçoit les fichiers agents pré-configurés, les formats de brief inter-agents, et un guide de démarrage immédiat. Valeur perçue équivalente : ~150 EUR. |
-| **3 — Entrée payante** | Atelier Découverte AR4A | Session live 2h | Zoom / Techiftiin | 35 – 55 EUR (20 000 – 35 000 XAF) | Le participant exécute son premier pipeline AR4A complet sur son propre business avec support live. Sortie concrète : brief marché + première version d'offre personnalisée. |
-| **4 — Offre core** | Programme Intensif AR4A — "Votre Système à 4 Agents, Opérationnel en 3 Jours" | Programme live 3 jours | Zoom / Techiftiin | 280 – 450 EUR (175 000 – 280 000 XAF) | Pipeline AR4A complet et opérationnel : lead magnet déployable, offre validée, stratégie YouTube de 90 jours, séquence de conversion active. |
-| **5 — Premium / Institutionnel** | Déploiement AR4A — Accompagnement MEC Advisory | Engagement consulting 90 jours | Sur mesure (distanciel + présentiel possible) | 2 500 – 5 000 EUR / engagement (1 500 000 – 3 000 000 XAF) | AR4A intégré dans l'opération business du client : systèmes de lead generation actifs, reporting mensuel, ajustements d'agents, formation de l'équipe interne. |
+| Level | Name | Format | Platform | Price (EUR) | Price (XAF) | Transformation Delivered |
+|-------|------|--------|----------|-------------|-------------|--------------------------|
+| 1 — FREE | "Si Vous Voulez Vous Enrichir Avec l'IA, Construisez Ce Systeme a 4 Agents" | YouTube video under 15 min + LinkedIn + Instagram clips | YouTube (primary) | 0 | 0 | The viewer understands why tools alone produce no revenue, and sees AR4A running on a real business case in real time. Credibility is established by visible output, not claims. |
+| 2 — LEAD MAGNET | Revenue Agent Template AR4A | Downloadable folder (email-gated): pre-configured agent files + inter-agent brief formats + activation guide | Landing page / YouTube description link | 0 (perceived value: ~150 EUR) | 0 (perceived value: ~98,000 XAF) | The lead receives the complete AR4A file structure, can attempt a first run before any purchase. Converts passive viewers into active prospects with demonstrated intent. |
+| 3 — ENTRY OFFER | Atelier Decouverte AR4A — "Votre Premier Pipeline en 2 Heures" | Live online workshop, 2 hours | Zoom / Techiftiin | 35–55 EUR | 23,000–36,000 XAF | The participant executes their first complete AR4A pipeline on their own real business with live support. Concrete output produced during the session: market brief + first offer structure. |
+| 4 — CORE OFFER | Programme Intensif AR4A — "Votre Systeme a 4 Agents, Operationnel en 3 Jours" | Live programme, 3 days, async follow-up | Zoom / Techiftiin | 280–450 EUR | 184,000–295,000 XAF | Complete and operational AR4A pipeline: deployable lead magnet, validated offer, 90-day YouTube strategy, active conversion sequence — all configured on the buyer's specific business. |
+| 5 — PREMIUM / INSTITUTIONAL | Deploiement AR4A — Accompagnement MEC Advisory | 90-day consulting engagement: custom deployment, monthly reporting, agent optimization, internal team training | Custom (remote + on-site possible) | 2,500–5,000 EUR per engagement | 1,640,000–3,280,000 XAF per engagement | AR4A integrated into the client's business operations: active lead generation systems, monthly performance reporting, agent adjustments, trained internal team. Buyer profile: established consulting firms, institutional training providers, B2B organizations in francophone Africa and MENA. |
 
----
-
-## 6. Proof Requirements
-
-| Claim | Type de preuve nécessaire | Standard minimum acceptable |
-|-------|--------------------------|----------------------------|
-| "Le système génère des leads qualifiés" | Capture d'une page de téléchargement avec compteur de signups OU liste email montrant des inscriptions réelles datées | Au moins 50 leads documentés avant la première vente de programme |
-| "Vous n'avez pas besoin de coder" | Démonstration live d'un utilisateur non-technique exécutant les agents via brief structuré uniquement — aucune ligne de code visible | Une session complète filmée ou streamée sans intervention technique de MALI-MEC |
-| "Le système est opérationnel en moins de 24h" | Run coordinateur horodaté de A à Z, fichiers de sortie datés et visibles à l'écran | 4 fichiers de sortie produits dans une fenêtre de 4 heures à partir d'un brief fourni à J0 |
-| "AR4A fonctionne pour le marché francophone" | Sorties d'agents intégralement en français, avec pricing local, canaux locaux (WhatsApp Business, réseaux francophones), et contexte business africain/MENA | Au moins 2 runs complets sur des briefs d'entreprises francophones réelles |
-| "MALI-MEC l'utilise dans ses propres opérations" | Le fichier 01-market-signal-brief.md est la sortie d'Agent 1. Ce document est la sortie d'Agent 2. Afficher le dossier outputs/ en temps réel avec les fichiers datés | Dossier outputs/ visible à l'écran avec les fichiers correspondant à la campagne actuelle |
-| "La formation est applicable immédiatement" | Témoignage d'un participant de l'Atelier Découverte montrant sa sortie AR4A personnelle produite pendant la session | 3 témoignages avec captures de sorties réelles, avant la promotion du Programme Intensif |
+**Note on XAF conversion:** Rate applied: 1 EUR = 655.96 XAF (fixed CFA franc zone rate). Rounded to nearest 1,000 XAF for commercial readability.
 
 ---
 
-## 7. Objection Map
+## Step 6 — Proof Requirements
 
-| Objection | Peur racine | Réponse directe | Élément de preuve |
-|-----------|-------------|-----------------|-------------------|
-| "Je ne suis pas développeur — c'est pas pour moi." | Peur de l'exclusion technique. Croyance que l'IA avancée est réservée à ceux qui savent coder. | AR4A fonctionne par briefs écrits, pas par code. Si vous pouvez décrire votre business en trois paragraphes, vous pouvez exécuter ce système. Le Programme Intensif démarre par la rédaction du brief — aucun outil de développement n'est ouvert pendant toute la session. | Démo live minutes 1 à 8 de la vidéo YouTube : aucun éditeur de code, aucun terminal visible — uniquement des briefs en texte et des sorties lisibles en français. |
-| "ChatGPT fait déjà ça — pourquoi payer ?" | Peur de payer pour quelque chose déjà accessible gratuitement. Dévaluation du mécanisme par analogie avec un outil connu. | ChatGPT répond à des questions. AR4A exécute une séquence : la sortie de chaque agent est le brief de l'agent suivant. Demandez à ChatGPT de produire simultanément un signal de marché calibré, une architecture d'offre, 5 angles YouTube et un lead magnet cohérents entre eux en 8 minutes. Le résultat sera générique. AR4A est une chaîne de production, pas un générateur de texte. | Deux runs côte à côte sur le même brief : une conversation ChatGPT standard, un pipeline AR4A complet. Comparer la cohérence et la spécificité des sorties. |
-| "Les résultats seront trop génériques pour mon business." | Peur du gaspillage d'argent sur un livrable inutilisable. Expérience passée négative avec des formations IA standardisées. | La qualité de la sortie est proportionnelle à la qualité du brief d'entrée. Le Programme Intensif commence par 45 minutes de construction de brief personnalisé avec le groupe. Deux participants avec deux briefs différents obtiennent deux systèmes entièrement différents. | Deux fichiers de sortie produits côte à côte : un pour un coach business à Abidjan, un pour un formateur en finance islamique à Casablanca. Les sorties sont structurellement distinctes. |
-| "C'est trop complexe à mettre en place — je vais me bloquer." | Peur de l'échec personnel dans un contexte technologique. Historique d'abandon sur des outils précédents. | Le Programme Intensif livre les fichiers agents pré-configurés. La seule variable que vous contrôlez est le brief business — que vous rédigez avec le groupe en session 1. La configuration technique est faite en amont par MALI-MEC. Vous arrivez, vous rédigez, vous exécutez. | Checklist de démarrage visible dans le lead magnet : "Si vous pouvez faire ces 3 choses, vous êtes prêt." Aucune des 3 choses ne nécessite une compétence technique. |
-| "Comment est-ce que ça génère réellement des revenus ?" | Peur d'investir dans un outil sans ROI visible. Confusion entre la production du système et la production du revenu. | AR4A ne génère pas de revenus directement — il produit les livrables qui permettent de vendre : lead magnet déployable, offre validée, pipeline de contenu actif. Le revenu vient de leur déploiement. La vidéo YouTube est elle-même construite sur AR4A — si elle génère des leads pour MALI-MEC en temps réel, c'est la démonstration que le système fonctionne dans la vraie vie. | Chemin de conversion rendu explicite à l'écran : vidéo → téléchargement lead magnet → inscription atelier → programme intensif → consulting. Chaque étape chiffrée, même de façon indicative. |
-
----
-
-## 8. Revenue Model Estimate — 90 jours
-
-**Hypothèses de base :** Une vidéo YouTube principale publiée à J0, relayée sur LinkedIn et Instagram. Lead magnet en ligne dès J0. Atelier Découverte ouvert à J+15. Programme Intensif première cohorte à J+30. Aucune publicité payante dans le scénario conservateur.
-
-| Métrique | Conservateur | Modéré | Optimiste |
-|----------|:-----------:|:------:|:---------:|
-| Vues vidéo (30 premiers jours) | 1 500 | 6 000 | 20 000 |
-| Téléchargements lead magnet | 90 (6% des vues) | 420 (7%) | 1 600 (8%) |
-| Participants Atelier Découverte (45 EUR) | 8 | 30 | 90 |
-| Revenus Atelier | 360 EUR | 1 350 EUR | 4 050 EUR |
-| Participants Programme Intensif (350 EUR) | 6 | 22 | 60 |
-| Revenus Programme | 2 100 EUR | 7 700 EUR | 21 000 EUR |
-| Engagements MEC Advisory (3 500 EUR) | 1 | 3 | 8 |
-| Revenus Consulting | 3 500 EUR | 10 500 EUR | 28 000 EUR |
-| **TOTAL REVENUS ESTIMÉS (90 jours)** | **~5 960 EUR** | **~19 550 EUR** | **~53 050 EUR** |
-
-**AVERTISSEMENT OBLIGATOIRE :** Tous les chiffres ci-dessus sont des estimations illustratives fondées sur des ratios de conversion standards pour ce type de funnel en marché francophone. Ils ne constituent pas des projections financières garanties, des engagements contractuels, ni des résultats typiques. Les performances réelles dépendent de la qualité d'exécution du contenu, de la taille et de l'engagement de l'audience existante de MALI-MEC au moment de la publication, du timing, et de facteurs de marché externes non prévisibles. Ne pas présenter ces chiffres à des partenaires ou investisseurs sans ce disclaimer.
+| Claim | Proof Required | Minimum Standard |
+|-------|---------------|-----------------|
+| "AR4A produces a complete business strategy in under 15 minutes" | YouTube video showing the full pipeline run in real time, unaccelerated, with visible timestamps | One complete uncut video ending under 15 minutes with all four output files displayed simultaneously on screen |
+| "No technical skill required" | Live demonstration using exclusively natural language inputs — no code written or terminal opened by the presenter during the main demonstration | Zero lines of code typed by the host during the primary demonstration sequence |
+| "The system is reconfigurable for any offer or market" | Two separate runs using two structurally different business briefs, producing demonstrably distinct outputs | Two published outputs — one for a coaching business, one for a training or consulting business — with visibly different positioning, offers, and content angles |
+| "Adapted to francophone African and MENA markets" | Agent outputs entirely in French, with local pricing (XAF), local channels (WhatsApp Business, francophone platforms), and African or MENA business context | At least one complete run using a business brief anchored in a specifically African or MENA context — named city, named market, named audience |
+| "MALI-MEC uses this system in its own operations" | The file 01-market-signal-brief.md is the output of Agent 1. This document is the output of Agent 2. Showing the outputs/ folder live on screen with dated files is direct proof | The outputs/ folder visible on screen with files corresponding to the current campaign, dates and filenames readable |
+| "Training is immediately applicable" | Participant testimony from the Discovery Workshop showing their personal AR4A output produced during the session | Three testimonials with real output screenshots before any promotion of the Intensive Programme |
 
 ---
 
-## Résumé exécutif
+## Step 7 — Objection Map
 
-Le marché a un problème d'architecture, pas un problème d'outils. MALI-MEC possède la solution et — fait rare — possède également la démonstration en temps réel de cette solution. Le pipeline AR4A ne se vend pas : il se montre. Chaque vidéo, chaque session live, chaque fichier de sortie publié EST la preuve de la promesse commerciale.
+| Objection | Root Fear | Response | Proof Element |
+|-----------|-----------|----------|---------------|
+| "Je ne suis pas developpeur — ce n'est pas pour moi." | Fear of technical exclusion. The belief that advanced AI is reserved for those who can code. | AR4A runs on written briefs, not code. If you can describe your business in three paragraphs, you can execute this system. The Intensive Programme opens with brief writing — no development tool is opened during any session. | The live demonstration, minutes 1 through 10 of the YouTube video: no code editor, no terminal, no command line. Only text briefs and readable French-language outputs. |
+| "ChatGPT fait deja ca — pourquoi payer ?" | Fear of paying for something already accessible for free. Devaluation of the mechanism by analogy with a known tool. | ChatGPT answers questions. AR4A executes a sequence: each agent's output becomes the next agent's brief. Ask ChatGPT to simultaneously produce a calibrated market signal, an offer architecture, five YouTube angles, and a coherent lead magnet in 8 minutes. The output will be generic. AR4A is a production chain, not a text generator. | Two runs side by side on the same brief: one standard ChatGPT conversation, one complete AR4A pipeline. Compare specificity, commercial coherence, and immediate deployability of the outputs. |
+| "Les resultats seront trop generiques pour mon business." | Fear of wasting money on an unusable deliverable. Prior negative experience with standardized AI training. | Output quality is proportional to brief quality. The Intensive Programme opens with 45 minutes of guided brief construction with the group. Two participants with two different briefs receive two entirely different systems. | Two output files produced side by side: one for a business coach in Abidjan, one for an Islamic finance trainer in Casablanca. The outputs are structurally and commercially distinct. |
+| "C'est trop complexe a mettre en place — je vais me bloquer." | Fear of personal failure in a technical context. History of abandonment with previous tools. | The Intensive Programme delivers pre-configured agent files. The only variable you control is the business brief — which you write with the group in Session 1. Technical configuration is handled in advance by MALI-MEC. You arrive, you write, you execute. | Activation checklist visible in the lead magnet: "If you can do these 3 things, you are ready." None of the 3 things requires any technical skill. |
+| "Comment est-ce que ca genere reellement des revenus ?" | Fear of investing in a system without visible ROI. Confusion between producing the system and producing the revenue. | AR4A does not generate revenue directly — it produces the deliverables that make selling possible: a deployable lead magnet, a validated offer, an active content pipeline. Revenue comes from deploying those deliverables. The YouTube video built on AR4A is itself the demonstration: if it generates leads for MALI-MEC in real time, the system is proven in live conditions. | The full conversion path made explicit on screen: video → lead magnet download → workshop registration → intensive programme → consulting. Each step linked to a named revenue event, even if stated as illustrative. |
 
-La priorité immédiate avant diffusion : rendre cette preuve visible avant que le contenu soit distribué. Un run coordinateur complet, horodaté, sauvegardé dans le dossier outputs/, montrable en 90 secondes d'écran. Cette action unique fait passer la crédibilité de condition à certitude.
+---
 
-**Prochaine action requise :** Transmettre ce document à l'agent Content Angle Strategist avec instruction de construire les angles de contenu autour de l'argument économique identifié dans le brief marché — "Les autres parlent d'IA. Ce système la facture."
+## Step 8 — Revenue Model Estimate (90 Days)
+
+**Base assumptions:** One primary YouTube video published at Day 0, distributed on LinkedIn and Instagram. Lead magnet live at Day 0. Discovery Workshop open at Day +15. First Intensive Programme cohort at Day +30. No paid advertising in the conservative scenario.
+
+**ALL FIGURES ARE ILLUSTRATIVE ESTIMATES. They are based on standard conversion ratios for this funnel type in francophone digital markets. They do not constitute financial projections, contractual commitments, or typical results. Real performance depends on content execution quality, the size and engagement of MALI-MEC's existing audience at the time of publication, platform algorithmic distribution, and external market variables that are not predictable. These figures must not be presented to partners or investors without this disclaimer.**
+
+| Metric | Conservative | Moderate | Optimistic |
+|--------|:-----------:|:--------:|:----------:|
+| Video views (first 30 days) | 1,500 | 6,000 | 20,000 |
+| Video views (90-day cumulative) | 4,000 | 16,000 | 50,000 |
+| Lead magnet downloads | 90 (6% of views) | 420 (7%) | 1,600 (8%) |
+| Discovery Workshop attendees (45 EUR avg) | 8 | 30 | 90 |
+| Workshop revenue | 360 EUR | 1,350 EUR | 4,050 EUR |
+| Intensive Programme participants (350 EUR avg) | 6 | 22 | 60 |
+| Programme revenue | 2,100 EUR | 7,700 EUR | 21,000 EUR |
+| MEC Advisory engagements (3,500 EUR avg) | 1 | 3 | 8 |
+| Consulting revenue | 3,500 EUR | 10,500 EUR | 28,000 EUR |
+| **TOTAL ESTIMATED REVENUE (90 days)** | **~5,960 EUR** | **~19,550 EUR** | **~53,050 EUR** |
+
+### Conditions Required to Reach the Moderate Scenario
+
+- Minimum 2 YouTube videos published within the first 30 days
+- Lead magnet active and accessible from the video description from Day 0 of publication
+- Workshop registration page and payment system operational before first promotion
+- One complete real AR4A coordinator run published as a proof artifact before the main video is filmed
+- At least one social media distribution effort per week (LinkedIn post, Instagram reel using video clips)
+
+---
+
+## Executive Summary
+
+The market has an architecture problem, not a tools problem. MALI-MEC possesses the solution and — which is rare — also possesses a live demonstration of that solution. The AR4A pipeline does not need to be sold: it needs to be shown. Every video, every live session, every published output file IS the proof of the commercial promise.
+
+The single highest-priority action before any content is distributed: make that proof visible before the content reaches its audience. One complete coordinator run, timestamped, saved in the outputs/ folder, showable in 90 seconds of screen time. This single action moves credibility from a conditional strength to a certainty — and closes the gap between the current 3.9 market signal score and a full 4.0+ clearance.
+
+**Next required action:** Transmit this document to the Content Angle Strategist agent with instruction to build content angles around the economic argument identified in the market signal brief: "Les autres parlent d'IA. Ce systeme la facture."
+
+---
+
+OFFER_POSITIONING_SCORE: 4.1
