@@ -1,0 +1,978 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MALI-MEC — Revenue Agent System</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0f1117;
+    --surface: #1a1d27;
+    --surface2: #22263a;
+    --border: #2e3350;
+    --accent: #4f6ef7;
+    --accent2: #7c3aed;
+    --success: #22c55e;
+    --warning: #f59e0b;
+    --danger: #ef4444;
+    --text: #e2e8f0;
+    --muted: #64748b;
+    --hint: #94a3b8;
+    --radius: 10px;
+    --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --mono: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
+  }
+
+  body {
+    font-family: var(--font);
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  /* HEADER */
+  header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(15, 17, 23, 0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 28px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .logo-mark {
+    width: 32px;
+    height: 32px;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 13px;
+    color: #fff;
+    letter-spacing: -0.5px;
+  }
+
+  .logo-text {
+    font-weight: 700;
+    font-size: 15px;
+    color: var(--text);
+    letter-spacing: 0.3px;
+  }
+
+  .logo-sub {
+    font-size: 11px;
+    color: var(--muted);
+    font-weight: 400;
+  }
+
+  .header-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  /* BUTTONS */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 16px;
+    border-radius: 7px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    border: 1px solid transparent;
+    transition: all 0.15s;
+    font-family: var(--font);
+    text-decoration: none;
+  }
+
+  .btn:active { transform: scale(0.97); }
+
+  .btn-primary {
+    background: var(--accent);
+    color: #fff;
+    border-color: var(--accent);
+  }
+  .btn-primary:hover { background: #3d5ae0; border-color: #3d5ae0; }
+
+  .btn-ghost {
+    background: transparent;
+    color: var(--hint);
+    border-color: var(--border);
+  }
+  .btn-ghost:hover { background: var(--surface2); color: var(--text); }
+
+  .btn-danger {
+    background: transparent;
+    color: var(--danger);
+    border-color: rgba(239,68,68,0.3);
+  }
+  .btn-danger:hover { background: rgba(239,68,68,0.1); }
+
+  .btn-sm {
+    padding: 4px 10px;
+    font-size: 12px;
+  }
+
+  .btn-icon {
+    padding: 7px 9px;
+  }
+
+  /* LAYOUT */
+  .layout {
+    display: grid;
+    grid-template-columns: 1fr 340px;
+    gap: 24px;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 28px 28px 80px;
+  }
+
+  /* PROJECT TITLE */
+  .project-title-wrap {
+    margin-bottom: 24px;
+  }
+
+  .project-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+  }
+
+  .project-title-input {
+    width: 100%;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    color: var(--text);
+    font-size: 22px;
+    font-weight: 700;
+    padding: 14px 18px;
+    font-family: var(--font);
+    transition: border-color 0.2s;
+    outline: none;
+  }
+
+  .project-title-input:focus { border-color: var(--accent); }
+
+  .project-title-input::placeholder { color: var(--muted); }
+
+  /* SECTION CARDS */
+  .section-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    margin-bottom: 14px;
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+
+  .section-card:focus-within { border-color: rgba(79, 110, 247, 0.5); }
+
+  .section-card.key-section {
+    border-left: 3px solid var(--accent);
+  }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px 10px;
+  }
+
+  .section-name {
+    font-weight: 600;
+    font-size: 13px;
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .key-badge {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: var(--accent);
+    background: rgba(79, 110, 247, 0.12);
+    padding: 2px 7px;
+    border-radius: 4px;
+  }
+
+  .section-hint {
+    font-size: 11.5px;
+    color: var(--muted);
+    padding: 0 16px 10px;
+    font-style: italic;
+  }
+
+  .section-textarea {
+    width: 100%;
+    background: transparent;
+    border: none;
+    border-top: 1px solid var(--border);
+    color: var(--text);
+    font-size: 13.5px;
+    line-height: 1.65;
+    padding: 14px 16px;
+    font-family: var(--mono);
+    resize: none;
+    min-height: 90px;
+    outline: none;
+    transition: background 0.15s;
+  }
+
+  .section-textarea:focus { background: rgba(79, 110, 247, 0.04); }
+
+  /* SIDEBAR */
+  .sidebar { display: flex; flex-direction: column; gap: 16px; }
+
+  .sidebar-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+
+  .sidebar-card-header {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border);
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--hint);
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  /* OUTPUT STATUS */
+  .output-list { padding: 8px 0; }
+
+  .output-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 16px;
+    transition: background 0.1s;
+  }
+
+  .output-item:hover { background: var(--surface2); }
+
+  .output-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    background: var(--border);
+  }
+
+  .output-dot.exists { background: var(--success); box-shadow: 0 0 6px rgba(34,197,94,0.4); }
+
+  .output-info { flex: 1; min-width: 0; }
+
+  .output-label {
+    font-size: 12.5px;
+    font-weight: 500;
+    color: var(--text);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .output-size {
+    font-size: 11px;
+    color: var(--muted);
+  }
+
+  .outputs-footer {
+    padding: 10px 16px;
+    border-top: 1px solid var(--border);
+  }
+
+  /* QUICK START */
+  .command-block {
+    background: #0a0c12;
+    padding: 14px 16px;
+    margin: 0;
+    position: relative;
+  }
+
+  .command-text {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: #a5f3fc;
+    line-height: 1.7;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+
+  .copy-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    color: var(--hint);
+    font-size: 11px;
+    font-family: var(--font);
+    padding: 3px 9px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .copy-btn:hover { background: var(--surface); color: var(--text); }
+  .copy-btn.copied { color: var(--success); border-color: var(--success); }
+
+  .command-note {
+    padding: 10px 16px;
+    font-size: 11.5px;
+    color: var(--muted);
+    border-top: 1px solid var(--border);
+    line-height: 1.5;
+  }
+
+  /* MODAL */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.7);
+    backdrop-filter: blur(4px);
+    z-index: 200;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .modal-overlay.open { display: flex; }
+
+  .modal {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 28px;
+    width: 100%;
+    max-width: 480px;
+    box-shadow: 0 24px 60px rgba(0,0,0,0.5);
+    animation: modalIn 0.2s ease;
+  }
+
+  @keyframes modalIn {
+    from { transform: scale(0.95) translateY(10px); opacity: 0; }
+    to { transform: scale(1) translateY(0); opacity: 1; }
+  }
+
+  .modal-title {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: var(--text);
+  }
+
+  .modal-desc {
+    font-size: 13px;
+    color: var(--hint);
+    margin-bottom: 22px;
+    line-height: 1.5;
+  }
+
+  .form-group {
+    margin-bottom: 18px;
+  }
+
+  .form-label {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--hint);
+    text-transform: uppercase;
+    letter-spacing: 0.7px;
+    margin-bottom: 7px;
+  }
+
+  .form-input {
+    width: 100%;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 7px;
+    color: var(--text);
+    font-size: 14px;
+    padding: 10px 14px;
+    font-family: var(--font);
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .form-input:focus { border-color: var(--accent); }
+
+  .modal-section-list {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+    margin-top: 8px;
+  }
+
+  .section-check {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 10px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.15s;
+    font-size: 12.5px;
+    color: var(--hint);
+    user-select: none;
+  }
+
+  .section-check:hover { border-color: var(--accent); color: var(--text); }
+
+  .section-check input { display: none; }
+
+  .section-check.checked {
+    border-color: rgba(239,68,68,0.4);
+    background: rgba(239,68,68,0.06);
+    color: var(--danger);
+  }
+
+  .checkmark {
+    width: 16px;
+    height: 16px;
+    border: 1.5px solid currentColor;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-size: 10px;
+    font-weight: 700;
+  }
+
+  .modal-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    margin-top: 24px;
+  }
+
+  /* TOAST */
+  .toast-container {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    z-index: 300;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    pointer-events: none;
+  }
+
+  .toast {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 11px 16px;
+    font-size: 13px;
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+    animation: toastIn 0.25s ease;
+    pointer-events: auto;
+    max-width: 320px;
+  }
+
+  .toast.success { border-left: 3px solid var(--success); }
+  .toast.error { border-left: 3px solid var(--danger); }
+  .toast.info { border-left: 3px solid var(--accent); }
+
+  @keyframes toastIn {
+    from { transform: translateX(100%); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+  }
+
+  @keyframes toastOut {
+    to { transform: translateX(120%); opacity: 0; }
+  }
+
+  /* UNSAVED INDICATOR */
+  .unsaved-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--warning);
+    display: none;
+    animation: pulse 1.5s infinite;
+  }
+
+  .unsaved-dot.visible { display: block; }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+
+  /* MISC */
+  .divider { height: 1px; background: var(--border); margin: 4px 0; }
+
+  .stat-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 16px;
+    font-size: 12px;
+  }
+
+  .stat-label { color: var(--muted); }
+  .stat-value { color: var(--text); font-weight: 600; }
+  .stat-value.green { color: var(--success); }
+  .stat-value.yellow { color: var(--warning); }
+
+  .section-count-badge {
+    font-size: 11px;
+    color: var(--muted);
+    background: var(--surface2);
+    border-radius: 12px;
+    padding: 2px 8px;
+  }
+
+  @media (max-width: 900px) {
+    .layout { grid-template-columns: 1fr; }
+    .sidebar { order: -1; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <div class="logo-mark">MM</div>
+    <div>
+      <div class="logo-text">MALI-MEC</div>
+      <div class="logo-sub">Revenue Agent System</div>
+    </div>
+  </div>
+  <div class="header-actions">
+    <div class="unsaved-dot" id="unsavedDot" title="Modifications non sauvegardées"></div>
+    <button class="btn btn-ghost" onclick="openNewProjectModal()">
+      ✦ Nouveau Projet
+    </button>
+    <button class="btn btn-primary" id="saveBtn" onclick="saveAll()">
+      ↑ Sauvegarder
+    </button>
+  </div>
+</header>
+
+<div class="layout">
+  <!-- MAIN FORM -->
+  <div>
+    <div class="project-title-wrap">
+      <div class="project-label">Titre du Projet</div>
+      <input
+        type="text"
+        class="project-title-input"
+        id="projectTitle"
+        value="{{ title }}"
+        placeholder="Nom de ton projet ou offre"
+        oninput="markDirty()"
+      >
+    </div>
+
+    {% for section in sections %}
+    {% set label = section_labels.get(section.name, section.name) %}
+    {% set hint = section_hints.get(section.name, '') %}
+    {% set is_key = section.name in key_sections %}
+    <div class="section-card {% if is_key %}key-section{% endif %}">
+      <div class="section-header">
+        <div class="section-name">
+          {{ label }}
+          {% if is_key %}<span class="key-badge">Essentiel</span>{% endif %}
+        </div>
+        <span class="section-count-badge" id="count-{{ loop.index0 }}">{{ section.content | length }} car.</span>
+      </div>
+      {% if hint %}
+      <div class="section-hint">{{ hint }}</div>
+      {% endif %}
+      <textarea
+        class="section-textarea"
+        data-section-name="{{ section.name }}"
+        data-index="{{ loop.index0 }}"
+        id="section-{{ loop.index0 }}"
+        oninput="autoResize(this); updateCount(this); markDirty()"
+      >{{ section.content }}</textarea>
+    </div>
+    {% endfor %}
+  </div>
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+
+    <!-- OUTPUTS STATUS -->
+    <div class="sidebar-card">
+      <div class="sidebar-card-header">
+        Fichiers Générés
+        <span id="outputsReadyCount" class="section-count-badge">—</span>
+      </div>
+      <div class="output-list" id="outputList">
+        {% for output in outputs %}
+        <div class="output-item" id="output-{{ loop.index0 }}">
+          <div class="output-dot {% if output.exists %}exists{% endif %}" id="dot-{{ loop.index0 }}"></div>
+          <div class="output-info">
+            <div class="output-label">{{ output.label }}</div>
+            <div class="output-size" id="size-{{ loop.index0 }}">
+              {% if output.exists %}{{ (output.size / 1024) | round(1) }} ko{% else %}Non généré{% endif %}
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+      <div class="outputs-footer">
+        <button class="btn btn-danger btn-sm" style="width:100%" onclick="clearOutputs()">
+          ✕ Vider les outputs
+        </button>
+      </div>
+    </div>
+
+    <!-- QUICK START -->
+    <div class="sidebar-card">
+      <div class="sidebar-card-header">Lancer le Système</div>
+      <div class="command-block">
+        <button class="copy-btn" id="copyBtn" onclick="copyCommand()">Copier</button>
+        <div class="command-text" id="commandText">Lis le fichier business-brief.md et lance les 4 agents du système de revenu dans l'ordre suivant :
+1. Lance l'agent market-signal-researcher — attends le résultat avant de continuer.
+2. Si le score d'opportunité est ≥ 3.5, lance offer-architect.
+3. Lance content-angle-strategist avec l'output de l'étape 2.
+4. Lance conversion-system-builder avec l'output de l'étape 3.
+5. Génère la synthèse coordinateur dans outputs/05-revenue-agent-demo.md.
+6. Génère le brief final production dans outputs/06-final-video-brief.md.</div>
+      </div>
+      <div class="command-note">
+        Copiez cette commande et collez-la dans <strong>Claude Code</strong> pour lancer l'analyse complète.
+      </div>
+    </div>
+
+    <!-- STATS -->
+    <div class="sidebar-card">
+      <div class="sidebar-card-header">État du Brief</div>
+      <div class="stat-row">
+        <span class="stat-label">Sections remplies</span>
+        <span class="stat-value" id="filledSections">—</span>
+      </div>
+      <div class="divider"></div>
+      <div class="stat-row">
+        <span class="stat-label">Sections essentielles</span>
+        <span class="stat-value" id="filledKey">—</span>
+      </div>
+      <div class="divider"></div>
+      <div class="stat-row">
+        <span class="stat-label">Longueur totale</span>
+        <span class="stat-value" id="totalChars">—</span>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- NOUVEAU PROJET MODAL -->
+<div class="modal-overlay" id="newProjectModal">
+  <div class="modal">
+    <div class="modal-title">Nouveau Projet</div>
+    <div class="modal-desc">
+      Donne un nom à ton nouveau projet et choisis les sections à réinitialiser. Les agents restent intacts.
+    </div>
+
+    <div class="form-group">
+      <label class="form-label" for="newProjectName">Nom du Projet</label>
+      <input
+        type="text"
+        class="form-input"
+        id="newProjectName"
+        placeholder="Ex: MALI-MEC — Offre Coaching IA Algérie"
+      >
+    </div>
+
+    <div class="form-group">
+      <div class="form-label">Sections à vider</div>
+      <div class="modal-section-list" id="sectionCheckList"></div>
+    </div>
+
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModal()">Annuler</button>
+      <button class="btn btn-primary" onclick="applyNewProject()">Créer le Projet</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST CONTAINER -->
+<div class="toast-container" id="toastContainer"></div>
+
+<script>
+  // ─── State ────────────────────────────────────────────────────────────────
+  let isDirty = false;
+  const KEY_SECTIONS = {{ key_sections | tojson }};
+
+  // ─── Init ─────────────────────────────────────────────────────────────────
+  document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.section-textarea').forEach(ta => {
+      autoResize(ta);
+    });
+    updateStats();
+    updateOutputsCount();
+    refreshOutputs();
+  });
+
+  // ─── Auto-resize textarea ─────────────────────────────────────────────────
+  function autoResize(ta) {
+    ta.style.height = 'auto';
+    ta.style.height = (ta.scrollHeight) + 'px';
+  }
+
+  // ─── Character count ──────────────────────────────────────────────────────
+  function updateCount(ta) {
+    const idx = ta.dataset.index;
+    const el = document.getElementById('count-' + idx);
+    if (el) el.textContent = ta.value.length + ' car.';
+    updateStats();
+  }
+
+  // ─── Stats ────────────────────────────────────────────────────────────────
+  function updateStats() {
+    const textareas = document.querySelectorAll('.section-textarea');
+    let filled = 0, filledKey = 0, keyTotal = 0, total = 0;
+    textareas.forEach(ta => {
+      const val = ta.value.trim();
+      total += val.length;
+      if (val.length > 0) filled++;
+      if (KEY_SECTIONS.includes(ta.dataset.sectionName)) {
+        keyTotal++;
+        if (val.length > 0) filledKey++;
+      }
+    });
+    document.getElementById('filledSections').textContent = filled + ' / ' + textareas.length;
+    const keyEl = document.getElementById('filledKey');
+    keyEl.textContent = filledKey + ' / ' + keyTotal;
+    keyEl.className = 'stat-value ' + (filledKey === keyTotal ? 'green' : 'yellow');
+    document.getElementById('totalChars').textContent = total.toLocaleString('fr-FR') + ' car.';
+  }
+
+  // ─── Dirty state ──────────────────────────────────────────────────────────
+  function markDirty() {
+    isDirty = true;
+    document.getElementById('unsavedDot').classList.add('visible');
+  }
+
+  function markClean() {
+    isDirty = false;
+    document.getElementById('unsavedDot').classList.remove('visible');
+  }
+
+  window.addEventListener('beforeunload', e => {
+    if (isDirty) {
+      e.preventDefault();
+      e.returnValue = '';
+    }
+  });
+
+  // Ctrl+S / Cmd+S shortcut
+  document.addEventListener('keydown', e => {
+    if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+      e.preventDefault();
+      saveAll();
+    }
+  });
+
+  // ─── Save ─────────────────────────────────────────────────────────────────
+  async function saveAll() {
+    const btn = document.getElementById('saveBtn');
+    btn.textContent = '…';
+    btn.disabled = true;
+
+    const title = document.getElementById('projectTitle').value;
+    const sections = [];
+    document.querySelectorAll('.section-textarea').forEach(ta => {
+      sections.push({ name: ta.dataset.sectionName, content: ta.value });
+    });
+
+    try {
+      const res = await fetch('/api/save', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ title, sections }),
+      });
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      markClean();
+      showToast('Brief sauvegardé ✓', 'success');
+    } catch (err) {
+      showToast('Erreur lors de la sauvegarde', 'error');
+    } finally {
+      btn.textContent = '↑ Sauvegarder';
+      btn.disabled = false;
+    }
+  }
+
+  // ─── Clear outputs ────────────────────────────────────────────────────────
+  async function clearOutputs() {
+    if (!confirm('Vider tous les fichiers outputs générés ?')) return;
+    try {
+      const res = await fetch('/api/clear-outputs', { method: 'POST' });
+      const data = await res.json();
+      showToast(data.cleared + ' fichier(s) supprimé(s)', 'info');
+      refreshOutputs();
+    } catch {
+      showToast('Erreur lors de la suppression', 'error');
+    }
+  }
+
+  // ─── Refresh outputs status ───────────────────────────────────────────────
+  async function refreshOutputs() {
+    try {
+      const res = await fetch('/api/outputs-status');
+      const data = await res.json();
+      data.forEach((item, i) => {
+        const dot = document.getElementById('dot-' + i);
+        const size = document.getElementById('size-' + i);
+        if (dot) dot.className = 'output-dot' + (item.exists ? ' exists' : '');
+        if (size) size.textContent = item.exists
+          ? (item.size / 1024).toFixed(1) + ' ko'
+          : 'Non généré';
+      });
+      updateOutputsCount(data);
+    } catch {}
+  }
+
+  function updateOutputsCount(data) {
+    if (!data) return;
+    const ready = data.filter(d => d.exists).length;
+    const el = document.getElementById('outputsReadyCount');
+    if (el) el.textContent = ready + ' / ' + data.length;
+  }
+
+  setInterval(refreshOutputs, 8000);
+
+  // ─── Copy command ─────────────────────────────────────────────────────────
+  function copyCommand() {
+    const text = document.getElementById('commandText').textContent;
+    navigator.clipboard.writeText(text).then(() => {
+      const btn = document.getElementById('copyBtn');
+      btn.textContent = '✓ Copié';
+      btn.classList.add('copied');
+      setTimeout(() => {
+        btn.textContent = 'Copier';
+        btn.classList.remove('copied');
+      }, 2000);
+    });
+  }
+
+  // ─── New project modal ────────────────────────────────────────────────────
+  const CLEARABLE_SECTIONS = [
+    'Target Audience',
+    'Core Promise',
+    'Current Video / Campaign Concept',
+    'Strategic Phrase',
+    'Business Goals',
+    'Constraints',
+    'Proof Requirements',
+  ];
+
+  const SECTION_LABELS_MAP = {{ section_labels | tojson }};
+
+  function openNewProjectModal() {
+    const list = document.getElementById('sectionCheckList');
+    list.innerHTML = '';
+    CLEARABLE_SECTIONS.forEach(name => {
+      const label = SECTION_LABELS_MAP[name] || name;
+      const div = document.createElement('label');
+      div.className = 'section-check checked';
+      div.innerHTML = `
+        <input type="checkbox" checked data-section="${name}">
+        <span class="checkmark">✓</span>
+        <span>${label}</span>
+      `;
+      div.querySelector('input').addEventListener('change', function () {
+        div.classList.toggle('checked', this.checked);
+        div.querySelector('.checkmark').textContent = this.checked ? '✓' : '';
+      });
+      list.appendChild(div);
+    });
+    document.getElementById('newProjectName').value = '';
+    document.getElementById('newProjectModal').classList.add('open');
+    setTimeout(() => document.getElementById('newProjectName').focus(), 100);
+  }
+
+  function closeModal() {
+    document.getElementById('newProjectModal').classList.remove('open');
+  }
+
+  // Close modal on overlay click
+  document.getElementById('newProjectModal').addEventListener('click', function(e) {
+    if (e.target === this) closeModal();
+  });
+
+  function applyNewProject() {
+    const name = document.getElementById('newProjectName').value.trim();
+    const checkedSections = Array.from(
+      document.querySelectorAll('#sectionCheckList input:checked')
+    ).map(i => i.dataset.section);
+
+    if (name) {
+      document.getElementById('projectTitle').value = name;
+    }
+
+    checkedSections.forEach(sectionName => {
+      const ta = document.querySelector(`.section-textarea[data-section-name="${sectionName}"]`);
+      if (ta) {
+        ta.value = '';
+        autoResize(ta);
+        updateCount(ta);
+      }
+    });
+
+    markDirty();
+    closeModal();
+    showToast('Nouveau projet prêt — sections vidées ✓', 'success');
+    updateStats();
+  }
+
+  // ─── Toast ────────────────────────────────────────────────────────────────
+  function showToast(msg, type = 'info') {
+    const container = document.getElementById('toastContainer');
+    const toast = document.createElement('div');
+    toast.className = 'toast ' + type;
+    const icons = { success: '✓', error: '✕', info: '→' };
+    toast.innerHTML = `<span>${icons[type] || '→'}</span><span>${msg}</span>`;
+    container.appendChild(toast);
+    setTimeout(() => {
+      toast.style.animation = 'toastOut 0.3s ease forwards';
+      setTimeout(() => toast.remove(), 300);
+    }, 3000);
+  }
+</script>
+</body>
+</html>
