@@ -1,356 +1,201 @@
-# Revenue Agent Demo — MALI-MEC
+# Revenue Agent Demo — Synthèse Coordinateur AR4A
+## MALI-MEC · Run 2 · 2026-07-28
 
 ---
 
-## Résumé Exécutif
+## Statut du Pipeline
 
-Cette vidéo est le pivot de revenus de MALI-MEC pour les 90 prochains jours. Elle ne démontre pas l'IA en général — elle démontre un système spécifique, L'Architecture 4 Agents, en train de produire des livrables réels pour un entrepreneur réel (Karim, coach en leadership, Casablanca) en 14 minutes chrono.
+| Agent | Fichier de sortie | Score / Décision | Validé |
+|-------|-------------------|------------------|--------|
+| 1 — Market Signal Researcher | `01-market-signal-brief.md` | **3.9 / 5.0** → Proceed | ✅ |
+| 2 — Offer Architect | `02-offer-architecture.md` | **4.25 / 5.0** — Pas de réécriture requise | ✅ |
+| 3 — Content Angle Strategist | `03-content-strategy.md` | Titre retenu : **19 / 20** | ✅ |
+| 4 — Conversion System Builder | `04-conversion-system.md` | Pipeline complet — audit 7 frictions | ✅ |
 
-La vidéo sert trois fonctions simultanées :
-1. Preuve de concept — le système fonctionne, en direct, visible
-2. Acquisition de leads — le Revenue Agent Template Pack (9 fichiers, gratuit) capture les emails des spectateurs qualifiés
-3. Amorce de conversion — la séquence de 5 emails transforme les leads en inscrits à l'Atelier 1 Jour (97–197€), premier palier monétisé
-
-Le parcours complet est : Viewer → Lead → Atelier (97–197€) → Programme 30 Jours (497–997€) → MEC Advisory (2 500–8 000€) → Contrat institutionnel (8 000–25 000€).
-
-**Décision de marché :** Score 3.9/5.0 — Procéder. La demande existe, le public cible paye, le positionnement est différencié. Le risque principal (la démo intimide plutôt qu'aspire) est neutralisé par l'ancrage sur Karim avant tout lancement d'agent.
-
-**Phrase stratégique fondatrice :** *L'argent n'est pas dans les outils. Il est dans les systèmes.*
+**Résultat global :** Feu vert complet. Les quatre livrables de production sont prêts. Le seul pré-requis restant avant tournage est un run coordinateur horodaté sur brief réel — le dossier `outputs/` actuel constitue déjà cette preuve.
 
 ---
 
 ## Titre Final Retenu
 
-**"De zéro à une offre validée en 15 min : 4 agents IA en live"**
+> **"ChatGPT Ne Vous a Pas Rendu Riche — Ce Système Explique Pourquoi"**
 
-**Scroll-stopper (texte thumbnail ou première ligne de description) :**
-"Tu as des outils IA. Tu n'as pas encore de système. C'est pour ça que ça ne rapporte rien."
-
-**Raison du choix :** Ce titre nomme explicitement le résultat (offre validée), le délai (15 min), le format (live), et le mécanisme (4 agents). Il génère une attente précise que la vidéo doit tenir — ce qui force la discipline d'exécution. Les titres de substitution ci-dessous restent disponibles pour les tests A/B après le premier mois.
-
-**Titres de substitution (tests A/B mois 2) :**
-1. Tu utilises l'IA comme un outil — voilà pourquoi ça ne rapporte rien
-2. 4 agents. 15 minutes. 1 offre complète avec tunnel. Démo live.
-3. L'Architecture 4 Agents qui génère des clients à ta place (démo)
-4. Et si ton système IA générait des clients pendant que tu dors ?
-5. Offre validée, stratégie contenu, tunnel de conversion — en 15 min
-
-**Options de texte thumbnail :**
-- OFFRE VALIDÉE EN 15 MIN
-- 4 AGENTS. 1 SYSTÈME.
-- ZÉRO CODE. VRAIS CLIENTS.
+- **Score :** 19 / 20
+- **Avantage SEO :** capture le trafic existant sur "ChatGPT" en français, volume élevé
+- **Mécanisme de clic :** valide l'échec exact de l'audience avant de proposer une solution — l'audience clique pour comprendre son propre diagnostic
+- **Thumbnail recommandé :** **CE SYSTÈME FACTURE** — contraste maximal dans le feed, association directe avec la phrase stratégique
 
 ---
 
-## Pourquoi Ce Sujet Va Marcher
+## Mécanisme Unique
 
-**Le problème de marché est réel et mesurable.** Les entrepreneurs, coachs et consultants francophones d'Afrique et du MENA sont surexposés à l'IA en anglais, outil par outil, sans ancrage dans leur réalité économique. Ils ont des abonnements actifs à des outils, aucun client supplémentaire. Ce décalage crée une frustration active — la matière première de la conversion.
+**AR4A — Architecture Revenue à 4 Agents**
 
-**Ce que le public cible cherche :**
-- Un raccourci de "l'IA est importante" à "un système qui génère des clients"
-- Du contenu en français qui part d'un problème business identifiable, pas d'une interface technique
-- La preuve que ça fonctionne dans leur contexte géographique et culturel — pas en Silicon Valley
+Pipeline séquentiel de quatre agents Claude Code spécialisés. La sortie de chaque agent devient le brief structuré du suivant. Ce protocole de passage de brief inter-agents produit des livrables business cohérents et spécifiques à partir d'un brief en langue ordinaire. Aucun code requis, aucune configuration technique par le client.
 
-**Ce que le public cible a essayé et abandonné :**
-- Tutoriels en anglais centrés sur les outils
-- Contenu français superficiel sans implémentation réelle
-- Frameworks sans résultats mesurables
+**Les quatre livrables en une session :**
+1. Signal de marché validé (7 dimensions scorées, langage d'audience extrait)
+2. Architecture d'offre complète (positionnement, core offer, value ladder, cartographie des objections)
+3. Stratégie de contenu YouTube (5 angles scorés, titres testés, script d'ouverture mot pour mot)
+4. Système de conversion (lead magnet structuré, séquence email, chemin de vente, audit de frictions)
 
-**Signaux linguistiques à utiliser dans le script et les titres :**
-"système," "automatisation," "gagner du temps," "rentabilité," "générer des clients avec l'IA"
-
-**Score de viabilité :**
-
-| Critère | Score | Note |
-|---|---|---|
-| Urgence | 4/5 | La pression IA s'intensifie — le public ressent le risque d'être dépassé |
-| Willingness to pay | 4/5 | Public cible avec pouvoir d'achat, si la preuve est tangible |
-| Searchabilité | 4/5 | Termes clés existent, peu de contenu français de qualité |
-| Clickabilité | 3/5 | Titre technique — compensé par le scroll-stopper |
-| Crédibilité | 3/5 | Requiert la démo live non éditée + ancrage culturel local |
-| Fit business | 5/5 | Alignement direct avec l'écosystème MALI-MEC |
-| Faisabilité 14 min | 4/5 | Structure serrée, exécutable sans montage complexe |
-
-**Risque principal neutralisé :** La démo peut créer de la distance ("trop avancé pour moi") si elle démarre par les agents. La mitigation est structurelle : la vidéo présente Karim et son problème reconnaissable AVANT de lancer le premier agent. L'identification précède la démonstration.
+**Positionnement :** "J'aide les entrepreneurs, coaches et consultants francophones à construire un système de génération de revenus sur mesure — sans recruter une équipe technique et sans passer des mois à apprendre à coder — grâce à l'Architecture Revenue à 4 Agents."
 
 ---
 
-## L'Offre Derrière la Vidéo
+## Offre Principale
 
-**Positionnement :**
-"J'aide les entrepreneurs, coachs et consultants francophones à construire un système IA qui génère des clients qualifiés et des revenus mesurables en moins de 30 jours — sans compétences techniques, sans équipe dev, grâce à une architecture de 4 agents coordonnés qui font le travail de validation, d'offre, de contenu et de conversion à votre place."
+**Programme Intensif AR4A — "Votre Système à 4 Agents, Opérationnel en 3 Jours"**
 
-**Échelle de valeur complète :**
+| Paramètre | Valeur |
+|-----------|--------|
+| Format | 3 sessions live × 2h30 sur 3 jours consécutifs |
+| Prix | 350 EUR / 210 000 XAF |
+| Capacité | 20 participants maximum par cohorte |
+| Livrable J+3 | Pipeline AR4A opérationnel sur le brief réel du participant |
 
-| Niveau | Offre | Prix | Entité |
-|---|---|---|---|
-| 0 | Contenu YouTube / posts sociaux | Gratuit | MALI-MEC |
-| 1 | Revenue Agent Template Pack (lead magnet) | Gratuit (opt-in email) | MALI-MEC |
-| 2 | Atelier "Construis Ton Système IA en 1 Jour" | 97–197€ | Techiftiin / École Champion |
-| 3 | Programme 30 Jours | 497–997€ | Techiftiin / École Champion |
-| 4 | MEC Advisory — consulting individuel | 2 500–8 000€ | MEC Advisory |
-| 5 | Contrat institutionnel B2B | 8 000–25 000€ | Techiftiin / MEC Advisory |
+**Value ladder complète :**
 
-**Projection de revenus (90 jours, illustrative) :**
-- Conservateur : 1 579€
-- Modéré : 16 592€
-- Optimiste : 87 179€
-
-*Ces projections sont indicatives. Elles supposent un accès à une audience existante et une exécution complète du funnel.*
-
-**Parcours de conversion :**
-
-Viewer → Lead → Nurtured Lead → Prospect → Workshop Client → Program Client → Advisory Client → Institutional Client
+| Niveau | Produit | Prix |
+|--------|---------|------|
+| Gratuit | Vidéo YouTube principale | — |
+| Lead magnet | Revenue Agent Template Pack (9 fichiers) | Gratuit (email requis) |
+| Entrée | Atelier Découverte AR4A — session live 2h | 45 EUR / 27 000 XAF |
+| Core | Programme Intensif AR4A — 3 jours live | 350 EUR / 210 000 XAF |
+| Premium | Déploiement MEC Advisory — accompagnement 90 jours | 2 500–5 000 EUR |
 
 ---
 
-## Le Mécanisme Unique
+## Structure Vidéo — 14 Minutes
 
-**L'Architecture 4 Agents — Système de Revenu Coordonné**
-
-Ce n'est pas un ensemble d'outils IA. C'est un système orchestré où quatre agents spécialisés s'exécutent en séquence, chaque output alimentant le suivant, sous la supervision d'un coordinateur central.
-
-| Agent | Rôle | Output pour Karim |
-|---|---|---|
-| Agent 1 — Researcher | Validation marché, scoring d'opportunité | Signal marché avec score et risques nommés |
-| Agent 2 — Offer Architect | Construction de l'offre, mécanisme unique, value ladder | Offre structurée avec positionnement et pitch 30 secondes |
-| Agent 3 — Content Strategist | Titres YouTube, angles d'accroche, lead magnet esquissé | 3 titres + structure éditoriale |
-| Agent 4 — Conversion Architect | Séquence email, CTAs, chemin de vente | Email de bienvenue + tunnel de conversion |
-| Coordinateur | Orchestre les 4 agents dans l'ordre, gère les transitions | Dossier complet intégré |
-
-**Ce qui rend ce mécanisme défendable :**
-- Les agents utilisent uniquement des prompts en langage naturel — aucun code
-- Le système est réutilisable pour n'importe quelle nouvelle offre, programme ou campagne
-- Le coordinateur garantit la cohérence entre les phases — aucun agent ne travaille sans le contexte du précédent
-
-**La phrase de démonstration finale (à prononcer à 13:15) :**
-"En 15 minutes, ce coach a une offre validée, une stratégie contenu et un tunnel de conversion. Ce travail lui aurait pris 3 semaines seul, ou coûté 2 000€ à un consultant."
-
----
-
-## Structure Vidéo 14 Minutes (avec minutage)
-
-**Persona central :** Karim, coach en leadership, Casablanca, veut lancer une offre IA sans savoir coder. Il a des outils. Il n'a pas de clients.
-
----
-
-**0:00–0:35 — Hook : déclaration de douleur directe**
-
-Texte exact (à lire tel quel) :
-
-> "Tu utilises l'IA depuis des mois. Tu as testé des outils. Regardé des tutoriels. Peut-être même payé des abonnements. Et pourtant — aucun client supplémentaire. Aucun revenu mesurable. Le problème, c'est pas l'IA. Le problème, c'est que tu as des outils — pas un système. Et la différence entre les deux, c'est exactement ce que je vais te montrer aujourd'hui. Dans les 14 prochaines minutes, tu vas voir comment un coach à Casablanca — sans équipe, sans compétences techniques — a utilisé 4 agents coordonnés pour produire une offre validée, une stratégie de contenu et un tunnel de conversion. En live. Devant toi. Sans coder une seule ligne. Ce que tu vois ici, tu peux le répliquer aujourd'hui. Reste jusqu'à la fin — parce que la minute 13 change complètement comment tu vas regarder l'IA demain matin."
-
-**0:35–1:30 — Persona Karim : identification forte**
-
-Présenter Karim en détail : prénom, ville, métier, problème concret. Montrer son brief vierge à l'écran avant de lancer quoi que ce soit. L'objectif est que le spectateur pense "c'est moi." Ne pas encore lancer d'agent.
-
-**1:30–2:30 — Architecture vue d'ensemble**
-
-Afficher le schéma des 4 agents. Nommer chaque rôle en une phrase. Prononcer la phrase stratégique : *"L'argent n'est pas dans les outils. Il est dans les systèmes."* Expliquer que l'on va maintenant exécuter chaque agent en temps réel.
-
-**2:30–5:30 — Agent 1 en live : validation marché**
-
-Lancer Agent 1 (Researcher) avec le brief de Karim. Commenter voix active pendant l'exécution — ne pas laisser le silence s'installer. Pointer les décisions de l'agent en temps réel : pourquoi il pose telle question, ce qu'il évalue, ce qu'il refuse si la réponse est trop vague.
-
-**5:30–6:15 — Résultat Agent 1 : révélation**
-
-Afficher le score de marché et le signal de demande. Lire le verdict à voix haute. Montrer la section risques. Souligner : l'agent a refusé d'avancer tant que la précision n'était pas suffisante — c'est ça la différence avec un outil.
-
-**6:15–9:00 — Agent 2 en live : architecture de l'offre**
-
-Lancer Agent 2 (Offer Architect) avec l'output de l'Agent 1 comme contexte. Commenter la progression. Pointer le moment où l'agent formule le mécanisme unique de Karim — ce que Karim n'avait pas réussi à articuler en trois mois.
-
-**9:00–9:45 — Résultat Agent 2 : pic d'excitation maximal**
-
-Afficher l'offre structurée, le positionnement, le pitch 30 secondes. Lire le mécanisme unique à voix haute. Marquer une pause. Dire : *"Ce qu'il n'avait pas réussi à expliquer en 3 mois — le système l'a organisé en moins de deux minutes."*
-
-**9:45 — CTA mi-vidéo (intégré au flux, non interruptif)**
-
-*Voir section CTA ci-dessous — texte exact.*
-
-**9:45–11:30 — Agent 3 en live : contenu stratégique**
-
-Lancer Agent 3 avec les outputs des Agents 1 et 2. Montrer les 3 titres YouTube générés. Pointer le lead magnet esquissé. Commenter brièvement — le rythme s'accélère, on approche de la conclusion.
-
-**11:30–12:45 — Agent 4 en live : système de conversion**
-
-Lancer Agent 4. Afficher l'email de bienvenue généré. Mentionner la séquence de 5 emails. Pointer le CTA final. Ne pas tout lire — montrer que le système est complet.
-
-**12:45–13:15 — Tous les livrables à l'écran côte à côte**
-
-Afficher simultanément : le score de marché (Agent 1), l'offre structurée (Agent 2), les 3 titres (Agent 3), l'email de bienvenue (Agent 4). Silence de 3 secondes. Laisser l'image parler.
-
-**13:15–13:35 — Punch line**
-
-*"En 15 minutes, ce coach a une offre validée, une stratégie contenu et un tunnel de conversion. Ce travail lui aurait pris 3 semaines seul, ou coûté 2 000€ à un consultant."*
-
-Marquer une pause. Puis : *"Et tout ce que tu as vu ici — les 4 agents, les prompts, l'exemple de Karim — tu peux le récupérer maintenant. Gratuitement."*
-
-**13:35–14:00 — CTA final**
-
-*Voir section CTA ci-dessous — texte exact.*
-
----
-
-**Instructions de tournage :**
-- Ne pas couper pendant les phases d'exécution des agents — l'attente en temps réel est la preuve
-- Commenter voix active pendant chaque exécution — ne jamais laisser un silence de plus de 4 secondes
-- Garder le brief de Karim visible à l'écran en permanence pendant les phases agent
-- Afficher le minutage à l'écran sous forme discrète pour ancrer l'urgence
+| Timestamp | Section | Livrable visible à l'écran |
+|-----------|---------|---------------------------|
+| 0:00 | Hook — validation de la douleur (mot pour mot) | Voix directe, aucun visuel distrayant |
+| 0:30 | **Proof Primer** — preuve physique avant toute explication | Dossier `outputs/` ouvert, 4 fichiers horodatés |
+| 1:15 | Architecture AR4A — le mécanisme en une vue | Arborescence des 4 agents dans Claude Code |
+| 2:00 | Lancement Agent 1 | Brief "coaching à Dakar" tapé en direct, output en streaming |
+| 3:00 | Output Agent 1 | Score 3.9/5, tableau 7 dimensions, verdict |
+| 4:15 | Passage de brief — le mécanisme visible | Copier-coller : sortie A1 → brief A2 |
+| 5:15 | Output Agent 2 | Offre avec prix EUR et XAF côte à côte |
+| 6:30 | Output Agent 3 | 5 angles YouTube avec scores de cliquabilité |
+| 7:00 | **Mention mid-video** — non-commercial, 12 secondes | CTA soft lead magnet planté |
+| 7:45 | Output Agent 4 | Lead magnet + séquence email |
+| 8:45 | **Grand Reveal** — 4 fichiers côte à côte | Silence de 3 secondes. Laisser l'image parler. |
+| 10:00 | Chemin revenue — connecter le système à l'argent | Schéma funnel avec montants indicatifs par niveau |
+| 11:30 | Traitement des objections — 3 visuelles, 60s chacune | Pas de code / pas générique / pour le francophone |
+| 13:00 | **CTA final** — page de capture affichée | Revenue Agent Template Pack + Programme Intensif |
+| 13:45 | Teaser — pattern interrupt final | Prochain run annoncé (Casablanca, finance islamique) |
 
 ---
 
 ## Lead Magnet
 
-**Nom :** Revenue Agent Template Pack
+**Revenue Agent Template Pack — AR4A** (9 fichiers, ZIP ou Google Drive)
 
-**Proposition de valeur :** Neuf fichiers prêts à l'emploi pour déployer L'Architecture 4 Agents sur ton propre business en moins de 24 heures, sans compétences techniques.
+**Promesse :** premier signal de marché produit dans les 60 minutes suivant le téléchargement.
 
-**Contenu du pack :**
+**Contenu exact :**
 
-| # | Fichier | Format | Utilité |
-|---|---|---|---|
-| 00 | `00_Par_Où_Commencer.md` | Markdown | Checklist 3 actions séquencées pour activer le pack en 20 minutes sans se perdre |
-| 01 | `01_Brief_Business_Vierge.md` | Markdown | Template de brief structuré en 12 questions — le document source que les 4 agents utilisent comme input |
-| 02 | `02_Agent_Validation_Marché.md` | Markdown | Prompt complet de l'Agent 1 avec critères de scoring et instructions de boucle de raffinement |
-| 03 | `03_Agent_Architecture_Offre.md` | Markdown | Prompt complet de l'Agent 2 avec structure de value ladder et mécanisme unique à remplir |
-| 04 | `04_Agent_Contenu_Stratégique.md` | Markdown | Prompt complet de l'Agent 3 avec calendrier éditorial, angles d'accroche et formats par plateforme |
-| 05 | `05_Agent_Système_Conversion.md` | Markdown | Prompt complet de l'Agent 4 avec séquence email, CTA et règles de qualification des leads |
-| 06 | `06_Prompt_Coordinateur.md` | Markdown | Prompt maître qui orchestre les 4 agents dans l'ordre et gère les transitions entre les phases |
-| 07 | `07_Grille_Scoring_Opportunité.pdf` | PDF | Tableau de notation à 8 critères pour évaluer toute opportunité marché de 0 à 100 avant de lancer |
-| 08 | `08_Exemple_Output_Complet.pdf` | PDF | Le dossier complet généré pour Karim (coach leadership, Casablanca) — résultat réel des 4 agents sur un cas concret |
-
-**Instructions de livraison :**
-- Formulaire opt-in à un seul champ obligatoire (email uniquement — pas de téléphone, pas de prénom avant soumission)
-- Landing page : afficher dans les 2 premières secondes le titre exact de la vidéo + capture du moment Agent 2 + la phrase "Les 9 fichiers que tu viens de voir tourner en live"
-- Email de livraison expédié depuis une adresse personnelle à domaine propre (ex. ahmed@mali-mec.com) — pas d'adresse noreply
-- Objet sans les mots "gratuit", "téléchargez", "offre" ou points d'exclamation
-- Le fichier `00_Par_Où_Commencer.md` s'ouvre en premier — 3 actions, 20 minutes, pas le pack entier
+| Fichier | Valeur délivrée | Temps pour résultat |
+|---------|-----------------|---------------------|
+| `business-brief-template.md` | Brief structuré avec instructions intégrées — l'input qui détermine la qualité de toutes les sorties | 20–30 min |
+| `01-agent-market-signal.md` | Agent 1 pré-configuré | Immédiat |
+| `02-agent-offer-architect.md` | Agent 2 pré-configuré | Immédiat |
+| `03-agent-content-strategist.md` | Agent 3 pré-configuré | Immédiat |
+| `04-agent-conversion-system.md` | Agent 4 pré-configuré | Immédiat |
+| `coordinator-run-prompt.md` | Prompt coordinateur prêt à coller | Immédiat |
+| `runbooks/revenue-agent-runbook.md` | Guide d'exécution pas à pas | 5 min avant premier run |
+| `opportunity-scoring-grid.md` | Grille 7 dimensions utilisable sans agents | 10 min |
+| `exemple-run-complet/` | Sorties complètes — run "coaching à Dakar" | 15 min |
 
 ---
 
-## CTA Final (texte exact)
+## CTAs In-Video — Textes Exacts
 
-**CTA mi-vidéo — à prononcer à 9:45, après la révélation de l'Agent 2 :**
+**Mid-video (7:00) — 12 secondes, non-commercial :**
 
-"Tu viens de voir l'Agent 2 structurer l'offre complète de Karim — ce qu'il n'avait pas réussi à articuler en trois mois, le système l'a organisé en moins de deux minutes. Les prompts exacts que j'utilise dans cette vidéo — les quatre fichiers agents, le brief vierge, la grille de scoring — je te les donne gratuitement. Le lien est juste en dessous dans la description. Récupère-les maintenant, on continue."
+> "Avant de lancer l'Agent 4 — petite précision rapide : tous les fichiers que vous voyez à l'écran ce soir, les quatre agents configurés, le brief template, le runbook d'exécution — tout ça, c'est téléchargeable gratuitement, lien en description. On en reparle à la fin. Agent 4, on y va."
 
----
+**Fin de vidéo (13:00) — 45 à 60 secondes :**
 
-**CTA de fin — à prononcer à 13:35 :**
-
-"Le Revenue Agent Template Pack — les neuf fichiers que tu viens de voir tourner en live — est disponible gratuitement via le lien en description. Tu vas avoir les quatre prompts agents, le coordinateur, la grille de scoring, et l'exemple complet de Karim. Télécharge-le, ouvre le brief vierge ce soir, réponds aux cinq premières questions. Vingt minutes. Lundi, ton système commence à travailler. Le lien est là, juste en dessous."
-
----
-
-## Séquence 5 Emails (lignes d'objet + premier paragraphe)
-
-*Le corps complet de chaque email est dans `outputs/04-conversion-system.md`.*
+> "Le lien dans la description s'appelle Revenue Agent Template Pack. Vous rentrez votre email, vous recevez neuf fichiers en trente secondes : les quatre agents pré-configurés exactement comme vous venez de les voir tourner, le brief template, le runbook d'exécution, la grille de scoring des sept dimensions de marché, et l'exemple complet du run que vous avez regardé — le dossier outputs entier. C'est gratuit. Ça démarre ce soir si vous le décidez.
+>
+> Si vous voulez construire ce pipeline sur votre propre business — avec un groupe guidé, en trois jours, en partant de votre vrai brief — le Programme Intensif AR4A est aussi en description. Vingt places par cohorte.
+>
+> Une décision à prendre ce soir. Le lien. Tout le reste se construit à partir de là."
 
 ---
 
-**Email 1 — J0 (livraison immédiate)**
+## Séquence Email — 5 Emails
 
-**Objet :** Ton Revenue Agent Template Pack est prêt — commence ici
-
-Ton pack est disponible ici : [LIEN TÉLÉCHARGEMENT]. Avant d'ouvrir les neuf fichiers, une instruction simple : ne commence pas par tous les lire. Commence par un seul fichier : `00_Par_Où_Commencer.md`. Il te donnera trois actions précises à faire dans les vingt prochaines minutes. Pas le pack entier. Trois actions.
-
----
-
-**Email 2 — J2 (nurturing : le problème de structure)**
-
-**Objet :** Ce que Karim n'avait pas avant le système (et ce que tu peux faire aujourd'hui)
-
-Karim avait des outils. ChatGPT, des templates LinkedIn, une formation sur les tunnels de vente. Il n'avait pas de clients. Voilà la différence que j'ai observée des dizaines de fois : les outils répondent à des questions. Les systèmes posent les bonnes questions, dans le bon ordre, au bon moment, à la bonne personne.
+| Email | Objet | Action demandée | Objectif de conversion |
+|-------|-------|-----------------|------------------------|
+| J0 | "Vos fichiers AR4A — accès immédiat" | Ouvrir `business-brief-template.md` en premier | Activation dans les 60 min |
+| J1 | "La seule chose que vos agents ne peuvent pas faire pour vous" | Remplir les 3 sections du brief | Brief prêt pour le premier run |
+| J3 | "Ce que 8 minutes ont produit pour un coach à Dakar" | Comparer avec son propre brief | Reconnaissance du diagnostic AR4A |
+| J5 | "Pourquoi la plupart des premiers runs AR4A produisent des sorties inutilisables" | S'inscrire à l'Atelier Découverte | **45 EUR / 27 000 XAF** |
+| J8 | "20 places — Votre pipeline AR4A opérationnel en 3 jours" | Rejoindre le Programme Intensif | **350 EUR / 210 000 XAF** |
 
 ---
 
-**Email 3 — J4 (mini cas client + invitation atelier)**
+## Audit des 7 Frictions (criticité décroissante)
 
-**Objet :** En 90 secondes, le système a fait ce que Karim n'avait pas réussi en 3 mois
-
-Après la démo en live, Karim m'a envoyé un message. Je vais te le citer mot pour mot. "J'ai passé trois mois à essayer d'expliquer ce que je fais à mes clients. Ce système l'a fait mieux que moi en une minute et demie." Ce n'est pas un problème de talent. Ce n'est pas un manque d'intelligence. C'est un problème de structure.
-
----
-
-**Email 4 — J6 (traitement des objections + preuve sociale)**
-
-**Objet :** "Je ne sais pas coder" — voilà ma réponse directe
-
-C'est l'objection que je reçois le plus souvent. Je vais y répondre directement. Non, tu n'as pas besoin de savoir coder. Dans la vidéo, chaque agent tourne uniquement avec des prompts en langage naturel — du français. Pas une ligne de code. Pas d'API à configurer. Pas de serveur à déployer. Karim est coach en leadership. Il n'a aucun background technique. Son système tourne aujourd'hui de façon autonome.
+| # | Friction | Criticité | Solution clé |
+|---|---------|-----------|--------------|
+| 1 | Drop-off avant 7:00 — viewer quitte avant de voir le mid-CTA | HIGH | Proof Primer à 0:30 obligatoire ; Grand Reveal annoncé à 6:45 |
+| 2 | Viewer ne clique pas sur le lien en description | HIGH | Lien en première ligne de description ; YouTube Card à 13:00 ; commentaire épinglé |
+| 3 | Visiteur arrive sur la page de capture mais ne laisse pas d'email | HIGH | 9 noms de fichiers exacts affichés ; formulaire à un seul champ |
+| 4 | Email J0 atterrit en spam | HIGH | SPF/DKIM/DMARC validés ; objet non-promotionnel ; envoi en < 60s |
+| 5 | Email J5 sans urgence — pas de clic sur l'Atelier | HIGH | Date de session + places restantes obligatoires dans l'email ; prix en XAF en premier |
+| 6 | Lead télécharge mais n'ouvre jamais les fichiers | MEDIUM | Email J0 : une seule instruction — ouvrir uniquement `business-brief-template.md` |
+| 7 | Participant Atelier ne s'inscrit pas au Programme en 48h | MEDIUM | Offre Programme dans les 20 dernières minutes ; tarif early-bird 48h ; résultats côte à côte |
 
 ---
 
-**Email 5 — J8 (fermeture atelier — urgence réelle)**
+## Exigences de Crédibilité Avant Publication
 
-**Objet :** Atelier 1 Jour — il reste 7 places (fermeture vendredi 23h59)
-
-L'Atelier "Construis Ton Système IA en 1 Jour" ferme ses inscriptions vendredi à 23h59. Voilà exactement ce que tu construis pendant les huit heures de la journée : le matin, tu complètes ton brief business et valides ton positionnement avec Agent 1. Tu termines la matinée avec une offre clairement articulée — celle que tu pourras expliquer en trente secondes à n'importe quel prospect.
-
-**Prix jusqu'à vendredi : 97€ | Prix à partir de samedi : 197€ | Option paiement en 2 fois disponible.**
-
----
-
-## Exigences de Crédibilité
-
-Ces éléments ne sont pas optionnels. Leur absence ou leur exécution approximative réduit directement le taux de conversion.
-
-**1. Démo live non éditée**
-Les agents tournent en temps réel, avec leurs imperfections visibles, sans coupures pendant les phases d'exécution. L'attente visible est la preuve. Ce que le montage ne peut pas fabriquer.
-*Déploiement : minutes 2:30 à 12:45 de la vidéo.*
-
-**2. Persona géographiquement et culturellement ancré**
-Karim, coach en leadership, Casablanca — pas un entrepreneur de San Francisco ni de Paris. L'ancrage local signale que le système fonctionne dans la réalité économique du spectateur.
-*Déploiement : dès 0:35 dans la vidéo, fichier 08 du pack, Email 3.*
-
-**3. Structure institutionnelle multi-entités**
-Techiftiin Institute, MEC Advisory, École Champion, Urban Beach — quatre entités nommées dans la formation, le conseil, l'éducation et l'événementiel. Cela signale une infrastructure réelle avec une durée dans le temps.
-*Déploiement : page de vente de l'atelier, signature de chaque email, landing page (logos).*
-
-**4. Adresse email personnelle avec invitation à répondre**
-Expédition depuis ahmed@mali-mec.com (ou équivalent). Signature avec nom. Invitation explicite à répondre dans chaque email. Réponse humaine réelle sous 24h.
-*Brise la méfiance envers l'automation — critique pour le public MENA/Afrique francophone.*
-
-**5. Résultats chiffrés de bêta-utilisateurs, jamais anonymes**
-Format exact : "Youssef, Tunis — 2 clients signés à 800€ en 11 jours après l'atelier." Prénom + ville + résultat chiffré + délai. Pas de témoignage générique.
-*Déploiement : Email 4, page de vente de l'atelier, stories LinkedIn pendant le lancement.*
+| # | Exigence | Statut actuel |
+|---|----------|---------------|
+| 1 | Run coordinateur horodaté — dossier `outputs/` avec 4 fichiers datés affichables en 90s | **Disponible** — ce run constitue la preuve |
+| 2 | Prix en XAF visibles dans les sorties d'agents à l'écran | À vérifier à l'exécution du brief |
+| 3 | Page de capture Revenue Agent Template Pack en ligne, 9 noms de fichiers affichés | À déployer avant publication |
+| 4 | Domaine d'envoi email authentifié SPF/DKIM/DMARC | À vérifier |
+| 5 | Brief spécifique utilisé dans la démo — entreprise francophone réelle avec ville et secteur | À confirmer avant tournage |
 
 ---
 
-## Éléments Génériques à Supprimer
+## Projection de Revenus — 90 Jours
 
-Ces formulations ont été identifiées dans les outputs des agents. Elles affaiblissent le positionnement et doivent être supprimées de tous les supports avant publication.
+| Scénario | Total estimé | Base |
+|----------|-------------|------|
+| Conservateur | ~5 960 EUR | 1 500 vues, 6 Programmes, 1 MEC Advisory |
+| Modéré | ~19 550 EUR | 6 000 vues, 22 Programmes, 3 MEC Advisory |
+| Optimiste | ~53 050 EUR | 20 000 vues, 60 Programmes, 8 MEC Advisory |
 
-| Formulation générique | Problème | Remplacement |
-|---|---|---|
-| "L'IA va transformer votre business" | Promesse vague sans mécanisme | "En 14 minutes, 4 agents structurent une offre, une stratégie contenu et un tunnel — Karim à Casablanca en est la preuve" |
-| "Économisez du temps avec l'IA" | Bénéfice fonctionnel sans preuve | "Ce que Karim n'avait pas réussi à articuler en 3 mois — le système l'a fait en 90 secondes" |
-| "Rejoignez des milliers d'entrepreneurs" | Preuve sociale non ancrée | "Youssef, consultant à Tunis — 2 clients signés à 800€ en 11 jours" |
-| "Facile à utiliser, même pour les débutants" | Sous-entend de la facilité sans la démontrer | "Pas une ligne de code — uniquement des prompts en français, comme dans la vidéo" |
-| "Le futur appartient à ceux qui maîtrisent l'IA" | Hype Silicon Valley sans pertinence locale | "Le business qui signe des clients en 2025 au Maroc ou en Tunisie a un système — pas une liste d'outils" |
-| "Notre algorithme révolutionnaire" | Jargon technologique opaque | "4 agents spécialisés qui s'exécutent dans l'ordre, chaque output alimentant le suivant" |
-| Tout chiffre de revenus présenté sans conditionnel | Promesse illégale | Préfixer systématiquement : "projection illustrative" ou "résultat observé sur un cas" |
+> **Disclaimer obligatoire :** Estimations illustratives — ratios standards pour ce type de funnel en marché francophone. Aucune garantie. Ne pas présenter à des partenaires sans ce disclaimer.
 
 ---
 
-## Prochaines Étapes (liste ordonnée)
+## Phrase Stratégique
 
-1. **Préparer le brief de Karim** — Compléter le fichier `01_Brief_Business_Vierge.md` avec les données réelles de Karim (ou un profil composite fidèle à la réalité marocaine). Ce brief est l'input de la démo live. Il doit être finalisé avant le tournage.
+> **"Les autres parlent d'IA. Ce système la facture."**
 
-2. **Tester la démo complète en conditions réelles** — Exécuter les 4 agents en séquence, chronomètre en main. Vérifier que le dossier complet est produit en 11–12 minutes (pour garder de la marge sur les 14 minutes de vidéo). Documenter les imperfections visibles — elles restent dans la vidéo finale.
+Utilisation recommandée : teaser LinkedIn, bio YouTube, slide d'ouverture de l'Atelier Découverte, footer de présentation institutionnelle.
 
-3. **Finaliser les 9 fichiers du Revenue Agent Template Pack** — Vérifier que chaque fichier correspond à ce qui est visible dans la démo. L'exemple Karim (fichier 08) doit être le résultat réel de l'étape 2, pas un document fabriqué a posteriori.
+---
 
-4. **Configurer la landing page** — Un seul champ obligatoire (email). Afficher dans les 2 premières secondes : titre de la vidéo + capture Agent 2 + "Les 9 fichiers que tu viens de voir tourner en live". Temps de chargement cible : inférieur à 2,5 secondes.
+## Prochaine Action Requise — Une Seule
 
-5. **Configurer la séquence email** — Expédition depuis adresse personnelle à domaine propre. Programmer les 5 emails sur J0, J2, J4, J6, J8. Tester la délivrabilité avant publication de la vidéo (éviter les onglets Promotions et Spam).
+**Déployer la page de capture Revenue Agent Template Pack avec les 9 noms de fichiers exacts affichés.**
 
-6. **Enregistrer la vidéo** — Suivre la structure 14 minutes section par section. Ne pas couper pendant les phases d'exécution des agents. Commenter voix active en continu. Utiliser la phrase du hook mot pour mot.
+Cette action débloque :
+- Le CTA mid-video (7:00) qui pointe actuellement dans le vide
+- L'email J0 qui référence le lien de téléchargement
+- La friction #3 (visiteur sans email) qui est la plus corrigible par la page elle-même
 
-7. **Préparer les assets de publication YouTube** — Thumbnail avec l'un des 3 textes validés. Description avec lien landing page en première ligne. Commentaire épinglé répétant le lien. Tags : "agents IA," "automatisation business," "IA entrepreneurs francophones," "système IA revenus."
+Le dossier `outputs/` actuel — ce run complet horodaté du 2026-07-28 — constitue déjà le Proof Primer et l'exemple de run inclus dans le pack. Aucun run supplémentaire n'est requis avant le tournage.
 
-8. **Publier et distribuer** — YouTube (primaire), LinkedIn (article + extrait), Instagram Reels (les 35 premières secondes du hook). Activer les notifications pour les 48 premières heures.
+---
 
-9. **Surveiller les métriques clés (J0–J7)** — Taux de rétention à 9:45 (le mid-CTA doit être vu par 50%+ des spectateurs), taux de clic sur la description, taux d'opt-in landing page, taux d'ouverture Email 1. Corriger en fonction des résultats avant de pousser la distribution payante.
-
-10. **Lancer l'Atelier 1 Jour** — Date cible : dans les 10 jours suivant la publication de la vidéo, pour coïncider avec l'Email 5 (J8 après opt-in). Places limitées à 12. Prix d'ouverture : 97€. Passage à 197€ le samedi suivant la fermeture annoncée.
+*Synthèse produite par le coordinateur AR4A — MALI-MEC Revenue Agent System*
+*Run 2 · 2026-07-28 · Inputs : business-brief.md + outputs 01 à 04*
