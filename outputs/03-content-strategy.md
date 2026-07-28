@@ -1,166 +1,158 @@
 # Content Strategy — MALI-MEC Revenue Agent System
 
+**Produit par :** Content Angle Strategist Agent
 **Date :** 2026-07-28
-**Basé sur :** business-brief.md + 01-market-signal-brief.md + 02-offer-architecture.md
-**Principe cardinal :** Le titre parle du résultat, pas de l'outil. Chaque décision sert l'offre.
+**Sources :** business-brief.md + 01-market-signal-brief.md + 02-offer-architecture.md
+**Score de positionnement reçu (Agent 2) :** 4.4 / 5.0
+**Principe cardinal :** Le titre parle du résultat, pas de l'outil. Chaque décision sert directement l'offre AR4A.
 
 ---
 
-## Viewer Desire State
+## Content Strategy
 
-**Émotion au début de la vidéo :** Frustré et sceptique. Ils ont essayé ChatGPT, suivi des tutoriels, accumulé des abonnements — et leurs revenus n'ont pas bougé. Ils cherchent une dernière raison de croire que l'IA peut vraiment changer quelque chose pour eux.
+### Viewer Desire State
 
-**Émotion à la fin de la vidéo :** Équipé et prêt à agir. Ils ont vu le système tourner en temps réel sur un vrai problème business. Ils comprennent pourquoi leurs tentatives précédentes ont échoué (architecture, pas compétence) et ils savent exactement quoi télécharger ou rejoindre pour commencer ce soir.
+**Émotion au début de la vidéo :** Frustration teintée de honte. Ce spectateur n'est pas un débutant — il a déjà essayé. Il a installé ChatGPT, suivi des tutoriels en anglais, accumulé des abonnements. Ce qu'il ressent : beaucoup d'effort investi, zéro revenu incrémental, et la conviction croissante que l'IA "ne fonctionne pas pour lui." La honte vient du fait qu'il ne veut pas l'admettre. Il est à la limite de l'abandon — mais pas encore. Il regarde cette vidéo parce qu'il lui faut une explication, pas un outil de plus.
 
-**La phrase qui arrête le scroll :** "ChatGPT ne vous a pas rendu plus riche — et ce n'est pas votre faute, c'est votre architecture."
+**Émotion à la fin de la vidéo :** Capacité opérationnelle et urgence d'agir. Pas l'inspiration vague des vidéos de motivation — une clarté fonctionnelle précise. Il comprend pourquoi ses tentatives ont échoué (architecture vs. outils). Il a vu le système tourner en direct sur un vrai cas business. Il a un prochain pas concret : télécharger les fichiers agents. L'émotion dominante est "Je sais exactement quoi faire et je commence ce soir."
 
----
-
-## 1. Candidats de Titre
-
-### Critères de scoring
-- **Curiosité** : Est-ce que le titre crée une tension qui force le clic ?
-- **Clarté de la promesse** : Est-ce que le résultat est lisible immédiatement ?
-- **SEO YouTube** : Contient-il des termes que l'audience tape réellement ?
-- **Adéquation audience** : Parle-t-il directement à la douleur ou au désir du persona cible ?
-
-| Titre | Curiosité | Clarté | SEO | Audience | Total |
-|-------|-----------|--------|-----|----------|-------|
-| ChatGPT Ne Vous a Pas Rendu Riche — Ce Système Explique Pourquoi | 5 | 4 | 5 | 5 | **19/20** |
-| L'Architecture IA Qui Transforme Vos Outils en Machine à Revenus | 4 | 4 | 4 | 5 | **17/20** |
-| Construisez Ce Système à 4 Agents IA Avant d'Apprendre un Autre Outil | 5 | 4 | 3 | 5 | **17/20** |
-| De l'Idée au Lead Magnet en 8 Minutes : Le Système à 4 Agents | 4 | 5 | 3 | 4 | **16/20** |
-| 4 Agents IA → 4 Livrables Business → Revenus : Le Système Complet | 3 | 5 | 4 | 4 | **16/20** |
+**La phrase qui arrête le scroll :**
+> "Pendant que vous testez des outils IA, quelqu'un dans votre marché construit le système qui vous remplace."
 
 ---
 
-### Titre retenu
+### Title Candidates
 
-**"ChatGPT Ne Vous a Pas Rendu Riche — Ce Système Explique Pourquoi"**
+| Title | Emotional Pull | Specificity | Clickability | Offer Alignment | Total |
+|-------|:-------------:|:-----------:|:------------:|:---------------:|:-----:|
+| Les Autres Parlent d'IA. Ce Système à 4 Agents, Lui, la Facture. | 5 | 4 | 5 | 5 | **19** |
+| ChatGPT Ne Vous a Pas Rendu Riche — Ce Système Explique Pourquoi | 5 | 4 | 5 | 4 | **18** |
+| Construisez Ce Système à 4 Agents IA Avant d'Apprendre un Autre Outil | 4 | 4 | 5 | 5 | **18** |
+| Ce Système IA à 4 Agents Génère des Clients Pendant que Vous Dormez | 5 | 4 | 5 | 4 | **18** |
+| 4 Agents IA : Offre, Stratégie, Lead Magnet — 8 Minutes Chrono | 3 | 5 | 4 | 5 | **17** |
 
-**Justification :** Ce titre est le seul qui commence par valider l'échec exact que l'audience a vécu — dans leur propre langage ("j'ai essayé ChatGPT mais ça ne m'a pas rapporté d'argent"). Il transforme leur frustration en curiosité active : ils cliquent non pas pour voir un outil, mais pour comprendre pourquoi leurs efforts ont échoué et ce qu'il faut faire à la place. L'avantage SEO est structurel : "ChatGPT" génère un volume de recherche massif en français — le titre capture ce trafic existant pour l'orienter vers un positionnement anti-outil. ChatGPT est utilisé comme repoussoir, pas comme sujet : le titre parle du résultat économique manquant ("riche") et de l'architecture correctrice ("système"), jamais d'un outil. Le mot "explique" en fin de titre installe une promesse de compréhension — pas de hype, pas de vente — ce qui correspond exactement au niveau de scepticisme de l'audience cible.
+**Selected Title :**
+> Les Autres Parlent d'IA. Ce Système à 4 Agents, Lui, la Facture.
 
----
-
-## 2. Titres de Backup
-
-1. **[Question]** "Combien de Clients Vos Outils IA Vous ont-ils Rapportés Ce Mois-ci ?"
-2. **[Erreur / contraste]** "L'Erreur qui Empêche Vos Outils IA de Générer des Revenus (et le Correctif)"
-3. **[Nombre en avant]** "4 Agents, 8 Minutes, 4 Livrables — Le Pipeline IA Qui Génère des Leads"
-4. **[Résultat en avant]** "Votre Prochain Lead Magnet, Validé et Déployable, Sorti d'une Seule Session"
-5. **[Autorité / système]** "Le Pipeline AR4A : Comment Nous Construisons Nos Systèmes de Revenus IA"
-
----
-
-## 3. Options de Texte Thumbnail
-
-Contraintes appliquées : 1 à 4 mots maximum, lisible à 150px, crée immédiatement la curiosité ou le désir, s'associe naturellement au titre retenu.
-
-1. **CE SYSTÈME FACTURE**
-2. **IDÉE → REVENUS**
-3. **ARRÊTEZ LES OUTILS**
-4. **4 AGENTS IA**
-5. **ZÉRO CODE. 4 LIVRABLES.**
-
-**Recommandation principale :** "CE SYSTÈME FACTURE" — traduit visuellement la phrase stratégique "Les autres parlent d'IA. Ce système la facture." et crée un contraste immédiat avec tout contenu IA générique dans le feed YouTube de l'audience cible. Fonctionne en lecture rapide à 150px.
+**Justification :** Ce titre exécute mot pour mot l'argument économique central identifié par l'Agent 2 comme directive stratégique explicite : "construire les angles de contenu autour de 'Les autres parlent d'IA. Ce système la facture.'" Le verbe "facturer" fait un double travail commercial : il évoque la facture client (transaction réelle, revenu généré) et positionne AR4A non pas comme un générateur de texte mais comme une machine de facturation — une chaîne de production, pas un outil de réflexion. Le contraste "Les autres / Ce système" positionne MALI-MEC par opposition directe aux contenus IA génériques que le spectateur a déjà consommés sans résultat. Là où les autres titres du tableau parlent du spectateur ou de l'outil, celui-ci parle du marché — ce qui crée une pression sociale implicite sans être agressif. À 65 caractères, il est dans les limites d'affichage YouTube sans troncature. Agent 1 a confirmé que la discoverabilité dépend davantage de la distribution algorithmique que du volume de recherche par mot-clé — ce qui favorise un titre distinctif et émotionnellement chargé sur un titre SEO-optimisé générique.
 
 ---
 
-## 4. Hook — Les 30 Premières Secondes (mot pour mot)
+### Backup Titles
 
-*Ton : direct, posé, sans chaleur d'introduction. Zéro "bonjour", zéro présentation, zéro warm-up. La première syllabe est déjà dans le vif. Rythme : 3 phrases courtes, 1 pause, puis l'annonce.*
+1. **[Question]** Et si Votre Système IA Générait des Leads sans Que Vous Ayez à Coder ?
+2. **[Erreur/contraste]** ChatGPT Ne Vous a Pas Rendu Riche — Ce Système Explique Pourquoi
+3. **[Nombre]** 4 Agents IA, 8 Minutes, 4 Livrables Business — Démonstration Complète
+4. **[Résultat]** De Zéro Revenu IA à Système Actif : Construisez l'AR4A en 3 Jours
+5. **[Autorité/système]** L'Architecture IA que j'Utilise pour Générer des Leads Chaque Semaine
 
 ---
 
-Vous avez essayé ChatGPT. Peut-être des formations aussi. Peut-être d'autres outils. Et ce soir, vos revenus sont exactement là où ils étaient il y a six mois.
+### Thumbnail Text Options
+
+1. **LA FACTURE** — Reprend le punchline du titre retenu. Crée une dissonance immédiate (pourquoi une facture sur une vidéo IA ?) qui se résout en faveur du clic. Lisible à 80px.
+2. **IDÉE → REVENUS** — La flèche de transformation est le langage visuel le plus universel pour une audience entrepreneuriale. Fonctionne à toutes les tailles d'écran.
+3. **4 AGENTS IA** — Nomme le mécanisme, crée la curiosité sur "pourquoi 4 ?" sans l'expliquer. Fort pour l'audience B2B qui recherche de la spécificité.
+4. **ZÉRO CODE** — Élimine l'objection principale avant même que la vidéo commence. Filtre naturellement vers les non-techniciens.
+5. **CE SYSTÈME D'ABORD** — L'urgence de "D'ABORD" positionne tout le reste comme secondaire et crée une hiérarchie de priorités favorable au clic.
+
+**Recommandation principale : IDÉE → REVENUS**
+La flèche de transformation communique le chemin complet en trois tokens visuels, s'associe naturellement au titre retenu sans le dupliquer, et fonctionne à toutes les tailles d'écran (téléphone, desktop, notification YouTube). Elle ne nomme pas l'outil — elle nomme la transformation. Pour la miniature : "IDÉE → REVENUS" en blanc sur fond sombre, visage du présentateur en premier plan avec expression de confiance, écran d'ordinateur montrant les outputs agents en arrière-plan.
+
+---
+
+### Hook — Les 30 Premières Secondes
+
+*(Script exact — aucune introduction, aucun bonjour, aucun warm-up. La première syllabe est dans le vif. Rythme : trois phrases courtes, une pause, puis l'annonce précise du mécanisme.)*
+
+---
+
+Vous avez essayé ChatGPT. Les tutoriels. Peut-être une formation aussi.
+
+Et ce soir, vos revenus sont exactement là où ils étaient il y a six mois.
 
 Ce n'est pas l'IA qui ne fonctionne pas. C'est que vous avez des outils — pas un système.
 
-Dans les 14 prochaines minutes, je vais lancer en direct quatre agents IA spécialisés sur un vrai problème business. Vous allez voir apparaître à l'écran : un signal de marché validé, une architecture d'offre complète, cinq angles YouTube prêts à publier, et un lead magnet structuré. Pas des slides. La machine en train de tourner. Et à la fin, vous repartez avec les fichiers pour faire pareil — ce soir, si vous le décidez.
+Dans les quatorze prochaines minutes, je vais construire ce système en direct devant vous. Quatre agents IA spécialisés — qui fonctionnent en chaîne, en français, sans une seule ligne de code — vont transformer un brief business en signal de marché validé, offre structurée, stratégie YouTube, et lead magnet prêt à déployer.
+
+Ce sont exactement les agents qu'on utilise chez MALI-MEC. Et les fichiers sont dans la description.
+
+Regardez jusqu'à la fin.
 
 ---
 
-**Décomposition du hook :**
-
-| Élément | Lignes | Fonction |
-|---------|--------|----------|
-| La douleur | "Vous avez essayé ChatGPT... exactement là où ils étaient." | Valide l'échec exact vécu. Deuxième personne immédiate. |
-| Le reframing | "Ce n'est pas l'IA... pas un système." | Retire la honte, réoriente le diagnostic. |
-| La promesse spécifique | "Quatre agents IA... cinq angles YouTube... lead magnet." | Quatre livrables nommés, délai précis, mécanisme annoncé. |
-| L'urgence d'action | "Ce soir, si vous le décidez." | Le résultat est actionnable immédiatement, pas dans 6 semaines. |
+*(Durée cible : 28 à 32 secondes au rythme de parole naturel. Aucune musique pendant ces premières secondes — voix seule sur fond neutre. La tension vient de l'absence d'habillage, pas de son accumulation.)*
 
 ---
 
-## 5. Retention Map
+### Retention Map
 
-| Temps | Section | Ce qui se passe à l'écran | État du viewer | Risque de décrochage | Contre-mesure |
-|-------|---------|--------------------------|----------------|----------------------|---------------|
-| 0:00 | Hook — Validation de la douleur | Voix seule ou visage en direct. Aucun visuel distrayant. La phrase d'ouverture démarre dans la première seconde. | Reconnu — "c'est exactement ma situation" | Maximal : le scroll se décide en 3 secondes | Commencer par "Vous avez essayé" — deuxième personne immédiate, pas d'intro |
-| 0:30 | Proof Primer — La preuve avant l'explication | Dossier `outputs/` ouvert à l'écran. 4 fichiers horodatés visibles. Voix : "Ce que vous voyez là, c'est la sortie du système que je vais construire devant vous aujourd'hui — les timestamps sont là." | Confiance active, curiosité sur le "comment" | Élevé pour les profils B2B et institutionnels qui décident vite | Afficher des timestamps datés du jour même. La preuve visuelle remplace le pitch. |
-| 1:15 | Architecture AR4A — Le mécanisme en une vue | Arborescence des 4 agents affichée dans Claude Code. Voix : "Pas quatre outils. Une chaîne de production. La sortie de chaque agent devient le brief du suivant." | Compréhension architecturale — "ah, c'est différent de ce que j'ai essayé" | Faible si le setup dure moins de 45 secondes | Annoncer le premier lancement pendant la présentation pour maintenir l'anticipation |
-| 2:00 | Lancement Agent 1 — Market Signal Researcher | Brief "Je lance un programme de coaching pour jeunes entrepreneurs à Dakar" tapé en direct. Agent 1 lancé. Output en streaming visible. | Engagement actif, observation concentrée | Moyen : la latence IA peut créer un vide | Commenter l'action en temps réel : "Regardez ce que l'agent analyse maintenant — c'est le marché de coaching francophone" |
-| 3:00 | Output Agent 1 — Score de marché révélé | Score d'opportunité 3.9/5 affiché. Tableau des 7 dimensions scorées. Langage de l'audience extrait. Voix : "Ce que ChatGPT ne produit pas — une analyse de marché avec des scores et une recommandation." | Surprise positive — "ça marche vraiment" | Faible : moment de récompense naturel, pic de rétention | Lire à voix haute 2 à 3 lignes de la sortie pour que l'audience réalise la densité du livrable |
-| 4:15 | Passage de brief — Le mécanisme visible | Copier-coller visible à l'écran : la sortie d'Agent 1 devient le brief d'Agent 2. Voix : "C'est ici que la magie opère. Ce n'est pas un outil isolé — c'est une chaîne." | Compréhension du mécanisme unique AR4A | Moyen : transition technique sans résultat immédiat | Nommer l'action ("injection du brief") et annoncer ce que l'Agent 2 va produire dans 60 secondes |
-| 5:15 | Output Agent 2 — Architecture d'offre | Positionnement formulé. Core offer avec prix en EUR et XAF côte à côte. Value ladder structuré. | Désir émergent — "je veux ça pour mon business" | Faible : contenu concret et directement identifiable par l'audience | Zoomer sur la ligne de prix en XAF — l'ancrage monétaire local déclenche une identification forte |
-| 6:30 | Output Agent 3 — Stratégie YouTube | 5 angles de contenu avec scores affichés. Script d'ouverture de la vidéo visible. Voix : "L'Agent 3 vient de produire votre plan YouTube des 90 prochains jours." | "Il produit ce que je passais des heures à chercher" — désir maximal | Moyen : le viewer peut croire que le meilleur est déjà passé | Annoncer explicitement : "Dans 90 secondes, l'Agent 4 produit le lead magnet que vous pourrez télécharger dès la fin de cette vidéo" |
-| 7:45 | Output Agent 4 — Lead Magnet + Conversion | Lead magnet structuré affiché. Séquence email visible. Scripts CTA. Voix : "Quatrième livrable. Huit minutes de traitement total depuis le début." | Désir d'action — "je veux ces fichiers" | Faible : dernier agent = momentum naturel vers la conclusion | Ne pas commenter trop longtemps — laisser la densité du document parler |
-| 8:45 | Grand Reveal — 4 fichiers côte à côte | Dossier `outputs/` ouvert. Les 4 fichiers affichés simultanément en split view. Silence de 3 secondes. Voix : "Quatre livrables business. Un problème réel. Huit minutes." | Admiration — validation de la promesse complète | Très faible : pic d'attention maximal de la vidéo | Annoncer ce moment 2 minutes avant. Après la phrase, 3 secondes de silence. Laisser l'image parler. |
-| 10:00 | Chemin revenue — Connecter le système à l'argent | Schéma du funnel revenue à l'écran, étape par étape. Chiffres indicatifs par niveau. Voix : "Voici comment ce que vous venez de voir se traduit en revenus." | Désir de mise en oeuvre | Élevé : moment commercial perçu, certains quittent ici | Ne pas vendre — montrer. Le funnel est présenté comme une information, pas un argumentaire. Chaque étape porte sa transformation, pas son prix. |
-| 11:30 | Traitement des objections — 3 en 3 minutes | 3 objections traitées en 60 secondes chacune, visuellement : "Pas de code" (aucun terminal à l'écran), "Pas générique" (deux sorties différentes côte à côte), "Pour le marché francophone" (prix XAF, villes africaines dans les sorties) | Rassurance, levée des blocages | Moyen : si les objections traînent, le viewer qualifié a déjà décidé | 60 secondes maximum par objection. Traitement visuel, pas uniquement verbal. |
-| 13:00 | Call to Action — Lead Magnet + Programme Intensif | Page de capture Revenue Agent Template affichée. Programme Intensif AR4A annoncé avec les 20 places, lien en description. | Prêt à agir | Faible : les viewers encore là sont qualifiés et intentionnels | CTA unique et direct. Un lien principal (lead magnet), un secondaire (programme). Pas de liste d'options. |
-| 13:45 | Teaser — Pattern interrupt final | Annonce de la prochaine vidéo : "Je fais tourner AR4A sur un vrai brief de formation en finance islamique à Casablanca — en arabe et en français." Fin abrupte sur cette phrase. | Anticipation — l'audience qualifiée s'abonne pour la suite | Très faible : récompense les viewers fidèles | Finir avant que le viewer sente la fin arriver. L'abruptness est intentionnelle — elle signale que le contenu est dense, pas performatif. |
+| Temps | Section | Ce qui se passe | État du viewer | Risque de décrochage |
+|-------|---------|-----------------|----------------|----------------------|
+| 0:00 | **Hook — La Douleur** | Voix seule, pas de générique. "Vous avez essayé ChatGPT. Les tutoriels. Et vos revenus n'ont pas bougé." Deuxième personne dès le premier mot. | RECONNAISSANCE — "C'est exactement moi." Identification immédiate. | CRITIQUE. Les 8 premières secondes décident de tout. Une seule phrase qui ne résonne pas et le scroll reprend. Ne pas commencer par "Bonjour", jamais. |
+| 0:30 | **Preuve avant l'explication** | Dossier outputs/ ouvert en direct. Fichiers horodatés du jour visibles : 01-market-signal-brief.md, 02-offer-architecture.md. Voix : "Ce que vous voyez là, c'est la sortie du système que je vais construire devant vous ce soir." | CONFIANCE ACTIVE — Une preuve physique (fichier, date) avant toute promesse réduit le signal marketing. Le sceptique reste. | ÉLEVÉ pour les profils B2B et institutionnels qui décident en 20 secondes. Le dossier horodaté du jour est la réponse directe à "est-ce que c'est réel ?" |
+| 1:15 | **Le Diagnostic** | "Voici pourquoi ChatGPT ne vous rapporte rien." Explication en 45 secondes du problème architectural : outil isolé vs. pipeline séquentiel. Visuel simple — texte ou schéma minimaliste. | ILLUMINATION — Ils comprennent pour la première fois pourquoi leurs tentatives ont échoué. Ce n'est pas eux, c'est l'architecture. | FAIBLE. Le "moment aha" est le verrou d'attention le plus puissant d'une vidéo pédagogique. Ne pas couper avec une transition brutale. |
+| 2:00 | **Introduction AR4A** | Diagram : 4 agents, flèche séquentielle, brief en entrée, 4 livrables en sortie. Brief business du cas live tapé en direct — "Je lance un programme de coaching pour jeunes entrepreneurs à Dakar." | ANTICIPATION — Ils voient la structure avant qu'elle tourne. Ils savent ce qu'ils vont regarder. | MOYEN. Si le diagram dépasse 4 boîtes et une flèche, la lisibilité s'effondre. Garder à l'essentiel. Annoncer Agent 1 immédiatement après. |
+| 3:00 | **Agent 1 en direct** | Agent 1 (Market Signal Researcher) lancé. Brief injecté. Output en français apparaît en temps réel : score 3.9/5, tableau des 7 dimensions, recommandation stratégique. Lire à voix haute les lignes les plus fortes. | FASCINATION — La machine produit quelque chose de structuré, en français, calibré sur un vrai business. Ce n'est plus de la théorie. | FAIBLE. La démonstration live est le pic de rétention le plus élevé. Ne pas interrompre avec des annotations ou des transitions. Laisser l'output apparaître. |
+| 5:00 | **Agent 2 en direct** | Agent 2 (Offer Architect) reçoit l'output d'Agent 1 comme brief. Positionnement formulé. Tableau d'offre structuré. Pricing en EUR et XAF côte à côte. | RECONNAISSANCE + ENVIE — "Ce positionnement... il pourrait s'appliquer à mon business." Le tableau de prix ancre la promesse de revenus dans du concret. | FAIBLE. Deuxième pic de fascination. Zoomer sur le pricing — la spécificité XAF est la preuve d'adaptation marché la plus forte disponible à cet instant. |
+| 7:00 | **Agent 3 en direct** | Agent 3 (Content Strategist) reçoit les outputs des Agents 1 et 2. Cinq candidats de titres YouTube apparaissent. Carte de rétention visible. Voix : "Attendez — cet agent est en train de construire la stratégie de la vidéo que vous regardez en ce moment." | MOMENT META — Le paradoxe d'auto-référence force l'attention. Le viewer ne peut pas décrocher parce qu'il est en train d'être analysé. | QUASI NUL. C'est le verrou de rétention le plus puissant de la vidéo. Signaler ce moment explicitement et à voix haute — ne pas le laisser passer sans le nommer. |
+| 9:00 | **Agent 4 en direct** | Agent 4 (Conversion System) reçoit tous les outputs précédents. Structure de lead magnet apparaît. Séquence email visible. Scripts CTA en français. | DÉSIR — Ils veulent ce lead magnet pour leur propre business. C'est le moment de projection maximale. | FAIBLE. Le désir verrouille l'attention. Ne pas révéler le lien du lead magnet ici — garder la récompense pour le CTA final. |
+| 10:30 | **Le Grand Reveal** | Les quatre fichiers output ouverts simultanément en split view. Trois secondes de silence. Voix : "Quatre livrables business. Un seul brief. Huit minutes de traitement. C'est ça, un système." | IMPACT — L'échelle de ce qui vient de se passer atterrit. Une page de positionnement, une stratégie YouTube, un lead magnet, une séquence de conversion. Tout ça, d'un texte de 300 mots. | MOYEN. Si les quatre fichiers sont illisibles à cette taille, l'impact s'effondre. Zoomer séquentiellement sur chaque titre de fichier avant de les montrer ensemble. |
+| 12:00 | **Le Pont Revenu** | Le parcours de conversion montré explicitement à l'écran : vidéo → téléchargement → atelier → programme → consulting. Fourchettes de prix visibles. Voix : "Je vous montre ça pour que vous voyiez la chaîne complète — pas pour vous vendre quelque chose maintenant." | DÉCISION — Le viewer calcule si c'est fait pour lui. Les sceptiques peuvent décrocher ici. | ÉLEVÉ. C'est le moment le plus commercial de la vidéo. Le traiter comme une preuve (montrer) plutôt que comme un argumentaire (vendre) protège la rétention. |
+| 13:00 | **Kill d'objection : ChatGPT** | Fenêtre ChatGPT ouverte sur le même brief à gauche, output AR4A à droite. Trente secondes de comparaison visuelle silencieuse. Voix minimale : "Même brief. Voyez la différence." | RE-ENGAGEMENT — Les viewers qui hésitaient sont rattrapés. La comparaison visuelle fait l'argument sans rhétorique. | MOYEN. Les viewers déjà convaincus peuvent trouver cette section redondante. 30 secondes maximum. La compacité respecte leur temps. |
+| 13:45 | **CTA Unique** | Un seul call-to-action, deux niveaux. Niveau 1 : "Téléchargez les fichiers agents — lien dans la description." Niveau 2 : "20 places dans le Programme Intensif AR4A — lien dans la description." Landing page montrée en direct, pas seulement mentionnée. | ACTION PRÊTE — Les viewers encore là ont déjà décidé. Ils ont besoin de la confirmation que le lien existe et fonctionne. | FAIBLE parmi les viewers retenus. Ne pas ajouter de troisième CTA — la dilution des appels à l'action réduit les conversions sur chacun. |
 
 ---
 
-## 6. Screen Recording Beats
+### Screen Recording Beats
 
 | Timestamp | Action à l'écran | Technique | Pourquoi |
-|-----------|-----------------|-----------|---------|
-| 0:30 | Ouvrir le dossier `outputs/` avec les 4 fichiers horodatés | Zoom in progressif sur les noms de fichiers et les timestamps. Curseur immobile sur les dates pendant 3 secondes. | Établit la preuve physique avant toute explication. Les timestamps datés du jour rendent la preuve non contestable. |
-| 1:15 | Afficher l'arborescence des 4 agents dans Claude Code | Vue globale de la structure de fichiers, puis zoom sur chaque agent nommé successivement | La complexité visible rassure les profils B2B sans intimider les non-techniques — ils voient une organisation, pas du code. |
-| 2:00 | Taper le brief "Je lance un programme de coaching pour jeunes entrepreneurs à Dakar" dans le champ texte | Zoom in sur le curseur en mouvement pendant la frappe. Pas de copier-coller. | Humanise le brief. Le viewer voit que l'input est du français ordinaire, pas une syntaxe technique. "Dakar" crée une identification géographique immédiate. |
-| 2:30 | Agent 1 reçoit le brief et commence le traitement | Split view : brief injecté visible à gauche, output en streaming à droite | Rend le traitement transparent. L'attente devient une fonctionnalité — le viewer voit l'agent "lire" le brief en temps réel. |
-| 3:15 | Score d'opportunité 3.9/5 et tableau des 7 dimensions apparaissent | Highlight animé sur le score global, puis zoom successif sur chaque ligne du tableau | Un score précis — pas "bon" ou "élevé" — signale une analyse, pas une opinion. Moment de récompense chiffré. |
-| 4:00 | Copier la sortie d'Agent 1 et l'injecter comme brief d'Agent 2 | Action de copier-coller visible à l'écran, commentée à voix haute en simultané | Rend physiquement visible le mécanisme de "passage de brief" — c'est exactement l'innovation AR4A que les concurrents ne voient pas dans leurs outils isolés. |
-| 5:00 | Output Agent 2 : positionnement formulé, ligne de prix en EUR et XAF côte à côte | Zoom sur la section prix avec les deux devises alignées | "Ce système pense en XAF." L'ancrage monétaire local est le signal le plus fort de pertinence pour le marché francophone africain. |
-| 6:15 | Les 5 angles YouTube avec scores de clickabilité apparaissent dans la sortie | Reveal progressif ligne par ligne — rythme lent, pas de scroll rapide | Le viewer veut lire chaque titre. Ralentir ici est contre-intuitif mais génère le plus haut niveau d'engagement de cette section. |
-| 7:30 | Output Agent 4 : structure du lead magnet visible sur 8 à 10 sections, défilement lent | Défilement lent et régulier. Voix : "Ça, c'est le document que vous auriez payé un consultant pour produire." | Montre que 8 minutes de système produisent un livrable d'une densité que l'audience reconnaît comme ayant de la valeur marchande. |
-| 8:45 | Ouvrir les 4 fichiers côte à côte en split view | Vue panoramique sur les 4 titres de fichiers simultanément, puis silence de 3 secondes | Grand reveal. Aucun commentaire immédiat — laisser la multiplicité des livrables s'imprimer avant de parler. C'est le moment le plus fort de la vidéo. |
-| 10:15 | Afficher le schéma du funnel revenue avec montants indicatifs à chaque niveau | Annotation surlignée étape par étape : une flèche par niveau, un chiffre indicatif par étape | Connecte explicitement chaque output IA à une ligne de revenu potentielle. L'abstraction "système" devient : "vidéo → leads → inscrits → revenus". |
-| 13:00 | Ouvrir la page de capture du Revenue Agent Template dans un navigateur | Zoom sur le champ email et le bouton de téléchargement. Lien visible dans la barre d'adresse. | CTA visuel complet. Le viewer voit exactement ce qu'il reçoit en échange de son email — il n'a pas à imaginer. |
+|-----------|-----------------|-----------|----------|
+| 0:32 | Ouvrir le dossier outputs/ en direct. Fichiers 01-market-signal-brief.md et 02-offer-architecture.md visibles avec leurs horodatages du jour. | Zoom progressif sur les noms de fichiers. Curseur immobile sur les dates pendant 3 secondes. | Preuve physique avant la première promesse. Les timestamps datés du jour rendent la preuve non contestable. Une capture d'écran fabriquée ne peut pas avoir les mêmes horodatages. |
+| 1:45 | Taper le brief "Je lance un programme de coaching pour jeunes entrepreneurs à Dakar" dans l'interface en texte clair, sans terminal ni ligne de commande. | Plein écran, vitesse normale, aucune coupure, aucun copier-coller. | Prouve la promesse "zéro code" par l'image, pas par les mots. Le viewer voit exactement ce qu'il devra faire lui-même : écrire du texte ordinaire. "Dakar" ancre immédiatement la pertinence géographique. |
+| 2:10 | Afficher la structure du dossier agents : coordinateur.md, agent-1.md, agent-2.md, agent-3.md, agent-4.md. | Panoramique lent sur les noms de fichiers, pause de 2 secondes sur chaque. | Rend le système visible avant qu'il tourne. Quatre fichiers nommés = une organisation lisible, pas du code opaque. Rassure les non-techniciens. |
+| 2:50 | Lancer l'agent coordinateur. La première ligne de traitement apparaît. | Plein écran. Aucune accélération. Temps réel, pas de coupe. | Le moment où la machine démarre. La latence réelle est une preuve de réalité, pas un défaut à masquer. Couper ici serait une erreur de crédibilité. |
+| 3:20 | Output Agent 1 apparaît : score 3.9/5, tableau des 7 dimensions scorées, recommandation stratégique en français. | Zoom sur le score dès qu'il apparaît. Lire à voix haute : "3.9 sur 5 — feu vert." Puis zoom sur la section psychologie d'audience. | Un score précis — pas "bon" ou "élevé" — signale une analyse structurée, pas une opinion. Premier signal chiffré que l'output est décisionnel. |
+| 4:30 | Copier la sortie d'Agent 1 et l'injecter visible à l'écran comme brief d'Agent 2. | Action de copier-coller visible, commentée à voix haute en simultané : "La sortie d'Agent 1 devient le brief d'Agent 2. C'est ça, l'inter-agent." | Rend physiquement visible le mécanisme de "passage de brief" qui est l'innovation centrale d'AR4A. Ce moment distingue AR4A de ChatGPT plus efficacement que n'importe quelle explication verbale. |
+| 5:10 | Output Agent 2 : positionnement formulé, tableau d'offre avec pricing EUR et XAF côte à côte. | Zoom sur la section positionnement. Pause de 4 secondes. Puis zoom sur la ligne de pricing en XAF. | La pause sur le positionnement permet au viewer de se projeter. Le zoom sur le pricing XAF est le signal d'adaptation marché le plus fort : un outil générique aurait produit des prix en USD. |
+| 6:15 | Les 5 candidats de titres YouTube avec leurs scores de clickabilité apparaissent dans l'output Agent 3. | Révélation ligne par ligne, rythme lent. Commenter brièvement le titre en tête de liste avant de continuer. | Le viewer veut lire chaque titre. Ralentir ici est contre-intuitif mais génère le plus haut niveau d'engagement de cette section. La lenteur signale que le contenu est dense. |
+| 7:30 | Les deux éléments côte à côte : l'output Agent 3 à droite, la vidéo en cours à gauche (ou annonce verbale explicite). Voix : "Ce que vous voyez à droite... c'est la stratégie de la vidéo que vous regardez en ce moment." | Pause complète, changement de ton de voix, regard caméra si applicable. | Le moment méta. Signal obligatoire à voix haute. Les viewers en mode passif ne font pas le lien seuls. Cette rupture de rythme est le verrou de rétention le plus puissant disponible dans ce format. |
+| 9:00 | Output Agent 4 : structure du lead magnet avec ses sections nommées, séquence email visible. | Zoom sur le titre du lead magnet et ses sous-sections. Défilement lent. | Premier aperçu du livrable que le viewer peut obtenir. Crée le désir avant que le lien soit donné. Ne pas donner le lien ici — attendre le CTA. |
+| 10:35 | Quatre outputs ouverts en split view simultanément. | Révélation progressive : ouvrir l'un après l'autre en 4 secondes, puis recul pour voir les quatre ensemble. Silence de 5 secondes. | L'impact visuel de la totalité. Le silence permet à l'échelle de l'output d'atterrir sans concurrence audio. Ne pas parler pendant ces 5 secondes. |
+| 12:00 | Schéma du funnel revenue à l'écran avec les prix indicatifs à chaque niveau. | Annotation surlignée étape par étape : une flèche par niveau, un chiffre par étape. | Connecte explicitement chaque output agent à une ligne de revenu potentielle. L'abstraction "système" devient "vidéo → leads → inscrits → revenus." |
+| 13:05 | Fenêtre ChatGPT à gauche, output AR4A à droite. Même brief dans les deux. | Split-screen fixe, 30 secondes. Voix minimale. Laisser la comparaison visuelle faire le travail. | L'argument commercial le plus fort n'est pas rhétorique — il est visuel. La densité et la cohérence commerciale de l'output AR4A vs. la généricité de ChatGPT se lit en 10 secondes. |
+| 13:50 | Ouvrir la landing page du Revenue Agent Template dans un navigateur depuis la barre d'adresse. Champ email et bouton de téléchargement visibles. | Plein écran. Cliquer sur le champ email pour montrer que la page est réelle et fonctionnelle. | Le CTA est montré, pas seulement annoncé. La page existe. Le formulaire existe. Le viewer voit sa prochaine action — il n'a pas à l'imaginer. |
 
 ---
 
-## 7. Cinq Principes de Rétention pour Cette Vidéo
+### Retention Principles for This Video
 
-*Ces principes sont spécifiques au format démonstration technique, à l'audience francophone entrepreneuriale, au format 14 minutes, et au mécanisme de live-building. Ce ne sont pas des conseils YouTube généraux.*
+**1. La preuve avant l'explication — sans exception et sans délai**
 
-**1. La preuve avant l'explication — toujours, sans exception**
+Dans une vidéo de démonstration technique pour une audience qui a déjà été déçue par des promesses IA, la crédibilité s'établit par le visible, pas par le déclaratif. Montrer le dossier outputs/ avec ses fichiers horodatés dans les 45 premières secondes n'est pas un choix stylistique — c'est le contrat de confiance qui autorise tout le reste de la vidéo à exister. Le profil B2B de l'audience secondaire (consultants institutionnels, organisations) prend sa décision de rester ou partir dans cet intervalle. Une preuve physique avant le premier argument commercial transforme la posture du viewer de "encore un vendeur d'IA" à "quelqu'un qui montre quelque chose de réel."
 
-Dans une vidéo de démonstration technique destinée à une audience qui a déjà été déçue par des promesses IA, la crédibilité s'établit par le visible, pas par le déclaratif. Montrer le dossier `outputs/` avec ses fichiers horodatés dans les 45 premières secondes n'est pas une option stylistique — c'est le contrat de confiance qui autorise le reste de la vidéo à exister. Toute explication avant cette preuve est du pitch. Après cette preuve, c'est de la démonstration. Le profil B2B de l'audience secondaire prend sa décision de rester ou partir dans cet intervalle.
+**2. Annoncer le bénéfice avant l'output, jamais après**
 
-**2. Nommer la douleur avec précision avant de montrer le remède**
+La convention pédagogique standard est de montrer le résultat puis d'expliquer sa valeur. Pour ce format et cette audience, inverser l'ordre augmente la rétention : annoncer le bénéfice précis en une phrase AVANT que l'output apparaisse, puis laisser l'output confirmer l'annonce. "Dans trente secondes, vous allez voir apparaître un tableau de pricing calibré pour le marché francophone africain — avec des prix en XAF." Puis l'output apparaît. La confirmation crée une micro-satisfaction qui conditionne le viewer à attendre le prochain bénéfice annoncé. Un viewer qui attend quelque chose de précis ne quitte pas.
 
-Ce public a une expérience spécifique d'échec : il a investi du temps dans des outils IA et obtenu zéro revenu supplémentaire. Ce n'est pas une douleur générique. La rétention dans les 60 premières secondes dépend entièrement du degré de précision avec lequel le hook nomme cet échec. "Vous avez essayé l'IA" ne suffit pas. "Vous avez essayé ChatGPT, ça n'a pas généré de revenus, ce n'est pas votre faute — c'est votre architecture" : chaque mot retire une friction et installe une promesse. La précision du diagnostic crée l'identification. L'identification crée la rétention.
+**3. Le moment méta comme verrou de rétention à 7:30**
 
-**3. Maintenir la progression par les chiffres et les étapes annoncées à l'avance**
+La séquence où Agent 3 produit la stratégie de cette même vidéo est le verrou de rétention le plus puissant disponible dans ce format spécifique. Mais il ne fonctionne que si le présentateur le signale explicitement avec une rupture de rythme — une pause, un changement de ton, une phrase qui force la prise de conscience. "Attendez. L'agent que vous regardez en ce moment est en train de construire la stratégie de la vidéo que vous regardez. Ces titres qui apparaissent à l'écran — c'est la stratégie de cette vidéo, produite ce matin par ce système." Le paradoxe d'auto-référence est cognitif et involontaire — il ne peut pas être ignoré. Mais il doit être signalé, parce que les viewers en mode observation passive ne font pas le lien seuls.
 
-Une vidéo de live-building sans structure annoncée ressemble à regarder quelqu'un travailler. Une vidéo de live-building avec une progression numérotée ressemble à regarder un plan s'exécuter. Annoncer "Agent 1 sur 4" avant chaque lancement, afficher un titre de section à l'écran, et annoncer explicitement 2 minutes avant les moments de Grand Reveal ("dans 2 minutes, vous allez voir les 4 fichiers s'ouvrir côte à côte") transforme la rétention passive en anticipation active. Un viewer qui attend quelque chose de précis ne quitte pas. Les checkpoints annoncés génèrent une rétention intentionnelle.
+**4. Maintenir la progression numérotée des agents tout au long de la vidéo**
 
-**4. Ancrer dans le contexte francophone à chaque occasion disponible**
+Une vidéo de live-building sans structure annoncée ressemble à regarder quelqu'un travailler. Avec une progression numérotée explicite — "Agent 1 sur 4", "Agent 2 sur 4" — elle ressemble à regarder un plan s'exécuter. Afficher un indicateur visuel de progression à chaque transition d'agent, annoncer le prochain bénéfice avant de lancer chaque agent, et promettre le Grand Reveal deux minutes avant qu'il arrive ("dans deux minutes, vous allez voir les quatre fichiers s'ouvrir côte à côte — restez") transforme la rétention passive en anticipation active. Un viewer qui attend un moment spécifique ne quitte pas avant de l'avoir vu.
 
-Une seconde de doute — "est-ce que ça marche vraiment dans mon contexte ?" — génère un décrochage. Pour une audience d'entrepreneurs francophones africains et MENA, cet ancrage n'est pas symbolique : il est fonctionnel. Citer des villes réelles (Dakar, Abidjan, Casablanca), afficher des prix en XAF à côté des EUR, mentionner WhatsApp Business dans les sorties d'agents, utiliser des noms de marchés locaux dans les exemples — chaque occurrence de contexte local réduit la friction d'identification et augmente la durée de visionnage. La généralité tue la rétention dans ce marché. La spécificité géographique et monétaire la protège.
+**5. Ancrer dans le contexte francophone à chaque occasion disponible**
 
-**5. Le Grand Reveal comme point de non-retour intentionnel**
-
-À 8:45, les 4 fichiers ouverts côte à côte constituent le pic d'attention naturel de la vidéo. Mais ce pic ne se produit que si l'audience a été préparée à l'attendre. Annoncer ce moment deux minutes avant ("dans 2 minutes, vous allez voir les 4 livrables côte à côte — restez") installe un engagement intentionnel. Le viewer qui a entendu cette annonce ne quitte pas à 7:30 : il attend. Et un viewer qui attend le Grand Reveal regardera aussi le chemin revenue et le CTA qui suivent immédiatement après. Le reveal n'est pas seulement un moment de démonstration — c'est le mécanisme de rétention qui protège la partie commerciale de la vidéo.
+Une seconde de doute — "est-ce que ça marche vraiment dans mon contexte ?" — génère un décrochage immédiat. Pour une audience d'entrepreneurs francophones africains et MENA, cet ancrage n'est pas symbolique : il est fonctionnel. Utiliser des villes réelles dans le brief live (Dakar, Abidjan, Casablanca), zoomer sur les prix en XAF dans l'output Agent 2, mentionner WhatsApp Business dans les sorties de conversion, nommer les marchés locaux dans les exemples — chaque occurrence de contexte local réduit la friction d'identification et augmente la durée de visionnage. La généralité tue la rétention dans ce marché. La spécificité géographique et monétaire la protège.
 
 ---
 
-## Résumé stratégique
+### Note d'exécution prioritaire
 
-Le titre retenu positionne MALI-MEC non pas comme un créateur de contenu IA supplémentaire, mais comme l'entité qui diagnostique pourquoi les tentatives précédentes ont échoué — et démontre le correctif en temps réel. Cette posture est plus puissante que toute promesse de résultats parce qu'elle commence par valider l'expérience de l'audience, pas par la contredire.
+Avant le tournage, un run complet du coordinateur sur un brief réel MALI-MEC doit être produit et sauvegardé dans outputs/ avec des horodatages authentiques datant de la semaine du tournage. Ce run doit être visible à l'écran à 0:30 (preuve avant l'explication). C'est la condition critique identifiée par l'Agent 1 pour faire passer le score de crédibilité de 3 à 4 et fermer le gap entre un feu vert conditionnel et un feu vert complet. Sans cet artefact, la vidéo commence par une promesse. Avec cet artefact, elle commence par une preuve.
 
-La vidéo ne vend pas AR4A. Elle le prouve. Chaque fichier de sortie visible à l'écran est simultanément une preuve et un avant-goût du livrable que l'audience peut obtenir en téléchargeant le template ou en rejoignant le programme. La vidéo n'est pas un tunnel qui mène à l'offre. Elle est l'offre.
+---
 
-**Prochaine action requise avant le tournage :** Produire un run coordinateur complet sur un brief réel, horodaté, sauvegardé dans `outputs/`, affichable en 90 secondes de screen recording. Cette action unique fait passer le Proof Primer (0:30) de promesse à preuve, et transforme le score de crédibilité de l'ensemble de la vidéo.
+CONTENT_SCORE: 19.0/20
