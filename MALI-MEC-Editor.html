@@ -592,6 +592,127 @@ function parseMDFile(text){
   return{title,sections};
 }
 
+// ── Pure-JS inflate (RFC 1950/1951) — no browser APIs needed ─────
+function pureInflate(input){
+  // Unwrap zlib header (RFC 1950): skip CMF + FLG (2 bytes), strip Adler-32 (last 4 bytes)
+  if(input.length<6)throw new Error('too short');
+  const cmf=input[0],flg=input[1];
+  if((cmf&0x0f)!==8||(cmf*256+flg)%31!==0)throw new Error('bad zlib header');
+  const raw=input.subarray(2,input.length-4);
+
+  // Bit reader (LSB-first)
+  let bp=0; // bit position in raw
+  function readBits(n){
+    let v=0;
+    for(let i=0;i<n;i++){
+      if(bp>>3>=raw.length)throw new Error('eof');
+      v|=((raw[bp>>3]>>(bp&7))&1)<<i;
+      bp++;
+    }
+    return v;
+  }
+  function readByte(){return readBits(8);}
+
+  // Build canonical Huffman table: returns function(readBits)->symbol
+  function buildTree(lengths){
+    const maxLen=Math.max(...lengths);
+    if(maxLen===0)return ()=>-1;
+    const blCount=new Int32Array(maxLen+1);
+    for(const l of lengths)if(l>0)blCount[l]++;
+    const nextCode=new Int32Array(maxLen+2);
+    for(let b=1;b<=maxLen;b++)nextCode[b]=(nextCode[b-1]+blCount[b-1])<<1;
+    const tbl=new Map();
+    for(let i=0;i<lengths.length;i++){
+      const l=lengths[i];
+      if(l>0){
+        const code=nextCode[l]++;
+        tbl.set((l<<16)|code,i);
+      }
+    }
+    return function decode(){
+      let code=0,len=0;
+      for(let i=0;i<16;i++){
+        if(bp>>3>=raw.length)throw new Error('eof in tree');
+        code=(code<<1)|((raw[bp>>3]>>(bp&7))&1);
+        bp++;
+        len++;
+        const sym=tbl.get((len<<16)|code);
+        if(sym!==undefined)return sym;
+      }
+      throw new Error('bad huffman code');
+    };
+  }
+
+  // Fixed Huffman trees (BTYPE=01)
+  const fixedLitLen=(()=>{
+    const l=new Array(288);
+    for(let i=0;i<=143;i++)l[i]=8;
+    for(let i=144;i<=255;i++)l[i]=9;
+    for(let i=256;i<=279;i++)l[i]=7;
+    for(let i=280;i<=287;i++)l[i]=8;
+    return l;
+  })();
+  const fixedDist=new Array(32).fill(5);
+
+  const LEXT=[0,0,0,0,0,0,0,0,1,1,1,1,2,2,2,2,3,3,3,3,4,4,4,4,5,5,5,5,0,0,0];
+  const LBASE=[3,4,5,6,7,8,9,10,11,13,15,17,19,23,27,31,35,43,51,59,67,83,99,115,131,163,195,227,258,0,0];
+  const DEXT=[0,0,0,0,1,1,2,2,3,3,4,4,5,5,6,6,7,7,8,8,9,9,10,10,11,11,12,12,13,13];
+  const DBASE=[1,2,3,4,5,7,9,13,17,25,33,49,65,97,129,193,257,385,513,769,1025,1537,2049,3073,4097,6145,8193,12289,16385,24577];
+  const CLORDER=[16,17,18,0,8,7,9,6,10,5,11,4,12,3,13,2,14,1,15];
+
+  const out=[];
+
+  function inflate_block(litDecode,distDecode){
+    for(;;){
+      const sym=litDecode();
+      if(sym<256){out.push(sym);}
+      else if(sym===256){break;}
+      else{
+        const li=sym-257;
+        const len=LBASE[li]+readBits(LEXT[li]);
+        const di=distDecode();
+        const dist=DBASE[di]+readBits(DEXT[di]);
+        const start=out.length-dist;
+        for(let i=0;i<len;i++)out.push(out[start+i]);
+      }
+    }
+  }
+
+  // Main loop
+  let bfinal=0;
+  while(!bfinal){
+    bfinal=readBits(1);
+    const btype=readBits(2);
+    if(btype===0){
+      // Stored block
+      bp=(bp+7)&~7; // align to byte
+      const len=raw[bp>>3]|(raw[(bp>>3)+1]<<8);
+      bp+=32;
+      for(let i=0;i<len;i++){out.push(raw[(bp>>3)+i]);}
+      bp+=len*8;
+    }else if(btype===1){
+      inflate_block(buildTree(fixedLitLen),buildTree(fixedDist));
+    }else if(btype===2){
+      const hlit=readBits(5)+257;
+      const hdist=readBits(5)+1;
+      const hclen=readBits(4)+4;
+      const clLens=new Array(19).fill(0);
+      for(let i=0;i<hclen;i++)clLens[CLORDER[i]]=readBits(3);
+      const clDecode=buildTree(clLens);
+      const combined=[];
+      while(combined.length<hlit+hdist){
+        const c=clDecode();
+        if(c<16){combined.push(c);}
+        else if(c===16){const rep=readBits(2)+3;const last=combined[combined.length-1];for(let i=0;i<rep;i++)combined.push(last);}
+        else if(c===17){const rep=readBits(3)+3;for(let i=0;i<rep;i++)combined.push(0);}
+        else{const rep=readBits(7)+11;for(let i=0;i<rep;i++)combined.push(0);}
+      }
+      inflate_block(buildTree(combined.slice(0,hlit)),buildTree(combined.slice(hlit)));
+    }else{throw new Error('reserved btype');}
+  }
+  return new Uint8Array(out);
+}
+
 // ── PDF helpers (FlateDecode + ToUnicode CMap) ────────────────
 function u8Find(buf,pat,start){
   const L=pat.length;
@@ -603,23 +724,24 @@ function u8Find(buf,pat,start){
 }
 
 async function tryDecompress(data){
-  if(typeof DecompressionStream==='undefined')return null;
-  for(const fmt of['deflate','deflate-raw']){
-    try{
-      const ds=new DecompressionStream(fmt);
-      const writer=ds.writable.getWriter();
-      const reader=ds.readable.getReader();
-      const chunks=[];
-      // Must read and write concurrently — write() blocks until the reader consumes
-      await Promise.all([
-        writer.write(data).then(()=>writer.close()),
-        (async()=>{let r;while(!(r=await reader.read()).done)chunks.push(r.value);})()
-      ]);
-      const n=chunks.reduce((s,c)=>s+c.length,0);
-      if(n>0){const out=new Uint8Array(n);let o=0;for(const c of chunks){out.set(c,o);o+=c.length;}return out;}
-    }catch(e){}
+  if(typeof DecompressionStream!=='undefined'){
+    for(const fmt of['deflate','deflate-raw']){
+      try{
+        const ds=new DecompressionStream(fmt);
+        const writer=ds.writable.getWriter();
+        const reader=ds.readable.getReader();
+        const chunks=[];
+        await Promise.all([
+          writer.write(data).then(()=>writer.close()),
+          (async()=>{let r;while(!(r=await reader.read()).done)chunks.push(r.value);})()
+        ]);
+        const n=chunks.reduce((s,c)=>s+c.length,0);
+        if(n>0){const out=new Uint8Array(n);let o=0;for(const c of chunks){out.set(c,o);o+=c.length;}return out;}
+      }catch(e){}
+    }
   }
-  return null;
+  // Pure-JS fallback — works in all browsers, no APIs needed
+  try{return pureInflate(data);}catch(e){return null;}
 }
 
 function parseCMapText(s){
