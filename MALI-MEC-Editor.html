@@ -555,7 +555,7 @@ async function processFile(file){
       applyImported(parsed.sections,parsed.title||rawTitle);
     }else if(ext==='pdf'){
       const buf=await file.arrayBuffer();
-      const extracted=extractFromPDF(buf);
+      const extracted=await extractFromPDF(buf);
       if(!extracted||extracted.length<50)throw new Error('Le texte du PDF n\'a pas pu être extrait. Essaie de sauvegarder le brief en <strong>.md</strong> puis importe ce fichier.');
       const sections=parseSectionText(extracted);
       const filled=Object.values(sections).filter(v=>v&&v.trim()).length;
@@ -582,45 +582,146 @@ function parseMDFile(text){
   return{title,sections};
 }
 
-function extractFromPDF(buf){
-  const bytes=new Uint8Array(buf);const parts=[];const chunkSize=32768;let raw='';
-  for(let i=0;i<bytes.length;i+=chunkSize){raw+=String.fromCharCode(...bytes.subarray(i,Math.min(i+chunkSize,bytes.length)));}
-  const btRe=/BT\b([\s\S]{1,3000}?)ET\b/g;let m;
-  while((m=btRe.exec(raw))!==null){
-    const block=m[1];const pr=/\(([^)\\]|\\[\s\S])*\)/g;let pm;
-    while((pm=pr.exec(block))!==null){
-      const t=pm[0].slice(1,-1).replace(/\\n/g,'\n').replace(/\\r/g,'\n').replace(/\\t/g,' ').replace(/\\\\/g,'\\').replace(/\\./g,'');
-      if(t.trim().length>0)parts.push(t);
-    }
+// ── PDF helpers (FlateDecode + ToUnicode CMap) ────────────────
+function u8Find(buf,pat,start){
+  const L=pat.length;
+  outer:for(let i=start;i<=buf.length-L;i++){
+    for(let j=0;j<L;j++)if(buf[i+j]!==pat[j])continue outer;
+    return i;
   }
-  const hexRe=/<FEFF([0-9A-Fa-f]{4,})>/g;let hm;
-  while((hm=hexRe.exec(raw))!==null){
-    const hex=hm[1];let dec='';
-    for(let i=0;i<hex.length-3;i+=4){const code=parseInt(hex.slice(i,i+4),16);if(code>0x20&&code<0xFFFD)dec+=String.fromCharCode(code);}
-    if(dec.trim())parts.push(dec);
-  }
-  if(parts.length<3){return raw.replace(/[^\x20-\x7EÀ-ÿ\n]/g,' ').replace(/ {4,}/g,'\n');}
-  return parts.join(' ');
+  return -1;
 }
 
+async function tryDecompress(data){
+  for(const fmt of[‘deflate’,’deflate-raw’]){
+    try{
+      const ds=new DecompressionStream(fmt);
+      const w=ds.writable.getWriter();w.write(data);w.close();
+      const chunks=[];const r=ds.readable.getReader();
+      while(true){const{done,value}=await r.read();if(done)break;chunks.push(value);}
+      const tot=chunks.reduce((a,b)=>a+b.length,0);const out=new Uint8Array(tot);let off=0;
+      for(const c of chunks){out.set(c,off);off+=c.length;}
+      return out;
+    }catch(e){}
+  }
+  return null;
+}
+
+function parseCMapText(s){
+  const m=new Map();
+  for(const b of(s.match(/beginbfrange([\s\S]*?)endbfrange/g)||[])){
+    for(const l of b.split(‘\n’)){
+      const r=l.match(/<([0-9a-f]{2})><([0-9a-f]{2})><([0-9a-f]{4})>/i);
+      if(r){const s2=parseInt(r[1],16),e=parseInt(r[2],16),u=parseInt(r[3],16);for(let x=s2;x<=e;x++)m.set(x,String.fromCodePoint(u+(x-s2)));}
+    }
+  }
+  for(const b of(s.match(/beginbfchar([\s\S]*?)endbfchar/g)||[])){
+    for(const l of b.split(‘\n’)){
+      const r=l.match(/<([0-9a-f]{2})>\s*<([0-9a-f]{4})>/i);
+      if(r)m.set(parseInt(r[1],16),String.fromCodePoint(parseInt(r[2],16)));
+    }
+  }
+  return m;
+}
+
+function decodeCMapStream(stream,cmap){
+  const lines=[];const btRe=/BT\b([\s\S]{1,5000}?)ET\b/g;let m;
+  while((m=btRe.exec(stream))!==null){
+    const block=m[1];const tjRe=/\[([^\]]*)\]\s*TJ/g;let tj;
+    while((tj=tjRe.exec(block))!==null){
+      let line=’’;
+      const itemRe=/\(([^)\\]|\\[\s\S])*\)|(-?[0-9]+(?:\.[0-9]*)?)/g;let item;
+      while((item=itemRe.exec(tj[1]))!==null){
+        if(item[0][0]===’(‘){
+          const raw=item[0].slice(1,-1);let dec=’’;
+          for(let k=0;k<raw.length;k++){
+            let code=raw.charCodeAt(k);
+            if(raw[k]===’\\’&&k+1<raw.length){k++;const nx=raw[k];
+              if(nx>=’0’&&nx<=’7’){let o=nx;if(k+1<raw.length&&raw[k+1]>=’0’&&raw[k+1]<=’7’){o+=raw[k+1];k++;if(k+1<raw.length&&raw[k+1]>=’0’&&raw[k+1]<=’7’){o+=raw[k+1];k++;}}code=parseInt(o,8);}
+              else code=nx.charCodeAt(0);}
+            dec+=(cmap.get(code)||’’);
+          }
+          line+=dec;
+        }else if(parseFloat(item[0])<-100)line+=’ ‘;
+      }
+      if(line.trim())lines.push(line);
+    }
+    // Tj operator
+    const simRe=/\(([^)\\]|\\[\s\S])*\)\s*Tj/g;let s2;
+    while((s2=simRe.exec(block))!==null){
+      const raw=s2[0].slice(1,s2[0].lastIndexOf(‘)’));let dec=’’;
+      for(let k=0;k<raw.length;k++){let code=raw.charCodeAt(k);if(raw[k]===’\\’&&k+1<raw.length){k++;code=raw.charCodeAt(k);}dec+=(cmap.get(code)||’’);}
+      if(dec.trim())lines.push(dec);
+    }
+  }
+  return lines.join(‘\n’);
+}
+
+async function extractFromPDF(buf){
+  const bytes=new Uint8Array(buf);
+  const sPat=[0x73,0x74,0x72,0x65,0x61,0x6d];
+  const ePat=[0x65,0x6e,0x64,0x73,0x74,0x72,0x65,0x61,0x6d];
+  const raw=[];let si=0;
+  while(true){
+    const idx=u8Find(bytes,sPat,si);if(idx===-1)break;
+    const after=idx+6;let ds;
+    if(bytes[after]===0x0d&&bytes[after+1]===0x0a)ds=after+2;
+    else if(bytes[after]===0x0a)ds=after+1;else{si=idx+1;continue;}
+    const end=u8Find(bytes,ePat,ds);if(end===-1)break;
+    raw.push(bytes.slice(ds,end));si=end+9;
+  }
+  // Decompress
+  let dec=[];
+  if(typeof DecompressionStream!==’undefined’){
+    dec=await Promise.all(raw.map(s=>tryDecompress(s)));
+  }
+  const latin1=new TextDecoder(‘windows-1252’);
+  const tstreams=dec.map(d=>d?latin1.decode(d):null);
+  // Find CMap
+  let cmap=new Map();
+  for(const s of tstreams)if(s&&s.includes(‘beginbfrange’)){cmap=parseCMapText(s);if(cmap.size>0)break;}
+  // Decode content
+  if(cmap.size>0){
+    let all=’’;
+    for(const s of tstreams)if(s&&s.includes(‘BT’))all+=decodeCMapStream(s,cmap)+’\n’;
+    if(all.trim().length>50)return all;
+  }
+  // Fallback: raw BT/ET + hex extraction
+  const parts=[];const chunkSize=32768;let rawStr=’’;
+  for(let i=0;i<bytes.length;i+=chunkSize)rawStr+=String.fromCharCode(...bytes.subarray(i,Math.min(i+chunkSize,bytes.length)));
+  const btRe=/BT\b([\s\S]{1,3000}?)ET\b/g;let m;
+  while((m=btRe.exec(rawStr))!==null){const pr=/\(([^)\\]|\\[\s\S])*\)/g;let pm;
+    while((pm=pr.exec(m[1]))!==null){const t=pm[0].slice(1,-1).replace(/\\n/g,’\n’).replace(/\\r/g,’\n’).replace(/\\t/g,’ ‘).replace(/\\\\/g,’\\’).replace(/\\./g,’’);if(t.trim())parts.push(t);}
+  }
+  const hexRe=/<FEFF([0-9A-Fa-f]{4,})>/g;let hm;
+  while((hm=hexRe.exec(rawStr))!==null){const hex=hm[1];let d=’’;for(let i=0;i<hex.length-3;i+=4){const code=parseInt(hex.slice(i,i+4),16);if(code>0x20&&code<0xFFFD)d+=String.fromCharCode(code);}if(d.trim())parts.push(d);}
+  if(parts.length<3)return rawStr.replace(/[^\x20-\x7EÀ-ÿ\n]/g,’ ‘).replace(/ {4,}/g,’\n’);
+  return parts.join(‘ ‘);
+}
+
+// Compact-based section detection (works for both CMap-decoded and raw text)
 const SECTION_PATTERNS=[
-  [/PROPOS\s+DE\s+L['’]ORGANISATION/i,'About MALI-MEC'],
-  [/AUDIENCE\s+CIBLE/i,'Target Audience'],
-  [/PROMESSE\s+CENTRALE/i,'Core Promise'],
-  [/OBJECTIFS?\s+BUSINESS/i,'Business Goals'],
-  [/[EÉ]COSYST[EÈ]ME\s+D['’]OFFRES/i,'Offer Ecosystem (Value Ladder)'],
-  [/STRAT[EÉ]GIE\s+DE\s+CONTENU/i,'Content Strategy'],
-  [/CONCEPT\s+VID[EÉ]O\s*[/\/]\s*CAMP/i,'Current Video / Campaign Concept'],
-  [/PHRASE\s+STRAT[EÉ]GIQUE/i,'Strategic Phrase'],
-  [/CONTRAINTES/i,'Constraints'],
-  [/PREUVES?\s+REQUISES?/i,'Proof Requirements']
+  [/PROPOSDEL.ORGANISATION/i,’About MALI-MEC’],
+  [/AUDIENCECIBLE/i,’Target Audience’],
+  [/PROMESSECENTRALE/i,’Core Promise’],
+  [/OBJECTIFSBUSINESS/i,’Business Goals’],
+  [/[EÉ]COSYST[EÈ]MED.OFFRES/i,’Offer Ecosystem (Value Ladder)’],
+  [/STRAT[EÉ]GIEDECONTENU/i,’Content Strategy’],
+  [/CONCEPTVID[EÉ]O/i,’Current Video / Campaign Concept’],
+  [/PHRASESTRAT[EÉ]GIQUE/i,’Strategic Phrase’],
+  [/CONTRAINTES/i,’Constraints’],
+  [/PREUVESREQUISES/i,’Proof Requirements’]
 ];
 
 function parseSectionText(text){
+  // Build compacted string (no spaces/tabs) + position map back to original
+  const compact=[];const posMap=[];
+  for(let i=0;i<text.length;i++){if(text[i]!==’ ‘&&text[i]!==’\t’){compact.push(text[i]);posMap.push(i);}}
+  const C=compact.join(‘’);
   const positions=[];
   for(const[pat,name]of SECTION_PATTERNS){
-    pat.lastIndex=0;const m=pat.exec(text);
-    if(m)positions.push({idx:m.index,end:m.index+m[0].length,name});
+    pat.lastIndex=0;const m=pat.exec(C);
+    if(m){const os=posMap[m.index],oe=posMap[m.index+m[0].length-1]+1;positions.push({idx:os,end:oe,name});}
   }
   positions.sort((a,b)=>a.idx-b.idx);
   const result={};const seen=new Set();
@@ -628,7 +729,7 @@ function parseSectionText(text){
     const{end,name}=positions[i];
     if(seen.has(name))continue;seen.add(name);
     const nextIdx=i+1<positions.length?positions[i+1].idx:text.length;
-    const content=text.slice(end,nextIdx).replace(/^\s*[:—\-]\s*/,'').trim();
+    const content=text.slice(end,nextIdx).replace(/^\s*[:—\-\n]+/,’’).trim();
     if(content)result[name]=content;
   }
   return result;
