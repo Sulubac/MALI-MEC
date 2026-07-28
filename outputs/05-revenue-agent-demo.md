@@ -1,5 +1,5 @@
 # Revenue Agent Demo — Synthèse Coordinateur AR4A
-## MALI-MEC · Run 3 · 2026-07-28
+## École Champion · Run 4 · 2026-07-28
 
 ---
 
@@ -7,64 +7,66 @@
 
 | Agent | Fichier de sortie | Score / Décision | Validé |
 |-------|-------------------|------------------|--------|
-| 1 — Market Signal Researcher | `01-market-signal-brief.md` | **3.9 / 5.0** → Proceed (conditions) | ✅ |
-| 2 — Offer Architect | `02-offer-architecture.md` | **4.4 / 5.0** positionnement — Pas de réécriture requise | ✅ |
+| 1 — Market Signal Researcher | `01-market-signal-brief.md` | **4.0 / 5.0** → Proceed (preuve avant promesse) | ✅ |
+| 2 — Offer Architect | `02-offer-architecture.md` | **4.5 / 5.0** positionnement — Aucune réécriture requise | ✅ |
 | 3 — Content Angle Strategist | `03-content-strategy.md` | Titre retenu : **19 / 20** | ✅ |
-| 4 — Conversion System Builder | `04-conversion-system.md` | Système complet — **7 frictions auditées** | ✅ |
+| 4 — Conversion System Builder | `04-conversion-system.md` | Système complet — **10 frictions auditées** | ✅ |
 
-**Résultat global :** Feu vert complet. Quatre livrables de production prêts. Le dossier `outputs/` actuel horodaté du 2026-07-28 constitue le Proof Primer pour le tournage.
+**Résultat global :** Feu vert complet. Quatre livrables de production prêts. Le dossier `outputs/` horodaté du 2026-07-28 constitue le Proof Primer pour le tournage.
 
 ---
 
 ## Titre Final Retenu
 
-> **"Les Autres Parlent d'IA. Ce Système à 4 Agents, Lui, la Facture."**
+> **"Donnez 3 Longueurs d'Avance à Votre Enfant Avant la Rentrée 2026"**
 
 - **Score :** 19 / 20
-- **Logique :** Exécute mot pour mot l'argument économique central identifié par l'Agent 2 ("Les autres parlent d'IA. Ce système la facture."). Le verbe "facturer" positionne AR4A comme une machine de facturation — chaîne de production, pas générateur de texte.
-- **Avantage :** Distinctif dans le feed YouTube francophone, distribué par algorithme plus que par mot-clé
-- **Thumbnail recommandée :** **IDÉE → REVENUS** — flèche de transformation, trois tokens visuels, fonctionne à toutes tailles d'écran
+- **Logique :** Le verbe "Donnez" place le parent en acteur, pas l'école en vendeur. Le chiffre 3 ancre La Trilogie Champion sans la nommer, créant la curiosité. La mention de la rentrée 2026 génère une urgence calendaire réelle. 65 caractères — s'affiche entier sur mobile.
+- **Avantage :** Clickable sur Facebook, YouTube, WhatsApp. Contraste local/mondial puissant pour l'audience djiboutienne.
+- **Thumbnail recommandée :** **3 LONGUEURS D'AVANCE** — chiffre + avantage compétitif, lisible à toute taille.
 
 ---
 
 ## Phrase Qui Arrête le Scroll
 
-> **"Pendant que vous testez des outils IA, quelqu'un dans votre marché construit le système qui vous remplace."**
+> **"Votre enfant peut accéder à la pédagogie des pays les plus avancés du monde sans quitter Djibouti — et les places pour la rentrée 2026 se remplissent maintenant."**
 
 ---
 
 ## Mécanisme Unique
 
-**AR4A — Architecture Revenue à 4 Agents**
+**La Trilogie Champion**
 
-Pipeline séquentiel de quatre agents Claude Code spécialisés. La sortie de chaque agent devient le brief structuré du suivant. Ce protocole de passage de brief inter-agents produit des livrables business cohérents et spécifiques à partir d'un brief en langue ordinaire. Aucun code requis. Aucune configuration technique par le client.
+Système pédagogique intégré à trois socles simultanés :
+1. **Excellence Cérébrale** — pédagogie inspirée des méthodes japonaises (attention profonde, discipline positive, routines structurantes)
+2. **Ouverture Internationale** — anglais intensif intégré dès la maternelle, pratique orale quotidienne
+3. **Compétences Futures** — programme d'initiation à l'IA développé et animé par Techiftiin Institute, adapté à l'âge de chaque élève
 
-**Les quatre livrables en une session :**
-1. Signal de marché validé — 7 dimensions scorées, langage d'audience extrait, recommandation stratégique
-2. Architecture d'offre complète — positionnement, core offer, value ladder EUR/XAF, carte d'objections
-3. Stratégie de contenu YouTube — 5 angles scorés, titres testés, script d'ouverture mot pour mot, retention map
-4. Système de conversion — lead magnet structuré, séquence 5 emails, chemin de vente, audit de frictions
+Trois actifs non réplicables simultanément : partenariat opérationnel exclusif Techiftiin Institute + capital de confiance "première école privée de Djibouti" + équipe formée aux deux méthodes.
 
 ---
 
 ## Positioning Statement (Agent 2)
 
-> **"J'aide les entrepreneurs, coaches, consultants et formateurs francophones à construire un système IA qui génère des leads qualifiés et des revenus mesurables, chaque semaine, sans écrire une ligne de code et sans dépendre d'une équipe technique, grâce à l'Architecture Revenue à 4 Agents (AR4A)."**
+> **"Nous aidons les parents djiboutiens ambitieux à donner à leurs enfants une longueur d'avance mesurable — réussite académique, anglais courant, et maîtrise des outils de demain — sans devoir les envoyer à l'étranger, ni accepter une école qui promet la modernité sans la démontrer, grâce à La Trilogie Champion."**
 
-Score composite : **4.4 / 5.0** — Approuvé sans réécriture.
+Score composite : **4.5 / 5.0** — Approuvé sans réécriture.
 
 ---
 
 ## Offre Principale
 
-**Programme Intensif AR4A — "Votre Système à 4 Agents, Opérationnel en 3 Jours"**
+**Parcours Scolaire Champion — Rentrée 2026–2027**
 
-| Paramètre | Valeur |
-|-----------|--------|
-| Format | 3 sessions live × 2h30 sur 3 jours consécutifs |
-| Prix | 280–450 EUR / 184 000–295 000 XAF |
-| Capacité | 20 participants maximum par cohorte |
-| Livrable J+3 | Pipeline AR4A opérationnel sur le brief réel du participant |
+| Niveau | Prix annuel | Équivalent EUR |
+|--------|------------|---------------|
+| Maternelle (PS–GS) | 225 000–240 000 DJF | ~1 131–1 206 EUR |
+| Primaire (CP–CM2) | 265 000–285 000 DJF | ~1 332–1 433 EUR |
+| Collège (6e–3e) | 310 000–340 000 DJF | ~1 558–1 709 EUR |
+| Lycée (2nde–Terminale) | 360 000–400 000 DJF | ~1 809–2 010 EUR |
+| Frais d'inscription | 15 000 DJF | ~75 EUR |
+
+Capacité : **200 élèves** — toutes sections confondues.
 
 ---
 
@@ -72,11 +74,11 @@ Score composite : **4.4 / 5.0** — Approuvé sans réécriture.
 
 | Niveau | Produit | Prix |
 |--------|---------|------|
-| 0 — Gratuit | Vidéo YouTube principale | — |
-| 1 — Lead Magnet | Revenue Agent Template Pack (9 fichiers) | Gratuit (email requis) |
-| 2 — Entrée | Atelier Découverte AR4A — 2h live | 45 EUR / 29 500 XAF |
-| 3 — Core | Programme Intensif AR4A — 3 jours live | 280–450 EUR / 184 000–295 000 XAF |
-| 4 — Premium | Déploiement MEC Advisory — 90 jours | 2 500–5 000 EUR |
+| 0 — Gratuit | Vidéo YouTube/Facebook principale | — |
+| 1 — Lead Magnet | Guide PDF "Les 5 Compétences Avant 2030" (10 pages, via WhatsApp) | Gratuit (numéro requis) |
+| 2 — Entrée | Journée Portes Ouvertes + Évaluation Découverte (2h, 25 familles max) | Gratuit |
+| 3 — Core | Parcours Scolaire Champion 2026–2027 (annuel, présentiel) | 225 000–400 000 DJF |
+| 4 — Premium | Programme Champion Excellence — Suivi Renforcé (janvier 2027) | +50 000–80 000 DJF/an |
 
 ---
 
@@ -84,100 +86,94 @@ Score composite : **4.4 / 5.0** — Approuvé sans réécriture.
 
 | Timestamp | Section | Ce qui est visible à l'écran |
 |-----------|---------|------------------------------|
-| 0:00 | Hook — validation de la douleur | Voix directe, zéro visuel distrayant |
-| 0:30 | **Proof Primer** | Dossier `outputs/` ouvert, 4 fichiers horodatés |
-| 1:15 | Architecture AR4A | Arborescence des 4 agents dans Claude Code |
-| 2:00 | Lancement Agent 1 | Brief "coaching à Dakar" tapé en direct, output en streaming |
-| 3:00 | Output Agent 1 | Score 3.9/5, tableau 7 dimensions, langage audience |
-| 4:15 | Passage de brief | Copier-coller visible : sortie A1 → brief A2 |
-| 5:15 | Output Agent 2 | Positionnement + pricing EUR et XAF côte à côte |
-| 6:30 | Output Agent 3 | 5 angles YouTube avec scores de cliquabilité |
-| 7:00 | **Mention mid-vidéo** | CTA soft 11 secondes — "ces fichiers sont dans la description" |
-| 7:30 | **Moment méta** | Agent 3 a produit la stratégie de cette même vidéo |
-| 7:45 | Output Agent 4 | Lead magnet + séquence email structurés |
-| 8:45 | **Grand Reveal** | 4 fichiers côte à côte — 3 secondes de silence |
-| 10:00 | Chemin revenue | Schéma funnel avec montants indicatifs par niveau |
-| 11:30 | Objections visuelles | 3 objections, 60s chacune, traitement à l'écran |
-| 13:30 | **CTA final** | Page de capture affichée — Revenue Agent Template Pack |
-| 13:45 | Teaser | Prochain run annoncé (Casablanca, finance islamique, arabe/français) |
+| 0:00 | Hook — Le Dilemme | Visage présentateur ou façade école, plan serré |
+| 0:45 | La Promesse des 14 Minutes | Engagé — "montrer pas décrire" |
+| 1:30 | Pourquoi les Autres Écoles N'y Arrivent Pas | Sceptique activé positivement |
+| 2:30 | Présentation La Trilogie + première image intérieure | Premier plan intérieur — panoramique lent 3s |
+| 3:30 | Socle 1 — Méthode Japonaise | Enseignant nommé sous-titre 5s, démonstration avec élèves |
+| 5:30 | Socle 2 — Anglais Intensif | Session sans coupure, enfant en gros plan qui parle |
+| 7:00 | **CTA mi-vidéo** | "Envoyez GUIDE au [numéro]" — numéro statique 25s |
+| 7:30 | Socle 3 — IA Techiftiin | Formateur nommé, enfant actif, outil visible à l'écran |
+| 9:30 | Les 3 Socles en Système | Montage journée type, rythme visuel accéléré |
+| 10:30 | Preuve Externe | Témoignage parent continu + visite salle rénovée |
+| 11:30 | Objections Traitées | Diplômes / IA réelle / suivi — 45s chacune |
+| 12:30 | Récapitulatif | 3 mots-clés apparaissant séquentiellement |
+| 13:00 | **CTA final** | "Envoyez VISITE au [numéro]" — numéro statique 45s, deux dates JPO affichées |
+| 13:45 | Fermeture | Urgence douce, ton calme |
 
 ---
 
 ## Hook — Les 30 Premières Secondes (mot pour mot)
 
-> Vous avez essayé ChatGPT. Les tutoriels. Peut-être une formation aussi.
+> Depuis des années, les parents djiboutiens ambitieux font face au même dilemme : donner à leur enfant une éducation de niveau mondial, ou rester ici. Comme si les deux étaient incompatibles.
 >
-> Et ce soir, vos revenus sont exactement là où ils étaient il y a six mois.
+> Ce que vous allez voir dans cette vidéo change cette croyance complètement.
 >
-> Ce n'est pas l'IA qui ne fonctionne pas. C'est que vous avez des outils — pas un système.
+> Dans quatorze minutes, je vais vous montrer — pas décrire, montrer — le seul système pédagogique à Djibouti qui combine la méthode japonaise, l'anglais intensif dès la maternelle, et une initiation à l'intelligence artificielle encadrée par des formateurs de Techiftiin Institute. Trois socles. Une seule école. Dès septembre 2026.
 >
-> Dans les quatorze prochaines minutes, je vais construire ce système en direct devant vous. Quatre agents IA spécialisés — qui fonctionnent en chaîne, en français, sans une seule ligne de code — vont transformer un brief business en signal de marché validé, offre structurée, stratégie YouTube, et lead magnet prêt à déployer.
->
-> Ce sont exactement les agents qu'on utilise chez MALI-MEC. Et les fichiers sont dans la description. Regardez jusqu'à la fin.
+> Les places pour la prochaine Journée Portes Ouvertes se remplissent cette semaine. Regardez d'abord. Décidez ensuite.
 
 ---
 
 ## Lead Magnet
 
-**Revenue Agent Template Pack — AR4A** (9 fichiers, ZIP)
+**"Les 5 Compétences Que Votre Enfant Doit Maîtriser Avant 2030"** — PDF 10 pages, livré via WhatsApp en <5 minutes
 
-**Promesse :** Premier pipeline AR4A lancé dans les 30 minutes suivant le téléchargement.
-
-| Fichier | Valeur en une phrase |
-|---------|---------------------|
-| `business-brief-template.md` | L'input qui détermine la qualité de toutes les sorties |
-| `agent-1-market-signal.md` | Agent 1 préconfiguré — score d'opportunité 7 dimensions |
-| `agent-2-offer-architect.md` | Agent 2 préconfiguré — offre + pricing EUR/XAF |
-| `agent-3-content-strategist.md` | Agent 3 préconfiguré — 5 titres scorés + script |
-| `agent-4-conversion-system.md` | Agent 4 préconfiguré — lead magnet + emails |
-| `coordinateur-run-prompt.md` | Lancer les 4 agents en séquence — copier-coller |
-| `runbook-revenue-agent.md` | Guide 7 étapes avec captures d'écran annotées |
-| `grille-scoring-opportunite.md` | Évaluer une idée sans agents — 10 minutes |
-| `exemple-run-complet/` | Outputs complets du run "coaching à Dakar" |
+| Page | Contenu | Utilité implicite |
+|------|---------|------------------|
+| 1 | Couverture + introduction | Cadrage : "évaluer, pas juste visiter" |
+| 2–3 | Les 5 compétences d'ici 2030 | Le parent comprend "pourquoi maintenant" |
+| 4–6 | 10 questions à poser lors d'une visite d'école | Prépare le parent à poser les questions qu'École Champion maîtrise |
+| 7–8 | Ce que le programme anglais doit inclure | Étalon implicite qui positionne l'offre |
+| 9–10 | L'IA à l'école : sérieux ou cosmétique ? | 4 indicateurs — Techiftiin répond à chacun |
+| Encart final | Invitation Journée Portes Ouvertes + mot-clé VISITE | Conversion vers l'étape suivante |
 
 ---
 
 ## CTAs — Textes Exacts
 
-**Mid-vidéo (7:00) — 11 secondes :**
-> "Ces fichiers agents — ceux que vous regardez tourner depuis sept minutes — ils sont dans la description. Téléchargez-les pendant que je lance le dernier agent."
+**Mi-vidéo (7:00) — 25 secondes :**
+> "Si ce que vous venez de voir vous parle — ces enfants qui répondent en anglais, cette session que vous n'attendiez pas à Djibouti — j'ai préparé un document gratuit pour vous. C'est un guide pratique : les 5 compétences que votre enfant doit maîtriser avant 2030, et les questions exactes à poser lors d'une visite d'école pour savoir si l'établissement les enseigne vraiment. Envoyez simplement le mot GUIDE au numéro qui apparaît en bas de votre écran. Je vous l'envoie maintenant, directement sur WhatsApp."
 
-**Fin de vidéo (13:30) — 55 secondes :**
-> "Voilà ce qu'un système produit — pas un outil. Quatre livrables business. Un brief de trois paragraphes. Huit minutes de traitement.
+**Fin de vidéo (13:30) — 60 secondes :**
+> "Vous avez vu les trois socles. La méthode japonaise. L'anglais. L'intelligence artificielle avec Techiftiin Institute. Tout ça à Djibouti, dès septembre 2026.
 >
-> Le Revenue Agent Template Pack est dans la description. Vous y trouvez exactement ce que vous venez de voir tourner : les quatre fichiers agents préconfigurés, le brief template, le prompt coordinateur, le runbook, la grille de scoring, et l'exemple complet de ce run sur le cas de Dakar. Zéro configuration technique. Vous téléchargez, vous copiez les fichiers, vous lancez le coordinateur sur votre propre business.
+> Maintenant, voici ce que je vous propose. Venez voir par vous-même. Gratuitement. Avec votre enfant, si vous le souhaitez.
 >
-> C'est gratuit.
+> Nous organisons deux Journées Portes Ouvertes avant la rentrée. Vous visitez les salles. Vous rencontrez les enseignants. Votre enfant peut participer à une mini-session. Et on vous remet la brochure complète avec tous les tarifs, par niveau, en toute transparence.
 >
-> Si vous voulez construire ce pipeline sur votre offre réelle — en direct, avec moi, avec correction en temps réel — l'Atelier Découverte AR4A dure deux heures et coûte 45 euros. Si vous voulez le système complet en trois jours, le Programme Intensif AR4A a vingt places.
+> Pour réserver votre place, c'est simple : envoyez le mot VISITE au [numéro WhatsApp affiché à l'écran]. Les places sont limitées à 25 familles par session.
 >
-> Les deux liens sont dans la description. Prenez la description. Maintenant."
+> Un seul mot. VISITE. Et on s'occupe du reste."
 
 ---
 
-## Séquence Email — 5 Emails
+## Séquence WhatsApp — 5 Messages (canal principal)
 
-| Email | Objet | Action demandée | Objectif de conversion |
-|-------|-------|-----------------|------------------------|
-| J0 | "Vos fichiers AR4A sont là — commencez par ça ce soir" | Ouvrir `business-brief-template.md` uniquement | Activation dans les 24h |
-| J1 | "Ce qui sépare un output déployable d'un output que vous ne publierez jamais" | Relancer le run avec brief révisé (3 règles) | Brief calibré prêt |
-| J3 | "Ce que 8 minutes ont produit sur un vrai brief — résultats complets" | Comparer avec le dossier exemple-run-complet | Identification de l'écart |
-| J5 | "Pourquoi vos outils IA n'ont pas encore changé vos revenus — la vraie raison" | Répondre à l'email (signal d'intention) | Dialogue direct ouvert |
-| J8 | "La prochaine étape — si vous voulez aller plus vite et moins seul" | S'inscrire à l'Atelier Découverte | **45 EUR / 29 500 XAF** |
+| Message | Déclencheur | Premier mot visible | Action demandée | Objectif |
+|---------|-------------|---------------------|-----------------|----------|
+| M1 | Immédiat | "Bienvenue — voici votre guide" | Ouvrir le PDF | Activation dans les 24h |
+| M2 | Jour 2 | "Une question qu'on nous pose souvent après la lecture" | Répondre OUI ou VISITE | Inscription Journée Portes Ouvertes |
+| M3 | Jour 4 | "Ce qu'une maman de Djibouti nous a dit après la visite" | Répondre VISITE | Confirmation inscription JPO |
+| M4 | Jour 6 | "Les tarifs complets — en toute transparence" | Lire et poser des questions | Neutralisation objection prix |
+| M5 | Jour 8 | "Dernières places disponibles — [Date Session 1]" | VISITE ou PREINSCRIRE | Conversion finale |
 
 ---
 
-## Audit des 7 Frictions (criticité décroissante)
+## Audit des 10 Frictions (criticité décroissante)
 
 | # | Friction | Localisation | Criticité | Solution clé |
 |---|---------|-------------|-----------|--------------|
-| 1 | Viewer ne clique pas sur le lien description | Vidéo → landing page | **HIGH** | Mention 7:00 + lien ligne 1 description + YouTube Card + commentaire épinglé |
-| 2 | Visiteur ne laisse pas son email | Landing page | **HIGH** | 1 seul champ, 9 noms de fichiers exacts visibles, screenshot du dossier |
-| 3 | Email J0 en spam | Post-téléchargement | **HIGH** | SPF/DKIM/DMARC validés ; envoi < 60s ; objet non-promotionnel |
-| 4 | Lead télécharge mais ne lance pas | Activation | **HIGH** | Email J0 : une seule instruction — brief template en premier |
-| 5 | Email J5 sans clic Atelier | Nurture → prospect | **HIGH** | Prix en XAF d'abord ; date + places restantes obligatoires |
-| 6 | Infrastructure paiement XAF absente | Achat | **HIGH** | Wave / Orange Money / MTN Mobile Money + virement pour gros montants |
-| 7 | Participant Atelier ne s'inscrit pas au Programme | Atelier → core | **MEDIUM** | Offre Programme dans les 20 dernières minutes ; early-bird 48h |
+| 1 | Numéro mal affiché — parent ne peut pas noter | Vidéo → WhatsApp | **CRITIQUE** | Numéro statique 45s fin de vidéo, lisible mobile 6 pouces |
+| 2 | Réponse WhatsApp >4h — perte du lead | Contact entrant → guide | **CRITIQUE** | Réponse <2h, guide envoyé <5 min. 5 modèles prêts avant lancement |
+| 3 | Contenu de promesse avant preuves visuelles | Publication → crédibilité | **CRITIQUE** | Séquence non négociable : preuves semaine 1, positionnement semaine 3 |
+| 4 | Entretien JPO absent ou bâclé | Visite → préinscription | **CRITIQUE** | 30 min direction par famille. Objection diplômes traitée proactivement |
+| 5 | Vidéo partagée WhatsApp sans numéro de contact | Distribution virale | **ÉLEVÉ** | Numéro gravé dans la vidéo. Message type prêt à coller pour partages |
+| 6 | Parent inscrit JPO ne vient pas le jour J | Inscription → présence | **ÉLEVÉ** | Rappel WhatsApp 48h avant + matin même. Deuxième date en alternative |
+| 7 | Hésitation sur modalités de paiement cash | Préinscription → inscription | **ÉLEVÉ** | Montant mensuel équivalent affiché. Annuel / semestriel / trimestriel |
+| 8 | Guide reçu mais visite non priorisée | Lead → JPO | **ÉLEVÉ** | Encart final guide + Message 2 (J2) lien guide → visite |
+| 9 | Témoignages anonymes ou génériques | Publications | **MOYEN** | Uniquement prénom + section enfant + autorisation. Zéro anonyme. |
+| 10 | Volume messages WhatsApp dépasse capacité | Pic post-publication virale | **MOYEN** | 2e responsable WhatsApp pendant pics. Tableau lead tracking simple |
 
 ---
 
@@ -185,41 +181,48 @@ Score composite : **4.4 / 5.0** — Approuvé sans réécriture.
 
 | # | Exigence | Statut |
 |---|----------|--------|
-| 1 | Run coordinateur horodaté — dossier `outputs/` affichable en 90s | **Disponible** — ce run (Run 3, 2026-07-28) |
-| 2 | Prix en XAF dans les sorties d'agents visibles à l'écran | À vérifier à l'exécution du brief de démo |
-| 3 | Page de capture Revenue Agent Template Pack en ligne, 9 fichiers affichés | **À déployer avant publication** |
-| 4 | Domaine d'expédition email authentifié SPF/DKIM/DMARC | À vérifier |
-| 5 | Solution de paiement Mobile Money opérationnelle pour zone XAF | **À déployer — friction #6 critique** |
+| 1 | Vidéo visite locaux rénovés filmée smartphone | **À produire — semaine 1** |
+| 2 | Profils 3 enseignants nommés publiés | **À produire — semaine 1** |
+| 3 | Vidéo session IA : formateur Techiftiin nommé + enfant actif + outil visible | **À produire — semaine 2** |
+| 4 | Vidéo session anglais sans coupure avec enfants actifs | **À produire — semaine 2** |
+| 5 | Guide PDF "5 Compétences" testé et livrable via WhatsApp en <5 min | **À produire avant lancement** |
+| 6 | Brochure tarifaire complète par niveau prête pour entretiens JPO | **À produire avant JPO #1** |
+| 7 | 1 témoignage parent identifiable filmé (après JPO #1 ou visite test) | **À produire avant semaine 4** |
 
 ---
 
-## Projection de Revenus — 90 Jours
+## Projection de Revenus — 90 Jours illustratifs
 
-| Scénario | Total estimé | Base |
-|----------|-------------|------|
-| Conservateur | ~5 960 EUR | 1 500 vues, 6 Programmes, 1 MEC Advisory |
-| Modéré | ~19 550 EUR | 6 000 vues, 22 Programmes, 3 MEC Advisory |
-| Optimiste | ~53 050 EUR | 20 000 vues, 60 Programmes, 8 MEC Advisory |
+*(Frais annuels moyens pondérés : 255 000 DJF / ~1 281 EUR. ESTIMATIONS ILLUSTRATIVES — aucune garantie de résultat.)*
 
-> **Disclaimer obligatoire :** Estimations illustratives fondées sur des ratios standards pour ce type de funnel en marché francophone. Aucune garantie de résultat. Ne pas présenter à des partenaires sans ce disclaimer.
+| Scénario | Inscriptions définitives | Total engagé |
+|----------|:------------------------:|-------------|
+| Conservateur | 4 élèves | ~1 080 000 DJF / ~5 427 EUR |
+| Modéré | 20 élèves | ~5 520 000 DJF / ~27 739 EUR |
+| Optimiste | 55 élèves | ~15 075 000 DJF / ~75 754 EUR |
+
+> **Disclaimer obligatoire :** Estimations illustratives fondées sur des ratios standards pour ce type de funnel en marché francophone africain. Aucune garantie de résultat. Ne pas présenter à des partenaires sans ce disclaimer.
 
 ---
 
 ## Phrase Stratégique
 
-> **"L'argent n'est pas dans les outils. Il est dans les systèmes."**
+> **"Votre enfant n'a pas besoin d'aller à l'étranger pour recevoir l'éducation des pays qui réussissent."**
 
 ---
 
 ## Prochaine Action Unique
 
-**Déployer la solution de paiement Mobile Money (Wave / Orange Money / MTN) pour la zone XAF avant l'Atelier Découverte 1.**
+**Filmer les 5 preuves fondamentales dans les 7 jours (avant toute publication de promesse) :**
+1. Visite des locaux rénovés — panoramique 5–8 min
+2. Profil de 3 enseignants nommés face caméra
+3. Session IA Techiftiin — formateur nommé, enfant actif, outil visible
+4. Session anglais — enfants actifs sans script, son ambiant
+5. Présentation institutionnelle — "première école privée de Djibouti" avec référence vérifiable
 
-Cette action débloque la friction #6 — la seule qui peut tuer une conversion déjà décidée, après que l'audience a regardé la vidéo, téléchargé le pack, reçu les 5 emails, et cliqué sur "Réserver ma place."
-
-En parallèle : **déployer la page de capture Revenue Agent Template Pack** avec les 9 noms de fichiers exacts affichés — débloque les frictions #1, #2, #3.
+Ces 5 contenus débloquent les frictions #1 (crédibilité), #3 (séquençage) et #4 (objections JPO). Aucun contenu de promesse avant que ces 5 actifs soient validés par la direction.
 
 ---
 
 *Synthèse produite par le coordinateur AR4A — MALI-MEC Revenue Agent System*
-*Run 3 · 2026-07-28 · Inputs : business-brief.md + outputs 01 à 04*
+*Run 4 · 2026-07-28 · École Champion · Inputs : business-brief.md + outputs 01 à 04*

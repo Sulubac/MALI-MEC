@@ -1,415 +1,256 @@
-# 06 — BRIEF VIDÉO FINAL — MALI-MEC
-## Document de tournage unique — à lire avant d'appuyer sur Enregistrer
-## Run 3 · 2026-07-28
+# Brief Final de Tournage — École Champion
+## MALI-MEC · Run 4 · 2026-07-28
 
 ---
 
-# PARTIE 1 — TABLEAU DE SCORING PIPELINE
+## Fiche Technique
 
-| Dimension | Score Agent 1 | Décision |
-|-----------|:-------------:|----------|
-| Urgence | 4 / 5 | Validé |
-| Willingness to Pay | 4 / 5 | Validé |
-| Searchabilité | 3.5 / 5 | Compensé par force du titre et distribution algorithmique |
-| Cliquabilité | 4 / 5 | Titre retenu : 19/20 |
-| Crédibilité créateur | 3.5 / 5 | Mitigation : Proof Primer à 0:30 obligatoire |
-| Business Fit | 4.5 / 5 | Validé — value ladder cohérente de gratuit à institutionnel |
-| Faisabilité 15 min | 4 / 5 | Validé sous condition de rehearsal chronométré |
-| **Score global** | **3.9 / 5.0** | **Feu vert — Procéder** |
-
-**Risque principal :** Crédibilité gap au premier contact.
-**Mitigation unique :** Dossier `outputs/` horodaté à l'écran dans les 45 premières secondes — preuve physique avant toute explication.
-
----
-
-# PARTIE 2 — FICHE TECHNIQUE
-
-| Métadonnée | Valeur |
+| Paramètre | Valeur |
 |-----------|--------|
-| **Titre principal** | Les Autres Parlent d'IA. Ce Système à 4 Agents, Lui, la Facture. |
-| **Titre backup 1** | Et si Votre Système IA Générait des Leads sans Que Vous Ayez à Coder ? |
-| **Titre backup 2** | ChatGPT Ne Vous a Pas Rendu Riche — Ce Système Explique Pourquoi |
-| **Titre backup 3** | 4 Agents IA, 8 Minutes, 4 Livrables Business — Démonstration Complète |
-| **Titre backup 4** | De Zéro Revenu IA à Système Actif : Construisez l'AR4A en 3 Jours |
-| **Titre backup 5** | L'Architecture IA que j'Utilise pour Générer des Leads Chaque Semaine |
-| **Texte thumbnail — option 1 (recommandée)** | IDÉE → REVENUS |
-| **Texte thumbnail — option 2** | LA FACTURE |
-| **Texte thumbnail — option 3** | 4 AGENTS IA |
-| **Texte thumbnail — option 4** | ZÉRO CODE |
-| **Texte thumbnail — option 5** | CE SYSTÈME D'ABORD |
-| **Durée cible** | 14 minutes (tolérance max : 16 min) |
-| **Brief de démo** | "Je lance un programme de coaching pour jeunes entrepreneurs à Dakar" |
-| **Mécanisme unique** | AR4A — Architecture Revenue à 4 Agents |
-| **Phrase stratégique** | "L'argent n'est pas dans les outils. Il est dans les systèmes." |
-| **Phrase scroll-stopper** | "Pendant que vous testez des outils IA, quelqu'un dans votre marché construit le système qui vous remplace." |
-| **URL lead magnet** | [À renseigner avant tournage] |
-| **URL Atelier Découverte** | [À renseigner avant tournage] |
-| **URL Programme Intensif** | [À renseigner avant tournage] |
-| **Solution paiement XAF** | Wave / Orange Money / MTN — **obligatoire avant Atelier 1** |
-| **Adresse email d'expédition** | Adresse à domaine propre — SPF/DKIM/DMARC validés avant envoi |
-| **Public cible** | Entrepreneurs, coaches, consultants, formateurs francophones — Afrique et MENA |
-| **CTA mid-video** | À 7:00 — après output Agent 3, 11 secondes |
-| **CTA final** | À 13:30 — landing page affichée à l'écran, 55 secondes |
+| Titre | Donnez 3 Longueurs d'Avance à Votre Enfant Avant la Rentrée 2026 |
+| Score titre | 19 / 20 |
+| Durée cible | 14 minutes |
+| Plateformes | Facebook (primaire), YouTube, WhatsApp (distribution) |
+| Langue | Français |
+| CTA unique | Envoyez VISITE au [numéro WhatsApp] |
+| Date de tournage cible | Semaine du 28 juillet 2026 — avant toute publication |
+| Date de publication cible | Semaine 3 (après preuves visuelles semaines 1–2) |
 
 ---
 
-# PARTIE 3 — SCRIPT DE TOURNAGE MINUTE PAR MINUTE
+## Script Minute par Minute
 
-**Instructions générales :**
-- Ne jamais couper pendant les phases d'exécution des agents — la latence visible est la preuve
-- Voix active en continu — aucun silence de plus de 4 secondes
-- Ton : direct, posé, entrepreneurial — pas "guru", pas "cours en ligne générique"
-- Brief "coaching à Dakar" visible à l'écran en permanence pendant les phases agent
-- Police terminal : 16px minimum — vérifier l'aperçu avant de lancer
+### 0:00–0:45 — Hook : Le Dilemme (mot pour mot)
+
+> Depuis des années, les parents djiboutiens ambitieux font face au même dilemme : donner à leur enfant une éducation de niveau mondial, ou rester ici. Comme si les deux étaient incompatibles.
+>
+> Ce que vous allez voir dans cette vidéo change cette croyance complètement.
+>
+> Dans quatorze minutes, je vais vous montrer — pas décrire, montrer — le seul système pédagogique à Djibouti qui combine la méthode japonaise, l'anglais intensif dès la maternelle, et une initiation à l'intelligence artificielle encadrée par des formateurs de Techiftiin Institute. Trois socles. Une seule école. Dès septembre 2026.
+>
+> Les places pour la prochaine Journée Portes Ouvertes se remplissent cette semaine. Regardez d'abord. Décidez ensuite.
+
+**À l'écran :** Visage présentateur ou façade de l'école. Plan serré, fond neutre, aucun générique d'introduction.
 
 ---
 
-## 0:00 — 0:30 | HOOK | Validation de la douleur — mot pour mot
+### 0:45–1:30 — La Promesse des 14 Minutes
 
-**Texte exact (ne pas improviser) :**
+Annonce la structure : vous allez voir chacun des trois socles démontré en situation réelle avec des enfants. Pas de diaporama, pas de brochure à l'écran — des classes réelles, des enseignants nommés, des enfants qui apprennent.
 
-> Vous avez essayé ChatGPT. Les tutoriels. Peut-être une formation aussi.
->
-> Et ce soir, vos revenus sont exactement là où ils étaient il y a six mois.
->
-> Ce n'est pas l'IA qui ne fonctionne pas. C'est que vous avez des outils — pas un système.
->
-> Dans les quatorze prochaines minutes, je vais construire ce système en direct devant vous. Quatre agents IA spécialisés — qui fonctionnent en chaîne, en français, sans une seule ligne de code — vont transformer un brief business en signal de marché validé, offre structurée, stratégie YouTube, et lead magnet prêt à déployer.
->
-> Ce sont exactement les agents qu'on utilise chez MALI-MEC. Et les fichiers sont dans la description. Regardez jusqu'à la fin.
-
-**Écran :** Visage en direct ou voix seule sur fond neutre. La première syllabe démarre dans la première seconde. Aucune introduction. Aucun "bonjour". Aucun warm-up.
+**À l'écran :** Présentateur. Ton direct, aucune animation.
 
 ---
 
-## 0:30 — 1:15 | PROOF PRIMER | La preuve avant l'explication
+### 1:30–2:30 — Pourquoi les Autres Écoles N'y Arrivent Pas
 
-**Ce que tu dis :**
+Trois raisons structurelles : le partenariat IA exige un formateur qualifié et non une application mobile, la méthode japonaise exige une formation enseignante qui prend des mois, l'anglais oral exige une pratique quotidienne intégrée dans le programme. Ce n'est pas une critique des autres établissements — c'est une explication de pourquoi les trois simultanément sont rares.
 
-> "Ce que vous voyez là, c'est la sortie du système que je vais construire devant vous aujourd'hui. Les quatre fichiers. Les timestamps sont là — datés d'aujourd'hui. Ce n'est pas un exemple préparé. C'est ce que le pipeline a produit sur ce brief, dans cette session. Et dans les quatorze prochaines minutes, vous allez le voir tourner en direct."
-
-**Écran :** Ouvrir le dossier `outputs/`. Zoom progressif sur les 4 noms de fichiers et leurs timestamps. Curseur immobile sur les dates pendant 3 secondes. Ne pas scroller, ne pas expliquer le contenu — laisser les timestamps parler.
+**À l'écran :** Présentateur. Pas de noms d'écoles concurrentes.
 
 ---
 
-## 1:15 — 2:00 | ARCHITECTURE AR4A | Le mécanisme en une vue
+### 2:30–3:30 — Présentation de La Trilogie Champion
 
-**Ce que tu dis :**
+Nommer les trois socles pour la première fois : Excellence Cérébrale / Ouverture Internationale / Compétences Futures. Expliquer que ce sont trois programmes intégrés — pas trois cours ajoutés. Premier plan intérieur (couloir ou salle de classe) visible.
 
-> "Voilà le système. L'Architecture Revenue à 4 Agents — AR4A.
->
-> Quatre agents Claude Code spécialisés. Pas quatre outils. Une chaîne de production : la sortie de chaque agent devient le brief du suivant. Agent 1 valide le marché. Agent 2 structure l'offre. Agent 3 produit la stratégie YouTube. Agent 4 construit le système de conversion.
->
-> Aucun agent ne travaille sans le contexte du précédent. C'est ça la différence avec un outil isolé. On commence maintenant."
-
-**Écran :** Ouvrir `.claude/agents/`. Les 4 fichiers visibles. Pointer chaque fichier pendant que tu le nommes. "On commence maintenant" = dernier mot avant que l'Agent 1 s'exécute.
+**À l'écran :** Panoramique lent 3 secondes, lumière naturelle, aucun filtre. Premier test de réalité visuelle.
 
 ---
 
-## 2:00 — 3:00 | LANCEMENT AGENT 1 | Market Signal Researcher
+### 3:30–5:30 — Socle 1 : La Méthode Japonaise
 
-**Ce que tu dis (commentaire pendant l'exécution) :**
+Enseignant nommé avec prénom et titre affiché à l'écran 5 secondes. Démonstration d'un principe concret avec des élèves en situation réelle — pas une description. Plan buste de l'enseignant, puis plan large incluant les élèves, sans coupure.
 
-> *[Au lancement]* "Brief injecté : 'Je lance un programme de coaching pour jeunes entrepreneurs à Dakar.' Agent 1 en train d'analyser.
->
-> *[Pendant l'exécution]* Regardez ce que l'agent évalue maintenant — le marché de coaching francophone, le contexte Dakar, la willingness to pay locale. Il va scorer cette opportunité sur sept dimensions. Score à venir dans quelques secondes."
-
-**Écran :** Terminal visible. Output en streaming. Ne pas masquer la latence. Si la latence dépasse 60s : "L'agent analyse — la précision vaut l'attente."
-
----
-
-## 3:00 — 4:15 | OUTPUT AGENT 1 | Score de marché révélé
-
-**Ce que tu dis :**
-
-> "Voilà le verdict. Score d'opportunité : [lire le score à voix haute]. Sept dimensions scorées.
->
-> Regardez ici — [pointer le langage d'audience extrait]. L'agent a extrait le langage exact de cette audience : 'est-ce que ça marche vraiment en Afrique ?', 'j'ai besoin d'un système pas juste une formation', 'tous ces outils c'est trop.'
->
-> Et voilà la recommandation stratégique. [Lire 2 à 3 lignes à voix haute.]
->
-> Ce que ChatGPT ne produit pas : une analyse de marché avec des scores et une recommandation. Agent 1 validé. On passe à l'Agent 2."
-
-**Écran :** Highlight sur le score global. Zoom tableau 7 dimensions. Pointer le langage audience. Finir sur la recommandation stratégique.
+**Principes de tournage :**
+- Continuité sans coupure = signature d'authenticité
+- L'enseignant explique une chose précise (ex. : routine d'attention du matin, méthode de correction positive)
+- Les élèves sont actifs, pas spectateurs
 
 ---
 
-## 4:15 — 4:30 | PASSAGE DE BRIEF | Le mécanisme visible
+### 5:30–7:00 — Socle 2 : L'Anglais Intensif ← **PIC ÉMOTIONNEL #1**
 
-**Ce que tu dis :**
+Session anglais filmée sans interruption avec des enfants actifs et son ambiant réel. Plan large, puis zoom progressif sur un enfant qui répond en anglais, retour plan large.
 
-> "C'est ici que la magie opère. La sortie de l'Agent 1 devient le brief de l'Agent 2. Ce n'est pas un outil isolé — c'est une chaîne. L'injection du brief maintenant. Dans 60 secondes, vous allez voir l'architecture d'offre complète pour ce programme de Dakar."
+**Règle absolue :** Aucun enfant ne récite. Les enfants répondent à des questions posées spontanément. Un enfant de 4 à 6 ans qui répond en anglais naturellement est la preuve la plus forte de la vidéo — et elle doit arriver avant la minute 7.
 
-**Écran :** Copier-coller visible et commenté. Sortie A1 à gauche, champ brief A2 à droite.
-
----
-
-## 4:30 — 5:15 | AGENT 2 EN LIVE | Offer Architect
-
-**Ce que tu dis :**
-
-> *[Pendant l'exécution]* "L'Agent 2 construit l'architecture d'offre. Il commence par le positionnement — comment différencier ce programme dans le marché de coaching francophone. Puis le mécanisme unique. Puis le value ladder.
->
-> Et il aligne tout sur les contraintes réelles de ce marché : budget de démarrage limité, audience sur WhatsApp Business, pas de site web encore."
-
-**Écran :** Agent 2 en exécution. Brief visible en fenêtre secondaire.
+**À l'écran :** Session réelle, son ambiant, aucun filtre, aucun sous-titre superflu.
 
 ---
 
-## 5:15 — 6:30 | OUTPUT AGENT 2 | Architecture d'offre — pic de désir
+### 7:00–7:30 — CTA Mi-Vidéo (mot pour mot)
 
-**Ce que tu dis :**
-
-> "Voilà le positionnement formulé. [Lire à voix haute.]
+> Si ce que vous venez de voir vous parle — ces enfants qui répondent en anglais, cette session que vous n'attendiez pas à Djibouti — j'ai préparé un document gratuit pour vous.
 >
-> Regardez la section prix — [pointer]. XAF et EUR côte à côte. Ce système pense en XAF. L'Agent 2 a calibré l'offre sur le pouvoir d'achat réel de ce marché.
+> C'est un guide pratique : les 5 compétences que votre enfant doit maîtriser avant 2030, et les questions exactes à poser lors d'une visite d'école pour savoir si l'établissement les enseigne vraiment.
 >
-> Value ladder structuré sur cinq niveaux — du gratuit au consulting institutionnel. Un livrable que vous auriez payé un consultant pour produire. En 45 secondes de traitement."
+> Envoyez simplement le mot GUIDE au numéro qui apparaît en bas de votre écran. Je vous l'envoie maintenant, directement sur WhatsApp. Continuons — il reste deux points essentiels.
 
-**Écran :** Zoom positionnement. Zoom prix XAF. Défilement lent value ladder.
+**À l'écran :** Numéro WhatsApp statique affiché pendant toute la durée du CTA. Transition sans rupture de ton.
 
 ---
 
-## 6:30 — 7:00 | OUTPUT AGENT 3 | Stratégie YouTube
+### 7:30–9:30 — Socle 3 : L'IA avec Techiftiin Institute ← **MOMENT CLÉ**
 
-**Ce que tu dis :**
+Formateur Techiftiin nommé avec prénom et titre affiché 5 secondes. Plan composé : formateur / enfant / outil IA visible à l'écran. Zoom de 3 secondes sur l'écran de l'outil pendant l'interaction — le spectateur doit voir ce que l'enfant voit.
 
-> "Agent 3 — les cinq angles YouTube. Regardez les scores de cliquabilité. [Défilement lent des 5 titres.]
->
-> Chaque titre est sorti de l'analyse de l'Agent 1. Pas de l'intuition — de la validation.
->
-> Dans 90 secondes, l'Agent 4 produit le lead magnet que vous pourrez télécharger dès la fin de cette vidéo."
-
-**Écran :** Reveal progressif des 5 titres — rythme lent.
+**Règle absolue :** L'enfant interagit activement avec l'outil — il ne regarde pas le formateur qui manipule. Ce plan neutralise définitivement l'objection "l'IA c'est dans la brochure."
 
 ---
 
-## 7:00 | MENTION MID-VIDEO | CTA non-commercial — 11 secondes
+### 9:30–10:30 — Les 3 Socles en Système
 
-**Texte exact :**
-
-> "Ces fichiers agents — ceux que vous regardez tourner depuis sept minutes — ils sont dans la description. Téléchargez-les pendant que je lance le dernier agent."
-
-**Écran :** Geste vers la description. Reprendre l'écran de travail immédiatement.
+Montage d'une journée type. Rythme visuel accéléré. Montre comment les trois socles coexistent dans une journée scolaire — pas en parallèle mais en séquence cohérente. L'enfant passe d'une activité à l'autre naturellement.
 
 ---
 
-## 7:30 | MOMENT MÉTA | Auto-référentialité — 15 secondes
+### 10:30–11:30 — Preuve Externe ← **PIC ÉMOTIONNEL #2**
 
-**Ce que tu dis :**
+Témoignage d'un parent identifiable : prénom + section de l'enfant affiché à l'écran. Filmé en continu sans coupure. Puis coupe nette vers la visite des salles rénovées (couloir → salle de classe → espace IA → espace anglais).
 
-> "Petite précision — la stratégie de contenu que vous venez de voir produite par l'Agent 3 ? C'est la stratégie de cette vidéo. Ce que vous regardez a été construit par le système qu'il démontre."
-
-**Écran :** Rester sur l'output Agent 3 visible. Ne pas meubler davantage — laisser la logique s'imprimer.
+**Règle absolue :** Un parent filmé en continu = spontané. Un parent coupé = récité. Ce signal est immédiatement détecté dans un marché communautaire.
 
 ---
 
-## 7:45 — 8:45 | OUTPUT AGENT 4 | Lead magnet + conversion
+### 11:30–12:30 — Objections Traitées Directement
 
-**Ce que tu dis :**
+Trois objections traitées proactivement, 45 secondes chacune :
 
-> "Agent 4 — le système de conversion. Lead magnet structuré, séquence email de nurture, chemin de conversion complet.
->
-> Il reçoit les sorties des Agents 1, 2 et 3. Ce n'est pas un template générique — c'est un système calibré sur ce programme précis.
->
-> [Défilement lent.] Voilà le lead magnet. Séquence email : cinq emails horodatés. Chemin de conversion complet.
->
-> Quatrième livrable. Huit minutes de traitement total depuis le début.
->
-> Dans 30 secondes, vous allez voir les quatre fichiers s'ouvrir côte à côte — restez."
+1. **"Les diplômes sont-ils reconnus officiellement ?"** → "École Champion suit intégralement le programme officiel djiboutien. Notre méthode ajoute des compétences — elle ne remplace jamais le cadre national."
 
-**Écran :** Défilement lent output Agent 4. Annoncer le Grand Reveal.
+2. **"L'IA est-elle vraiment enseignée ou c'est du marketing ?"** → "Vous venez de voir la session. Le formateur s'appelle [prénom]. L'outil est [nom]. [X] sessions par semaine par niveau."
+
+3. **"Mon enfant s'adaptera-t-il à la pédagogie japonaise ?"** → "Ce que nous appliquons est structurant et bienveillant. Pas rigide. Tous les enfants y répondent — vous venez de voir pourquoi."
 
 ---
 
-## 8:45 | GRAND REVEAL | Quatre fichiers côte à côte
+### 12:30–13:00 — Récapitulatif
 
-*[Ouvrir les 4 fichiers — silence de 3 secondes — aucun mot.]*
+Trois mots-clés apparaissent séquentiellement à l'écran, ton calme :
+- **MÉTHODE JAPONAISE**
+- **ANGLAIS INTENSIF**
+- **IA TECHIFTIIN**
 
-*[Puis :]*
-
-> "Quatre livrables business. Un problème réel. Huit minutes."
-
-*[Pause de 2 secondes.]*
-
-**Écran :** Dossier `outputs/` ouvert. Vue panoramique sur les 4 noms de fichiers. Split view si possible. Silence de 3 secondes — ne pas meubler. C'est le pic d'attention maximal de la vidéo.
+Aucune pression. Aucune urgence artificielle. Ce sont les trois mots que le parent va répéter sur WhatsApp.
 
 ---
 
-## 10:00 — 11:30 | CHEMIN REVENUE | Connecter le système à l'argent
+### 13:00–13:45 — CTA Final (mot pour mot)
 
-**Ce que tu dis :**
-
-> "Voilà comment ce que vous venez de voir se traduit en revenus. [Afficher le funnel revenue.]
+> Vous avez vu les trois socles. La méthode japonaise. L'anglais. L'intelligence artificielle avec Techiftiin Institute. Tout ça à Djibouti, dès septembre 2026.
 >
-> La vidéo YouTube génère des vues. Les vues génèrent des téléchargements du lead magnet — gratuit, email requis. Les leads reçoivent cinq emails sur huit jours. Les emails génèrent des inscriptions à l'Atelier Découverte — 45 euros, deux heures live. Les participants de l'Atelier s'inscrivent au Programme Intensif — jusqu'à 450 euros, trois jours. Les participants du Programme qualifient pour le consulting MEC Advisory.
+> Maintenant, voici ce que je vous propose.
 >
-> La vidéo n'est pas la promotion de l'offre. Elle est la preuve de l'offre."
+> Venez voir par vous-même. Gratuitement. Avec votre enfant, si vous le souhaitez.
+>
+> Nous organisons deux Journées Portes Ouvertes avant la rentrée. Vous visitez les salles. Vous rencontrez les enseignants. Votre enfant peut participer à une mini-session. Et on vous remet la brochure complète avec tous les tarifs, par niveau, en toute transparence.
+>
+> Pour réserver votre place, c'est simple : envoyez le mot VISITE au [numéro WhatsApp affiché à l'écran]. Les places sont limitées à 25 familles par session. La prochaine date est le [Date Session 1].
+>
+> Un seul mot. VISITE. Et on s'occupe du reste.
+>
+> La visite est gratuite. La décision vous appartient. Votre enfant mérite au moins de voir ce qui existe maintenant à Djibouti.
 
-**Écran :** Schéma funnel avec montants. Ne pas vendre — montrer.
+**À l'écran :** Numéro WhatsApp statique. Deux dates des Journées Portes Ouvertes affichées simultanément. Minimum 15 secondes de numéro seul — capture d'écran mobile possible sans mettre pause.
 
 ---
 
-## 11:30 — 13:00 | OBJECTIONS VISUELLES | 3 × 60 secondes
+## Checklist de Tournage (dans l'ordre)
 
-**Objection 1 — "Je ne suis pas développeur"**
+### Semaine 1 — Preuves Fondamentales (avant toute publication)
 
-> "AR4A fonctionne par briefs écrits, pas par code. [Pointer l'écran] — regardez : pendant toute cette session, aucun éditeur de code, aucun terminal de développement. Uniquement des briefs en français ordinaire et des sorties lisibles."
+- [ ] Visite des locaux : couloir → salle de classe → espace IA → cour. 5–8 minutes, lumière naturelle, smartphone stabilisé.
+- [ ] 3 profils enseignants face caméra (prénom + matière + méthode enseignée). 2 min par profil.
+- [ ] Vérification et filmage de la source "première école privée de Djibouti" (affichage officiel ou archive).
 
-**Objection 2 — "ChatGPT fait déjà ça"**
+### Semaine 2 — Preuves Pédagogiques
 
-> "ChatGPT répond à des questions. AR4A exécute une séquence. Demandez à ChatGPT de produire simultanément un signal de marché calibré, une architecture d'offre, cinq angles YouTube et un lead magnet cohérents entre eux en huit minutes. Le résultat sera générique. AR4A est une chaîne de production, pas un générateur de texte."
+- [ ] Session anglais avec enfants actifs, filmée sans coupure, 3–5 minutes.
+- [ ] Session IA Techiftiin : formateur nommé + enfant actif + outil visible + zoom 3s sur l'écran.
+- [ ] Démonstration méthode japonaise avec enseignant et élèves, principe concret, 3 minutes minimum.
 
-**Objection 3 — "Les résultats seront trop génériques"**
+### Avant Lancement Vidéo (semaine 3)
 
-> "La qualité de la sortie est proportionnelle à la précision du brief d'entrée. Deux briefs différents. Deux systèmes entièrement différents. Ce n'est pas un template. C'est votre architecture."
+- [ ] Guide PDF 10 pages finalisé, testé via envoi WhatsApp, reçu en <5 min.
+- [ ] Numéro WhatsApp dédié actif, personne désignée à la réception.
+- [ ] 5 modèles de réponse WhatsApp prêts à coller (guide, visite, tarifs, diplômes, préinscription).
+- [ ] Tableau de suivi leads ouvert (nom, date, étape, statut).
 
----
+### Avant Journée Portes Ouvertes #1
 
-## 13:30 | CTA FINAL | Texte exact — 55 secondes
-
-**Ce que tu dis :**
-
-> "Voilà ce qu'un système produit — pas un outil. Quatre livrables business. Un brief de trois paragraphes. Huit minutes de traitement.
->
-> Le Revenue Agent Template Pack est dans la description. Vous y trouvez exactement ce que vous venez de voir tourner : les quatre fichiers agents préconfigurés, le brief template, le prompt coordinateur, le runbook, la grille de scoring, et l'exemple complet de ce run sur le cas de Dakar. Zéro configuration technique. Vous téléchargez, vous copiez les fichiers, vous lancez le coordinateur sur votre propre business.
->
-> C'est gratuit.
->
-> Si vous voulez construire ce pipeline sur votre offre réelle — en direct, avec moi, avec correction en temps réel — l'Atelier Découverte AR4A dure deux heures et coûte 45 euros. Si vous voulez le système complet en trois jours, le Programme Intensif AR4A a vingt places.
->
-> Les deux liens sont dans la description. Prenez la description. Maintenant."
-
-**Écran :** Landing page Revenue Agent Template Pack visible dans le navigateur. Champ email et bouton lisibles. URL visible dans la barre d'adresse.
+- [ ] Brochure tarifaire complète imprimée (toutes les modalités de paiement, tarifs par niveau).
+- [ ] Programme JPO détaillé finalisé (accueil + visite + démonstration + entretien individuel + visite libre).
+- [ ] Formulaire de préinscription disponible sur place.
+- [ ] Formateur Techiftiin confirmé pour la démonstration en direct.
 
 ---
 
-## 13:45 | TEASER | Pattern interrupt final
-
-**Ce que tu dis :**
-
-> "La prochaine vidéo — je fais tourner AR4A sur un vrai brief de formation en finance islamique à Casablanca. En arabe et en français."
-
-**Fin abrupte sur cette phrase.** L'abruptness est intentionnelle — le contenu est dense, pas performatif.
-
----
-
-# PARTIE 4 — LISTE DE PRÉPARATION TECHNIQUE
-
-*Tout ceci doit être prêt et testé AVANT d'appuyer sur Enregistrer. Un test à blanc complet est obligatoire la veille.*
-
----
-
-## 4.1 — Structure du projet Claude Code
+## Description Facebook / YouTube (copier-coller)
 
 ```
-MALI-MEC/
-├── .claude/
-│   └── agents/
-│       ├── market-signal-researcher.md     ← Agent 1
-│       ├── offer-architect.md              ← Agent 2
-│       ├── content-angle-strategist.md     ← Agent 3
-│       └── conversion-system-builder.md    ← Agent 4
-├── business-brief.md                       ← BRIEF DE DÉMO (rempli — cas Dakar)
-└── outputs/
-    └── [vider avant tournage ou archiver dans outputs/archive/run-3/]
+Donnez 3 Longueurs d'Avance à Votre Enfant Avant la Rentrée 2026
+
+Dans cette vidéo, vous allez voir — pas entendre, VOIR — les trois programmes
+qu'aucune autre école ne combine à Djibouti simultanément :
+✅ La méthode japonaise avec un enseignant formé
+✅ L'anglais intensif dès la maternelle (session filmée sans coupure)
+✅ L'intelligence artificielle avec Techiftiin Institute
+
+École Champion. Première école privée de Djibouti. Rentrée 2026–2027.
+
+📩 Pour recevoir gratuitement "Les 5 Compétences Avant 2030" : envoyez GUIDE
+📅 Pour réserver votre visite gratuite : envoyez VISITE
+
+au [numéro WhatsApp]
+
+Les places pour la Journée Portes Ouvertes sont limitées à 25 familles.
 ```
 
 ---
 
-## 4.2 — Brief de démo — Contenu requis
+## Commentaire Épinglé (copier-coller immédiatement après publication)
 
-- **Contexte :** Programme de coaching pour jeunes entrepreneurs à Dakar
-- **Audience :** 20–35 ans, premier business, audience Facebook et WhatsApp Business
-- **Contraintes :** Budget de démarrage limité, pas de site web, audience locale
-- **Objectif :** Valider l'opportunité et structurer l'offre initiale
+```
+📌 Pour recevoir le guide gratuit ou réserver votre visite :
+Envoyez GUIDE ou VISITE au [numéro WhatsApp]
 
-Tous les champs remplis — aucun placeholder visible à l'écran.
-
----
-
-## 4.3 — Test à blanc chronomètre en main
-
-| Agent | Durée cible | Durée maximale |
-|-------|:-----------:|:--------------:|
-| Agent 1 — Market Signal | 2 min 30 s | 3 min 30 s |
-| Agent 2 — Offer Architect | 2 min 00 s | 3 min 00 s |
-| Agent 3 — Content Strategist | 1 min 30 s | 2 min 00 s |
-| Agent 4 — Conversion System | 1 min 00 s | 1 min 30 s |
-| **Total agents** | **7 min 00 s** | **10 min 00 s** |
-
-Si total > 10 min : ajouter à chaque prompt "Limite ta réponse à 500 mots. Priorise la précision sur l'exhaustivité."
-
-**Le test confirme :**
-- Chaque agent reçoit l'output du précédent sans intervention manuelle
-- L'output Agent 2 contient le mécanisme unique nommé
-- L'output Agent 3 contient 5 angles YouTube scorés
-- L'output Agent 4 contient un lead magnet structuré avec nom et sections
-- Prix en XAF visibles dans l'output Agent 2
-- Tous les outputs lisibles à l'écran sans zoom excessif (police 14px minimum)
+Journée Portes Ouvertes :
+📅 Session 1 : [Date]
+📅 Session 2 : [Date]
+25 familles maximum par session.
+```
 
 ---
 
-## 4.4 — Configuration enregistrement
+## Message WhatsApp de Partage Communautaire (à distribuer aux familles satisfaites)
 
-- **Résolution :** 1920×1080 minimum
-- **Police terminal :** 16px minimum
-- **Thème terminal :** Clair (meilleur contraste YouTube)
-- **Audio :** Micro externe uniquement — tester le niveau avant tournage
-- **Notifications :** Désactiver TOUTES avant de lancer
-- **Fenêtres ouvertes :** Claude Code + terminal + navigateur (CTA final uniquement)
-
----
-
-## 4.5 — Checklist avant Enregistrer
-
-- [ ] Dossier `outputs/` propre ou archivé dans `outputs/archive/run-3/`
-- [ ] Brief de démo rempli — aucun placeholder visible
-- [ ] 4 fichiers agents présents dans `.claude/agents/`
-- [ ] Test à blanc terminé dans les temps (< 10 min total agents)
-- [ ] Prix en XAF vérifiés dans l'output Agent 2 du test à blanc
-- [ ] Micro configuré et testé
-- [ ] Notifications désactivées
-- [ ] Police lisible à l'écran (16px terminal)
-- [ ] Textes du hook (0:00), mid-CTA (7:00), et CTA final (13:30) sur deuxième écran ou imprimés
-- [ ] URL lead magnet renseignée et page live
-- [ ] Solution paiement Mobile Money opérationnelle (Wave / Orange Money / MTN)
-- [ ] Prise d'essai 60 secondes vérifiée (audio + vidéo)
+```
+Je viens de regarder cette vidéo sur École Champion à Djibouti.
+Ils montrent vraiment leurs classes — la session anglais avec les enfants,
+le programme IA avec Techiftiin... C'est sérieux.
+Pour ceux qui cherchent une école pour la rentrée :
+[lien vidéo]
+Pour visiter gratuitement : envoyez VISITE au [numéro]
+```
 
 ---
 
-# PARTIE 5 — CHECKLIST DE PUBLICATION (10 POINTS)
+## Checklist de Publication
 
-À compléter dans les 48 heures précédant la publication.
-
-| # | Action | Statut |
-|---|--------|--------|
-| 1 | Titre configuré sur YouTube — champ titre, description, tags IA francophone | ☐ |
-| 2 | Thumbnail créée : "IDÉE → REVENUS" — lisible à 150px, test mobile | ☐ |
-| 3 | Landing page lead magnet live — 9 noms de fichiers exacts affichés — test < 2,5s | ☐ |
-| 4 | Lien de téléchargement testé — pack reçu depuis adresse tierce en < 60 secondes | ☐ |
-| 5 | Séquence 5 emails configurée — J0/J1/J3/J5/J8 — objet non-promotionnel sur chaque | ☐ |
-| 6 | Email J0 testé — arrivé en boîte principale (pas Promotions, pas Spam) | ☐ |
-| 7 | Description YouTube : URL lead magnet en ligne 1, résumé, tags | ☐ |
-| 8 | Commentaire épinglé préparé — URL lead magnet + URL Atelier — à poster dans les 5 premières minutes | ☐ |
-| 9 | Extrait 0:00–0:35 (hook) exporté pour LinkedIn et Instagram Reels | ☐ |
-| 10 | Alertes notifications activées 48h — répondre à chaque commentaire dans les 4 premières heures | ☐ |
+- [ ] Vidéo complète relue par la direction avant publication
+- [ ] Numéro WhatsApp affiché testé (envoi de test : GUIDE reçu en <5 min)
+- [ ] Guide PDF joint au message de test WhatsApp
+- [ ] Preuves visuelles semaines 1–2 publiées avant la vidéo principale
+- [ ] Commentaire épinglé posté immédiatement après publication
+- [ ] Description Facebook/YouTube copiée et vérifiée
+- [ ] Dates Journées Portes Ouvertes confirmées et inscrites dans le texte
+- [ ] Tableau de suivi leads ouvert et testé
+- [ ] Deuxième responsable WhatsApp briefé (gestion pics post-publication)
+- [ ] Formulaire préinscription testé physiquement
 
 ---
 
-# ANNEXE — SIGNAUX DE CRÉDIBILITÉ PAR SEGMENT
-
-| Signal | Audience ciblée | Déploiement |
-|--------|----------------|-------------|
-| Dossier `outputs/` horodaté — 0:30 | Profils B2B et institutionnels | Proof Primer — obligatoire |
-| Prix en XAF dans les sorties d'agents — 5:15 | Entrepreneurs francophones africains | Output Agent 2 — automatique si brief correct |
-| Villes réelles dans les exemples (Dakar) | Ensemble de l'audience cible | Brief de démo + email J3 |
-| WhatsApp Business dans les canaux recommandés | Entrepreneurs sans site web | Output Agent 3 — si brief mentionne WA |
-| Moment méta à 7:30 (la vidéo produite par AR4A) | Entrepreneurs analytiques | Déclaration factuelle unique, non-répétée |
-| Structure multi-entités en footer | Acheteurs institutionnels | Footer de tous les emails + pages de vente |
-
----
-
-*Document produit par le coordinateur AR4A — MALI-MEC Revenue Agent System*
-*Run 3 · 2026-07-28*
-*Tous les textes en gras sont des scripts exacts — à ne modifier qu'après un test à blanc complet et chronométré.*
+*Brief final produit par le coordinateur AR4A — MALI-MEC Revenue Agent System*
+*Run 4 · 2026-07-28 · École Champion · Rentrée 2026–2027*
+*Pipeline : 4 agents · 4 livrables · Feu vert complet*
