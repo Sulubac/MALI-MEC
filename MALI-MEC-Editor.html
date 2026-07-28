@@ -562,12 +562,14 @@ async function processFile(file){
       const parsed=parseMDFile(text);
       applyImported(parsed.sections,parsed.title||rawTitle);
     }else if(ext==='pdf'){
+      setUStatus('Décompression du PDF…','inf');
       const buf=await file.arrayBuffer();
       const extracted=await extractFromPDF(buf);
       if(!extracted||extracted.length<50)throw new Error('Le texte du PDF n\'a pas pu être extrait. Essaie de sauvegarder le brief en <strong>.md</strong> puis importe ce fichier.');
+      setUStatus('Détection des sections…','inf');
       const sections=parseSectionText(extracted);
       const filled=Object.values(sections).filter(v=>v&&v.trim()).length;
-      if(filled===0)throw new Error('Aucune section reconnue dans ce PDF. Le fichier doit contenir des en-têtes comme <strong>AUDIENCE CIBLE</strong>, <strong>OBJECTIFS BUSINESS</strong>, etc.');
+      if(filled===0)throw new Error('Sections non détectées ('+extracted.length+' car. extraits). Utilise Chrome ou Edge et réessaie, ou sauvegarde le brief en <strong>.md</strong>.');
       applyImported(sections,rawTitle);
     }else{
       throw new Error('Format non supporté. Utilise un fichier <strong>.md</strong> ou <strong>.pdf</strong>.');
@@ -601,12 +603,20 @@ function u8Find(buf,pat,start){
 }
 
 async function tryDecompress(data){
+  if(typeof DecompressionStream==='undefined')return null;
   for(const fmt of['deflate','deflate-raw']){
     try{
-      const buf=await new Response(
-        new Blob([data]).stream().pipeThrough(new DecompressionStream(fmt))
-      ).arrayBuffer();
-      if(buf.byteLength>0)return new Uint8Array(buf);
+      const ds=new DecompressionStream(fmt);
+      const writer=ds.writable.getWriter();
+      const reader=ds.readable.getReader();
+      const chunks=[];
+      // Must read and write concurrently — write() blocks until the reader consumes
+      await Promise.all([
+        writer.write(data).then(()=>writer.close()),
+        (async()=>{let r;while(!(r=await reader.read()).done)chunks.push(r.value);})()
+      ]);
+      const n=chunks.reduce((s,c)=>s+c.length,0);
+      if(n>0){const out=new Uint8Array(n);let o=0;for(const c of chunks){out.set(c,o);o+=c.length;}return out;}
     }catch(e){}
   }
   return null;
