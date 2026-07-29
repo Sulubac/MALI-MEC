@@ -173,8 +173,13 @@ html,body{height:100%;overflow:hidden;font-family:-apple-system,BlinkMacSystemFo
 .checklist{list-style:none;display:flex;flex-direction:column;gap:4px}
 .checklist li{display:flex;align-items:center;gap:6px;font-size:13px}
 
-@media(max-width:600px){
-  .pos-right{width:260px}
+@media(max-width:700px){
+  .pos-layout{flex-direction:column}
+  .pos-left{flex:none;height:55%;border-right:none;border-bottom:1px solid #334155}
+  .pos-right{width:100%;flex:none;height:45%}
+  .prod-grid{grid-template-columns:repeat(auto-fill,minmax(110px,1fr))}
+  .floor-grid{grid-template-columns:repeat(auto-fill,minmax(110px,1fr))}
+  .kpi-grid{grid-template-columns:repeat(2,1fr)}
   .nav-btn span{display:none}
   .logo-sub{display:none}
 }
@@ -199,12 +204,22 @@ html,body{height:100%;overflow:hidden;font-family:-apple-system,BlinkMacSystemFo
 
 <script>
 // ══════════════════════════════════════════════════
-// STORAGE
+// STORAGE (with in-memory fallback for iOS Safari)
 // ══════════════════════════════════════════════════
+var _mem = {};
+var _lsOk = (function(){ try { localStorage.setItem('_t','1'); localStorage.removeItem('_t'); return true; } catch(e){ return false; } })();
+
 const S = {
   _k: k => 'ubpos_' + k,
-  get: k => { try { return JSON.parse(localStorage.getItem(S._k(k))); } catch { return null; } },
-  set: (k, v) => { localStorage.setItem(S._k(k), JSON.stringify(v)); return v; },
+  get: k => {
+    if (_lsOk) { try { var v = localStorage.getItem(S._k(k)); return v !== null ? JSON.parse(v) : null; } catch(e){} }
+    return (_mem[k] !== undefined) ? _mem[k] : null;
+  },
+  set: (k, v) => {
+    _mem[k] = v;
+    if (_lsOk) { try { localStorage.setItem(S._k(k), JSON.stringify(v)); } catch(e){ _lsOk = false; } }
+    return v;
+  },
   tables:     () => S.get('tables')    || [],
   categories: () => S.get('categories') || [],
   products:   () => S.get('products')  || [],
@@ -1351,10 +1366,18 @@ setInterval(() => {
 // ══════════════════════════════════════════════════
 // INIT
 // ══════════════════════════════════════════════════
-seedIfEmpty();
-_payMethod = 'cash';
-_adjType = 'purchase';
-render();
+try {
+  seedIfEmpty();
+  _payMethod = 'cash';
+  _adjType = 'purchase';
+  render();
+} catch(e) {
+  document.getElementById('view-container').innerHTML =
+    '<div style="padding:32px;color:#ef4444;font-size:14px">' +
+    '<b>Erreur de démarrage :</b><br>' + e.message +
+    '<br><br><button onclick="location.reload()" style="margin-top:12px;padding:8px 18px;background:#10b981;color:#fff;border:none;border-radius:8px;cursor:pointer;font-size:14px">Réessayer</button>' +
+    '</div>';
+}
 </script>
 </body>
 </html>
