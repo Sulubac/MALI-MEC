@@ -187,6 +187,31 @@ html,body{height:100%;overflow:hidden;font-family:-apple-system,BlinkMacSystemFo
 .kitchen-card.new-order{border-color:#10b981;box-shadow:0 0 0 1px rgba(16,185,129,.2)}
 .kitchen-item{display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid rgba(51,65,85,.5);font-size:13px}
 .kitchen-item:last-child{border-bottom:none}
+/* Day closure */
+.closure-screen{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;padding:32px;text-align:center}
+.closure-icon{font-size:72px;margin-bottom:20px}
+/* Reconciliation */
+.recon-col{background:#1e293b;border:1px solid #334155;border-radius:12px;padding:16px;flex:1;min-width:220px}
+.recon-hdr{font-size:11px;font-weight:700;color:var(--tm);text-transform:uppercase;letter-spacing:.08em;margin-bottom:12px;display:flex;align-items:center;gap:6px}
+.recon-row{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid rgba(51,65,85,.4);font-size:13px}
+.recon-row:last-child{border-bottom:none}
+.recon-total{display:flex;justify-content:space-between;padding:10px 0 0;border-top:2px solid #334155;font-weight:700;font-size:14px;margin-top:4px}
+.recon-badge{display:inline-flex;align-items:center;gap:5px;padding:4px 12px;border-radius:8px;font-size:13px;font-weight:600}
+.recon-ok{background:rgba(16,185,129,.15);border:1px solid rgba(16,185,129,.3);color:#34d399}
+.recon-err{background:rgba(239,68,68,.15);border:1px solid rgba(239,68,68,.3);color:#f87171}
+/* Payment methods grid */
+.pay-method-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.pay-method-btn{padding:10px 6px;border-radius:8px;border:1px solid #475569;background:#1e293b;color:var(--tm);cursor:pointer;font-size:12px;font-weight:500;transition:all .15s;text-align:center}
+.pay-method-btn:hover{border-color:var(--br);color:#fff}
+.pay-method-btn.active{background:rgba(16,185,129,.15);border-color:var(--br);color:var(--br)}
+/* Perm checkboxes */
+.perm-grid{display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-top:8px}
+.perm-item{display:flex;align-items:center;gap:6px;font-size:12px;padding:4px 6px;border-radius:6px;color:var(--tm)}
+.perm-item:hover{background:#334155;color:#fff}
+.perm-item input{accent-color:var(--br);cursor:pointer;width:14px;height:14px}
+/* Pending reports */
+.report-card{background:#1e293b;border:1px solid #334155;border-radius:10px;padding:14px;display:flex;align-items:center;gap:12px;margin-bottom:8px}
+.report-card-av{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
 
 /* misc */
 .row{display:flex;align-items:center;gap:8px}
@@ -276,9 +301,12 @@ const S = {
   products:   () => S.get('products')  || [],
   orders:     () => S.get('orders')    || [],
   items:      () => S.get('items')     || [],
-  stock:      () => S.get('stock')     || [],
-  movements:  () => S.get('movements') || [],
-  users:      () => S.get('users')     || [],
+  stock:         () => S.get('stock')          || [],
+  movements:     () => S.get('movements')      || [],
+  users:         () => S.get('users')          || [],
+  closures:      () => S.get('closures')       || [],
+  pendingReports:() => S.get('pending_reports')|| [],
+  credits:       () => S.get('credits')        || [],
   nextId: k => { const n = (S.get('seq_' + k) || 0) + 1; S.set('seq_' + k, n); return n; },
 };
 
@@ -287,13 +315,13 @@ const S = {
 // ══════════════════════════════════════════════════
 var _ROLE_PERMS = {
   superadmin:    ['*'],
-  manager:       ['view_floor','take_orders','view_kitchen','process_payment','view_reports','view_stock','adjust_stock','add_products','view_orders_list','view_settings','manage_tables','manage_categories'],
-  caissiere:     ['view_floor','process_payment','view_reports','view_stock','view_orders_list'],
-  waiter:        ['view_floor','take_orders','view_orders_list'],
-  barman:        ['view_floor','take_orders','view_orders_list'],
-  chicha_waiter: ['view_floor','take_orders','view_orders_list'],
-  chef_cuisine:  ['view_kitchen','view_orders_list'],
-  asst_cuisine:  ['view_kitchen','view_orders_list'],
+  manager:       ['view_floor','take_orders','view_kitchen','process_payment','view_reports','view_reconciliation','view_stock','adjust_stock','add_products','view_orders_list','view_settings','manage_tables','manage_categories'],
+  caissiere:     ['view_floor','process_payment','view_reports','view_reconciliation','view_stock','view_orders_list','close_day'],
+  waiter:        ['view_floor','take_orders','view_orders_list','close_day'],
+  barman:        ['view_floor','take_orders','view_orders_list','close_day'],
+  chicha_waiter: ['view_floor','take_orders','view_orders_list','close_day'],
+  chef_cuisine:  ['view_kitchen','view_orders_list','close_day'],
+  asst_cuisine:  ['view_kitchen','view_orders_list','close_day'],
 };
 var _ROLE_LABELS = {
   superadmin:'Super Admin', manager:'Manager', caissiere:'Caissière',
@@ -310,6 +338,38 @@ var _ROLE_COLORS = {
   chef_cuisine:'#ef4444', asst_cuisine:'#f97316',
 };
 
+var ALL_PERMS = [
+  {id:'view_floor',       group:'Navigation', label:'Voir plan de salle'},
+  {id:'take_orders',      group:'Navigation', label:'Prendre des commandes'},
+  {id:'process_payment',  group:'Navigation', label:'Encaisser'},
+  {id:'view_kitchen',     group:'Navigation', label:'Vue cuisine'},
+  {id:'view_stock',       group:'Navigation', label:'Voir le stock'},
+  {id:'adjust_stock',     group:'Navigation', label:'Ajuster le stock'},
+  {id:'view_reports',     group:'Navigation', label:'Voir les rapports'},
+  {id:'view_reconciliation',group:'Navigation',label:'Réconciliation'},
+  {id:'view_settings',    group:'Navigation', label:'Paramètres'},
+  {id:'add_products',     group:'Produits',   label:'Ajouter produits'},
+  {id:'edit_prices',      group:'Produits',   label:'Modifier les prix'},
+  {id:'manage_tables',    group:'Admin',      label:'Gérer les tables'},
+  {id:'manage_categories',group:'Admin',      label:'Gérer les catégories'},
+  {id:'manage_users',     group:'Admin',      label:'Gérer les utilisateurs'},
+  {id:'view_orders_list', group:'Divers',     label:'Liste commandes'},
+  {id:'close_day',        group:'Divers',     label:'Clôturer la journée'},
+];
+
+var PAYMENT_METHODS = [
+  {id:'cash',    label:'💵 Espèces',    cash:true},
+  {id:'waafi',   label:'📱 WAAFI',      cash:false},
+  {id:'cacpay',  label:'📱 CACPAY',     cash:false},
+  {id:'eximpay', label:'📱 EXIMPAY',    cash:false},
+  {id:'boapay',  label:'📱 BOAPAY',     cash:false},
+  {id:'bcipay',  label:'📱 BCIPAY',     cash:false},
+  {id:'machine', label:'💳 Machine',    cash:false},
+];
+
+var PAY_LABELS = {};
+PAYMENT_METHODS.forEach(function(m){ PAY_LABELS[m.id] = m.label.replace(/[💵📱💳]\s*/,''); });
+
 function hashPin(pin) {
   var h = 5381;
   var s = String(pin);
@@ -318,9 +378,10 @@ function hashPin(pin) {
 }
 
 function can(perm) {
-  var u = currentUser();
-  if (!u) return false;
-  var perms = _ROLE_PERMS[u.role] || [];
+  var sess = S.get('session');
+  if (!sess) return false;
+  var u = S.users().find(function(x){ return x.id === sess.userId; });
+  var perms = (u && u.custom_perms != null) ? u.custom_perms : (_ROLE_PERMS[sess.role] || []);
   return perms.indexOf('*') >= 0 || perms.indexOf(perm) >= 0;
 }
 
@@ -448,6 +509,7 @@ const APP = {
   stockTab: 'inv',
   settingsTab: 'tables',
   reportsTab: 'today',
+  reportsMainTab: 'ventes',
   modal: null,
   modalData: null,
   loginUserId: null,
@@ -478,10 +540,12 @@ function calcTotals(orderId) {
 function getOrCreateOrder(tableId) {
   const existing = S.orders().find(o => o.table_id===tableId && o.status==='open');
   if (existing) return existing;
+  var sess = S.get('session') || {};
   const o = {
     id: S.nextId('orders'), table_id: tableId, status: 'open',
     customer_count:1, notes:'', subtotal:0, tax:0, discount:0, tip:0, total:0,
-    tax_rate:0, waiter:'', created_at: new Date().toISOString(), closed_at: null,
+    tax_rate:0, waiter: sess.name||'', created_at: new Date().toISOString(), closed_at: null,
+    created_by_id: sess.userId||null, created_by_name: sess.name||null, created_by_role: sess.role||null,
   };
   S.set('orders', [...S.orders(), o]);
   S.set('tables', S.tables().map(t => t.id===tableId ? {...t, status:'occupied'} : t));
@@ -496,7 +560,8 @@ function addItem(orderId, product) {
   } else {
     S.set('items', [...its, {
       id: S.nextId('items'), order_id: orderId, product_id: product.id,
-      product_name: product.name, quantity: 1, unit_price: product.price, notes: '',
+      product_name: product.name, category_id: product.category_id||null,
+      quantity: 1, unit_price: product.price, notes: '',
     }]);
   }
   calcTotals(orderId);
@@ -518,7 +583,8 @@ function doCheckout(orderId, method, cashGiven, tip) {
   }
   const totals = calcTotals(orderId);
   const order = S.orders().find(o => o.id===orderId);
-  const change = method==='cash' ? Math.max(0, (parseFloat(cashGiven)||0) - totals.total) : 0;
+  var isCashMethod = !!(PAYMENT_METHODS.find(function(x){return x.id===method;})||{}).cash;
+  const change = isCashMethod ? Math.max(0, (parseFloat(cashGiven)||0) - totals.total) : 0;
 
   S.set('orders', S.orders().map(o => o.id===orderId
     ? {...o, status:'paid', payment_method:method, closed_at:new Date().toISOString(), ...totals}
@@ -598,12 +664,17 @@ function renderNav() {
     {id:'settings', icon:'⚙️',  label:'Paramètres', perm:'view_settings'},
   ];
   const items = all.filter(it => can(it.perm));
-  document.getElementById('nav').innerHTML = items.map(it => `
+  let html = items.map(it => `
     <button class="nav-btn ${APP.view===it.id||(APP.view==='pos'&&it.id==='floor')?'active':''}"
       onclick="setState({view:'${it.id}'})">
       ${it.icon} <span>${it.label}</span>
     </button>
   `).join('');
+  if (can('close_day') && !can('view_reports')) {
+    html += `<button class="nav-btn" style="color:var(--am);margin-left:8px"
+      onclick="setState({modal:'close-day'})">🔒 <span>Clôturer</span></button>`;
+  }
+  document.getElementById('nav').innerHTML = html;
 }
 
 function renderHdrRight() {
@@ -638,6 +709,11 @@ function renderHdrRight() {
 function renderView() {
   const c = document.getElementById('view-container');
   c.innerHTML = '';
+  // Check if user has closed today (only for non-manager/non-superadmin roles)
+  if (can('close_day') && !can('view_reports') && hasClosedToday()) {
+    c.appendChild(buildClosedDayView());
+    return;
+  }
   if      (APP.view==='floor'    && can('view_floor'))    c.appendChild(buildFloor());
   else if (APP.view==='pos'      && can('view_floor'))    c.appendChild(buildPOS());
   else if (APP.view==='kitchen'  && can('view_kitchen'))  c.appendChild(buildKitchen());
@@ -774,6 +850,155 @@ function buildKitchen() {
   html += '</div>';
   wrap.innerHTML = html;
   return wrap;
+}
+
+// ══════════════════════════════════════════════════
+// DAY CLOSURE
+// ══════════════════════════════════════════════════
+function hasClosedToday() {
+  var sess = S.get('session');
+  if (!sess) return false;
+  return S.closures().some(function(c){ return c.userId===sess.userId && c.date===today(); });
+}
+
+function doCloseDay() {
+  var sess = S.get('session');
+  if (!sess) { notify('Non connecté','err'); return; }
+  var dateStr = today();
+  var todayCutoff = new Date(dateStr + 'T00:00:00');
+  var allOrders = S.orders();
+  var allItems  = S.items();
+  var cats      = S.categories();
+
+  var myOrders = allOrders.filter(function(o) {
+    var mine = o.created_by_id===sess.userId || o.waiter===sess.name;
+    var isToday = o.created_at && new Date(o.created_at) >= todayCutoff;
+    return mine && isToday;
+  });
+  var paidOrders = myOrders.filter(function(o){ return o.status==='paid'; });
+  var openOrders = myOrders.filter(function(o){ return o.status==='open'; });
+  var totalAmount = paidOrders.reduce(function(s,o){ return s+(o.total||0); },0);
+
+  // Category breakdown
+  var catBreakdown = {};
+  paidOrders.forEach(function(o) {
+    allItems.filter(function(i){ return i.order_id===o.id; }).forEach(function(i){
+      var cat = (cats.find(function(c){ return c.id===(i.category_id||null); })||{}).name || 'Autre';
+      if (!catBreakdown[cat]) catBreakdown[cat] = {qty:0,total:0};
+      catBreakdown[cat].qty   += i.quantity;
+      catBreakdown[cat].total += i.quantity * i.unit_price;
+    });
+  });
+
+  // Payment breakdown
+  var payBreakdown = {};
+  paidOrders.forEach(function(o) {
+    var m = o.payment_method||'autre';
+    if (!payBreakdown[m]) payBreakdown[m] = 0;
+    payBreakdown[m] += o.total||0;
+  });
+
+  // Credits: open orders → credit bucket
+  var credits = S.credits();
+  openOrders.forEach(function(o) {
+    credits.push({orderId:o.id, tableId:o.table_id, amount:o.total||0,
+      serverName:o.waiter||sess.name, date:dateStr, reason:'closure'});
+  });
+  S.set('credits', credits);
+
+  var closure = {
+    id:           Date.now(),
+    userId:       sess.userId,
+    userName:     sess.name,
+    userRole:     sess.role,
+    date:         dateStr,
+    closedAt:     new Date().toISOString(),
+    orderCount:   paidOrders.length,
+    openCount:    openOrders.length,
+    totalAmount:  totalAmount,
+    catBreakdown: catBreakdown,
+    payBreakdown: payBreakdown,
+    orderIds:     paidOrders.map(function(o){ return o.id; }),
+  };
+
+  var closures = S.closures();
+  closures.push(closure);
+  S.set('closures', closures);
+
+  var pending = S.pendingReports();
+  pending.push(closure);
+  S.set('pending_reports', pending);
+
+  notify('Journée clôturée — rapport transmis aux responsables');
+  setState({modal:null});
+}
+
+function buildClosedDayView() {
+  var el = mkEl('div', 'view');
+  var u  = currentUser();
+  var dateLabel = new Date().toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+  var myClosure = S.closures().filter(function(c){ return u && c.userId===u.userId && c.date===today(); }).slice(-1)[0]||{};
+  el.innerHTML = `
+    <div class="closure-screen">
+      <div class="closure-icon">🔒</div>
+      <h1 style="font-size:22px;font-weight:700;margin-bottom:8px">Journée clôturée</h1>
+      <p style="color:var(--tm);margin-bottom:6px">${esc(dateLabel)}</p>
+      <p style="color:var(--tm);font-size:13px;max-width:340px;line-height:1.6">
+        Votre rapport a été transmis aux responsables.<br>Revenez demain pour une nouvelle journée.
+      </p>
+      <div style="margin-top:24px;background:#1e293b;border:1px solid #334155;border-radius:12px;padding:18px 28px;text-align:center;min-width:240px">
+        <div style="font-size:11px;color:var(--tm);margin-bottom:8px">Résumé de la journée</div>
+        <div style="display:flex;gap:24px;justify-content:center">
+          <div><div style="font-size:20px;font-weight:700;color:var(--br)">${myClosure.orderCount||0}</div><div style="font-size:11px;color:var(--tm)">Commandes</div></div>
+          <div><div style="font-size:20px;font-weight:700;color:#fff">${fmt(myClosure.totalAmount||0)}</div><div style="font-size:11px;color:var(--tm)">Total</div></div>
+        </div>
+      </div>
+      <button class="btn btn-o" style="margin-top:20px" onclick="doLogout()">Se déconnecter</button>
+    </div>
+  `;
+  return el;
+}
+
+function buildCloseDayModal() {
+  var sess = S.get('session')||{};
+  var dateStr = today();
+  var todayCutoff = new Date(dateStr + 'T00:00:00');
+  var allOrders = S.orders();
+  var myOrders = allOrders.filter(function(o) {
+    var mine = o.created_by_id===sess.userId || o.waiter===sess.name;
+    var isToday = o.created_at && new Date(o.created_at) >= todayCutoff;
+    return mine && isToday;
+  });
+  var paidOrders = myOrders.filter(function(o){ return o.status==='paid'; });
+  var openOrders = myOrders.filter(function(o){ return o.status==='open'; });
+  var totalPaid  = paidOrders.reduce(function(s,o){ return s+(o.total||0); },0);
+  return `
+    <div class="overlay" onclick="if(event.target===this)setState({modal:null})">
+      <div class="modal">
+        <div class="mhdr">
+          <h2>🔒 Clôturer la journée</h2>
+          <button class="btn btn-o" style="padding:5px" onclick="setState({modal:null})">✕</button>
+        </div>
+        <div class="mbody" style="display:flex;flex-direction:column;gap:14px">
+          <p style="color:var(--tm);font-size:13px;line-height:1.6">
+            Votre rapport sera transmis automatiquement aux managers. Vous ne pourrez plus effectuer d'actions aujourd'hui.
+          </p>
+          <div style="background:#0f172a;border-radius:10px;padding:14px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;text-align:center">
+            <div><div style="font-size:20px;font-weight:700;color:var(--br)">${paidOrders.length}</div><div style="font-size:11px;color:var(--tm)">Commandes payées</div></div>
+            <div><div style="font-size:20px;font-weight:700;color:var(--am)">${openOrders.length}</div><div style="font-size:11px;color:var(--tm)">En cours</div></div>
+            <div><div style="font-size:20px;font-weight:700;color:var(--br)">${fmt(totalPaid)}</div><div style="font-size:11px;color:var(--tm)">Total encaissé</div></div>
+          </div>
+          ${openOrders.length?`<div style="background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.3);border-radius:8px;padding:10px;font-size:12px;color:var(--am)">
+            ⚠️ ${openOrders.length} commande${openOrders.length>1?'s':''} encore ouverte${openOrders.length>1?'s':''}. Elles seront enregistrées comme crédits.
+          </div>`:''}
+        </div>
+        <div class="mftr">
+          <button class="btn btn-o" style="flex:1" onclick="setState({modal:null})">Annuler</button>
+          <button class="btn btn-d" style="flex:1" onclick="doCloseDay()">Confirmer la clôture</button>
+        </div>
+      </div>
+    </div>
+  `;
 }
 
 // ══════════════════════════════════════════════════
@@ -1079,6 +1304,11 @@ function openAdjust(productId) {
 // REPORTS
 // ══════════════════════════════════════════════════
 function buildReports() {
+  var mainTab = APP.reportsMainTab || 'ventes';
+  if (mainTab === 'reconciliation') return buildReconciliation();
+  if (mainTab === 'pending')        return buildPendingReports();
+
+  var mainTabHtml = buildReportsTabBar();
   const wrap = mkEl('div', 'view');
   const periods = [{id:'today',label:"Aujourd'hui"},{id:'week',label:'7 jours'},{id:'month',label:'30 jours'}];
   const days = {today:1,week:7,month:30}[APP.reportsTab];
@@ -1111,7 +1341,6 @@ function buildReports() {
     payMethods[o.payment_method].count++;
     payMethods[o.payment_method].total += o.total||0;
   });
-  const methodLabel = {cash:'Espèces',card:'Carte',mobile:'Mobile'};
 
   // Daily data for chart
   const dailyMap = {};
@@ -1122,9 +1351,8 @@ function buildReports() {
   });
   const dailyData = Object.entries(dailyMap).sort((a,b)=>a[0].localeCompare(b[0]));
 
-  wrap.innerHTML = `
+  wrap.innerHTML = mainTabHtml + `
     <div class="row mb-12" style="flex-wrap:wrap;gap:10px;align-items:center">
-      <h1 style="font-size:18px;font-weight:700">📊 Rapports</h1>
       <div style="display:flex;background:#1e293b;border-radius:8px;padding:3px;gap:2px">
         ${periods.map(p=>`<button class="btn" style="padding:5px 12px;font-size:12px;${APP.reportsTab===p.id?'background:#334155;color:#fff':'background:transparent;color:var(--tm)'}"
           onclick="setState({reportsTab:'${p.id}'})">${p.label}</button>`).join('')}
@@ -1178,7 +1406,7 @@ function buildReports() {
           <div class="chart-title">Modes de paiement</div>
           ${Object.entries(payMethods).map(([m,{count,total}])=>`
             <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid #334155">
-              <span style="font-size:13px;color:#fff">${methodLabel[m]||m}</span>
+              <span style="font-size:13px;color:#fff">${(PAYMENT_METHODS.find(function(x){return x.id===m;})||{}).label||m}</span>
               <div style="text-align:right">
                 <div style="font-size:13px;font-weight:600;color:var(--br)">${fmt(total)}</div>
                 <div style="font-size:11px;color:var(--tm)">${count} commande${count>1?'s':''}</div>
@@ -1195,7 +1423,6 @@ function buildReports() {
     </div>`:''}
   `;
 
-  // Draw canvas chart after DOM insert
   if (dailyData.length > 1) {
     setTimeout(() => {
       const canvas = document.getElementById('chart-revenue');
@@ -1205,6 +1432,195 @@ function buildReports() {
   }
 
   return wrap;
+}
+
+function buildReportsTabBar() {
+  var tabs = [{id:'ventes',label:'📈 Ventes'}];
+  if (can('view_reconciliation') || can('close_day')) tabs.push({id:'reconciliation',label:'⚖️ Réconciliation'});
+  if (can('manage_users') || can('view_settings')) tabs.push({id:'pending',label:'📋 Rapports en attente'});
+  var cur = APP.reportsMainTab||'ventes';
+  return `<div style="display:flex;background:#1e293b;border-radius:10px;padding:4px;gap:2px;margin-bottom:16px;overflow-x:auto">
+    ${tabs.map(t=>`<button class="btn" style="flex:1;padding:7px 14px;font-size:12px;white-space:nowrap;${cur===t.id?'background:#334155;color:#fff':'background:transparent;color:var(--tm)'}"
+      onclick="setState({reportsMainTab:'${t.id}'})"> ${t.label}</button>`).join('')}
+  </div>`;
+}
+
+function buildReconciliation() {
+  var wrap = mkEl('div', 'view');
+  var dateStr = today();
+  var todayCutoff = new Date(dateStr + 'T00:00:00');
+  var allOrders = S.orders();
+  var allItems  = S.items();
+  var cats      = S.categories();
+  var credits   = S.credits();
+
+  // Today's paid orders
+  var paidToday = allOrders.filter(function(o){
+    return o.status==='paid' && o.closed_at && new Date(o.closed_at) >= todayCutoff;
+  });
+
+  // Column A: by server
+  var byServer = {};
+  paidToday.forEach(function(o){
+    var srv = o.waiter || o.created_by_name || 'Inconnu';
+    if (!byServer[srv]) byServer[srv] = 0;
+    byServer[srv] += o.total||0;
+  });
+  var colA_total = Object.values(byServer).reduce(function(s,v){return s+v;},0);
+
+  // Column B: by department (category)
+  var byDept = {};
+  paidToday.forEach(function(o){
+    allItems.filter(function(i){return i.order_id===o.id;}).forEach(function(i){
+      var catId = i.category_id;
+      var cat = (cats.find(function(c){return c.id==catId;})||{}).name || 'Autre';
+      if (!byDept[cat]) byDept[cat] = 0;
+      byDept[cat] += i.quantity * i.unit_price;
+    });
+  });
+  var colB_total = Object.values(byDept).reduce(function(s,v){return s+v;},0);
+
+  // Column C: by payment method
+  var byPay = {};
+  paidToday.forEach(function(o){
+    var m = o.payment_method||'autre';
+    if (!byPay[m]) byPay[m] = 0;
+    byPay[m] += o.total||0;
+  });
+  var colC_total = Object.values(byPay).reduce(function(s,v){return s+v;},0);
+
+  // Credits today
+  var todayCredits = credits.filter(function(c){return c.date===dateStr;});
+  var creditTotal  = todayCredits.reduce(function(s,c){return s+(c.amount||0);},0);
+
+  // Balance check
+  var balanced = Math.abs(colA_total - colC_total) < 1 && Math.abs(colB_total - colC_total) < 1;
+
+  var tabBar = buildReportsTabBar();
+  wrap.innerHTML = tabBar + `
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:8px">
+      <h2 style="font-size:16px;font-weight:700">⚖️ Réconciliation du jour</h2>
+      <span class="recon-badge ${balanced?'recon-ok':'recon-err'}">${balanced?'✓ Équilibré':'⚠ Écart détecté'}</span>
+    </div>
+
+    <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:16px">
+      <!-- Column A -->
+      <div class="recon-col">
+        <div class="recon-hdr">A · Commandes par serveur</div>
+        ${Object.entries(byServer).length?Object.entries(byServer).map(function(e){return `<div class="recon-row"><span>${esc(e[0])}</span><span style="color:var(--br);font-weight:600">${fmt(e[1])}</span></div>`;}).join(''):'<div style="color:var(--tm);font-size:12px">Aucune vente</div>'}
+        <div class="recon-total"><span>Total A</span><span style="color:var(--br)">${fmt(colA_total)}</span></div>
+      </div>
+
+      <!-- Column B -->
+      <div class="recon-col">
+        <div class="recon-hdr">B · Ventes par département</div>
+        ${Object.entries(byDept).length?Object.entries(byDept).map(function(e){return `<div class="recon-row"><span>${esc(e[0])}</span><span style="color:#60a5fa;font-weight:600">${fmt(e[1])}</span></div>`;}).join(''):'<div style="color:var(--tm);font-size:12px">Aucune vente</div>'}
+        <div class="recon-total"><span>Total B</span><span style="color:#60a5fa">${fmt(colB_total)}</span></div>
+      </div>
+
+      <!-- Column C -->
+      <div class="recon-col">
+        <div class="recon-hdr">C · Encaissements</div>
+        ${Object.entries(byPay).length?Object.entries(byPay).map(function(e){var pm=PAYMENT_METHODS.find(function(x){return x.id===e[0];})||{};return `<div class="recon-row"><span>${pm.label||esc(e[0])}</span><span style="color:#a78bfa;font-weight:600">${fmt(e[1])}</span></div>`;}).join(''):'<div style="color:var(--tm);font-size:12px">Aucun encaissement</div>'}
+        <div class="recon-total"><span>Total C</span><span style="color:#a78bfa">${fmt(colC_total)}</span></div>
+      </div>
+    </div>
+
+    <!-- Credits -->
+    <div class="card" style="padding:16px;margin-bottom:12px">
+      <div style="font-size:13px;font-weight:700;margin-bottom:12px;color:var(--am)">💳 Crédits du jour (commandes non encaissées)</div>
+      ${todayCredits.length?`
+        <table class="tbl" style="font-size:12px">
+          <thead><tr><th>Commande</th><th>Serveur</th><th>Montant</th></tr></thead>
+          <tbody>
+            ${todayCredits.map(function(c){return `<tr><td>#${c.orderId}</td><td>${esc(c.serverName||'')}</td><td style="color:var(--am);font-weight:600">${fmt(c.amount)}</td></tr>`;}).join('')}
+            <tr><td colspan="2" style="font-weight:700">Total crédits</td><td style="color:var(--am);font-weight:700">${fmt(creditTotal)}</td></tr>
+          </tbody>
+        </table>`
+      :'<p style="color:var(--tm);font-size:13px">Aucun crédit aujourd\'hui</p>'}
+    </div>
+
+    <!-- Ecart -->
+    ${!balanced?`<div style="background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.3);border-radius:10px;padding:14px">
+      <div style="font-weight:700;color:#f87171;margin-bottom:8px">⚠️ Écarts détectés</div>
+      ${Math.abs(colA_total-colC_total)>1?`<div style="font-size:12px;color:var(--tm)">A vs C : ${fmt(Math.abs(colA_total-colC_total))}</div>`:''}
+      ${Math.abs(colB_total-colC_total)>1?`<div style="font-size:12px;color:var(--tm)">B vs C : ${fmt(Math.abs(colB_total-colC_total))}</div>`:''}
+    </div>`:''}
+  `;
+  return wrap;
+}
+
+function buildPendingReports() {
+  var wrap = mkEl('div', 'view');
+  var reports = S.pendingReports().slice().reverse();
+  var tabBar  = buildReportsTabBar();
+  var _ROLE_LABELS_R = {waiter:'Serveur',barman:'Barman',chicha_waiter:'Srv. Chicha',chef_cuisine:'Chef Cuisine',asst_cuisine:'Asst. Cuisine',caissiere:'Caissière',manager:'Manager',superadmin:'Super Admin'};
+
+  var html = tabBar + `
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+      <h2 style="font-size:16px;font-weight:700">📋 Rapports en attente</h2>
+      <span style="font-size:12px;color:var(--tm)">${reports.length} rapport${reports.length!==1?'s':''}</span>
+    </div>
+  `;
+
+  if (!reports.length) {
+    html += `<div style="text-align:center;padding:60px;color:var(--tm)">
+      <div style="font-size:40px;opacity:.3;margin-bottom:12px">📋</div>
+      <p>Aucun rapport reçu</p>
+    </div>`;
+  } else {
+    html += reports.map(function(r) {
+      var icon = {waiter:'🙋',barman:'🍺',chicha_waiter:'💨',chef_cuisine:'👨‍🍳',asst_cuisine:'🧑‍🍳',caissiere:'💰',manager:'👔',superadmin:'⭐'}[r.userRole]||'👤';
+      var dateLabel = r.date ? new Date(r.date + 'T12:00:00').toLocaleDateString('fr-FR',{weekday:'short',day:'numeric',month:'short'}) : '';
+      return `<div class="report-card">
+        <div class="report-card-av" style="background:#1e293b;border:1px solid #334155">${icon}</div>
+        <div style="flex:1;min-width:0">
+          <div style="font-weight:600;color:#fff;font-size:13px">${esc(r.userName||'')}</div>
+          <div style="font-size:11px;color:var(--tm)">${_ROLE_LABELS_R[r.userRole]||r.userRole} · ${esc(dateLabel)}</div>
+          <div style="font-size:12px;color:var(--tm);margin-top:3px">${r.orderCount||0} commandes · ${fmt(r.totalAmount||0)}</div>
+        </div>
+        <button class="btn btn-o" style="font-size:11px;padding:5px 10px;flex-shrink:0" onclick="generateAndPrintReport(${r.id})">📄 PDF</button>
+      </div>`;
+    }).join('');
+  }
+  wrap.innerHTML = html;
+  return wrap;
+}
+
+function generateAndPrintReport(closureId) {
+  var r = S.pendingReports().find(function(x){ return x.id===closureId; });
+  if (!r) { notify('Rapport introuvable','err'); return; }
+  var dateLabel = r.date ? new Date(r.date+'T12:00:00').toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long',year:'numeric'}) : r.date;
+  var catRows = Object.entries(r.catBreakdown||{}).map(function(e){
+    return '<tr><td>'+esc(e[0])+'</td><td style="text-align:right">'+e[1].qty+' art.</td><td style="text-align:right">'+Math.round(e[1].total).toLocaleString('fr-FR')+' DJF</td></tr>';
+  }).join('');
+  var payRows = Object.entries(r.payBreakdown||{}).map(function(e){
+    var pm = PAYMENT_METHODS.find(function(x){return x.id===e[0];})||{};
+    return '<tr><td>'+(pm.label||esc(e[0]))+'</td><td style="text-align:right">'+Math.round(e[1]).toLocaleString('fr-FR')+' DJF</td></tr>';
+  }).join('');
+  var html = '<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Rapport '+esc(r.userName)+'</title>'
+    +'<style>body{font-family:sans-serif;font-size:12px;color:#111;padding:24px;max-width:480px;margin:0 auto}'
+    +'h1{font-size:18px;margin-bottom:4px}h2{font-size:13px;margin:16px 0 6px;border-bottom:1px solid #ccc;padding-bottom:4px}'
+    +'table{width:100%;border-collapse:collapse;margin-bottom:8px}td,th{padding:5px 8px;border-bottom:1px solid #eee;text-align:left}'
+    +'.total{font-weight:700;font-size:14px}.badge{display:inline-block;padding:2px 10px;border-radius:20px;font-size:11px;background:#e8f5e9;color:#2e7d32}'
+    +'@media print{button{display:none}}</style>'
+    +'</head><body>'
+    +'<h1>Rapport de clôture</h1>'
+    +'<p style="color:#555">'+esc(dateLabel)+'</p>'
+    +'<p><strong>'+esc(r.userName||'')+'</strong> · '+esc(r.userRole||'')+'</p>'
+    +'<table><tr><td>Commandes traitées</td><td style="text-align:right"><strong>'+(r.orderCount||0)+'</strong></td></tr>'
+    +'<tr><td>Commandes créditées</td><td style="text-align:right"><strong>'+(r.openCount||0)+'</strong></td></tr>'
+    +'<tr class="total"><td>Total encaissé</td><td style="text-align:right">'+Math.round(r.totalAmount||0).toLocaleString('fr-FR')+' DJF</td></tr>'
+    +'</table>'
+    +(catRows?'<h2>Ventilation par catégorie</h2><table><tr><th>Catégorie</th><th style="text-align:right">Qté</th><th style="text-align:right">Montant</th></tr>'+catRows+'</table>':'')
+    +(payRows?'<h2>Ventilation par mode de paiement</h2><table><tr><th>Mode</th><th style="text-align:right">Montant</th></tr>'+payRows+'</table>':'')
+    +'<p style="font-size:10px;color:#999;margin-top:20px">Généré le '+new Date().toLocaleString('fr-FR')+' · Urban Beach POS</p>'
+    +'<script>window.onload=function(){window.print();}<\/script>'
+    +'</body></html>';
+  var w = window.open('','_blank','width=600,height=700');
+  if (!w) { notify('Autorisez les pop-ups pour générer le PDF','err'); return; }
+  w.document.write(html);
+  w.document.close();
 }
 
 function drawBarChart(canvas, labels, data) {
@@ -1474,7 +1890,7 @@ function editUser(id) {
     setState({modal:'edit-user', modalData:{id:0, name:'', role:'waiter', pin:'', isNew:true}});
   } else {
     var u = S.users().find(function(x){ return x.id===id; });
-    if (u) setState({modal:'edit-user', modalData:{id:u.id, name:u.name, role:u.role, pin:'', isNew:false}});
+    if (u) setState({modal:'edit-user', modalData:{id:u.id, name:u.name, role:u.role, pin:'', isNew:false, custom_perms:u.custom_perms||null}});
   }
 }
 
@@ -1487,17 +1903,18 @@ function toggleUser(id) {
 
 function saveUser(data) {
   var users = S.users();
+  var customPerms = getSelectedPerms();
   if (data.isNew) {
     if (!String(data.name||'').trim()) { notify('Entrez un nom', 'err'); return; }
     if (!data.pin || String(data.pin).replace(/\D/g,'').length !== 4) { notify('Le PIN doit avoir 4 chiffres', 'err'); return; }
     var id = S.nextId('users');
-    users.push({id:id, name:String(data.name).trim(), role:data.role, pin:hashPin(String(data.pin).replace(/\D/g,'')), active:1});
+    users.push({id:id, name:String(data.name).trim(), role:data.role, pin:hashPin(String(data.pin).replace(/\D/g,'')), active:1, custom_perms:customPerms});
     S.set('users', users);
     notify('Utilisateur ajouté');
   } else {
     S.set('users', users.map(function(u) {
       if (u.id !== data.id) return u;
-      var upd = Object.assign({},u,{name:String(data.name).trim(), role:data.role});
+      var upd = Object.assign({},u,{name:String(data.name).trim(), role:data.role, custom_perms:customPerms});
       var pinStr = String(data.pin||'').replace(/\D/g,'');
       if (pinStr.length === 4) upd.pin = hashPin(pinStr);
       return upd;
@@ -1507,6 +1924,28 @@ function saveUser(data) {
   setState({modal:null, modalData:null});
 }
 
+function getSelectedPerms() {
+  var el = document.getElementById('eu-custom-perms-box');
+  if (!el || el.style.display==='none') return null;
+  var checked = Array.from(el.querySelectorAll('input[type=checkbox]:checked')).map(function(cb){return cb.value;});
+  return checked.length ? checked : null;
+}
+
+function prefillPerms(role) {
+  var box = document.getElementById('eu-custom-perms-box');
+  if (!box) return;
+  var defaults = _ROLE_PERMS[role]||[];
+  ALL_PERMS.forEach(function(p){
+    var cb = document.getElementById('perm-cb-'+p.id);
+    if (cb) cb.checked = defaults.indexOf('*')>=0 || defaults.indexOf(p.id)>=0;
+  });
+}
+
+function toggleCustomPerms(show) {
+  var box = document.getElementById('eu-custom-perms-box');
+  if (box) box.style.display = show ? '' : 'none';
+}
+
 function buildEditUserModal() {
   var d = APP.modalData||{};
   var roles = [
@@ -1514,21 +1953,42 @@ function buildEditUserModal() {
     {id:'waiter',lbl:'Serveur'},{id:'barman',lbl:'Barman'},{id:'chicha_waiter',lbl:'Srv. Chicha'},
     {id:'chef_cuisine',lbl:'Chef Cuisine'},{id:'asst_cuisine',lbl:'Asst. Cuisine'},
   ];
+  var _cu = currentUser()||{};
+  var isSuperAdmin = can('manage_users') && (can('*') || _cu.role==='superadmin');
+  var existingCustom = d.custom_perms;
+  var hasCustom = existingCustom != null;
+  var initPerms = hasCustom ? existingCustom : (_ROLE_PERMS[d.role||'waiter']||[]);
+
+  var groups = {};
+  ALL_PERMS.forEach(function(p){ (groups[p.group]=groups[p.group]||[]).push(p); });
+
+  var permHtml = Object.entries(groups).map(function(g) {
+    return `<div style="margin-bottom:8px">
+      <div style="font-size:10px;color:var(--tm);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px">${esc(g[0])}</div>
+      <div class="perm-grid">
+        ${g[1].map(function(p){
+          var chk = initPerms.indexOf('*')>=0 || initPerms.indexOf(p.id)>=0;
+          return `<label class="perm-item"><input type="checkbox" id="perm-cb-${p.id}" value="${p.id}" ${chk?'checked':''}>${esc(p.label)}</label>`;
+        }).join('')}
+      </div>
+    </div>`;
+  }).join('');
+
   return `
     <div class="overlay" onclick="if(event.target===this)setState({modal:null})">
-      <div class="modal">
-        <div class="mhdr">
+      <div class="modal modal-lg" style="max-height:90vh;display:flex;flex-direction:column">
+        <div class="mhdr" style="flex-shrink:0">
           <h2>${d.isNew?'Nouvel utilisateur':'Modifier l\'utilisateur'}</h2>
           <button class="btn btn-o" style="padding:5px" onclick="setState({modal:null})">✕</button>
         </div>
-        <div class="mbody" style="display:flex;flex-direction:column;gap:12px">
+        <div class="mbody" style="display:flex;flex-direction:column;gap:12px;overflow-y:auto;flex:1">
           <div>
             <label class="lbl">Nom *</label>
             <input class="inp" id="eu-name" value="${esc(d.name||'')}" placeholder="Prénom Nom">
           </div>
           <div>
             <label class="lbl">Rôle *</label>
-            <select class="inp" id="eu-role">
+            <select class="inp" id="eu-role" onchange="prefillPerms(this.value)">
               ${roles.map(function(r){return `<option value="${r.id}" ${d.role===r.id?'selected':''}>${r.lbl}</option>`;}).join('')}
             </select>
           </div>
@@ -1537,8 +1997,19 @@ function buildEditUserModal() {
             <input class="inp" id="eu-pin" type="password" inputmode="numeric" maxlength="4" placeholder="••••"
               style="letter-spacing:6px;font-size:20px">
           </div>
+          ${isSuperAdmin?`
+          <div>
+            <label style="display:flex;align-items:center;gap:8px;cursor:pointer;margin-bottom:6px">
+              <input type="checkbox" id="eu-use-custom" ${hasCustom?'checked':''} style="width:14px;height:14px;accent-color:var(--br)"
+                onchange="toggleCustomPerms(this.checked)">
+              <span style="font-size:12px;color:var(--tm)">Droits d'accès personnalisés</span>
+            </label>
+            <div id="eu-custom-perms-box" style="display:${hasCustom?'':'none'};background:#0f172a;border:1px solid #334155;border-radius:8px;padding:12px">
+              ${permHtml}
+            </div>
+          </div>`:''}
         </div>
-        <div class="mftr">
+        <div class="mftr" style="flex-shrink:0">
           <button class="btn btn-o" style="flex:1" onclick="setState({modal:null})">Annuler</button>
           <button class="btn btn-p" style="flex:1" onclick="saveUser({
             id:${d.id||0}, isNew:${!!d.isNew},
@@ -1558,10 +2029,11 @@ function buildEditUserModal() {
 function renderModals() {
   const el = document.getElementById('modals');
   if (!APP.modal) { el.innerHTML = ''; return; }
-  if (APP.modal==='payment') el.innerHTML = buildPaymentModal();
-  else if (APP.modal==='adjust') el.innerHTML = buildAdjustModal();
+  if      (APP.modal==='payment')      el.innerHTML = buildPaymentModal();
+  else if (APP.modal==='adjust')       el.innerHTML = buildAdjustModal();
   else if (APP.modal==='edit-product') el.innerHTML = buildEditProductModal();
-  else if (APP.modal==='edit-user') el.innerHTML = buildEditUserModal();
+  else if (APP.modal==='edit-user')    el.innerHTML = buildEditUserModal();
+  else if (APP.modal==='close-day')    el.innerHTML = buildCloseDayModal();
 }
 
 function buildPaymentModal() {
@@ -1593,11 +2065,9 @@ function buildPaymentModal() {
 
           <div>
             <label class="lbl">Mode de paiement</label>
-            <div class="row">
-              ${[['cash','💵 Espèces'],['card','💳 Carte'],['mobile','📱 Mobile']].map(([m,lbl])=>`
-                <button id="pay-method-${m}" class="btn ${m==='cash'?'btn-p':'btn-o'} w-full"
-                  onclick="selectPayMethod('${m}',${total})">${lbl}</button>
-              `).join('')}
+            <div class="pay-method-grid">
+              ${PAYMENT_METHODS.map(function(m){return `<button id="pay-method-${m.id}" class="pay-method-btn${m.id==='cash'?' active':''}"
+                  onclick="selectPayMethod('${m.id}',${total})">${m.label}</button>`;}).join('')}
             </div>
           </div>
 
@@ -1627,12 +2097,15 @@ function buildPaymentModal() {
 let _payMethod = 'cash';
 function selectPayMethod(m, baseTotal) {
   _payMethod = m;
-  ['cash','card','mobile'].forEach(x => {
-    const btn = document.getElementById('pay-method-'+x);
-    if(btn) btn.className = 'btn ' + (x===m?'btn-p':'btn-o') + ' w-full';
+  var isCash = !!(PAYMENT_METHODS.find(function(x){return x.id===m;})||{}).cash;
+  PAYMENT_METHODS.forEach(function(pm) {
+    var btn = document.getElementById('pay-method-'+pm.id);
+    if (btn) {
+      btn.className = 'pay-method-btn' + (pm.id===m?' active':'');
+    }
   });
-  const cashSec = document.getElementById('cash-section');
-  if(cashSec) cashSec.style.display = m==='cash'?'':'none';
+  var cashSec = document.getElementById('cash-section');
+  if (cashSec) cashSec.style.display = isCash ? '' : 'none';
   updatePayTotal(baseTotal);
 }
 function updatePayTotal(baseTotal) {
@@ -1660,7 +2133,8 @@ function submitPayment(orderId, baseTotal) {
   const tip = parseFloat(gv('pay-tip'))||0;
   const cashGiven = parseFloat(gv('pay-cash'))||0;
   const grand = baseTotal + tip;
-  if (_payMethod==='cash' && cashGiven < grand) { notify('Montant insuffisant','err'); return; }
+  var _isCash = !!(PAYMENT_METHODS.find(function(x){return x.id===_payMethod;})||{}).cash;
+  if (_isCash && cashGiven < grand) { notify('Montant insuffisant','err'); return; }
   const result = doCheckout(orderId, _payMethod, cashGiven, tip);
   setState({modal:null, tableId:null, orderId:null, view:'floor'});
 
