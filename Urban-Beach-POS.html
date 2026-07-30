@@ -565,14 +565,14 @@ function doLogout() {
 function seedUsers() {
   if (S.get('users') !== null) return;
   S.set('users', [
-    {id:1, name:'Super Admin',   role:'superadmin',   pin:hashPin('0000'), active:1},
-    {id:2, name:'Manager',       role:'manager',      pin:hashPin('1234'), active:1},
-    {id:3, name:'Caissière',     role:'caissiere',    pin:hashPin('2222'), active:1},
-    {id:4, name:'Serveur 1',     role:'waiter',       pin:hashPin('1111'), active:1},
-    {id:5, name:'Barman',        role:'barman',       pin:hashPin('3333'), active:1},
-    {id:6, name:'Chef Cuisine',  role:'chef_cuisine', pin:hashPin('4444'), active:1},
-    {id:7, name:'Asst. Cuisine', role:'asst_cuisine', pin:hashPin('5555'), active:1},
-    {id:8, name:'Srv. Chicha',   role:'chicha_waiter',pin:hashPin('6666'), active:1},
+    {id:1, name:'Super Admin',   role:'superadmin',   pin:hashPin('0000'), active:1, must_change_pin:1},
+    {id:2, name:'Manager',       role:'manager',      pin:hashPin('1234'), active:1, must_change_pin:1},
+    {id:3, name:'Caissière',     role:'caissiere',    pin:hashPin('2222'), active:1, must_change_pin:1},
+    {id:4, name:'Serveur 1',     role:'waiter',       pin:hashPin('1111'), active:1, must_change_pin:1},
+    {id:5, name:'Barman',        role:'barman',       pin:hashPin('3333'), active:1, must_change_pin:1},
+    {id:6, name:'Chef Cuisine',  role:'chef_cuisine', pin:hashPin('4444'), active:1, must_change_pin:1},
+    {id:7, name:'Asst. Cuisine', role:'asst_cuisine', pin:hashPin('5555'), active:1, must_change_pin:1},
+    {id:8, name:'Srv. Chicha',   role:'chicha_waiter',pin:hashPin('6666'), active:1, must_change_pin:1},
   ]);
   S.set('seq_users', 8);
 }
@@ -674,6 +674,8 @@ const APP = {
   modalData: null,
   loginUserId: null,
   loginPin: '',
+  changePinNew: '',
+  changePinConfirm: '',
 };
 
 function setState(patch) { Object.assign(APP, patch); render(); }
@@ -876,10 +878,94 @@ function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').re
 // ══════════════════════════════════════════════════
 function render() {
   if (!currentUser()) { renderLoginOverlay(); return; }
+  var _sess = S.get('session');
+  var _sessUser = _sess ? S.users().find(function(u){ return u.id === _sess.userId; }) : null;
+  if (_sessUser && _sessUser.must_change_pin) { renderChangePinOverlay(); return; }
   renderNav();
   renderHdrRight();
   renderView();
   renderModals();
+}
+
+function renderChangePinOverlay() {
+  document.getElementById('nav').innerHTML = '';
+  document.getElementById('hdr-right').innerHTML = '';
+  document.getElementById('modals').innerHTML = '';
+  var pin1 = String(APP.changePinNew || '');
+  var pin2 = String(APP.changePinConfirm || '');
+  var phase = pin1.length < 4 ? 'new' : 'confirm';
+  var displayPin = phase === 'new' ? pin1 : pin2;
+  var dots = [0,1,2,3].map(function(i){
+    return '<div style="width:14px;height:14px;border-radius:50%;border:2px solid '
+      + (i < displayPin.length ? '#10b981' : '#475569')
+      + ';background:' + (i < displayPin.length ? '#10b981' : 'transparent') + '"></div>';
+  }).join('');
+  var keys = ['1','2','3','4','5','6','7','8','9','','0','⌫'];
+  var keypad = keys.map(function(k){
+    if (!k) return '<div></div>';
+    return '<button class="pin-key" onclick="handleChangePinKey(\'' + k + '\')">' + k + '</button>';
+  }).join('');
+
+  var html = '<div class="login-overlay">'
+    + '<div class="login-logo">🔑 Changement de PIN obligatoire</div>'
+    + '<div class="login-sub" style="max-width:300px;text-align:center;margin-bottom:24px">'
+    + (phase === 'new'
+        ? 'Votre compte a été créé avec un PIN provisoire.<br>Choisissez un nouveau PIN à 4 chiffres.'
+        : 'Confirmez votre nouveau PIN.')
+    + '</div>'
+    + '<div style="font-size:14px;font-weight:600;color:var(--tm);margin-bottom:14px;text-align:center">'
+    + (phase === 'new' ? 'Nouveau PIN' : 'Confirmez le PIN') + '</div>'
+    + '<div style="display:flex;gap:12px;margin-bottom:24px;justify-content:center">' + dots + '</div>'
+    + '<div id="cpin-err" style="color:#f87171;font-size:12px;min-height:18px;text-align:center;margin-bottom:10px"></div>'
+    + '<div class="pin-grid">' + keypad + '</div>'
+    + '<button class="btn btn-o" style="margin-top:20px;font-size:12px" onclick="doLogout()">← Annuler et se déconnecter</button>'
+    + '</div>';
+
+  document.getElementById('view-container').innerHTML = html;
+}
+
+function handleChangePinKey(k) {
+  var pin1 = String(APP.changePinNew || '');
+  var pin2 = String(APP.changePinConfirm || '');
+  var phase = pin1.length < 4 ? 'new' : 'confirm';
+
+  if (k === '⌫') {
+    if (phase === 'new') APP.changePinNew = pin1.slice(0, -1);
+    else APP.changePinConfirm = pin2.slice(0, -1);
+    render(); return;
+  }
+
+  if (phase === 'new') {
+    APP.changePinNew = pin1 + k;
+    if (APP.changePinNew.length === 4) render();
+    else render();
+  } else {
+    APP.changePinConfirm = pin2 + k;
+    if (APP.changePinConfirm.length === 4) {
+      if (APP.changePinNew !== APP.changePinConfirm) {
+        APP.changePinNew = '';
+        APP.changePinConfirm = '';
+        render();
+        setTimeout(function(){
+          var el = document.getElementById('cpin-err');
+          if (el) el.textContent = 'Les PINs ne correspondent pas. Réessayez.';
+        }, 30);
+      } else {
+        var sess = S.get('session');
+        S.set('users', S.users().map(function(u) {
+          if (u.id !== sess.userId) return u;
+          return Object.assign({}, u, {pin: hashPin(APP.changePinNew), must_change_pin: 0});
+        }));
+        APP.changePinNew = '';
+        APP.changePinConfirm = '';
+        notify('PIN changé avec succès', 'ok');
+        APP.view = (currentUser() && !can('view_floor') && can('view_kitchen')) ? 'kitchen' : 'floor';
+        render();
+      }
+    } else {
+      render();
+    }
+  }
 }
 
 function renderNav() {
@@ -2365,7 +2451,7 @@ function saveUser(data) {
     if (!String(data.name||'').trim()) { notify('Entrez un nom', 'err'); return; }
     if (!data.pin || String(data.pin).replace(/\D/g,'').length !== 4) { notify('Le PIN doit avoir 4 chiffres', 'err'); return; }
     var id = S.nextId('users');
-    users.push({id:id, name:String(data.name).trim(), role:data.role, pin:hashPin(String(data.pin).replace(/\D/g,'')), active:1, custom_perms:customPerms});
+    users.push({id:id, name:String(data.name).trim(), role:data.role, pin:hashPin(String(data.pin).replace(/\D/g,'')), active:1, custom_perms:customPerms, must_change_pin:1});
     S.set('users', users);
     notify('Utilisateur ajouté');
   } else {
@@ -2373,7 +2459,7 @@ function saveUser(data) {
       if (u.id !== data.id) return u;
       var upd = Object.assign({},u,{name:String(data.name).trim(), role:data.role, custom_perms:customPerms});
       var pinStr = String(data.pin||'').replace(/\D/g,'');
-      if (pinStr.length === 4) upd.pin = hashPin(pinStr);
+      if (pinStr.length === 4) { upd.pin = hashPin(pinStr); upd.must_change_pin = 1; }
       return upd;
     }));
     notify('Utilisateur mis à jour');
