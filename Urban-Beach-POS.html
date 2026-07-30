@@ -229,6 +229,38 @@ html,body{height:100%;overflow:hidden;font-family:-apple-system,BlinkMacSystemFo
 .checklist{list-style:none;display:flex;flex-direction:column;gap:4px}
 .checklist li{display:flex;align-items:center;gap:6px;font-size:13px}
 
+/* ── Ticket workflow ─────────────────── */
+.dept-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px;padding:14px}
+.ticket-card{background:#1e293b;border:1px solid #334155;border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:10px;transition:border-color .2s}
+.ticket-card.t-new{border-color:rgba(96,165,250,.5);background:rgba(96,165,250,.04)}
+.ticket-card.t-accepted{border-color:rgba(245,158,11,.5);background:rgba(245,158,11,.04)}
+.ticket-card.t-ready{border-color:rgba(16,185,129,.5);background:rgba(16,185,129,.04)}
+.ticket-card.t-delivered{border-color:#334155;opacity:.55}
+.ticket-hdr{display:flex;align-items:center;justify-content:space-between;gap:6px}
+.ticket-tbl{font-size:22px;font-weight:800;color:#fff}
+.ticket-age{font-size:11px;font-family:monospace;padding:2px 7px;border-radius:6px}
+.ticket-item-row{display:flex;justify-content:space-between;align-items:center;padding:5px 8px;background:rgba(255,255,255,.04);border-radius:6px;font-size:13px;gap:6px}
+.ticket-qty{font-weight:700;color:var(--br);flex-shrink:0}
+.ticket-actions{display:flex;gap:6px}
+.ticket-btn{flex:1;padding:9px 6px;border-radius:8px;border:none;cursor:pointer;font-size:12px;font-weight:700;transition:all .15s}
+.ticket-btn:active{transform:scale(.97)}
+.ticket-btn-accept{background:rgba(59,130,246,.2);color:#60a5fa;border:1px solid rgba(59,130,246,.3)}
+.ticket-btn-accept:hover{background:rgba(59,130,246,.35);color:#fff}
+.ticket-btn-ready{background:rgba(16,185,129,.2);color:#34d399;border:1px solid rgba(16,185,129,.3)}
+.ticket-btn-ready:hover{background:rgba(16,185,129,.35);color:#fff}
+.ticket-btn-deliver{background:rgba(167,139,250,.2);color:#c4b5fd;border:1px solid rgba(167,139,250,.3)}
+.ticket-btn-deliver:hover{background:rgba(167,139,250,.35);color:#fff}
+.dept-tabs{display:flex;border-bottom:1px solid #334155;flex-shrink:0;overflow-x:auto}
+.dept-tab-btn{padding:10px 18px;border:none;background:transparent;color:var(--tm);font-size:13px;font-weight:600;cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;transition:all .15s}
+.dept-tab-btn:hover{color:#fff}
+.dept-tab-btn.active{color:var(--br);border-bottom-color:var(--br)}
+.dept-tab-badge{display:inline-flex;align-items:center;justify-content:center;background:#ef4444;color:#fff;font-size:10px;font-weight:700;min-width:17px;height:17px;border-radius:9px;padding:0 4px;margin-left:5px}
+.delivery-card{background:#1e293b;border:1px solid rgba(16,185,129,.35);border-radius:10px;padding:14px 16px;margin-bottom:8px}
+.send-btn{width:100%;padding:10px;border-radius:8px;border:1px solid rgba(59,130,246,.4);background:rgba(59,130,246,.1);color:#60a5fa;font-size:13px;font-weight:700;cursor:pointer;transition:all .15s}
+.send-btn:hover{background:rgba(59,130,246,.2);color:#fff}
+.send-btn:disabled{opacity:.4;cursor:not-allowed}
+.dept-status-chip{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:8px;font-size:11px;font-weight:600}
+
 @media(max-width:700px){
   .pos-layout{flex-direction:column}
   .pos-left{flex:none;height:55%;border-right:none;border-bottom:1px solid #334155}
@@ -307,6 +339,7 @@ const S = {
   closures:      () => S.get('closures')       || [],
   pendingReports:() => S.get('pending_reports')|| [],
   credits:       () => S.get('credits')        || [],
+  tickets:       () => S.get('tickets')        || [],
   nextId: k => { const n = (S.get('seq_' + k) || 0) + 1; S.set('seq_' + k, n); return n; },
 };
 
@@ -318,8 +351,8 @@ var _ROLE_PERMS = {
   manager:       ['view_floor','take_orders','view_kitchen','process_payment','view_reports','view_reconciliation','view_stock','adjust_stock','add_products','view_orders_list','view_settings','manage_tables','manage_categories'],
   caissiere:     ['view_floor','process_payment','view_reports','view_reconciliation','view_stock','view_orders_list','close_day'],
   waiter:        ['view_floor','take_orders','view_orders_list','close_day'],
-  barman:        ['view_floor','take_orders','view_orders_list','close_day'],
-  chicha_waiter: ['view_floor','take_orders','view_orders_list','close_day'],
+  barman:        ['view_floor','take_orders','view_kitchen','view_orders_list','close_day'],
+  chicha_waiter: ['view_floor','take_orders','view_kitchen','view_orders_list','close_day'],
   chef_cuisine:  ['view_kitchen','view_orders_list','close_day'],
   asst_cuisine:  ['view_kitchen','view_orders_list','close_day'],
 };
@@ -369,6 +402,132 @@ var PAYMENT_METHODS = [
 
 var PAY_LABELS = {};
 PAYMENT_METHODS.forEach(function(m){ PAY_LABELS[m.id] = m.label.replace(/[💵📱💳]\s*/,''); });
+
+var DEPT_MAP    = {'Food':'kitchen','Drinks':'bar','Shisha':'chicha','Events Global':'kitchen'};
+var DEPT_LABELS = {kitchen:'Cuisine', bar:'Bar', chicha:'Chicha'};
+var DEPT_ICONS  = {kitchen:'👨‍🍳', bar:'🍺', chicha:'💨'};
+var ROLE_DEPT   = {chef_cuisine:'kitchen', asst_cuisine:'kitchen', barman:'bar', chicha_waiter:'chicha'};
+
+function myDept() {
+  var sess = S.get('session');
+  if (!sess) return null;
+  return ROLE_DEPT[sess.role] || null;
+}
+
+function deptTickets(dept, statusFilter) {
+  var tickets = S.tickets();
+  return tickets.filter(function(t) {
+    var matchDept = !dept || t.department === dept;
+    var matchStatus = !statusFilter || (Array.isArray(statusFilter) ? statusFilter.indexOf(t.status) >= 0 : t.status === statusFilter);
+    return matchDept && matchStatus;
+  });
+}
+
+function pendingTicketCount() {
+  var dept = myDept();
+  if (!dept) return 0;
+  return deptTickets(dept, ['pending','accepted']).length;
+}
+
+function myReadyTickets() {
+  var sess = S.get('session');
+  if (!sess || sess.role !== 'waiter') return [];
+  return S.tickets().filter(function(t) {
+    return t.waiter_id === sess.userId && t.status === 'ready';
+  });
+}
+
+function sendToDepts(orderId) {
+  var order = S.orders().find(function(o){ return o.id === orderId; });
+  if (!order) return;
+  var sess = S.get('session');
+  if (!sess) return;
+  var items = S.items().filter(function(i){ return i.order_id === orderId; });
+  var cats  = S.categories();
+  var tickets = S.tickets();
+  var seq = S.get('seq_tickets') || 0;
+
+  // Group items by department
+  var deptItems = {};
+  items.forEach(function(item) {
+    var cat = cats.find(function(c){ return c.id === item.category_id; });
+    var catName = cat ? cat.name : '';
+    var dept = DEPT_MAP[catName];
+    if (!dept) return; // skip uncategorized
+    if (!deptItems[dept]) deptItems[dept] = [];
+    deptItems[dept].push({product_name: item.product_name, quantity: item.quantity, category: catName});
+  });
+
+  if (!Object.keys(deptItems).length) {
+    notify('Aucun article à envoyer', 'err');
+    return;
+  }
+
+  var now = new Date().toISOString();
+  var added = 0;
+  Object.keys(deptItems).forEach(function(dept) {
+    // Check if a non-delivered ticket already exists for this order+dept
+    var existing = tickets.find(function(t){ return t.order_id === orderId && t.department === dept && t.status !== 'delivered'; });
+    if (existing) return; // already sent
+    seq++;
+    tickets.push({
+      id: seq,
+      order_id: orderId,
+      table_id: order.table_id,
+      waiter_name: sess.name,
+      waiter_id: sess.userId,
+      department: dept,
+      items: deptItems[dept],
+      status: 'pending',
+      created_at: now,
+      accepted_at: null,
+      ready_at: null,
+      delivered_at: null,
+    });
+    added++;
+  });
+  S.set('tickets', tickets);
+  S.set('seq_tickets', seq);
+  if (added > 0) {
+    notify('Tickets envoyés aux départements (' + added + ')', 'ok');
+  } else {
+    notify('Tickets déjà envoyés', 'ok');
+  }
+  render();
+}
+
+function acceptTicket(ticketId) {
+  var tickets = S.tickets();
+  var t = tickets.find(function(x){ return x.id === ticketId; });
+  if (!t) return;
+  t.status = 'accepted';
+  t.accepted_at = new Date().toISOString();
+  S.set('tickets', tickets);
+  notify('Commande acceptée — préparation en cours', 'ok');
+  render();
+}
+
+function markTicketReady(ticketId) {
+  var tickets = S.tickets();
+  var t = tickets.find(function(x){ return x.id === ticketId; });
+  if (!t) return;
+  t.status = 'ready';
+  t.ready_at = new Date().toISOString();
+  S.set('tickets', tickets);
+  notify('Commande prête — le serveur va récupérer', 'ok');
+  render();
+}
+
+function deliverTicket(ticketId) {
+  var tickets = S.tickets();
+  var t = tickets.find(function(x){ return x.id === ticketId; });
+  if (!t) return;
+  t.status = 'delivered';
+  t.delivered_at = new Date().toISOString();
+  S.set('tickets', tickets);
+  notify('Livraison confirmée', 'ok');
+  render();
+}
 
 function hashPin(pin) {
   var h = 5381;
@@ -510,6 +669,7 @@ const APP = {
   settingsTab: 'tables',
   reportsTab: 'today',
   reportsMainTab: 'ventes',
+  deptTab: 'pending',
   modal: null,
   modalData: null,
   loginUserId: null,
@@ -731,12 +891,27 @@ function renderNav() {
     {id:'settings', icon:'⚙️',  label:'Paramètres', perm:'view_settings'},
   ];
   const items = all.filter(it => can(it.perm));
-  let html = items.map(it => `
-    <button class="nav-btn ${APP.view===it.id||(APP.view==='pos'&&it.id==='floor')?'active':''}"
+  let html = items.map(it => {
+    var badge = '';
+    if (it.id === 'kitchen' && myDept()) {
+      var cnt = pendingTicketCount();
+      if (cnt > 0) badge = '<span class="dept-tab-badge" style="margin-left:4px">' + cnt + '</span>';
+    }
+    return `<button class="nav-btn ${APP.view===it.id||(APP.view==='pos'&&it.id==='floor')?'active':''}"
       onclick="setState({view:'${it.id}'})">
-      ${it.icon} <span>${it.label}</span>
-    </button>
-  `).join('');
+      ${it.icon} <span>${it.label}</span>${badge}
+    </button>`;
+  }).join('');
+
+  // Waiter: show Livraisons badge if they have ready tickets
+  var sess = currentUser();
+  if (sess && sess.role === 'waiter') {
+    var readyCnt = myReadyTickets().length;
+    var badge2 = readyCnt > 0 ? '<span class="dept-tab-badge" style="margin-left:4px">' + readyCnt + '</span>' : '';
+    html += `<button class="nav-btn ${APP.view==='delivery'?'active':''}" onclick="setState({view:'delivery'})"
+      style="${readyCnt>0?'color:#c4b5fd':''}">🚀 <span>Livraisons</span>${badge2}</button>`;
+  }
+
   if (can('close_day') && !can('view_reports')) {
     html += `<button class="nav-btn" style="color:var(--am);margin-left:8px"
       onclick="setState({modal:'close-day'})">🔒 <span>Clôturer</span></button>`;
@@ -783,14 +958,15 @@ function renderView() {
   }
   if      (APP.view==='floor'    && can('view_floor'))    c.appendChild(buildFloor());
   else if (APP.view==='pos'      && can('view_floor'))    c.appendChild(buildPOS());
-  else if (APP.view==='kitchen'  && can('view_kitchen'))  c.appendChild(buildKitchen());
+  else if (APP.view==='kitchen'  && can('view_kitchen'))  c.appendChild(buildDeptView());
+  else if (APP.view==='delivery' && can('view_floor'))    c.appendChild(buildDeliveryView());
   else if (APP.view==='stock'    && can('view_stock'))    c.appendChild(buildStock());
   else if (APP.view==='reports'  && can('view_reports'))  c.appendChild(buildReports());
   else if (APP.view==='settings' && can('view_settings')) c.appendChild(buildSettings());
   else {
     const fallback = can('view_floor') ? 'floor' : can('view_kitchen') ? 'kitchen' : 'floor';
     APP.view = fallback;
-    c.appendChild(fallback==='floor' ? buildFloor() : buildKitchen());
+    c.appendChild(fallback==='floor' ? buildFloor() : buildDeptView());
   }
 }
 
@@ -869,53 +1045,187 @@ function handlePinKey(k) {
 }
 
 // ══════════════════════════════════════════════════
-// KITCHEN VIEW
+// DEPARTMENT VIEW (kitchen / bar / chicha)
 // ══════════════════════════════════════════════════
-function buildKitchen() {
-  const wrap = mkEl('div','');
+function buildDeptView() {
+  var dept = myDept();
+  var sess = S.get('session');
+  var tables = S.tables();
+
+  // Waiter with view_kitchen sees all depts in one unified view
+  var isWaiterView = sess && sess.role === 'waiter';
+  var effectiveDept = dept; // null for waiter
+
+  var tabMap = [
+    {key:'pending',  label:'Nouvelles',    statuses:['pending']},
+    {key:'accepted', label:'En cours',     statuses:['accepted']},
+    {key:'ready',    label:'Prêtes',       statuses:['ready']},
+    {key:'done',     label:'Livrées',      statuses:['delivered']},
+  ];
+
+  var wrap = mkEl('div','');
   wrap.style.cssText = 'height:100%;display:flex;flex-direction:column;overflow:hidden';
-  const orders = S.orders().filter(function(o){ return o.status==='open'; });
-  const allItems = S.items();
-  const tables = S.tables();
-  let html = `
-    <div style="padding:14px 16px;border-bottom:1px solid #334155;display:flex;align-items:center;gap:10px;flex-shrink:0">
-      <h1 style="font-size:18px;font-weight:700">👨‍🍳 Vue Cuisine</h1>
-      <span style="font-size:13px;color:var(--tm)">${orders.length} commande${orders.length!==1?'s':''} en cours</span>
-      <div class="spacer"></div>
-      <button class="btn btn-o" style="font-size:12px;padding:5px 10px" onclick="render()">↺ Actualiser</button>
-    </div>
-    <div class="kitchen-grid" style="overflow-y:auto;flex:1">
-  `;
-  if (!orders.length) {
-    html += `<div style="grid-column:1/-1;text-align:center;padding:60px;color:var(--tm)">
-      <div style="font-size:40px;opacity:.3;margin-bottom:12px">✅</div>
-      <p>Aucune commande en attente</p>
-    </div>`;
-  } else {
-    orders.forEach(function(o) {
-      const tbl = tables.find(function(t){ return t.id===o.table_id; });
-      const its = allItems.filter(function(i){ return i.order_id===o.id; });
-      const age = Math.floor((Date.now()-new Date(o.created_at).getTime())/60000);
-      const isNew = age < 10;
-      const ageColor = age>20?'#f87171':isNew?'#34d399':'#fbbf24';
-      html += `<div class="kitchen-card ${isNew?'new-order':''}">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
-          <span style="font-weight:700;font-size:16px">${tbl?esc(tbl.name):'Table ?'}</span>
-          <span style="font-size:12px;color:${ageColor}">⏱ ${age} min</span>
-        </div>
-        <div style="font-size:11px;color:var(--tm);margin-bottom:10px">Commande #${o.id}</div>
-        ${its.map(function(i){
-          return `<div class="kitchen-item">
-            <span style="color:#fff">${esc(i.product_name)}</span>
-            <span style="font-weight:700;color:var(--br);flex-shrink:0;margin-left:8px">×${i.quantity}</span>
-          </div>`;
-        }).join('')}
-        ${!its.length?'<div style="color:var(--tm);font-size:12px">Aucun article</div>':''}
-      </div>`;
+
+  var deptLabel = dept ? DEPT_LABELS[dept] : 'Tous';
+  var deptIcon  = dept ? DEPT_ICONS[dept]  : '📋';
+
+  function renderTab(tabKey) {
+    APP.deptTab = tabKey;
+    var tabDef = tabMap.find(function(t){ return t.key === tabKey; });
+    var tickets = deptTickets(effectiveDept, tabDef.statuses);
+
+    // Sort newest first for pending, oldest first for in-progress
+    tickets = tickets.slice().sort(function(a,b){
+      if (tabKey==='pending') return new Date(b.created_at) - new Date(a.created_at);
+      return new Date(a.created_at) - new Date(b.created_at);
+    });
+
+    var now = Date.now();
+    var cardsHtml = '';
+    if (!tickets.length) {
+      cardsHtml = '<div style="text-align:center;padding:60px;color:var(--tm)">'
+        + '<div style="font-size:40px;opacity:.3;margin-bottom:12px">✅</div>'
+        + '<p>Aucun ticket dans cette catégorie</p></div>';
+    } else {
+      tickets.forEach(function(t) {
+        var tblObj = tables.find(function(x){ return x.id === t.table_id; });
+        var tblName = tblObj ? esc(tblObj.name) : 'Table ?';
+        var ageMin = Math.floor((now - new Date(t.created_at).getTime()) / 60000);
+        var ageColor = ageMin > 20 ? '#f87171' : ageMin > 10 ? '#fbbf24' : '#34d399';
+        var deptLbl = DEPT_LABELS[t.department] || t.department;
+        var deptIco = DEPT_ICONS[t.department] || '🍽️';
+
+        var statusClass = t.status === 'pending' ? 't-new'
+          : t.status === 'accepted' ? 't-accepted'
+          : t.status === 'ready'    ? 't-ready'
+          : 't-delivered';
+
+        var actions = '';
+        if (t.status === 'pending' && dept) {
+          actions = '<button class="ticket-btn ticket-btn-accept" onclick="acceptTicket(' + t.id + ')">✋ Accepter</button>';
+        } else if (t.status === 'accepted' && dept) {
+          actions = '<button class="ticket-btn ticket-btn-ready" onclick="markTicketReady(' + t.id + ')">✅ Prêt</button>';
+        } else if (t.status === 'ready' && isWaiterView && t.waiter_id === sess.userId) {
+          actions = '<button class="ticket-btn ticket-btn-deliver" onclick="deliverTicket(' + t.id + ')">🚀 Livré</button>';
+        }
+
+        cardsHtml += '<div class="ticket-card ' + statusClass + '">'
+          + '<div class="ticket-hdr">'
+          + '<span class="ticket-tbl">' + tblName + '</span>'
+          + '<span style="font-size:12px;color:var(--tm)">' + deptIco + ' ' + deptLbl + '</span>'
+          + '<span class="ticket-age" style="color:' + ageColor + ';background:' + ageColor + '22">⏱ ' + ageMin + ' min</span>'
+          + '</div>'
+          + '<div style="font-size:11px;color:var(--tm);margin-bottom:4px">Ticket #' + t.id + ' · ' + esc(t.waiter_name) + '</div>'
+          + t.items.map(function(it){
+            return '<div class="ticket-item-row">'
+              + '<span>' + esc(it.product_name) + '</span>'
+              + '<span class="ticket-qty">×' + it.quantity + '</span>'
+              + '</div>';
+          }).join('')
+          + (actions ? '<div class="ticket-actions">' + actions + '</div>' : '')
+          + '</div>';
+      });
+    }
+
+    var gridEl = wrap.querySelector('.dept-grid');
+    if (gridEl) gridEl.innerHTML = cardsHtml;
+
+    // Update tab active states
+    wrap.querySelectorAll('.dept-tab-btn').forEach(function(btn) {
+      btn.classList.toggle('active', btn.dataset.tab === tabKey);
     });
   }
-  html += '</div>';
-  wrap.innerHTML = html;
+
+  // Build tab badges
+  function tabBadge(statuses) {
+    var count = deptTickets(effectiveDept, statuses).length;
+    return count > 0 ? '<span class="dept-tab-badge">' + count + '</span>' : '';
+  }
+
+  var tabsHtml = tabMap.map(function(t) {
+    return '<button class="dept-tab-btn' + (APP.deptTab === t.key ? ' active' : '') + '" data-tab="' + t.key + '">'
+      + t.label + tabBadge(t.statuses) + '</button>';
+  }).join('');
+
+  wrap.innerHTML = '<div style="padding:12px 16px;border-bottom:1px solid #334155;display:flex;align-items:center;gap:10px;flex-shrink:0">'
+    + '<h1 style="font-size:18px;font-weight:700">' + deptIcon + ' ' + deptLabel + '</h1>'
+    + '<div class="spacer"></div>'
+    + '<button class="btn btn-o" style="font-size:12px;padding:5px 10px" onclick="render()">↺ Actualiser</button>'
+    + '</div>'
+    + '<div class="dept-tabs">' + tabsHtml + '</div>'
+    + '<div class="dept-grid" style="overflow-y:auto;flex:1"></div>';
+
+  // Wire tab clicks
+  wrap.querySelectorAll('.dept-tab-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() { renderTab(btn.dataset.tab); });
+  });
+
+  // Initial render
+  renderTab(APP.deptTab || 'pending');
+
+  // Auto-refresh every 30 s if in dept view
+  if (wrap._refreshTimer) clearInterval(wrap._refreshTimer);
+  wrap._refreshTimer = setInterval(function() {
+    if (APP.view === 'kitchen') renderTab(APP.deptTab || 'pending');
+    else clearInterval(wrap._refreshTimer);
+  }, 30000);
+
+  return wrap;
+}
+
+// ══════════════════════════════════════════════════
+// WAITER DELIVERY VIEW
+// ══════════════════════════════════════════════════
+function buildDeliveryView() {
+  var sess = S.get('session');
+  var tables = S.tables();
+  var readyTickets = myReadyTickets();
+  var wrap = mkEl('div','');
+  wrap.style.cssText = 'height:100%;display:flex;flex-direction:column;overflow:hidden';
+
+  var cardsHtml = '';
+  if (!readyTickets.length) {
+    cardsHtml = '<div style="text-align:center;padding:80px;color:var(--tm)">'
+      + '<div style="font-size:50px;opacity:.3;margin-bottom:16px">🚀</div>'
+      + '<p style="font-size:15px">Aucune livraison en attente</p>'
+      + '<p style="margin-top:8px;font-size:13px">Les commandes prêtes apparaîtront ici</p>'
+      + '</div>';
+  } else {
+    readyTickets.forEach(function(t) {
+      var tblObj = tables.find(function(x){ return x.id === t.table_id; });
+      var tblName = tblObj ? esc(tblObj.name) : 'Table ?';
+      var deptLbl = DEPT_LABELS[t.department] || t.department;
+      var deptIco = DEPT_ICONS[t.department] || '🍽️';
+      var readyMin = t.ready_at ? Math.floor((Date.now() - new Date(t.ready_at).getTime()) / 60000) : 0;
+
+      cardsHtml += '<div class="delivery-card">'
+        + '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">'
+        + '<div style="display:flex;align-items:center;gap:10px">'
+        + '<span style="font-size:26px;font-weight:800;color:#fff">' + tblName + '</span>'
+        + '<span style="font-size:13px;color:var(--tm)">' + deptIco + ' ' + deptLbl + '</span>'
+        + '</div>'
+        + '<span style="font-size:12px;color:#fbbf24">Prêt depuis ' + readyMin + ' min</span>'
+        + '</div>'
+        + t.items.map(function(it){
+          return '<div class="ticket-item-row" style="margin-bottom:4px">'
+            + '<span style="color:#fff">' + esc(it.product_name) + '</span>'
+            + '<span class="ticket-qty">×' + it.quantity + '</span>'
+            + '</div>';
+        }).join('')
+        + '<button class="ticket-btn ticket-btn-deliver" style="width:100%;margin-top:10px;font-size:13px;padding:10px" onclick="deliverTicket(' + t.id + ')">'
+        + '🚀 Confirmer la livraison</button>'
+        + '</div>';
+    });
+  }
+
+  wrap.innerHTML = '<div style="padding:12px 16px;border-bottom:1px solid #334155;display:flex;align-items:center;gap:10px;flex-shrink:0">'
+    + '<h1 style="font-size:18px;font-weight:700">🚀 Livraisons en attente</h1>'
+    + (readyTickets.length ? '<span style="font-size:13px;background:rgba(167,139,250,.2);color:#c4b5fd;padding:2px 10px;border-radius:20px">' + readyTickets.length + ' prête' + (readyTickets.length>1?'s':'') + '</span>' : '')
+    + '<div class="spacer"></div>'
+    + '<button class="btn btn-o" style="font-size:12px;padding:5px 10px" onclick="render()">↺ Actualiser</button>'
+    + '</div>'
+    + '<div style="overflow-y:auto;flex:1;padding:14px">' + cardsHtml + '</div>';
+
   return wrap;
 }
 
@@ -1254,6 +1564,29 @@ function buildPOS() {
           <span>TOTAL</span><span class="v">${fmt(totals.total)}</span>
         </div>
       </div>
+      ${(()=>{
+        if (!order || !orderItems.length) return '';
+        var ordTickets = S.tickets().filter(function(t){ return t.order_id === order.id && t.status !== 'delivered'; });
+        if (!ordTickets.length) return '';
+        var statusLabel = {pending:'En attente',accepted:'En préparation',ready:'Prêt ✓'};
+        var deptStatus = ordTickets.map(function(t){
+          var ico = DEPT_ICONS[t.department]||'🍽️';
+          var lbl = DEPT_LABELS[t.department]||t.department;
+          var st = statusLabel[t.status]||t.status;
+          var color = t.status==='ready'?'#34d399':t.status==='accepted'?'#fbbf24':'#60a5fa';
+          return '<div style="display:flex;justify-content:space-between;align-items:center;padding:4px 0;font-size:12px">'
+            + '<span style="color:var(--tm)">' + ico + ' ' + lbl + '</span>'
+            + '<span style="color:' + color + ';font-weight:600">' + st + '</span>'
+            + '</div>';
+        }).join('');
+        return '<div style="margin-bottom:10px;padding:8px 10px;background:rgba(255,255,255,.04);border-radius:8px;border:1px solid #334155">'
+          + '<div style="font-size:11px;color:var(--tm);margin-bottom:4px;font-weight:600;text-transform:uppercase;letter-spacing:.04em">Statut des tickets</div>'
+          + deptStatus + '</div>';
+      })()}
+      ${can('take_orders') ? `
+        <button class="send-btn" style="margin-bottom:8px" onclick="sendToDepts(${order ? order.id : 0})" ${orderItems.length?'':'disabled'}>
+          📤 Envoyer aux départements
+        </button>` : ''}
       ${can('process_payment') ? `
         <button class="btn btn-p w-full" style="font-size:15px;font-weight:700;padding:12px"
           onclick="setState({modal:'payment'})" ${orderItems.length?'':'disabled'}>
