@@ -1134,120 +1134,97 @@ function handlePinKey(k) {
 // DEPARTMENT VIEW (kitchen / bar / chicha)
 // ══════════════════════════════════════════════════
 function buildDeptView() {
-  // Read session fresh every render
-  var sess    = S.get('session') || {};
-  var myRole  = sess.role || '';
+  var sess     = S.get('session') || {};
+  var myRole   = sess.role || '';
   var myUserId = sess.userId || null;
-  var dept    = ROLE_DEPT[myRole] || null;  // 'kitchen'|'bar'|'chicha'|null
-  var tables  = S.tables();
-  var tabKey  = APP.deptTab || 'pending';
-
-  var TAB_DEFS = [
-    {key:'pending',   label:'Nouvelles',   statuses:['pending'],   emptyIcon:'📭'},
-    {key:'accepted',  label:'En cours',    statuses:['accepted'],  emptyIcon:'⏳'},
-    {key:'ready',     label:'Prêtes',      statuses:['ready'],     emptyIcon:'✅'},
-    {key:'done',      label:'Livrées',     statuses:['delivered'], emptyIcon:'🏁'},
-  ];
-
-  // Dept staff only see their own dept's tickets; others see all
-  var filterDept = dept || null;
-
-  function ticketCount(statuses) {
-    return S.tickets().filter(function(t) {
-      var dm = !filterDept || t.department === filterDept;
-      return dm && statuses.indexOf(t.status) >= 0;
-    }).length;
-  }
-
-  var curTabDef = TAB_DEFS.find(function(td){ return td.key === tabKey; }) || TAB_DEFS[0];
+  // dept: the department this user belongs to, or null for supervisors
+  var dept = ROLE_DEPT[myRole] || null;
+  // Supervisors (manager, superadmin) see & act on all depts
+  var isSupervisor = !dept;
+  var tables = S.tables();
   var now = Date.now();
 
-  // Get tickets for current tab
-  var tickets = S.tickets().filter(function(t) {
-    var dm = !filterDept || t.department === filterDept;
-    return dm && curTabDef.statuses.indexOf(t.status) >= 0;
-  });
+  var allTickets  = S.tickets();
+  // Each user sees their dept tickets; supervisors see all
+  var myTickets   = isSupervisor ? allTickets : allTickets.filter(function(t){ return t.department === dept; });
+  var pendingTks  = myTickets.filter(function(t){ return t.status === 'pending'; })
+                             .sort(function(a,b){ return new Date(b.created_at)-new Date(a.created_at); });
+  var acceptedTks = myTickets.filter(function(t){ return t.status === 'accepted'; })
+                             .sort(function(a,b){ return new Date(a.created_at)-new Date(b.created_at); });
+  var readyTks    = myTickets.filter(function(t){ return t.status === 'ready'; })
+                             .sort(function(a,b){ return new Date(a.created_at)-new Date(b.created_at); });
 
-  // Sort: newest first for pending, oldest first for in-progress
-  tickets = tickets.slice().sort(function(a, b) {
-    if (tabKey === 'pending') return new Date(b.created_at) - new Date(a.created_at);
-    return new Date(a.created_at) - new Date(b.created_at);
-  });
+  function buildCard(tk) {
+    var tblObj   = tables.find(function(x){ return x.id === tk.table_id; });
+    var tblName  = tblObj ? esc(tblObj.name) : 'T?';
+    var ageMin   = Math.floor((now - new Date(tk.created_at).getTime()) / 60000);
+    var ageColor = ageMin > 20 ? '#f87171' : ageMin > 10 ? '#fbbf24' : '#34d399';
+    var deptLbl  = DEPT_LABELS[tk.department] || tk.department;
+    var deptIco  = DEPT_ICONS[tk.department]  || '🍽️';
+    // isDeptMatch: true for dept staff with matching dept, OR for supervisors
+    var isDeptMatch = isSupervisor || (!!dept && dept === tk.department);
 
-  // Build ticket cards
-  var cardsHtml = '';
-  if (!tickets.length) {
-    cardsHtml = '<div style="text-align:center;padding:60px;color:var(--tm)">'
-      + '<div style="font-size:40px;opacity:.3;margin-bottom:12px">' + curTabDef.emptyIcon + '</div>'
-      + '<p>Aucun ticket ici</p></div>';
-  } else {
-    tickets.forEach(function(tk) {
-      var tblObj  = tables.find(function(x){ return x.id === tk.table_id; });
-      var tblName = tblObj ? esc(tblObj.name) : 'Table ?';
-      var ageMin  = Math.floor((now - new Date(tk.created_at).getTime()) / 60000);
-      var ageColor = ageMin > 20 ? '#f87171' : ageMin > 10 ? '#fbbf24' : '#34d399';
-      var deptLbl = DEPT_LABELS[tk.department] || tk.department;
-      var deptIco = DEPT_ICONS[tk.department]  || '🍽️';
+    var actionBtn = '';
+    if (tk.status === 'pending' && isDeptMatch) {
+      actionBtn = '<button style="width:100%;margin-top:10px;padding:12px 8px;border-radius:8px;border:2px solid #3b82f6;background:rgba(59,130,246,.18);color:#60a5fa;font-size:14px;font-weight:700;cursor:pointer;letter-spacing:.01em" onclick="acceptTicket(' + tk.id + ')">✋ Accepter — début de préparation</button>';
+    } else if (tk.status === 'accepted' && isDeptMatch) {
+      actionBtn = '<button style="width:100%;margin-top:10px;padding:12px 8px;border-radius:8px;border:2px solid #10b981;background:rgba(16,185,129,.18);color:#34d399;font-size:14px;font-weight:700;cursor:pointer;letter-spacing:.01em" onclick="markTicketReady(' + tk.id + ')">✅ Prêt — commande terminée</button>';
+    }
 
-      var stClass = tk.status === 'pending'   ? 't-new'
-                  : tk.status === 'accepted'  ? 't-accepted'
-                  : tk.status === 'ready'     ? 't-ready'
-                  : 't-delivered';
-
-      // Action button: dept staff act on their dept; waiter delivers
-      var action = '';
-      var isDeptMatch = dept && dept === tk.department;
-      if (tk.status === 'pending' && isDeptMatch) {
-        action = '<button class="ticket-btn ticket-btn-accept" onclick="acceptTicket(' + tk.id + ')">✋ Accepter — début préparation</button>';
-      } else if (tk.status === 'accepted' && isDeptMatch) {
-        action = '<button class="ticket-btn ticket-btn-ready" onclick="markTicketReady(' + tk.id + ')">✅ Terminer — commande prête</button>';
-      } else if (tk.status === 'ready' && myRole === 'waiter' && tk.waiter_id === myUserId) {
-        action = '<button class="ticket-btn ticket-btn-deliver" onclick="deliverTicket(' + tk.id + ')">🚀 Livré au client</button>';
-      }
-
-      var itemsHtml = (tk.items || []).map(function(it) {
-        return '<div class="ticket-item-row">'
-          + '<span>' + esc(it.product_name || '') + '</span>'
-          + '<span class="ticket-qty">×' + (it.quantity || 1) + '</span>'
-          + '</div>';
-      }).join('') || '<div style="color:var(--tm);font-size:12px">—</div>';
-
-      cardsHtml += '<div class="ticket-card ' + stClass + '">'
-        + '<div class="ticket-hdr">'
-        + '<span class="ticket-tbl">' + tblName + '</span>'
-        + '<span style="font-size:12px;color:var(--tm)">' + deptIco + ' ' + deptLbl + '</span>'
-        + '<span class="ticket-age" style="color:' + ageColor + ';background:' + ageColor + '22">⏱ ' + ageMin + 'min</span>'
-        + '</div>'
-        + '<div style="font-size:11px;color:var(--tm);margin-bottom:6px">Ticket #' + tk.id + ' · ' + esc(tk.waiter_name || '') + '</div>'
-        + itemsHtml
-        + (action ? '<div class="ticket-actions" style="margin-top:8px">' + action + '</div>' : '')
+    var itemsHtml = (tk.items || []).map(function(it){
+      return '<div style="display:flex;justify-content:space-between;padding:4px 8px;background:rgba(255,255,255,.05);border-radius:6px;margin-bottom:3px;font-size:13px">'
+        + '<span>' + esc(it.product_name || '') + '</span>'
+        + '<span style="color:#10b981;font-weight:700">×' + (it.quantity || 1) + '</span>'
         + '</div>';
-    });
+    }).join('') || '<div style="color:#94a3b8;font-size:12px">—</div>';
+
+    return '<div style="background:#1e293b;border:1px solid #334155;border-radius:12px;padding:14px;margin-bottom:10px">'
+      + '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;gap:6px">'
+      + '<span style="font-size:22px;font-weight:800;color:#fff">' + tblName + '</span>'
+      + (isSupervisor ? '<span style="font-size:11px;color:#94a3b8">' + deptIco + ' ' + deptLbl + '</span>' : '')
+      + '<span style="font-size:11px;font-family:monospace;padding:2px 7px;border-radius:6px;color:' + ageColor + ';background:' + ageColor + '22;margin-left:auto">⏱ ' + ageMin + 'min</span>'
+      + '</div>'
+      + '<div style="font-size:11px;color:#94a3b8;margin-bottom:8px">Ticket #' + tk.id + ' · ' + esc(tk.waiter_name || '') + '</div>'
+      + itemsHtml
+      + actionBtn
+      + '</div>';
   }
 
-  // Build tabs bar
-  var tabsHtml = TAB_DEFS.map(function(td) {
-    var cnt  = ticketCount(td.statuses);
-    var bdg  = cnt > 0 ? '<span class="dept-tab-badge">' + cnt + '</span>' : '';
-    var active = td.key === tabKey ? ' active' : '';
-    return '<button class="dept-tab-btn' + active + '" onclick="setState({deptTab:\'' + td.key + '\'})">'
-      + td.label + bdg + '</button>';
-  }).join('');
+  function buildSection(label, color, tickets, emptyText) {
+    var header = '<div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px;display:flex;align-items:center;gap:8px;color:' + color + '">'
+      + '<span style="display:inline-block;width:9px;height:9px;border-radius:50%;background:' + color + '"></span>'
+      + label
+      + (tickets.length ? ' <span style="background:' + color + '33;color:' + color + ';padding:1px 7px;border-radius:10px;font-size:11px">' + tickets.length + '</span>' : '')
+      + '</div>';
+    var body = tickets.length
+      ? tickets.map(buildCard).join('')
+      : '<div style="text-align:center;padding:18px;color:#475569;font-size:12px;border:1px dashed #334155;border-radius:8px;margin-bottom:10px">' + emptyText + '</div>';
+    return '<div style="margin-bottom:20px">' + header + body + '</div>';
+  }
 
-  var deptLabel = dept ? DEPT_LABELS[dept] : 'Tous les départements';
-  var deptIcon  = dept ? DEPT_ICONS[dept]  : '📋';
+  var deptLabel  = dept ? (DEPT_LABELS[dept] || dept) : 'Tous les départements';
+  var deptIcon   = dept ? (DEPT_ICONS[dept]  || '🍽️') : '📋';
+  var roleLabel  = _ROLE_LABELS[myRole] || myRole;
+  var totalActive = pendingTks.length + acceptedTks.length + readyTks.length;
 
   var wrap = mkEl('div', '');
   wrap.style.cssText = 'height:100%;display:flex;flex-direction:column;overflow:hidden';
   wrap.innerHTML =
-    '<div style="padding:12px 16px;border-bottom:1px solid #334155;display:flex;align-items:center;gap:10px;flex-shrink:0">'
+    '<div style="padding:12px 16px;border-bottom:1px solid #334155;display:flex;align-items:center;gap:10px;flex-shrink:0;flex-wrap:wrap">'
     + '<h1 style="font-size:18px;font-weight:700">' + deptIcon + ' ' + deptLabel + '</h1>'
-    + (dept ? '<span style="font-size:12px;background:rgba(16,185,129,.15);color:#34d399;padding:2px 10px;border-radius:20px">Mon département</span>' : '')
+    + '<span style="font-size:11px;background:#1e293b;color:#94a3b8;padding:2px 8px;border-radius:6px;border:1px solid #334155">'
+    + roleLabel + (dept ? ' · ' + dept : ' · Superviseur')
+    + '</span>'
+    + (totalActive ? '<span style="background:rgba(239,68,68,.15);color:#f87171;font-size:12px;padding:2px 8px;border-radius:6px;font-weight:600">'
+      + totalActive + ' actif' + (totalActive > 1 ? 's' : '') + '</span>' : '')
     + '<div class="spacer"></div>'
-    + '<button class="btn btn-o" style="font-size:12px;padding:5px 10px" onclick="render()">↺ Actualiser</button>'
+    + '<button style="padding:5px 10px;border-radius:6px;border:1px solid #475569;background:transparent;color:#94a3b8;font-size:12px;cursor:pointer" onclick="render()">↺ Actualiser</button>'
     + '</div>'
-    + '<div class="dept-tabs">' + tabsHtml + '</div>'
-    + '<div class="dept-grid" style="overflow-y:auto;flex:1">' + cardsHtml + '</div>';
+    + '<div style="overflow-y:auto;flex:1;padding:14px">'
+    + buildSection('Nouvelles commandes', '#60a5fa', pendingTks, '✓ Aucune nouvelle commande')
+    + buildSection('En préparation', '#fbbf24', acceptedTks, '⏳ Aucune commande en cours')
+    + buildSection('Prêtes à livrer', '#34d399', readyTks, '💤 Aucune commande prête')
+    + '</div>';
 
   return wrap;
 }
@@ -1256,54 +1233,86 @@ function buildDeptView() {
 // WAITER DELIVERY VIEW
 // ══════════════════════════════════════════════════
 function buildDeliveryView() {
-  var sess = S.get('session');
+  var sess   = S.get('session') || {};
   var tables = S.tables();
-  var readyTickets = myReadyTickets();
+  var now    = Date.now();
+  // All tickets belonging to this waiter that are not yet delivered
+  var myTks  = S.tickets().filter(function(t){
+    return t.waiter_id === sess.userId && t.status !== 'delivered';
+  });
+  var readyTks    = myTks.filter(function(t){ return t.status === 'ready'; });
+  var pendingTks  = myTks.filter(function(t){ return t.status === 'pending'; });
+  var acceptedTks = myTks.filter(function(t){ return t.status === 'accepted'; });
   var wrap = mkEl('div','');
   wrap.style.cssText = 'height:100%;display:flex;flex-direction:column;overflow:hidden';
 
-  var cardsHtml = '';
-  if (!readyTickets.length) {
-    cardsHtml = '<div style="text-align:center;padding:80px;color:var(--tm)">'
+  function mkCard(t, showBtn) {
+    var tblObj  = tables.find(function(x){ return x.id === t.table_id; });
+    var tblName = tblObj ? esc(tblObj.name) : 'T?';
+    var deptLbl = DEPT_LABELS[t.department] || t.department;
+    var deptIco = DEPT_ICONS[t.department] || '🍽️';
+    var ageMin  = t.ready_at ? Math.floor((now - new Date(t.ready_at).getTime()) / 60000)
+                             : Math.floor((now - new Date(t.created_at).getTime()) / 60000);
+    var items   = (t.items || []).map(function(it){
+      return '<div style="display:flex;justify-content:space-between;padding:4px 8px;background:rgba(255,255,255,.05);border-radius:6px;margin-bottom:3px;font-size:13px">'
+        + '<span style="color:#fff">' + esc(it.product_name) + '</span>'
+        + '<span style="color:#10b981;font-weight:700">×' + it.quantity + '</span>'
+        + '</div>';
+    }).join('');
+    var btn = showBtn
+      ? '<button style="width:100%;margin-top:10px;padding:12px;border-radius:8px;border:2px solid #a855f7;background:rgba(168,85,247,.18);color:#c084fc;font-size:14px;font-weight:700;cursor:pointer" onclick="deliverTicket(' + t.id + ')">🚀 Confirmer la livraison</button>'
+      : '';
+    return '<div style="background:#1e293b;border:1px solid #334155;border-radius:12px;padding:14px;margin-bottom:10px">'
+      + '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">'
+      + '<div style="display:flex;align-items:center;gap:8px">'
+      + '<span style="font-size:22px;font-weight:800;color:#fff">' + tblName + '</span>'
+      + '<span style="font-size:12px;color:#94a3b8">' + deptIco + ' ' + deptLbl + '</span>'
+      + '</div>'
+      + '<span style="font-size:11px;color:#fbbf24">⏱ ' + ageMin + ' min</span>'
+      + '</div>'
+      + items + btn
+      + '</div>';
+  }
+
+  var html = '';
+
+  if (!readyTks.length && !pendingTks.length && !acceptedTks.length) {
+    html = '<div style="text-align:center;padding:80px;color:var(--tm)">'
       + '<div style="font-size:50px;opacity:.3;margin-bottom:16px">🚀</div>'
       + '<p style="font-size:15px">Aucune livraison en attente</p>'
       + '<p style="margin-top:8px;font-size:13px">Les commandes prêtes apparaîtront ici</p>'
       + '</div>';
   } else {
-    readyTickets.forEach(function(t) {
-      var tblObj = tables.find(function(x){ return x.id === t.table_id; });
-      var tblName = tblObj ? esc(tblObj.name) : 'Table ?';
-      var deptLbl = DEPT_LABELS[t.department] || t.department;
-      var deptIco = DEPT_ICONS[t.department] || '🍽️';
-      var readyMin = t.ready_at ? Math.floor((Date.now() - new Date(t.ready_at).getTime()) / 60000) : 0;
-
-      cardsHtml += '<div class="delivery-card">'
-        + '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">'
-        + '<div style="display:flex;align-items:center;gap:10px">'
-        + '<span style="font-size:26px;font-weight:800;color:#fff">' + tblName + '</span>'
-        + '<span style="font-size:13px;color:var(--tm)">' + deptIco + ' ' + deptLbl + '</span>'
-        + '</div>'
-        + '<span style="font-size:12px;color:#fbbf24">Prêt depuis ' + readyMin + ' min</span>'
-        + '</div>'
-        + t.items.map(function(it){
-          return '<div class="ticket-item-row" style="margin-bottom:4px">'
-            + '<span style="color:#fff">' + esc(it.product_name) + '</span>'
-            + '<span class="ticket-qty">×' + it.quantity + '</span>'
-            + '</div>';
-        }).join('')
-        + '<button class="ticket-btn ticket-btn-deliver" style="width:100%;margin-top:10px;font-size:13px;padding:10px" onclick="deliverTicket(' + t.id + ')">'
-        + '🚀 Confirmer la livraison</button>'
-        + '</div>';
-    });
+    if (readyTks.length) {
+      html += '<div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px;color:#34d399;display:flex;align-items:center;gap:6px">'
+        + '<span style="width:9px;height:9px;border-radius:50%;background:#34d399;display:inline-block"></span>'
+        + 'Prêtes à livrer <span style="background:#34d39933;color:#34d399;padding:1px 7px;border-radius:10px;font-size:11px">' + readyTks.length + '</span></div>'
+        + readyTks.map(function(t){ return mkCard(t, true); }).join('')
+        + '<div style="height:16px"></div>';
+    }
+    if (acceptedTks.length) {
+      html += '<div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px;color:#fbbf24;display:flex;align-items:center;gap:6px">'
+        + '<span style="width:9px;height:9px;border-radius:50%;background:#fbbf24;display:inline-block"></span>'
+        + 'En préparation <span style="background:#fbbf2433;color:#fbbf24;padding:1px 7px;border-radius:10px;font-size:11px">' + acceptedTks.length + '</span></div>'
+        + acceptedTks.map(function(t){ return mkCard(t, false); }).join('')
+        + '<div style="height:16px"></div>';
+    }
+    if (pendingTks.length) {
+      html += '<div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px;color:#60a5fa;display:flex;align-items:center;gap:6px">'
+        + '<span style="width:9px;height:9px;border-radius:50%;background:#60a5fa;display:inline-block"></span>'
+        + 'En attente de prise en charge <span style="background:#60a5fa33;color:#60a5fa;padding:1px 7px;border-radius:10px;font-size:11px">' + pendingTks.length + '</span></div>'
+        + pendingTks.map(function(t){ return mkCard(t, false); }).join('');
+    }
   }
 
   wrap.innerHTML = '<div style="padding:12px 16px;border-bottom:1px solid #334155;display:flex;align-items:center;gap:10px;flex-shrink:0">'
-    + '<h1 style="font-size:18px;font-weight:700">🚀 Livraisons en attente</h1>'
-    + (readyTickets.length ? '<span style="font-size:13px;background:rgba(167,139,250,.2);color:#c4b5fd;padding:2px 10px;border-radius:20px">' + readyTickets.length + ' prête' + (readyTickets.length>1?'s':'') + '</span>' : '')
+    + '<h1 style="font-size:18px;font-weight:700">🚀 Mes livraisons</h1>'
+    + (readyTks.length ? '<span style="font-size:13px;background:rgba(167,139,250,.2);color:#c4b5fd;padding:2px 10px;border-radius:20px">'
+      + readyTks.length + ' prête' + (readyTks.length>1?'s':'') + '</span>' : '')
     + '<div class="spacer"></div>'
-    + '<button class="btn btn-o" style="font-size:12px;padding:5px 10px" onclick="render()">↺ Actualiser</button>'
+    + '<button style="padding:5px 10px;border-radius:6px;border:1px solid #475569;background:transparent;color:#94a3b8;font-size:12px;cursor:pointer" onclick="render()">↺ Actualiser</button>'
     + '</div>'
-    + '<div style="overflow-y:auto;flex:1;padding:14px">' + cardsHtml + '</div>';
+    + '<div style="overflow-y:auto;flex:1;padding:14px">' + html + '</div>';
 
   return wrap;
 }
@@ -1647,20 +1656,31 @@ function buildPOS() {
         if (!order || !orderItems.length) return '';
         var ordTickets = S.tickets().filter(function(t){ return t.order_id === order.id && t.status !== 'delivered'; });
         if (!ordTickets.length) return '';
-        var statusLabel = {pending:'En attente',accepted:'En préparation',ready:'Prêt ✓'};
+        var readyTks = ordTickets.filter(function(t){ return t.status === 'ready'; });
+        var statusLabel = {pending:'⏳ En attente',accepted:'🔥 En préparation',ready:'✅ Prêt!'};
         var deptStatus = ordTickets.map(function(t){
           var ico = DEPT_ICONS[t.department]||'🍽️';
           var lbl = DEPT_LABELS[t.department]||t.department;
           var st = statusLabel[t.status]||t.status;
           var color = t.status==='ready'?'#34d399':t.status==='accepted'?'#fbbf24':'#60a5fa';
-          return '<div style="display:flex;justify-content:space-between;align-items:center;padding:4px 0;font-size:12px">'
+          var deliverBtn = (t.status === 'ready' && can('take_orders'))
+            ? ' <button style="padding:3px 10px;border-radius:6px;border:1px solid #a855f7;background:rgba(168,85,247,.2);color:#c084fc;font-size:11px;font-weight:700;cursor:pointer" onclick="deliverTicket(' + t.id + ')">🚀 Livrer</button>'
+            : '';
+          return '<div style="display:flex;justify-content:space-between;align-items:center;padding:5px 0;font-size:12px;border-bottom:1px solid rgba(255,255,255,.05)">'
             + '<span style="color:var(--tm)">' + ico + ' ' + lbl + '</span>'
+            + '<div style="display:flex;align-items:center;gap:6px">'
             + '<span style="color:' + color + ';font-weight:600">' + st + '</span>'
-            + '</div>';
+            + deliverBtn
+            + '</div></div>';
         }).join('');
+        var readyBanner = readyTks.length
+          ? '<div style="display:flex;align-items:center;gap:6px;padding:7px 10px;background:rgba(16,185,129,.12);border:1px solid rgba(16,185,129,.35);border-radius:7px;margin-bottom:8px;font-size:12px;color:#34d399;font-weight:700">'
+            + '🔔 ' + readyTks.length + ' commande' + (readyTks.length>1?'s':'') + ' prête' + (readyTks.length>1?'s':'') + ' — cliquez Livrer ci-dessous'
+            + '</div>'
+          : '';
         return '<div style="margin-bottom:10px;padding:8px 10px;background:rgba(255,255,255,.04);border-radius:8px;border:1px solid #334155">'
-          + '<div style="font-size:11px;color:var(--tm);margin-bottom:4px;font-weight:600;text-transform:uppercase;letter-spacing:.04em">Statut des tickets</div>'
-          + deptStatus + '</div>';
+          + '<div style="font-size:11px;color:var(--tm);margin-bottom:6px;font-weight:600;text-transform:uppercase;letter-spacing:.04em">Statut des tickets</div>'
+          + readyBanner + deptStatus + '</div>';
       })()}
       ${can('take_orders') ? `
         <button class="send-btn" style="margin-bottom:8px" onclick="sendToDepts(${order ? order.id : 0})" ${orderItems.length?'':'disabled'}>
