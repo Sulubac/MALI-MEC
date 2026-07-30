@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const morgan = require('morgan');
+const path = require('path');
 const db = require('./db/database');
 
 const app = express();
@@ -423,6 +424,12 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', tables: tables.c, products: products.c, open_orders: openOrders.c });
 });
 
+// Serve the standalone single-file POS (no build needed, works on any device)
+app.get('/app', (req, res) => {
+  res.sendFile(path.join(__dirname, '..', 'Urban-Beach-POS.html'));
+});
+
 app.listen(PORT, () => {
   console.log(`🍽️  Urban Beach POS API running on http://localhost:${PORT}`);
+  console.log(`📱  Standalone POS: http://localhost:${PORT}/app`);
 });

@@ -180,12 +180,32 @@ html,body{height:100%;overflow:hidden;font-family:-apple-system,BlinkMacSystemFo
   .prod-grid{grid-template-columns:repeat(auto-fill,minmax(110px,1fr))}
   .floor-grid{grid-template-columns:repeat(auto-fill,minmax(110px,1fr))}
   .kpi-grid{grid-template-columns:repeat(2,1fr)}
+  .pos-layout{flex-direction:column}
+  .pos-left{flex:none;height:55%;border-right:none;border-bottom:1px solid #334155}
+  .pos-right{width:100%;flex:none;height:45%}
+  .prod-grid{grid-template-columns:repeat(auto-fill,minmax(110px,1fr))}
+  .floor-grid{grid-template-columns:repeat(auto-fill,minmax(110px,1fr))}
+  .kpi-grid{grid-template-columns:repeat(2,1fr)}
   .nav-btn span{display:none}
   .logo-sub{display:none}
 }
 </style>
 </head>
 <body>
+
+<!-- iPhone Quick Look banner: visible when JS is disabled/blocked, hidden by JS immediately -->
+<div id="ios-banner" style="display:block;background:#1e3a5f;border-bottom:2px solid #3b82f6;padding:18px 20px;font-family:sans-serif;color:#fff">
+  <div style="font-size:15px;font-weight:700;margin-bottom:8px">📱 Pour ouvrir sur iPhone</div>
+  <p style="font-size:13px;color:#93c5fd;margin-bottom:10px">Ce fichier s'affiche en mode aperçu — JavaScript est désactivé. Suivez ces étapes :</p>
+  <ol style="font-size:13px;color:#bfdbfe;line-height:2;padding-left:18px">
+    <li>Appuyez sur le bouton <b>Partager</b> (↑) en bas à gauche</li>
+    <li>Choisissez <b>"Ouvrir dans Safari"</b></li>
+    <li>L'application se chargera complètement</li>
+  </ol>
+  <p style="font-size:12px;color:#60a5fa;margin-top:10px">💡 Astuce : Si vous avez accès à l'adresse de votre POS, ouvrez-la directement dans Safari et ajoutez-la à l'écran d'accueil.</p>
+</div>
+<script>document.getElementById('ios-banner').style.display='none';</script>
+
 <div id="root">
   <div class="hdr">
     <div class="logo"><span class="logo-icon">🐟</span>Urban Beach<span class="logo-sub">POS</span></div>
@@ -409,7 +429,7 @@ function doAdjust(productId, type, qty, notes) {
 function voidOrder(orderId) {
   const order = S.orders().find(o => o.id===orderId);
   S.set('orders', S.orders().map(o => o.id===orderId ? {...o, status:'cancelled', closed_at:new Date().toISOString()} : o));
-  if (order?.table_id) S.set('tables', S.tables().map(t => t.id===order.table_id ? {...t, status:'available'} : t));
+  if (order && order.table_id) S.set('tables', S.tables().map(t => t.id===order.table_id ? {...t, status:'available'} : t));
 }
 
 function stockAlerts() {
@@ -616,11 +636,11 @@ function buildPOS() {
       <div class="row" style="justify-content:space-between">
         <div>
           <div class="ord-title">${tbl?esc(tbl.name):'Table'}</div>
-          <div class="ord-sub">Commande #${order?.id||'—'}${order&&!order.is_new?'':''}</div>
+          <div class="ord-sub">Commande #${order ? order.id : '—'}</div>
         </div>
         <div class="row gap-2">
           ${orderItems.length?`<button class="btn btn-o" style="padding:4px 8px;font-size:11px;color:var(--rd)"
-            onclick="if(confirm('Annuler cette commande ?')){voidOrder(${order?.id});setState({view:'floor',tableId:null,orderId:null})}">✕ Annuler</button>`:''}
+            onclick="if(confirm('Annuler cette commande ?')){voidOrder(${order ? order.id : 0});setState({view:'floor',tableId:null,orderId:null})}">✕ Annuler</button>`:''}
         </div>
       </div>
     </div>
@@ -988,7 +1008,7 @@ function buildTablesSettings(tables) {
 function buildProductsSettings(products, cats) {
   return `
     <div style="display:flex;justify-content:flex-end;margin-bottom:10px">
-      <button class="btn btn-p" onclick="setState({modal:'edit-product',modalData:{category_id:${cats[0]?.id||0},name:'',description:'',price:'',cost:'',track_stock:false,isNew:true}})">+ Ajouter un produit</button>
+      <button class="btn btn-p" onclick="editProduct(0)">+ Ajouter un produit</button>
     </div>
     <table class="tbl card" style="overflow:hidden">
       <thead><tr><th>Produit</th><th>Catégorie</th><th style="text-align:right">Prix</th><th style="text-align:right">Coût</th><th style="text-align:center">Stock</th><th></th></tr></thead>
@@ -998,12 +1018,12 @@ function buildProductsSettings(products, cats) {
           return `<tr>
             <td style="font-weight:500;color:#fff">${esc(p.name)}</td>
             <td><span class="b" style="background:${c.color||'#94a3b8'}22;color:${c.color||'#94a3b8'}">${esc(c.name||'?')}</span></td>
-            <td style="text-align:right;color:var(--br);font-weight:600">${p.price?.toLocaleString('fr-FR')} DJF</td>
+            <td style="text-align:right;color:var(--br);font-weight:600">${(p.price||0).toLocaleString('fr-FR')} DJF</td>
             <td style="text-align:right;color:var(--tm)">${(p.cost||0).toLocaleString('fr-FR')} DJF</td>
             <td style="text-align:center">${p.track_stock?'✓':''}</td>
             <td style="text-align:right">
               <div style="display:flex;gap:4px;justify-content:flex-end">
-                <button class="btn btn-o" style="padding:3px 8px;font-size:11px" onclick="setState({modal:'edit-product',modalData:{...${JSON.stringify(p)},isNew:false}})">✏️</button>
+                <button class="btn btn-o" style="padding:3px 8px;font-size:11px" onclick="editProduct(${p.id})">✏️</button>
                 <button class="btn btn-o" style="padding:3px 8px;font-size:11px;color:var(--rd)" onclick="delProduct(${p.id})">✕</button>
               </div>
             </td>
@@ -1045,10 +1065,22 @@ function buildCatsSettings(cats) {
 // ══════════════════════════════════════════════════
 // SETTINGS ACTIONS
 // ══════════════════════════════════════════════════
+function gv(id) { var el = document.getElementById(id); return el ? el.value : ''; }
+
+function editProduct(id) {
+  var cats = S.categories();
+  if (id === 0) {
+    setState({modal:'edit-product', modalData:{id:0, category_id:cats.length?cats[0].id:0, name:'', description:'', price:'', cost:'', track_stock:false, isNew:true}});
+  } else {
+    var p = S.products().find(function(x){return x.id===id;});
+    if (p) setState({modal:'edit-product', modalData:Object.assign({}, p, {isNew:false})});
+  }
+}
+
 function addTable() {
-  const name = document.getElementById('new-tbl-name')?.value?.trim();
-  const cap = parseInt(document.getElementById('new-tbl-cap')?.value)||4;
-  const sec = document.getElementById('new-tbl-sec')?.value?.trim()||'Salle Principale';
+  const name = gv('new-tbl-name').trim();
+  const cap = parseInt(gv('new-tbl-cap'))||4;
+  const sec = gv('new-tbl-sec').trim()||'Salle Principale';
   if (!name) return notify('Entrez un nom','err');
   const id = S.nextId('tables');
   S.set('tables', [...S.tables(), {id, name, capacity:cap, section:sec, status:'available'}]);
@@ -1066,8 +1098,8 @@ function delProduct(id) {
   render();
 }
 function addCat() {
-  const name = document.getElementById('new-cat-name')?.value?.trim();
-  const color = document.getElementById('new-cat-color')?.value||'#10b981';
+  const name = gv('new-cat-name').trim();
+  const color = gv('new-cat-color')||'#10b981';
   if (!name) return notify('Entrez un nom','err');
   const id = S.nextId('categories');
   S.set('categories', [...S.categories(), {id, name, color}]);
@@ -1116,12 +1148,13 @@ function renderModals() {
 function buildPaymentModal() {
   const order = S.orders().find(o=>o.id===APP.orderId);
   const tbl = S.tables().find(t=>t.id===APP.tableId);
-  const total = order?.total||0;
+  const total = (order && order.total) ? order.total : 0;
+  const orderId = order ? order.id : 0;
   return `
     <div class="overlay" onclick="if(event.target===this)setState({modal:null})">
       <div class="modal">
         <div class="mhdr">
-          <div><h2>Encaissement</h2><p style="font-size:12px;color:var(--tm)">${tbl?esc(tbl.name)+' · ':''} Commande #${order?.id}</p></div>
+          <div><h2>Encaissement</h2><p style="font-size:12px;color:var(--tm)">${tbl?esc(tbl.name)+' · ':''} Commande #${orderId}</p></div>
           <button class="btn btn-o" style="padding:5px" onclick="setState({modal:null})">✕</button>
         </div>
         <div class="mbody" style="display:flex;flex-direction:column;gap:14px">
@@ -1163,7 +1196,7 @@ function buildPaymentModal() {
         <div class="mftr">
           <button class="btn btn-o" style="flex:1" onclick="setState({modal:null})">Annuler</button>
           <button id="pay-submit" class="btn btn-p" style="flex:2;font-size:14px;font-weight:700"
-            onclick="submitPayment(${order?.id},${total})">
+            onclick="submitPayment(${orderId},${total})">
             Valider · ${fmt(total)}
           </button>
         </div>
@@ -1184,7 +1217,7 @@ function selectPayMethod(m, baseTotal) {
   updatePayTotal(baseTotal);
 }
 function updatePayTotal(baseTotal) {
-  const tip = parseFloat(document.getElementById('pay-tip')?.value)||0;
+  const tip = parseFloat(gv('pay-tip'))||0;
   const grand = baseTotal + tip;
   const d = document.getElementById('pay-total-display');
   if(d) d.textContent = fmt(grand);
@@ -1192,9 +1225,9 @@ function updatePayTotal(baseTotal) {
   if(btn) btn.textContent = 'Valider · ' + fmt(grand);
 }
 function updateChange(baseTotal) {
-  const tip = parseFloat(document.getElementById('pay-tip')?.value)||0;
+  const tip = parseFloat(gv('pay-tip'))||0;
   const grand = baseTotal + tip;
-  const cash = parseFloat(document.getElementById('pay-cash')?.value)||0;
+  const cash = parseFloat(gv('pay-cash'))||0;
   const change = Math.max(0, cash - grand);
   const d = document.getElementById('change-display');
   if(d && cash >= grand) {
@@ -1205,8 +1238,8 @@ function updateChange(baseTotal) {
   } else if(d) d.innerHTML='';
 }
 function submitPayment(orderId, baseTotal) {
-  const tip = parseFloat(document.getElementById('pay-tip')?.value)||0;
-  const cashGiven = parseFloat(document.getElementById('pay-cash')?.value)||0;
+  const tip = parseFloat(gv('pay-tip'))||0;
+  const cashGiven = parseFloat(gv('pay-cash'))||0;
   const grand = baseTotal + tip;
   if (_payMethod==='cash' && cashGiven < grand) { notify('Montant insuffisant','err'); return; }
   const result = doCheckout(orderId, _payMethod, cashGiven, tip);
@@ -1285,8 +1318,8 @@ function selectAdjType(t) {
   });
 }
 function submitAdjust(productId) {
-  const qty = parseFloat(document.getElementById('adj-qty')?.value)||0;
-  const notes = document.getElementById('adj-note')?.value||'';
+  const qty = parseFloat(gv('adj-qty'))||0;
+  const notes = gv('adj-note');
   if (!qty || qty <= 0) { notify('Entrez une quantité valide','err'); return; }
   doAdjust(productId, _adjType, qty, notes);
   notify('Stock ajusté');
