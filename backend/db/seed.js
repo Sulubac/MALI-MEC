@@ -14,111 +14,99 @@ if (existing.count > 0) {
   `);
 }
 
-// Categories
+// ─── CATEGORIES ───────────────────────────────────────────────────────────────
 const insertCat = db.prepare('INSERT INTO categories (name, color, sort_order) VALUES (?, ?, ?)');
 const cats = [
-  { id: 1, name: 'Fruits de Mer', color: '#0ea5e9', order: 1 },
-  { id: 2, name: 'Poissons', color: '#10b981', order: 2 },
-  { id: 3, name: 'Grillades', color: '#f97316', order: 3 },
-  { id: 4, name: 'Entrées & Salades', color: '#a855f7', order: 4 },
-  { id: 5, name: 'Soupes', color: '#ec4899', order: 5 },
-  { id: 6, name: 'Boissons', color: '#06b6d4', order: 6 },
-  { id: 7, name: 'Desserts', color: '#f59e0b', order: 7 },
+  ['Food',          '#10b981', 1],
+  ['Drinks',        '#06b6d4', 2],
+  ['Shisha',        '#8b5cf6', 3],
+  ['Events Global', '#f97316', 4],
 ];
-cats.forEach(c => insertCat.run(c.name, c.color, c.order));
+cats.forEach(c => insertCat.run(...c));
 
-// Products (prices in DJF)
+const catIds = {};
+db.prepare('SELECT id, name FROM categories').all().forEach(c => { catIds[c.name] = c.id; });
+
+// ─── PRODUCTS ─────────────────────────────────────────────────────────────────
 const insertProd = db.prepare(`
   INSERT INTO products (category_id, name, description, price, cost, track_stock)
   VALUES (?, ?, ?, ?, ?, ?)
 `);
+
+const F = catIds['Food'];
+
 const products = [
-  // Fruits de Mer (cat 1)
-  [1, 'Homard Grillé de la Mer Rouge', 'Homard frais grillé, beurre aux herbes', 8500, 4500, 1],
-  [1, 'Plateau Royal de Fruits de Mer', 'Homard, crevettes, huîtres, langoustines', 15000, 7500, 1],
-  [1, 'Crevettes Géantes du Golfe', 'Crevettes fraîches sautées à l\'ail', 6500, 3200, 1],
-  [1, 'Langoustines Flambées', 'Langoustines au cognac et crème', 7200, 3500, 1],
-  [1, 'Huîtres Fraîches (6 pcs)', 'Huîtres de la côte', 4500, 2000, 1],
-  // Poissons (cat 2)
-  [2, 'Brochettes de Poissons Nobles', 'Dorade, thon, espadon marinés', 5500, 2800, 1],
-  [2, 'Dorade Royale Grillée', 'Dorade entière aux herbes du jardin', 5000, 2500, 1],
-  [2, 'Thon Rouge Tataki', 'Thon rouge snacké, sauce teriyaki', 6000, 3000, 1],
-  [2, 'Filet d\'Espadon', 'Espadon grillé, salsa mangue-coriandre', 5800, 2900, 1],
-  // Grillades (cat 3)
-  [3, 'Entrecôte 300g', 'Bœuf Black Angus, frites maison', 7500, 3800, 1],
-  [3, 'Côtelettes d\'Agneau', 'Côtelettes marinées, légumes grillés', 8000, 4000, 1],
-  [3, 'Poulet Fermier Grillé', 'Demi-poulet mariné aux épices', 4200, 2000, 1],
-  // Entrées & Salades (cat 4)
-  [4, 'Salade de Poulpe Grillé', 'Poulpe, tomates, olives, citron', 4200, 1800, 1],
-  [4, 'Salade Niçoise de la Mer', 'Thon, œufs, anchois, légumes', 3500, 1500, 1],
-  [4, 'Accras de Crevettes', 'Beignets légers aux crevettes', 2800, 1200, 1],
-  [4, 'Carpaccio de Dorade', 'Dorade marinée au citron vert', 3200, 1400, 1],
-  // Soupes (cat 5)
-  [5, 'Soupe de Poisson Traditionnelle', 'Bouillabaisse maison, rouille', 2800, 1200, 1],
-  [5, 'Bisque de Homard', 'Velouté de homard à la crème', 3500, 1600, 1],
-  // Boissons (cat 6)
-  [6, 'Eau Minérale 50cl', '', 300, 100, 1],
-  [6, 'Eau Minérale 1L', '', 500, 150, 1],
-  [6, 'Jus Frais du Jour', 'Mangue, goyave ou passion', 800, 300, 0],
-  [6, 'Soda (Coca, Fanta, Sprite)', '', 600, 200, 1],
-  [6, 'Bière Locale (33cl)', '', 1200, 500, 1],
-  [6, 'Vin Rouge (verre)', '', 2500, 1000, 1],
-  [6, 'Vin Blanc (verre)', '', 2500, 1000, 1],
-  [6, 'Café Espresso', '', 500, 150, 0],
-  [6, 'Thé à la Menthe', '', 400, 100, 0],
-  // Desserts (cat 7)
-  [7, 'Crème Brûlée Vanille', '', 1800, 700, 0],
-  [7, 'Tarte Tatin', 'Tarte aux pommes chaude, glace vanille', 2000, 800, 0],
-  [7, 'Fondant Chocolat', 'Coulant au cœur chocolat noir', 2200, 900, 0],
-  [7, 'Plateau de Fruits Exotiques', 'Mangue, ananas, papaye, fruit de la passion', 2500, 1000, 0],
+  // ── Entrées / Starters ────────────────────────────────────────────────────
+  [F, 'Soupe de carotte et gingembre',   'Carrot ginger soup - served with lemon toast',        1300,  500, 0],
+  [F, 'Soupe à la citrouille',           'Pumpkin soup - served with lemon toast',               1500,  580, 0],
+  [F, 'Coupe de crevettes',              'Shrimp cup - served with calypso sauce',               2500, 1000, 0],
+  [F, 'Carpaccio de bœuf',               'Beef carpaccio - virgin olive oil, lemon',             1800,  700, 0],
+  [F, 'Carpaccio de poulpe',             'Octopus carpaccio - virgin olive oil, lemon',          2500, 1000, 0],
+  [F, 'Carpaccio de poisson',            'Fish carpaccio - virgin olive oil, lemon',             1900,  750, 0],
+  [F, 'Salade hawaïenne',                'Hawaiian salad - chicken, pineapple, tomato, mayo',    2000,  800, 0],
+  [F, 'Salade César façon Beach House',  'Caesar salad - chicken, tomato, pineapple, mayo',      2000,  800, 0],
+
+  // ── Poissons & Fruits de Mer ──────────────────────────────────────────────
+  [F, 'Papillote de poisson grillé',     'Grilled fish in foil',                                 2900, 1150, 0],
+  [F, 'Poulpe grillé aux épices',        'Grilled octopus with spices',                          4200, 1700, 0],
+  [F, 'Duo poisson grillé & gambas',     'Grilled fish and prawn duo',                           4000, 1600, 0],
+  [F, 'Filet de poisson grillé du jour', 'Grilled fish of the day',                              2900, 1150, 0],
+  [F, 'Poêlée aux gambas',               'Pan-fried shrimp',                                     3800, 1500, 0],
+  [F, 'Langouste thermidor grillé',      'Grilled lobster thermidor (au kg)',                    10000, 4500, 0],
+
+  // ── Viandes / Meats ───────────────────────────────────────────────────────
+  [F, 'Mignon de bœuf grillé',           'Beef cutlet - imported from South America',            3200, 1280, 0],
+  [F, 'Brochettes de poulet Satay Kaï',  'Grilled chicken skewers with peanut sauce',            2800, 1100, 0],
+  [F, 'Filet de bœuf mariné',            'Marinated beef fillet',                                4800, 1900, 0],
+  [F, 'Entrecôte de bœuf',               'Beef steak - imported from South America',             3800, 1520, 0],
+  [F, '½ poulet grillé',                 '1½ grilled chicken',                                   2800, 1100, 0],
+  [F, 'Émincé de poulet sauté',          'Sliced sautéed chicken',                               2500, 1000, 0],
+
+  // ── Menu Enfants / Kids ───────────────────────────────────────────────────
+  [F, 'Menu Enfant',                     'Steak/Nuggets + frites + 1 boule de glace',            2200,  880, 0],
+
+  // ── Pâtes / Pasta & Rice ─────────────────────────────────────────────────
+  [F, 'Tagliatelle champignon',          'White tagliatelle with mushroom, pesto sauce',         1900,  750, 0],
+  [F, 'Tagliatelle aux gambas',          'Tagliatelle with shrimp',                              2500, 1000, 0],
+  [F, 'Tagliatelle au poulet',           'Chicken tagliatelle',                                  2000,  800, 0],
+  [F, 'Spaghetti carbonara',             'Spaghetti carbonara with cheese sauce',                2100,  840, 0],
+  [F, 'Spaghetti polonaise',             'Polish spaghetti',                                     2100,  840, 0],
+  [F, 'Penne al Arrabiata',              'Penne in spicy tomato sauce',                          1800,  720, 0],
+  [F, 'Riz sauté aux fruits de mer',     'Fried rice with seafood',                              2500, 1000, 0],
+  [F, 'Riz Biryani',                     'Biryani rice',                                         2500, 1000, 0],
+
+  // ── Desserts ─────────────────────────────────────────────────────────────
+  [F, 'Moelleux chocolat',               'Homemade chocolate fondant cake',                      2000,  800, 0],
+  [F, 'Poire Belle Hélène',              'Poached pear with chocolate sauce',                    1600,  640, 0],
+  [F, 'Coupe 3 boules',                  'Ice cream cup - 3 scoops',                             1100,  440, 0],
+  [F, 'Pêche Melba',                     'Peach melba - ice cream & raspberry coulis',           1600,  640, 0],
+  [F, 'Assiette de fruits mosaïque',     'Mosaic fruit plate',                                   1300,  520, 0],
+  [F, 'Banane Split',                    'Banana split',                                         1900,  760, 0],
+
+  // ── Drinks (placeholder — to be completed) ────────────────────────────────
+  // ── Shisha (placeholder — to be completed) ────────────────────────────────
+  // ── Events Global (placeholder — to be completed) ─────────────────────────
 ];
+
 products.forEach(p => insertProd.run(...p));
 
-// Stock for tracked products
-const insertStock = db.prepare(`
-  INSERT OR IGNORE INTO stock (product_id, quantity, min_quantity, unit)
-  VALUES (?, ?, ?, ?)
-`);
-const trackedProducts = db.prepare('SELECT id FROM products WHERE track_stock = 1').all();
-trackedProducts.forEach((p, i) => {
-  const qty = 10 + Math.floor(i * 3) % 20;
-  insertStock.run(p.id, qty, 5, 'portion');
-});
-
-// Dining tables
+// ─── DINING TABLES ────────────────────────────────────────────────────────────
 const insertTable = db.prepare(`
   INSERT INTO restaurant_tables (name, capacity, status, section)
   VALUES (?, ?, 'available', ?)
 `);
-const sections = [
-  // Section Terrasse
+const tables = [
   ['T1', 2, 'Terrasse'], ['T2', 4, 'Terrasse'], ['T3', 4, 'Terrasse'],
   ['T4', 6, 'Terrasse'], ['T5', 2, 'Terrasse'],
-  // Salle Principale
   ['T6', 4, 'Salle Principale'], ['T7', 4, 'Salle Principale'],
   ['T8', 6, 'Salle Principale'], ['T9', 4, 'Salle Principale'],
   ['T10', 4, 'Salle Principale'], ['T11', 2, 'Salle Principale'],
   ['T12', 8, 'Salle Principale'],
-  // Salon VIP
   ['VIP1', 8, 'Salon VIP'], ['VIP2', 10, 'Salon VIP'], ['VIP3', 12, 'Salon VIP'],
 ];
-sections.forEach(([name, cap, sec]) => insertTable.run(name, cap, sec));
+tables.forEach(([name, cap, sec]) => insertTable.run(name, cap, sec));
 
-// Demo: mark T1 as occupied with an open order
-db.prepare("UPDATE restaurant_tables SET status = 'occupied' WHERE name = 'T6'").run();
-const t6 = db.prepare("SELECT id FROM restaurant_tables WHERE name = 'T6'").get();
-if (t6) {
-  const ord = db.prepare(`
-    INSERT INTO orders (table_id, status, customer_count, subtotal, total, waiter)
-    VALUES (?, 'open', 2, 13500, 13500, 'Amina')
-  `).run(t6.id);
-  const oid = ord.lastInsertRowid;
-  db.prepare(`INSERT INTO order_items (order_id, product_id, product_name, quantity, unit_price) VALUES (?, 1, 'Homard Grillé de la Mer Rouge', 1, 8500)`).run(oid);
-  db.prepare(`INSERT INTO order_items (order_id, product_id, product_name, quantity, unit_price) VALUES (?, 19, 'Eau Minérale 50cl', 2, 300)`).run(oid);
-  db.prepare(`INSERT INTO order_items (order_id, product_id, product_name, quantity, unit_price) VALUES (?, 21, 'Soda (Coca, Fanta, Sprite)', 2, 600)`).run(oid);
-}
-
-console.log('✅ Database seeded successfully!');
+console.log('✅ Base de données initialisée avec succès !');
 console.log(`   - ${cats.length} catégories`);
 console.log(`   - ${products.length} produits`);
-console.log(`   - ${sections.length} tables`);
+console.log(`   - ${tables.length} tables`);
