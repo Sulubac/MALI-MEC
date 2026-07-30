@@ -1863,6 +1863,7 @@ function buildReports() {
   var mainTab = APP.reportsMainTab || 'ventes';
   if (mainTab === 'reconciliation') return buildReconciliation();
   if (mainTab === 'pending')        return buildPendingReports();
+  if (mainTab === 'classements')    return buildClassements();
 
   var mainTabHtml = buildReportsTabBar();
   const wrap = mkEl('div', 'view');
@@ -1990,8 +1991,197 @@ function buildReports() {
   return wrap;
 }
 
+function buildClassements() {
+  var mainTabHtml = buildReportsTabBar();
+  var wrap = mkEl('div', 'view');
+
+  var days   = {today:1, week:7, month:30}[APP.reportsTab] || 1;
+  var cutoff = new Date(); cutoff.setDate(cutoff.getDate() - days); cutoff.setHours(0,0,0,0);
+
+  var allOrders  = S.orders();
+  var allItems   = S.items();
+  var allCats    = S.categories();
+  var allTickets = S.tickets();
+
+  var paidOrders      = allOrders.filter(function(o){ return o.status==='paid' && o.closed_at && new Date(o.closed_at)>=cutoff; });
+  var periodTickets   = allTickets.filter(function(t){ return new Date(t.created_at)>=cutoff; });
+  var deliveredTks    = periodTickets.filter(function(t){ return t.status==='delivered' && t.accepted_at && t.ready_at && t.delivered_at; });
+
+  // ── 1. Produits ───────────────────────────────────────
+  var prodMap = {};
+  paidOrders.forEach(function(o){
+    allItems.filter(function(i){ return i.order_id===o.id; }).forEach(function(i){
+      if (!prodMap[i.product_name]) {
+        var c = allCats.find(function(x){ return x.id===i.category_id; }) || {};
+        prodMap[i.product_name] = {name:i.product_name, catName:c.name||'?', catColor:c.color||'#94a3b8', qty:0, rev:0};
+      }
+      prodMap[i.product_name].qty += i.quantity;
+      prodMap[i.product_name].rev += i.quantity * i.unit_price;
+    });
+  });
+  var prodRanking = Object.values(prodMap).sort(function(a,b){ return b.qty - a.qty; });
+
+  // ── 2. Personnel ──────────────────────────────────────
+  var staffMap = {};
+  paidOrders.forEach(function(o){
+    var key  = String(o.created_by_id || o.waiter || '?');
+    var name = o.created_by_name || o.waiter || 'Inconnu';
+    var role = o.created_by_role || '';
+    if (!staffMap[key]) staffMap[key] = {id:key, name:name, role:role, orders:0, ca:0, dlvTimes:[]};
+    staffMap[key].orders++;
+    staffMap[key].ca += o.total || 0;
+  });
+  deliveredTks.forEach(function(t){
+    var key = String(t.waiter_id || '');
+    if (key && staffMap[key]) {
+      var ms = new Date(t.delivered_at) - new Date(t.ready_at);
+      staffMap[key].dlvTimes.push(ms / 60000);
+    }
+  });
+  var staffRanking = Object.values(staffMap).map(function(s){
+    var avgDlv = s.dlvTimes.length ? s.dlvTimes.reduce(function(a,b){return a+b;},0)/s.dlvTimes.length : null;
+    return Object.assign({}, s, {avgOrder: s.orders ? s.ca/s.orders : 0, avgDlv: avgDlv});
+  }).sort(function(a,b){ return b.ca - a.ca; });
+
+  // ── 3. Départements ───────────────────────────────────
+  var deptMap = {};
+  periodTickets.forEach(function(t){
+    var d = t.department; if (!d) return;
+    if (!deptMap[d]) deptMap[d] = {dept:d, total:0, done:0, accTimes:[], prepTimes:[]};
+    deptMap[d].total++;
+    if (t.status==='delivered' && t.accepted_at && t.ready_at) {
+      deptMap[d].done++;
+      deptMap[d].accTimes.push((new Date(t.accepted_at)-new Date(t.created_at))/60000);
+      deptMap[d].prepTimes.push((new Date(t.ready_at)-new Date(t.accepted_at))/60000);
+    }
+  });
+  function avg(arr){ return arr.length ? arr.reduce(function(a,b){return a+b;},0)/arr.length : null; }
+  var deptRanking = Object.values(deptMap).map(function(d){
+    return Object.assign({}, d, {avgAcc: avg(d.accTimes), avgPrep: avg(d.prepTimes)});
+  }).sort(function(a,b){
+    if (a.avgPrep===null && b.avgPrep===null) return 0;
+    if (a.avgPrep===null) return 1; if (b.avgPrep===null) return -1;
+    return a.avgPrep - b.avgPrep;
+  });
+
+  function fmtMin(m){ if (m===null||m===undefined) return '—'; if (m<1) return '<1 min'; return Math.round(m)+' min'; }
+  function spdColor(m, good, bad){ if (m===null) return '#94a3b8'; return m<=good?'#34d399':m<=bad?'#fbbf24':'#f87171'; }
+  function mdl(i){ return ['🥇','🥈','🥉'][i]||(i+1+'.'); }
+
+  var periods = [{id:'today',label:"Aujourd'hui"},{id:'week',label:'7 jours'},{id:'month',label:'30 jours'}];
+  var barColors = ['#10b981','#06b6d4','#8b5cf6','#f59e0b','#ef4444','#ec4899','#f97316','#3b82f6','#14b8a6','#a855f7'];
+
+  var html = mainTabHtml;
+
+  // Period picker
+  html += '<div class="row mb-12" style="flex-wrap:wrap;gap:10px;align-items:center">'
+    + '<div style="display:flex;background:#1e293b;border-radius:8px;padding:3px;gap:2px">'
+    + periods.map(function(p){
+        return '<button class="btn" style="padding:5px 12px;font-size:12px;'+(APP.reportsTab===p.id?'background:#334155;color:#fff':'background:transparent;color:var(--tm)')+'" onclick="setState({reportsTab:\''+p.id+'\'})">'+p.label+'</button>';
+      }).join('')
+    + '</div></div>';
+
+  // ─ Produits ─
+  html += '<div class="chart-wrap" style="margin-bottom:14px"><div class="chart-title">🏆 Classement des produits — du plus vendu au moins vendu</div>';
+  if (!prodRanking.length) {
+    html += '<div style="text-align:center;padding:30px;color:var(--tm)">Aucune vente sur cette période</div>';
+  } else {
+    var maxQty = prodRanking[0].qty;
+    html += '<div style="overflow-x:auto"><table class="tbl" style="min-width:480px"><thead><tr>'
+      + '<th style="width:42px;text-align:center">#</th><th>Produit</th><th>Catégorie</th>'
+      + '<th style="text-align:right">Vendus</th><th style="text-align:right">CA</th><th style="width:110px"></th>'
+      + '</tr></thead><tbody>'
+      + prodRanking.map(function(p, i){
+          var bw = Math.round(p.qty/maxQty*100);
+          var col = barColors[i%barColors.length];
+          return '<tr>'
+            + '<td style="text-align:center;font-size:'+(i<3?'18':'13')+'px">'+mdl(i)+'</td>'
+            + '<td style="font-weight:500;color:#fff;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+esc(p.name)+'</td>'
+            + '<td><span class="b" style="background:'+p.catColor+'22;color:'+p.catColor+'">'+esc(p.catName)+'</span></td>'
+            + '<td style="text-align:right;font-weight:700;color:#fff">'+p.qty+'</td>'
+            + '<td style="text-align:right;color:var(--br)">'+fmt(p.rev)+'</td>'
+            + '<td><div style="height:7px;background:#334155;border-radius:4px"><div style="height:100%;width:'+bw+'%;background:'+col+';border-radius:4px"></div></div></td>'
+            + '</tr>';
+        }).join('')
+      + '</tbody></table></div>';
+  }
+  html += '</div>';
+
+  // ─ Personnel ─
+  html += '<div class="chart-wrap" style="margin-bottom:14px"><div class="chart-title">🧑‍🍽️ Classement du personnel — du plus performant au moins performant</div>';
+  if (!staffRanking.length) {
+    html += '<div style="text-align:center;padding:30px;color:var(--tm)">Aucun personnel actif sur cette période</div>';
+  } else {
+    var maxCA = staffRanking[0].ca || 1;
+    html += '<div style="overflow-x:auto"><table class="tbl" style="min-width:560px"><thead><tr>'
+      + '<th style="width:42px;text-align:center">#</th><th>Nom</th><th>Rôle</th>'
+      + '<th style="text-align:right">Commandes</th><th style="text-align:right">CA total</th>'
+      + '<th style="text-align:right">Panier moy.</th><th style="text-align:right">Tps livraison</th><th style="width:100px"></th>'
+      + '</tr></thead><tbody>'
+      + staffRanking.map(function(s, i){
+          var ico = _ROLE_ICONS[s.role]||'👤';
+          var lbl = _ROLE_LABELS[s.role]||s.role;
+          var dc  = spdColor(s.avgDlv, 3, 8);
+          var bw  = Math.round(s.ca/maxCA*100);
+          return '<tr>'
+            + '<td style="text-align:center;font-size:'+(i<3?'18':'13')+'px">'+mdl(i)+'</td>'
+            + '<td style="font-weight:600;color:#fff">'+ico+' '+esc(s.name)+'</td>'
+            + '<td style="color:var(--tm);font-size:12px">'+esc(lbl)+'</td>'
+            + '<td style="text-align:right">'+s.orders+'</td>'
+            + '<td style="text-align:right;font-weight:700;color:var(--br)">'+fmt(s.ca)+'</td>'
+            + '<td style="text-align:right;color:var(--tm)">'+fmt(s.avgOrder)+'</td>'
+            + '<td style="text-align:right;font-weight:600;color:'+dc+'">'+fmtMin(s.avgDlv)+'</td>'
+            + '<td><div style="height:7px;background:#334155;border-radius:4px"><div style="height:100%;width:'+bw+'%;background:#8b5cf6;border-radius:4px"></div></div></td>'
+            + '</tr>';
+        }).join('')
+      + '</tbody></table></div>'
+      + '<div style="font-size:11px;color:var(--tm);margin-top:8px">Tps livraison = délai entre commande prête et remise au client · '
+      + '<span style="color:#34d399">● &lt;3 min excellent</span> '
+      + '<span style="color:#fbbf24">● 3-8 min moyen</span> '
+      + '<span style="color:#f87171">● &gt;8 min lent</span></div>';
+  }
+  html += '</div>';
+
+  // ─ Départements ─
+  html += '<div class="chart-wrap" style="margin-bottom:14px"><div class="chart-title">⚡ Performance des départements — du plus rapide au plus lent</div>';
+  if (!deptRanking.length) {
+    html += '<div style="text-align:center;padding:30px;color:var(--tm)">Aucun ticket traité sur cette période</div>';
+  } else {
+    html += '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:10px">'
+      + deptRanking.map(function(d, i){
+          var lbl   = DEPT_LABELS[d.dept]||d.dept;
+          var ico   = DEPT_ICONS[d.dept]||'🍽️';
+          var prepC = spdColor(d.avgPrep, 10, 20);
+          var accC  = spdColor(d.avgAcc, 2, 5);
+          var pct   = d.total ? Math.round(d.done/d.total*100) : 0;
+          return '<div style="background:#1e293b;border:1px solid #334155;border-radius:10px;padding:14px">'
+            + '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">'
+            + '<div style="font-size:15px;font-weight:700">'+mdl(i)+' '+ico+' '+lbl+'</div>'
+            + '<span style="font-size:11px;color:#94a3b8">'+d.done+'/'+d.total+' tickets</span>'
+            + '</div>'
+            + '<div style="height:5px;background:#334155;border-radius:3px;margin-bottom:12px"><div style="height:100%;width:'+pct+'%;background:'+prepC+';border-radius:3px"></div></div>'
+            + '<div style="display:flex;flex-direction:column;gap:8px">'
+            + '<div style="display:flex;justify-content:space-between;font-size:12px"><span style="color:var(--tm)">Tps prise en charge</span><span style="color:'+accC+';font-weight:700">'+fmtMin(d.avgAcc)+'</span></div>'
+            + '<div style="display:flex;justify-content:space-between;font-size:12px"><span style="color:var(--tm)">Tps préparation</span><span style="color:'+prepC+';font-weight:700">'+fmtMin(d.avgPrep)+'</span></div>'
+            + '<div style="display:flex;justify-content:space-between;font-size:12px"><span style="color:var(--tm)">Taux de complétion</span><span style="color:#fff;font-weight:700">'+pct+'%</span></div>'
+            + '</div></div>';
+        }).join('')
+      + '</div>'
+      + '<div style="font-size:11px;color:var(--tm);margin-top:10px;display:flex;gap:14px;flex-wrap:wrap">'
+      + '<span><span style="color:#34d399">●</span> Excellent</span>'
+      + '<span><span style="color:#fbbf24">●</span> Moyen</span>'
+      + '<span><span style="color:#f87171">●</span> Lent</span>'
+      + '<span style="margin-left:8px;color:#94a3b8">Prise en charge: &lt;2min excellent, &lt;5min moyen · Préparation: &lt;10min excellent, &lt;20min moyen</span>'
+      + '</div>';
+  }
+  html += '</div>';
+
+  wrap.innerHTML = html;
+  return wrap;
+}
+
 function buildReportsTabBar() {
-  var tabs = [{id:'ventes',label:'📈 Ventes'}];
+  var tabs = [{id:'ventes',label:'📈 Ventes'},{id:'classements',label:'🏆 Classements'}];
   if (can('view_reconciliation') || can('close_day')) tabs.push({id:'reconciliation',label:'⚖️ Réconciliation'});
   if (can('manage_users') || can('view_settings')) tabs.push({id:'pending',label:'📋 Rapports en attente'});
   var cur = APP.reportsMainTab||'ventes';
