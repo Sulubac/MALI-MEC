@@ -3,19 +3,18 @@ node_modules/
 .pnp
 .pnp.js
 
-# Build outputs
-dist/
-build/
+# Next.js
 .next/
 out/
+build/
+dist/
 
-# Environment files
+# Environment
 .env
 .env.local
 .env.*.local
 
 # Logs
-logs/
 *.log
 npm-debug.log*
 
@@ -24,14 +23,12 @@ npm-debug.log*
 Thumbs.db
 
 # IDE
-.vscode/settings.json
+.vscode/
 .idea/
-
-# Docker
-docker/postgres/data/
+*.suo
 
 # Prisma
-apps/backend/prisma/migrations/
+apps/backend/node_modules/
 
-# Uploads
-uploads/
+# Docker
+docker/volumes/
