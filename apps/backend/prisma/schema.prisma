@@ -1,0 +1,853 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ============= ENUMS =============
+
+enum UserRole {
+  SUPER_ADMIN
+  ADMINISTRATOR
+  SENIOR_NOTARY
+  ASSISTANT_NOTARY
+  LEGAL_ASSISTANT
+  RECEPTIONIST
+  ACCOUNTANT
+  CASHIER
+  ARCHIVIST
+  CLIENT
+  BANK_OFFICER
+  REAL_ESTATE_AGENT
+  COURT_OFFICER
+  GOVERNMENT_OFFICER
+}
+
+enum UserStatus {
+  ACTIVE
+  INACTIVE
+  SUSPENDED
+  PENDING_VERIFICATION
+}
+
+enum Language {
+  FR
+  AR
+  EN
+  SO
+}
+
+enum ClientType {
+  INDIVIDUAL
+  COMPANY
+  GOVERNMENT
+  BANK
+  LAWYER
+  REAL_ESTATE
+  COURT
+  OTHER
+}
+
+enum DossierStatus {
+  DRAFT
+  ACTIVE
+  PENDING_DOCUMENTS
+  PENDING_SIGNATURE
+  PENDING_PAYMENT
+  PENDING_REGISTRATION
+  COMPLETED
+  ARCHIVED
+  CANCELLED
+}
+
+enum DossierType {
+  SALE
+  MORTGAGE
+  INHERITANCE
+  COMPANY_INCORPORATION
+  DONATION
+  LEASE
+  MARRIAGE_CONTRACT
+  POWER_OF_ATTORNEY
+  AFFIDAVIT
+  CERTIFICATION
+  LOAN_AGREEMENT
+  LAND_TRANSFER
+  DISSOLUTION
+  OTHER
+}
+
+enum DocumentType {
+  POWER_OF_ATTORNEY
+  SALE_AGREEMENT
+  MORTGAGE_DEED
+  LOAN_AGREEMENT
+  INHERITANCE_CERTIFICATE
+  COMPANY_INCORPORATION
+  ARTICLES_OF_ASSOCIATION
+  DONATION_ACT
+  LEASE_AGREEMENT
+  MARRIAGE_PROPERTY
+  AFFIDAVIT
+  CERTIFICATION
+  ACKNOWLEDGEMENT
+  AUTHORIZATION
+  MINUTES
+  CERTIFIED_COPY
+  EXTRACT
+  CERTIFICATE
+  RECEIPT
+  INVOICE
+  LETTER
+  OTHER
+}
+
+enum DocumentStatus {
+  DRAFT
+  UNDER_REVIEW
+  APPROVED
+  SIGNED
+  CERTIFIED
+  ARCHIVED
+  REJECTED
+}
+
+enum SignatureStatus {
+  PENDING
+  SIGNED
+  DECLINED
+  EXPIRED
+}
+
+enum AppointmentStatus {
+  SCHEDULED
+  CONFIRMED
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+  NO_SHOW
+}
+
+enum AppointmentType {
+  INITIAL_CONSULTATION
+  DOCUMENT_REVIEW
+  SIGNATURE
+  DELIVERY
+  FOLLOW_UP
+  VIDEO_CALL
+  OTHER
+}
+
+enum TaskStatus {
+  TODO
+  IN_PROGRESS
+  REVIEW
+  COMPLETED
+  CANCELLED
+}
+
+enum TaskPriority {
+  LOW
+  MEDIUM
+  HIGH
+  URGENT
+}
+
+enum PaymentMethod {
+  CASH
+  BANK_TRANSFER
+  CHECK
+  CARD
+  MOBILE_MONEY
+}
+
+enum PaymentStatus {
+  PENDING
+  PARTIAL
+  PAID
+  REFUNDED
+  CANCELLED
+}
+
+enum RiskLevel {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+enum NotificationType {
+  INFO
+  WARNING
+  SUCCESS
+  ERROR
+  REMINDER
+  ALERT
+}
+
+enum AuditAction {
+  CREATE
+  READ
+  UPDATE
+  DELETE
+  LOGIN
+  LOGOUT
+  EXPORT
+  IMPORT
+  SIGN
+  APPROVE
+  REJECT
+  ARCHIVE
+}
+
+// ============= MODELS =============
+
+model User {
+  id                String       @id @default(cuid())
+  email             String       @unique
+  password          String
+  firstName         String
+  lastName          String
+  phone             String?
+  role              UserRole     @default(LEGAL_ASSISTANT)
+  status            UserStatus   @default(ACTIVE)
+  language          Language     @default(FR)
+  avatar            String?
+  twoFactorEnabled  Boolean      @default(false)
+  twoFactorSecret   String?
+  lastLoginAt       DateTime?
+  loginCount        Int          @default(0)
+  passwordChangedAt DateTime?
+  refreshTokens     String[]
+  permissions       String[]
+  createdAt         DateTime     @default(now())
+  updatedAt         DateTime     @updatedAt
+
+  assignedDossiers   Dossier[]    @relation("AssignedNotary")
+  createdDossiers    Dossier[]    @relation("CreatedBy")
+  documents          Document[]   @relation("DocumentCreatedBy")
+  assignedTasks      Task[]       @relation("TaskAssignee")
+  createdTasks       Task[]       @relation("TaskCreator")
+  appointments       Appointment[] @relation("AppointmentNotary")
+  auditLogs          AuditLog[]
+  notifications      Notification[]
+  messages           Message[]
+  signatures         Signature[]
+  clientProfile      Client?
+  comments           Comment[]
+  timeEntries        TimeEntry[]
+
+  @@map("users")
+}
+
+model Client {
+  id                String       @id @default(cuid())
+  clientNumber      String       @unique
+  type              ClientType   @default(INDIVIDUAL)
+
+  firstName         String?
+  lastName          String?
+  dateOfBirth       DateTime?
+  placeOfBirth      String?
+  nationality       String?
+
+  companyName       String?
+  registrationNumber String?
+  vatNumber         String?
+  legalForm         String?
+  incorporationDate DateTime?
+
+  email             String?
+  phone             String?
+  phone2            String?
+  address           String?
+  city              String?
+  country           String       @default("DJ")
+  postalCode        String?
+
+  nationalIdNumber  String?
+  nationalIdExpiry  DateTime?
+  passportNumber    String?
+  passportExpiry    DateTime?
+  driverLicense     String?
+  tinNumber         String?
+
+  pepStatus         Boolean      @default(false)
+  sanctionsCheck    Boolean      @default(false)
+  kycStatus         String       @default("PENDING")
+  kycDate           DateTime?
+  riskScore         Int          @default(0)
+  riskLevel         RiskLevel    @default(LOW)
+  biometricRef      String?
+
+  isActive          Boolean      @default(true)
+  notes             String?
+  tags              String[]
+
+  userId            String?      @unique
+  user              User?        @relation(fields: [userId], references: [id])
+
+  createdAt         DateTime     @default(now())
+  updatedAt         DateTime     @updatedAt
+
+  dossiers          DossierClient[]
+  documents         ClientDocument[]
+  appointments      Appointment[]
+  invoices          Invoice[]
+  familyMembers     FamilyRelation[] @relation("ClientFamily")
+  relatedTo         FamilyRelation[] @relation("RelatedClient")
+  properties        PropertyOwner[]
+
+  @@index([email])
+  @@index([nationalIdNumber])
+  @@index([passportNumber])
+  @@map("clients")
+}
+
+model FamilyRelation {
+  id            String   @id @default(cuid())
+  clientId      String
+  relatedId     String
+  relationship  String
+  client        Client   @relation("ClientFamily", fields: [clientId], references: [id])
+  related       Client   @relation("RelatedClient", fields: [relatedId], references: [id])
+  createdAt     DateTime @default(now())
+
+  @@map("family_relations")
+}
+
+model Dossier {
+  id              String         @id @default(cuid())
+  dossierNumber   String         @unique
+  title           String
+  type            DossierType
+  status          DossierStatus  @default(DRAFT)
+  description     String?
+
+  assignedNotaryId String?
+  assignedNotary   User?          @relation("AssignedNotary", fields: [assignedNotaryId], references: [id])
+  createdById      String
+  createdBy        User           @relation("CreatedBy", fields: [createdById], references: [id])
+
+  propertyId      String?
+  property        Property?      @relation(fields: [propertyId], references: [id])
+
+  estimatedValue  Float?
+  notaryFees      Float?
+  taxAmount       Float?
+  totalAmount     Float?
+
+  openedAt        DateTime       @default(now())
+  deadlineAt      DateTime?
+  completedAt     DateTime?
+
+  aiSummary       String?
+  riskScore       Int            @default(0)
+  riskLevel       RiskLevel      @default(LOW)
+  riskFactors     String[]
+  complianceScore Int            @default(100)
+
+  priority        TaskPriority   @default(MEDIUM)
+  tags            String[]
+  notes           String?
+
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+
+  clients         DossierClient[]
+  documents       Document[]
+  tasks           Task[]
+  appointments    Appointment[]
+  invoices        Invoice[]
+  timeline        TimelineEntry[]
+  comments        Comment[]
+  auditLogs       AuditLog[]
+
+  @@index([dossierNumber])
+  @@index([status])
+  @@index([type])
+  @@map("dossiers")
+}
+
+model DossierClient {
+  id          String   @id @default(cuid())
+  dossierId   String
+  clientId    String
+  role        String
+  dossier     Dossier  @relation(fields: [dossierId], references: [id], onDelete: Cascade)
+  client      Client   @relation(fields: [clientId], references: [id])
+  createdAt   DateTime @default(now())
+
+  @@unique([dossierId, clientId, role])
+  @@map("dossier_clients")
+}
+
+model Document {
+  id              String          @id @default(cuid())
+  documentNumber  String          @unique
+  title           String
+  type            DocumentType
+  status          DocumentStatus  @default(DRAFT)
+  language        Language        @default(FR)
+
+  templateId      String?
+  template        DocumentTemplate? @relation(fields: [templateId], references: [id])
+  content         String?
+  htmlContent     String?
+
+  fileUrl         String?
+  fileName        String?
+  fileSize        Int?
+  mimeType        String?
+  checksum        String?
+
+  version         Int             @default(1)
+  parentDocumentId String?
+  parentDocument  Document?       @relation("DocumentVersions", fields: [parentDocumentId], references: [id])
+  versions        Document[]      @relation("DocumentVersions")
+
+  ocrProcessed    Boolean         @default(false)
+  ocrText         String?
+  ocrData         Json?
+
+  aiReviewed      Boolean         @default(false)
+  aiSuggestions   Json?
+  aiRiskScore     Int?
+
+  dossierId       String?
+  dossier         Dossier?        @relation(fields: [dossierId], references: [id])
+  createdById     String
+  createdBy       User            @relation("DocumentCreatedBy", fields: [createdById], references: [id])
+
+  signedAt        DateTime?
+  certifiedAt     DateTime?
+  expiresAt       DateTime?
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+
+  signatures      Signature[]
+  clientDocuments ClientDocument[]
+  auditLogs       AuditLog[]
+
+  @@index([documentNumber])
+  @@index([type])
+  @@index([status])
+  @@map("documents")
+}
+
+model DocumentTemplate {
+  id           String       @id @default(cuid())
+  name         String
+  nameAr       String?
+  nameEn       String?
+  type         DocumentType
+  language     Language     @default(FR)
+  content      String
+  variables    Json
+  category     String?
+  description  String?
+  isActive     Boolean      @default(true)
+  usageCount   Int          @default(0)
+  version      Int          @default(1)
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+
+  documents    Document[]
+
+  @@map("document_templates")
+}
+
+model ClientDocument {
+  id          String   @id @default(cuid())
+  clientId    String
+  documentId  String
+  docType     String
+  client      Client   @relation(fields: [clientId], references: [id])
+  document    Document @relation(fields: [documentId], references: [id])
+  createdAt   DateTime @default(now())
+
+  @@map("client_documents")
+}
+
+model Signature {
+  id            String          @id @default(cuid())
+  documentId    String
+  document      Document        @relation(fields: [documentId], references: [id])
+  signerId      String
+  signer        User            @relation(fields: [signerId], references: [id])
+  status        SignatureStatus @default(PENDING)
+  signedAt      DateTime?
+  ipAddress     String?
+  userAgent     String?
+  signatureData String?
+  certificate   String?
+  reason        String?
+  location      String?
+  order         Int             @default(0)
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+
+  @@map("signatures")
+}
+
+model Property {
+  id              String    @id @default(cuid())
+  propertyNumber  String    @unique
+  title           String
+  type            String
+
+  address         String
+  city            String
+  district        String?
+  coordinates     Json?
+
+  area            Float?
+  rooms           Int?
+  floors          Int?
+  yearBuilt       Int?
+
+  cadastralNumber String?
+  titleDeedNumber String?
+  registrationNumber String?
+
+  estimatedValue  Float?
+  marketValue     Float?
+  lastValuationDate DateTime?
+
+  isEncumbered    Boolean   @default(false)
+  isMortgaged     Boolean   @default(false)
+  restrictions    String[]
+
+  photos          String[]
+  documents       String[]
+  mapUrl          String?
+
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  owners          PropertyOwner[]
+  dossiers        Dossier[]
+  mortgages       Mortgage[]
+  transfers       PropertyTransfer[]
+
+  @@index([cadastralNumber])
+  @@map("properties")
+}
+
+model PropertyOwner {
+  id          String   @id @default(cuid())
+  propertyId  String
+  clientId    String
+  sharePercent Float   @default(100)
+  since       DateTime?
+  until       DateTime?
+  property    Property @relation(fields: [propertyId], references: [id])
+  client      Client   @relation(fields: [clientId], references: [id])
+  createdAt   DateTime @default(now())
+
+  @@map("property_owners")
+}
+
+model PropertyTransfer {
+  id          String   @id @default(cuid())
+  propertyId  String
+  fromOwner   String?
+  toOwner     String?
+  transferDate DateTime
+  amount      Float?
+  dossierId   String?
+  property    Property @relation(fields: [propertyId], references: [id])
+  createdAt   DateTime @default(now())
+
+  @@map("property_transfers")
+}
+
+model Mortgage {
+  id            String   @id @default(cuid())
+  propertyId    String
+  bankId        String?
+  loanAmount    Float
+  interestRate  Float?
+  startDate     DateTime
+  endDate       DateTime?
+  monthlyPayment Float?
+  remainingBalance Float?
+  status        String   @default("ACTIVE")
+  dossierId     String?
+  property      Property @relation(fields: [propertyId], references: [id])
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@map("mortgages")
+}
+
+model Appointment {
+  id          String             @id @default(cuid())
+  title       String
+  type        AppointmentType    @default(INITIAL_CONSULTATION)
+  status      AppointmentStatus  @default(SCHEDULED)
+
+  startTime   DateTime
+  endTime     DateTime
+  duration    Int
+  location    String?
+  isVirtual   Boolean            @default(false)
+  meetingLink String?
+  room        String?
+
+  notaryId    String
+  notary      User               @relation("AppointmentNotary", fields: [notaryId], references: [id])
+  clientId    String?
+  client      Client?            @relation(fields: [clientId], references: [id])
+  dossierId   String?
+  dossier     Dossier?           @relation(fields: [dossierId], references: [id])
+
+  description String?
+  notes       String?
+  outcome     String?
+
+  reminderSent Boolean           @default(false)
+  smsReminder  Boolean           @default(true)
+  emailReminder Boolean          @default(true)
+
+  createdAt   DateTime           @default(now())
+  updatedAt   DateTime           @updatedAt
+
+  @@index([startTime])
+  @@map("appointments")
+}
+
+model Task {
+  id              String       @id @default(cuid())
+  title           String
+  description     String?
+  status          TaskStatus   @default(TODO)
+  priority        TaskPriority @default(MEDIUM)
+
+  assigneeId      String?
+  assignee        User?        @relation("TaskAssignee", fields: [assigneeId], references: [id])
+  createdById     String
+  createdBy       User         @relation("TaskCreator", fields: [createdById], references: [id])
+  dossierId       String?
+  dossier         Dossier?     @relation(fields: [dossierId], references: [id])
+
+  dueDate         DateTime?
+  completedAt     DateTime?
+  estimatedHours  Float?
+  actualHours     Float?
+
+  tags            String[]
+  attachments     String[]
+
+  parentTaskId    String?
+  parentTask      Task?        @relation("SubTasks", fields: [parentTaskId], references: [id])
+  subTasks        Task[]       @relation("SubTasks")
+
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+
+  comments        Comment[]
+  timeEntries     TimeEntry[]
+
+  @@map("tasks")
+}
+
+model TimeEntry {
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+  taskId      String?
+  task        Task?    @relation(fields: [taskId], references: [id])
+  dossierId   String?
+  description String?
+  hours       Float
+  date        DateTime
+  billable    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+
+  @@map("time_entries")
+}
+
+model Invoice {
+  id              String        @id @default(cuid())
+  invoiceNumber   String        @unique
+
+  clientId        String
+  client          Client        @relation(fields: [clientId], references: [id])
+  dossierId       String?
+  dossier         Dossier?      @relation(fields: [dossierId], references: [id])
+
+  status          PaymentStatus @default(PENDING)
+
+  subtotal        Float
+  taxRate         Float         @default(0)
+  taxAmount       Float         @default(0)
+  discount        Float         @default(0)
+  total           Float
+  paid            Float         @default(0)
+  balance         Float
+
+  currency        String        @default("DJF")
+
+  issueDate       DateTime      @default(now())
+  dueDate         DateTime?
+  paidAt          DateTime?
+
+  notes           String?
+  terms           String?
+
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  items           InvoiceItem[]
+  payments        Payment[]
+
+  @@map("invoices")
+}
+
+model InvoiceItem {
+  id          String  @id @default(cuid())
+  invoiceId   String
+  invoice     Invoice @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+  description String
+  quantity    Float   @default(1)
+  unitPrice   Float
+  total       Float
+  taxRate     Float   @default(0)
+
+  @@map("invoice_items")
+}
+
+model Payment {
+  id            String        @id @default(cuid())
+  invoiceId     String
+  invoice       Invoice       @relation(fields: [invoiceId], references: [id])
+  amount        Float
+  method        PaymentMethod
+  status        PaymentStatus @default(PENDING)
+  reference     String?
+  notes         String?
+  paidAt        DateTime?
+  createdAt     DateTime      @default(now())
+
+  @@map("payments")
+}
+
+model TimelineEntry {
+  id          String   @id @default(cuid())
+  dossierId   String
+  dossier     Dossier  @relation(fields: [dossierId], references: [id], onDelete: Cascade)
+  action      String
+  description String
+  userId      String?
+  metadata    Json?
+  createdAt   DateTime @default(now())
+
+  @@map("timeline_entries")
+}
+
+model Comment {
+  id          String   @id @default(cuid())
+  content     String
+  dossierId   String?
+  dossier     Dossier? @relation(fields: [dossierId], references: [id])
+  taskId      String?
+  task        Task?    @relation(fields: [taskId], references: [id])
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+  isInternal  Boolean  @default(false)
+  attachments String[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("comments")
+}
+
+model Notification {
+  id          String           @id @default(cuid())
+  userId      String
+  user        User             @relation(fields: [userId], references: [id])
+  type        NotificationType @default(INFO)
+  title       String
+  message     String
+  isRead      Boolean          @default(false)
+  link        String?
+  metadata    Json?
+  createdAt   DateTime         @default(now())
+
+  @@index([userId, isRead])
+  @@map("notifications")
+}
+
+model Message {
+  id          String   @id @default(cuid())
+  fromId      String
+  from        User     @relation(fields: [fromId], references: [id])
+  toClientId  String?
+  subject     String
+  body        String
+  channel     String
+  status      String   @default("SENT")
+  metadata    Json?
+  createdAt   DateTime @default(now())
+
+  @@map("messages")
+}
+
+model AuditLog {
+  id          String      @id @default(cuid())
+  action      AuditAction
+  entity      String
+  entityId    String?
+  userId      String?
+  user        User?       @relation(fields: [userId], references: [id])
+  dossierId   String?
+  dossier     Dossier?    @relation(fields: [dossierId], references: [id])
+  documentId  String?
+  document    Document?   @relation(fields: [documentId], references: [id])
+  ipAddress   String?
+  userAgent   String?
+  oldData     Json?
+  newData     Json?
+  description String?
+  createdAt   DateTime    @default(now())
+
+  @@index([entity, entityId])
+  @@index([userId])
+  @@index([createdAt])
+  @@map("audit_logs")
+}
+
+model LegalReference {
+  id            String   @id @default(cuid())
+  code          String   @unique
+  title         String
+  titleAr       String?
+  body          String
+  bodyAr        String?
+  category      String
+  articleNumber String?
+  bookNumber    String?
+  chapterNumber String?
+  isActive      Boolean  @default(true)
+  tags          String[]
+  embedding     Json?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@map("legal_references")
+}
+
+model Setting {
+  id        String   @id @default(cuid())
+  key       String   @unique
+  value     String
+  category  String
+  isPublic  Boolean  @default(false)
+  updatedAt DateTime @updatedAt
+
+  @@map("settings")
+}
