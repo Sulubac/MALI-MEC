@@ -318,9 +318,9 @@ tbody tr:last-child td{border-bottom:none}
           <div class="field"><label for="up-title">Titre du document</label><input id="up-title" placeholder="Ex. Arrêté fixant les modalités…"></div>
           <div class="grid g2" style="margin-top:4px">
             <div class="field"><label for="up-type">Type</label>
-              <select id="up-type"><option>Décret</option><option>Loi</option><option>Arrêté</option><option>Rapport</option><option>Courrier</option><option>Convention</option></select></div>
+              <select id="up-type"><option>Décret</option><option>Loi</option><option>Loi de Finances</option><option>Arrêté</option><option>Rapport</option><option>Courrier</option></select></div>
             <div class="field"><label for="up-inst">Institution</label>
-              <select id="up-inst"><option>Présidence</option><option>Primature</option><option>Min. Finances</option><option>Min. Intérieur</option><option>Min. Éducation</option><option>Min. Santé</option><option>Min. Justice</option></select></div>
+              <select id="up-inst"><option>Présidence</option><option>Assemblée nationale</option><option>Primature</option><option>Min. Économie et Finances</option><option>Min. Budget</option><option>Min. Intérieur</option><option>Min. Jeunesse et Culture</option><option>MENFOP</option><option>MCPT</option></select></div>
           </div>
           <div class="grid g2">
             <div class="field"><label for="up-conf">Confidentialité</label>
@@ -376,7 +376,7 @@ tbody tr:last-child td{border-bottom:none}
       <div class="card">
         <div style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:8px">
           <h3>Plan national de classement — PNC-DJ-2024 <span class="badge b-blue">v1.0 · national</span></h3>
-          <span class="tiny">DUA = durée d'utilité administrative · sort final C = conservation, D = destruction, T = tri</span>
+          <span class="tiny">Base légale : Décret n° 2024-248/PR/MJC portant règlementation des archives publiques et privées · DUA = durée d'utilité administrative · sort final C = conservation, D = destruction, T = tri</span>
         </div>
         <div class="tree" id="plan-tree"></div>
       </div>
@@ -399,7 +399,7 @@ tbody tr:last-child td{border-bottom:none}
           <h3>WF-2024-0891 — Circuit standard d'archivage</h3>
           <span class="badge b-blue">En cours · étape 4/8</span>
         </div>
-        <p class="muted" style="margin-bottom:14px">Document : <span class="ref">MF/RAP/2024/0873</span> — Rapport d'exécution budgétaire, 1ᵉʳ semestre 2024</p>
+        <p class="muted" style="margin-bottom:14px">Document : <span class="ref">Décret n° 2024-248/PR/MJC</span> — règlementation des archives publiques et privées en République de Djibouti</p>
         <div class="steps" id="wf-steps"></div>
         <button class="btn sm" onclick="advanceWf()" id="wf-btn">Compléter l'étape en cours</button>
       </div>
@@ -439,16 +439,16 @@ tbody tr:last-child td{border-bottom:none}
     <section class="section" id="sec-citizen">
       <div class="hero-cit">
         <h2>Archives publiques de la République de Djibouti</h2>
-        <p style="color:#B9CBE6;margin-top:8px;max-width:60ch">Consultez librement les textes officiels publiés : décrets, lois, arrêtés et conventions. Seuls les documents de niveau <b>public</b> sont accessibles sans compte.</p>
+        <p style="color:#B9CBE6;margin-top:8px;max-width:60ch">Consultez librement les textes officiels publiés au <b>Journal Officiel de la République de Djibouti</b> : lois, décrets, arrêtés et lois de finances. Seuls les documents de niveau <b>public</b> sont accessibles sans compte.</p>
         <div style="display:flex;gap:10px;margin-top:18px;flex-wrap:wrap">
-          <input type="search" id="cit-q" style="flex:1;min-width:200px;border:none" placeholder="Ex. code du travail, décret 2024, journal officiel…" onkeydown="if(event.key==='Enter')citSearch()">
+          <input type="search" id="cit-q" style="flex:1;min-width:200px;border:none" placeholder="Ex. code numérique, budget 2024, archives publiques…" onkeydown="if(event.key==='Enter')citSearch()">
           <button class="btn" style="background:#12AD2B" onclick="citSearch()">Rechercher</button>
         </div>
       </div>
       <div id="cit-results" style="display:flex;flex-direction:column;gap:10px"></div>
     </section>
 
-    <p class="note">PNGA — démonstration interactive autonome (données fictives à titre d'exemple). Version complète : FastAPI · PostgreSQL · Elasticsearch · MinIO · Next.js — conforme ISO 15489, ISO 14721 (OAIS), ISO 27001, MoReq2010.</p>
+    <p class="note">PNGA — démonstration interactive autonome. Les références et intitulés des textes officiels proviennent du Journal Officiel de la République de Djibouti (journalofficiel.dj) ; les statuts de traitement, statistiques, empreintes et documents marqués « fictif » sont simulés. Version complète : FastAPI · PostgreSQL · Elasticsearch · MinIO · Next.js — conforme ISO 15489, ISO 14721 (OAIS), ISO 27001, MoReq2010 et au Décret n° 2024-248/PR/MJC.</p>
   </main>
 </div>
 
@@ -479,53 +479,63 @@ const MOIS=["Oct","Nov","Déc","Jan","Fév","Mar","Avr","Mai","Juin","Juil","Ao�
 const TREND={recus:[620,580,710,840,790,920,880,1010,970,1090,1180,1240],archives:[540,510,640,760,700,850,820,930,910,1020,1090,1150]};
 const TYPES=[["Décrets",4218],["Rapports",3651],["Courriers",2984],["Arrêtés",2312],["Lois",1147],["Conventions",893]];
 const INSTS=[
- {n:"Présidence de la République",ar:"رئاسة الجمهورية",c:"PR",docs:2841,go:1.9,q:4,users:34},
+ {n:"Présidence de la République",ar:"رئاسة الجمهورية",c:"PRE",docs:2841,go:1.9,q:4,users:34},
+ {n:"Assemblée nationale",ar:"الجمعية الوطنية",c:"AN",docs:1986,go:1.2,q:3,users:22},
  {n:"Primature",ar:"الوزارة الأولى",c:"PM",docs:2213,go:1.4,q:3,users:28},
- {n:"Ministère des Finances",ar:"وزارة المالية",c:"MF",docs:4102,go:3.1,q:5,users:57},
- {n:"Ministère de l'Intérieur",ar:"وزارة الداخلية",c:"MI",docs:3390,go:2.3,q:2.5,users:41},
- {n:"Ministère de l'Éducation",ar:"وزارة التربية الوطنية",c:"MEN",docs:2967,go:2.0,q:4,users:46},
- {n:"Ministère de la Santé",ar:"وزارة الصحة",c:"MS",docs:2540,go:1.7,q:3,users:39}];
+ {n:"Min. de l'Économie et des Finances",ar:"وزارة الاقتصاد والمالية",c:"MEF",docs:4102,go:3.1,q:5,users:57},
+ {n:"Min. du Budget",ar:"وزارة الميزانية",c:"MB",docs:2755,go:2.1,q:3,users:33},
+ {n:"Min. de l'Intérieur",ar:"وزارة الداخلية",c:"MI",docs:3390,go:2.3,q:2.5,users:41},
+ {n:"Min. de la Jeunesse et de la Culture — tutelle des Archives nationales",ar:"وزارة الشباب والثقافة",c:"MJC",docs:3124,go:2.6,q:4,users:38},
+ {n:"MENFOP — Éducation nationale et Formation professionnelle",ar:"وزارة التربية الوطنية والتكوين المهني",c:"MENFOP",docs:2967,go:2.0,q:4,users:46},
+ {n:"Min. de la Communication, Postes et Télécommunications",ar:"وزارة الاتصال المكلفة بالبريد والمواصلات",c:"MCPT",docs:1618,go:1.1,q:2,users:19}];
+/* Textes officiels réels publiés au Journal Officiel de la République de Djibouti
+   (journalofficiel.dj). Les statuts de traitement, niveaux de confidentialité et
+   empreintes sont simulés par la plateforme de démonstration. */
 let DOCS=[
- {ref:"PR/DEC/2024/0142",t:"Décret portant nomination des membres du Gouvernement",inst:"Présidence",type:"Décret",st:"publie",conf:"Public",date:"2024-05-12",aut:"Secrétariat général du Gouvernement",sum:"Nomination des membres du Gouvernement et fixation de leurs attributions respectives, en application de la Constitution.",kw:["nomination","gouvernement","constitution"],hash:"a3f8c21e99d04b7e5512fa08c6d93b1e447a0cf2b8d1e6a35c90f4d7218e6b3a"},
- {ref:"MF/RAP/2024/0873",t:"Rapport d'exécution budgétaire — 1ᵉʳ semestre 2024",inst:"Min. Finances",type:"Rapport",st:"validation",conf:"Interne",date:"2024-07-30",aut:"Direction du Budget",sum:"Bilan semestriel de l'exécution de la loi de finances : taux d'engagement de 47,2 %, analyse des écarts par ministère.",kw:["budget","loi de finances","exécution"],hash:"5b7e90d1c44a28f3ab61de07f9c2354e8810cbd6a2f47e91d05b3a68c1f2d947"},
- {ref:"PM/ARR/2024/0311",t:"Arrêté fixant les modalités d'application du télétravail dans la fonction publique",inst:"Primature",type:"Arrêté",st:"archive",conf:"Public",date:"2024-03-18",aut:"Primature",sum:"Cadre réglementaire du télétravail : éligibilité, quotité maximale de deux jours hebdomadaires, obligations de l'agent et de l'administration.",kw:["télétravail","fonction publique","modalités"],hash:"c19d4e72a80f356bd2478c01e5b96f3a7d20481ecb5f9a364d8e07c1b52a9f08"},
- {ref:"AN/LOI/2023/0057",t:"Loi portant protection des données à caractère personnel",inst:"Présidence",type:"Loi",st:"publie",conf:"Public",date:"2023-11-02",aut:"Assemblée nationale",sum:"Régime de protection des données personnelles : droits des personnes, obligations des responsables de traitement, création d'une autorité de contrôle.",kw:["données personnelles","protection","autorité de contrôle"],hash:"e84a1f09b37c62d5f1908ae44c7b25d6031f8e9ac2d75b48e6109f3ad4c8b761"},
- {ref:"MI/DEC/2024/0498",t:"Décret relatif à l'organisation territoriale de la région de Tadjourah",inst:"Min. Intérieur",type:"Décret",st:"archive",conf:"Public",date:"2024-06-09",aut:"Min. de l'Intérieur",sum:"Réorganisation administrative de la région de Tadjourah : délimitation des sous-préfectures et compétences des conseils régionaux.",kw:["Tadjourah","organisation territoriale","région"],hash:"90c5d7e2a41b8f36cd0219e75a83f4b6d7e10c29fa4b85d3e612a09c7f3b54d8"},
- {ref:"MEN/CON/2024/0126",t:"Convention de partenariat UNESCO — numérisation du patrimoine éducatif",inst:"Min. Éducation",type:"Convention",st:"validation",conf:"Interne",date:"2024-08-21",aut:"Min. de l'Éducation nationale",sum:"Partenariat triennal avec l'UNESCO pour la numérisation des archives pédagogiques et la formation de 40 archivistes.",kw:["UNESCO","numérisation","patrimoine"],hash:"27b9f04ce16a83d5b7f2490ae1c6d8352e94b07fd1c8a5e36b40d92f1e7a63c0"},
- {ref:"MS/RAP/2024/0654",t:"Rapport annuel de surveillance épidémiologique 2023",inst:"Min. Santé",type:"Rapport",st:"archive",conf:"Interne",date:"2024-02-14",aut:"Direction de la Santé publique",sum:"Synthèse nationale de la surveillance épidémiologique : couverture vaccinale, alertes sanitaires et recommandations.",kw:["épidémiologie","santé publique","surveillance"],hash:"6d20a8b5f97e14c3da65b1082ef4c9d7301a5f8be2c94d67a08e13f5c2b7d491"},
- {ref:"MJ/COU/2024/1204",t:"Courrier — transmission des statistiques judiciaires trimestrielles",inst:"Min. Justice",type:"Courrier",st:"ocr",conf:"Confidentiel",date:"2024-09-03",aut:"Secrétariat général, Min. Justice",sum:"Transmission officielle des statistiques d'activité des juridictions pour le 2ᵉ trimestre 2024.",kw:["statistiques","juridictions","transmission"],hash:"f13c78a90d25e6b4c8a17f30d9e2b56147c80ad3e5f9126b7d4e08a3c69f1b25"},
- {ref:"PR/DEC/1977/0001",t:"Décret constitutif des institutions de l'État — Indépendance",inst:"Présidence",type:"Décret",st:"archive",conf:"Public",date:"1977-06-27",aut:"Présidence de la République",sum:"Document historique fondateur : mise en place des premières institutions de la République de Djibouti à l'indépendance.",kw:["indépendance","1977","institutions"],hash:"08e4b2d79c51a6f3e8d04b17c92f5a36b1d7e04982c5fa61d3b8e97a04c6f512"},
- {ref:"MF/ARR/2024/0967",t:"Arrêté portant régie d'avances auprès du Trésor national",inst:"Min. Finances",type:"Arrêté",st:"publie",conf:"Public",date:"2024-04-25",aut:"Min. du Budget",sum:"Création d'une régie d'avances auprès du Trésor : plafond, ordonnateur délégué et modalités de contrôle.",kw:["régie d'avances","trésor","contrôle"],kwv:1,hash:"b6f0d3a82e97c15d4b28a60f7e19c3d5f2481b0e6a9d5c37e80f14b2d7a95c63"}];
+ {ref:"Décret n° 2024-248/PR/MJC",t:"Décret portant règlementation des archives publiques et privées en République de Djibouti",inst:"Min. Jeunesse et Culture",type:"Décret",st:"publie",conf:"Public",date:"2024-09-30",aut:"Président de la République — contreseing MJC",sum:"Texte fondateur du cadre archivistique national : il définit les archives publiques et privées, leurs régimes de collecte, de tri, de conservation, de communication et de sort final. C'est la base légale de la plateforme nationale de gestion des archives.",kw:["archives publiques","conservation","sort final","patrimoine"],jo:1,hash:"a3f8c21e99d04b7e5512fa08c6d93b1e447a0cf2b8d1e6a35c90f4d7218e6b3a"},
+ {ref:"Loi de Finances n° 64/AN/23/9ème L",t:"Loi de Finances portant Budget Initial de l'État pour l'exercice 2024",inst:"Assemblée nationale",type:"Loi de Finances",st:"archive",conf:"Public",date:"2023-12",aut:"Assemblée nationale — 9ème législature",sum:"Budget initial de l'État pour 2024, présenté en équilibre : recettes et dépenses arrêtées à 152 490 386 972 FDJ. Comprend notamment des mesures de rationalisation de la dépense publique dont la restructuration du parc automobile de l'État.",kw:["budget","loi de finances","152 490 386 972 FDJ","exercice 2024"],jo:1,hash:"5b7e90d1c44a28f3ab61de07f9c2354e8810cbd6a2f47e91d05b3a68c1f2d947"},
+ {ref:"Loi n° 150/AN/24/9ème L",t:"Loi portant Budget Initial de l'État pour l'exercice 2025",inst:"Assemblée nationale",type:"Loi de Finances",st:"publie",conf:"Public",date:"2024-12",aut:"Assemblée nationale — 9ème législature",sum:"Budget initial de l'État pour l'exercice 2025, adopté par l'Assemblée nationale et publié au Journal Officiel.",kw:["budget","exercice 2025","loi de finances"],jo:1,hash:"3e91c07d5a48b26fe013d97ca5b48e62d10f7a39c8e51b06d247af83e19c5d70"},
+ {ref:"Loi n° 019/AN/23/9ème L",t:"Loi portant Code Numérique",inst:"Assemblée nationale",type:"Loi",st:"publie",conf:"Public",date:"2025-07-06",aut:"Assemblée nationale — 9ème législature",sum:"Cadre juridique global du numérique : protection des données à caractère personnel garantissant un haut niveau de protection aux citoyens et aux entreprises, commerce électronique, cybersécurité et lutte contre la cybercriminalité.",kw:["code numérique","données personnelles","cybersécurité"],jo:1,hash:"e84a1f09b37c62d5f1908ae44c7b25d6031f8e9ac2d75b48e6109f3ad4c8b761"},
+ {ref:"Loi n° 18/AN/23/9ème L",t:"Loi portant ratification de la Convention de l'Union Africaine sur la Cybersécurité et la Protection des données à caractère personnel",inst:"Assemblée nationale",type:"Loi",st:"archive",conf:"Public",date:"2024-01-21",aut:"Assemblée nationale — 9ème législature",sum:"Ratification de la Convention de Malabo : Djibouti adhère au cadre continental africain de cybersécurité et de protection des données personnelles.",kw:["Convention de Malabo","Union Africaine","cybersécurité"],jo:1,hash:"c19d4e72a80f356bd2478c01e5b96f3a7d20481ecb5f9a364d8e07c1b52a9f08"},
+ {ref:"Loi n° 195/AN/25/9ème L",t:"Loi portant création de l'Autorité Nationale de Cybersécurité",inst:"Assemblée nationale",type:"Loi",st:"publie",conf:"Public",date:"2025",aut:"Assemblée nationale — 9ème législature",sum:"Création de l'ANC, chargée de piloter l'écosystème national de cybersécurité et habilitée à conclure des accords de partenariat avec les acteurs publics et privés.",kw:["ANC","cybersécurité","autorité nationale"],jo:1,hash:"90c5d7e2a41b8f36cd0219e75a83f4b6d7e10c29fa4b85d3e612a09c7f3b54d8"},
+ {ref:"Décret n° 2021-106/PRE",t:"Décret portant nomination des membres du Gouvernement",inst:"Présidence",type:"Décret",st:"archive",conf:"Public",date:"2021-05-24",aut:"Président de la République",sum:"Composition du Gouvernement dirigé par le Premier ministre Abdoulkader Kamil Mohamed (nommé par le décret n° 2021-105/PRE du même jour) : justice, économie et finances, affaires étrangères et coopération internationale, etc.",kw:["nomination","gouvernement","Premier ministre"],jo:1,hash:"27b9f04ce16a83d5b7f2490ae1c6d8352e94b07fd1c8a5e36b40d92f1e7a63c0"},
+ {ref:"Loi n° 174/AN/02/4ème L",t:"Loi portant décentralisation et statut des régions",inst:"Assemblée nationale",type:"Loi",st:"archive",conf:"Public",date:"2002-07-07",aut:"Assemblée nationale — 4ème législature",sum:"Statut des régions de la République (Tadjourah, Ali Sabieh, Dikhil, Obock, Arta) et organisation des conseils régionaux. Modifiée par la loi n° 139/AN/06/5ème L.",kw:["décentralisation","régions","conseils régionaux","Tadjourah"],jo:1,hash:"6d20a8b5f97e14c3da65b1082ef4c9d7301a5f8be2c94d67a08e13f5c2b7d491"},
+ {ref:"Loi n° 133/AN/05/5ème L",t:"Loi portant Code du Travail",inst:"Assemblée nationale",type:"Loi",st:"archive",conf:"Public",date:"2006-01-26",aut:"Assemblée nationale — 5ème législature",sum:"Code du Travail de la République de Djibouti : régit les relations professionnelles entre travailleurs et employeurs — contrat de travail, durée, salaires, représentation du personnel, règlement des conflits.",kw:["code du travail","droit du travail","emploi"],jo:1,hash:"f13c78a90d25e6b4c8a17f30d9e2b56147c80ad3e5f9126b7d4e08a3c69f1b25"},
+ {ref:"Arrêté n° 2023-155/PR/MCPT",t:"Arrêté portant création, organisation et fonctionnement du comité de pilotage du Projet Djibouti Fondement Numérique (DFN)",inst:"Min. Communication (MCPT)",type:"Arrêté",st:"archive",conf:"Public",date:"2023",aut:"Ministère de la Communication, chargé des Postes et des Télécommunications",sum:"Gouvernance du projet Djibouti Fondement Numérique : composition, attributions et fonctionnement du comité de pilotage chargé de la transformation numérique de l'administration.",kw:["Djibouti Fondement Numérique","transformation numérique","comité de pilotage"],jo:1,hash:"08e4b2d79c51a6f3e8d04b17c92f5a36b1d7e04982c5fa61d3b8e97a04c6f512"},
+ {ref:"Décret n° 2024-097/PRE",t:"Décret fixant le tarif de vente du Journal Officiel de la République de Djibouti",inst:"Présidence",type:"Décret",st:"publie",conf:"Public",date:"2024",aut:"Président de la République",sum:"Fixation des tarifs de vente et d'abonnement du Journal Officiel, support de publication authentique des lois, décrets et arrêtés de la République.",kw:["journal officiel","tarif","publication"],jo:1,hash:"b6f0d3a82e97c15d4b28a60f7e19c3d5f2481b0e6a9d5c37e80f14b2d7a95c63"},
+ {ref:"Loi n° 107/AN/24/9ème L",t:"Loi portant organisation et fonctionnement des organisations de la société civile de Djibouti",inst:"Assemblée nationale",type:"Loi",st:"archive",conf:"Public",date:"2024",aut:"Assemblée nationale — 9ème législature",sum:"Cadre juridique des organisations de la société civile : constitution, déclaration, gouvernance, financement et contrôle.",kw:["société civile","associations","gouvernance"],jo:1,hash:"5fd2e83b19c740a6e5d21f98b03c6ad74e18f25c09b6d3a71e84f0c2b59d67a1"},
+ {ref:"MB/RAP/2024-S1",t:"Rapport d'exécution budgétaire — 1ᵉʳ semestre 2024 (exemple interne fictif)",inst:"Min. Budget",type:"Rapport",st:"validation",conf:"Interne",date:"2024-07-30",aut:"Direction Générale du Budget",sum:"Document interne fictif illustrant le circuit de validation : bilan semestriel de l'exécution de la Loi de Finances n° 64/AN/23/9ème L, analyse des écarts par ministère.",kw:["exécution budgétaire","suivi","démonstration"],hash:"7a1c50d9e83f26b4a08d17e62c95f3ba4d07c81fe2a95d36b70e14a8c2f6d590"},
+ {ref:"MS/COU/2024-118",t:"Courrier — transmission des statistiques sanitaires trimestrielles (exemple interne fictif)",inst:"Min. Santé",type:"Courrier",st:"ocr",conf:"Confidentiel",date:"2024-09-03",aut:"Secrétariat général, Ministère de la Santé",sum:"Document interne fictif illustrant la file OCR : transmission officielle de statistiques d'activité des structures sanitaires pour le 2ᵉ trimestre 2024.",kw:["statistiques","santé","démonstration"],hash:"d40b96e2c17a58f3b62d09ea4c81f7d5230a68bfe194c57d3ae02b86f1c94e73"}];
 const PLAN=[
  ["100","Gouvernance et institutions",[["110","Actes du Président de la République","10 ans","C"],["120","Actes du Premier ministre","10 ans","C"],["130","Textes législatifs et réglementaires","Permanent","C"],["140","Relations internationales et traités","30 ans","C"]]],
  ["200","Finances publiques",[["210","Budget de l'État et lois de finances","10 ans","C"],["220","Comptabilité publique","10 ans","T"],["230","Marchés publics","15 ans","T"],["240","Fiscalité et douanes","10 ans","D"]]],
  ["300","Justice et ordre public",[["310","Décisions de justice","Permanent","C"],["320","État civil et nationalité","Permanent","C"],["330","Sécurité intérieure","20 ans","T"]]],
  ["400","Secteurs sociaux",[["410","Éducation et formation","10 ans","T"],["420","Santé publique","20 ans","T"],["430","Travail et protection sociale","50 ans","C"]]],
  ["500","Infrastructures et économie",[["510","Ports et zones franches","30 ans","C"],["520","Transports et équipement","15 ans","T"],["530","Énergie, eau et télécommunications","15 ans","T"]]]];
-const WF=[["Réception","Bureau d'ordre — 12 sept. 08:14",1],["Numérisation","Atelier scan — 12 sept. 09:02",1],["OCR + analyse IA","Automatique — 12 sept. 09:05 · confiance 97,1 %",1],["Validation archiviste","Assignée à M. Ahmed — SLA : 48 h",2],["Contrôle qualité","Validateur ministériel",0],["Indexation","Moteur de recherche national",0],["Archivage OAIS","Génération du paquet AIP",0],["Publication","Selon niveau de confidentialité",0]];
+const WF=[["Réception","Bureau d'ordre — 12 sept. 08:14",1],["Numérisation","Atelier scan — 12 sept. 09:02",1],["OCR + analyse IA","Automatique — 12 sept. 09:05 · confiance 97,1 %",1],["Validation archiviste","Assignée à M. Ahmed — SLA : 48 h",2],["Contrôle qualité","Validateur ministériel (MJC)",0],["Indexation","Moteur de recherche national",0],["Archivage OAIS","Génération du paquet AIP",0],["Publication","Selon niveau de confidentialité",0]];
 const DEPOTS=[
  {n:"Dépôt central — Djibouti-ville",c:"DEP-DJB",cap:12000,use:8340,clim:1,feu:1,rfid:1},
  {n:"Dépôt régional — Ali Sabieh",c:"DEP-ALS",cap:4000,use:1270,clim:1,feu:1,rfid:0},
  {n:"Dépôt régional — Tadjourah",c:"DEP-TAD",cap:3000,use:940,clim:0,feu:1,rfid:0}];
 const BOXES=[
- ["DJB-2024-00147","Décrets présidentiels 2020–2022","Dépôt central · salle A · travée 3 · tablette 2","place"],
- ["DJB-2024-00151","Budget national — exercice 2019","Dépôt central · salle B · travée 1 · tablette 4","emprunt"],
+ ["DJB-2024-00147","Journal Officiel — collection reliée 1977–1999","Dépôt central · salle A · travée 3 · tablette 2","place"],
+ ["DJB-2024-00151","Lois de finances et budgets — exercices 2000–2015","Dépôt central · salle B · travée 1 · tablette 4","emprunt"],
  ["ALS-2023-00034","État civil Ali Sabieh 1998–2004","Ali Sabieh · salle unique · travée 2","place"],
- ["DJB-2022-00092","Traités et accords 1977–1990","Dépôt central · salle sécurisée · coffre 1","place"],
- ["TAD-2024-00011","Conseil régional Tadjourah 2015–2020","Tadjourah · salle 1 · travée 1","place"]];
+ ["DJB-2022-00092","Traités et accords internationaux 1977–1990","Dépôt central · salle sécurisée · coffre 1","place"],
+ ["TAD-2024-00011","Conseil régional de Tadjourah 2005–2020 (loi n° 174/AN/02)","Tadjourah · salle 1 · travée 1","place"]];
 const AUDIT=[
- ["2024-09-12 09:41:07","VALIDATION","MF/RAP/2024/0873","m.ahmed","10.4.2.31"],
- ["2024-09-12 09:05:52","ANALYSE_IA","MF/RAP/2024/0873","system","interne"],
- ["2024-09-12 08:14:26","CREATION","MF/RAP/2024/0873","f.houssein","10.4.2.18"],
- ["2024-09-11 16:22:40","TELECHARGEMENT","PR/DEC/2024/0142","admin","10.4.1.2"],
- ["2024-09-11 14:03:11","CONNEXION","session","archiviste","41.223.85.14"],
- ["2024-09-11 11:47:55","MODIFICATION","MEN/CON/2024/0126","a.omar","10.4.3.7"],
- ["2024-09-10 17:30:02","EMPRUNT","DJB-2024-00151","d.robleh","10.4.2.44"]];
+ ["2024-10-02 09:41:07","VALIDATION","Décret n° 2024-248/PR/MJC","m.ahmed","10.4.2.31"],
+ ["2024-10-02 09:05:52","ANALYSE_IA","Décret n° 2024-248/PR/MJC","system","interne"],
+ ["2024-10-02 08:14:26","CREATION","Décret n° 2024-248/PR/MJC","f.houssein","10.4.2.18"],
+ ["2024-10-01 16:22:40","TELECHARGEMENT","Loi de Finances n° 64/AN/23/9ème L","admin","10.4.1.2"],
+ ["2024-10-01 14:03:11","CONNEXION","session","archiviste","41.223.85.14"],
+ ["2024-10-01 11:47:55","MODIFICATION","MB/RAP/2024-S1","a.omar","10.4.3.7"],
+ ["2024-09-30 17:30:02","EMPRUNT","DJB-2024-00151","d.robleh","10.4.2.44"]];
 const FEED=[
- ["b-green","Archivage OAIS terminé","MI/DEC/2024/0498 — paquet AIP scellé","il y a 12 min"],
- ["b-blue","Nouveau dépôt","MJ/COU/2024/1204 — OCR en file d'attente","il y a 38 min"],
- ["b-purple","Analyse IA","MF/RAP/2024/0873 — 14 entités extraites","il y a 1 h"],
- ["b-amber","SLA à surveiller","Validation MEN/CON/2024/0126 — échéance dans 6 h","il y a 2 h"],
+ ["b-green","Archivage OAIS terminé","Loi n° 107/AN/24/9ème L — paquet AIP scellé","il y a 12 min"],
+ ["b-blue","Nouveau dépôt","MS/COU/2024-118 — OCR en file d'attente","il y a 38 min"],
+ ["b-purple","Analyse IA","Décret n° 2024-248/PR/MJC — 14 entités extraites","il y a 1 h"],
+ ["b-amber","SLA à surveiller","Validation MB/RAP/2024-S1 — échéance dans 6 h","il y a 2 h"],
  ["b-blue","Emprunt physique","Boîte DJB-2024-00151 sortie du dépôt central","hier 17:30"]];
 
 /* ============ Utilitaires ============ */
@@ -618,7 +628,10 @@ function openDoc(ref){
   $('d-ref').textContent=d.ref;$('d-title').textContent=d.t;
   const[bc,bl]=STBADGE[d.st];
   $('d-badges').innerHTML=`<span class="badge ${bc}">${bl}</span><span class="badge ${CONFBADGE[d.conf]}">${d.conf}</span><span class="badge b-grey">${d.type}</span>`;
-  $('d-kv').innerHTML=[["Créateur",d.aut],["Institution",d.inst],["Date du document",d.date],["Langue","Français"],["Classement","PNC-DJ · "+(d.type==="Loi"||d.type==="Décret"?"130 — Textes législatifs":"210 — Budget de l'État")],["Conservation",d.type==="Loi"||d.ref.includes("1977")?"Permanente (sort final : C)":"10 ans (DUA)"]]
+  const cls=d.type==="Loi de Finances"?"210 — Budget de l'État et lois de finances":(d.type==="Loi"||d.type==="Décret"||d.type==="Arrêté")?"130 — Textes législatifs et réglementaires":"220 — Comptabilité publique";
+  $('d-kv').innerHTML=[["Créateur",d.aut],["Institution",d.inst],["Date du document",d.date],["Langue","Français"],
+    ["Source",d.jo?"Journal Officiel de la République de Djibouti (journalofficiel.dj)":"Production interne — exemple fictif"],
+    ["Classement","PNC-DJ · "+cls],["Conservation",(d.type==="Loi"||d.type==="Décret"||d.type==="Loi de Finances")?"Permanente (sort final : C)":"10 ans (DUA)"]]
     .map(([k,v])=>`<dt>${k}</dt><dd>${esc(v)}</dd>`).join('');
   $('d-sum').textContent=d.sum;
   $('d-kw').innerHTML=d.kw.map(k=>`<span class="badge b-blue">${esc(k)}</span>`).join('');
@@ -640,9 +653,13 @@ function simulateUpload(){
   (function next(){
     if(i>0){steps[i-1].classList.replace('now','done')}
     if(i>=steps.length){
-      const inst=$('up-inst').value,code={"Présidence":"PR","Primature":"PM","Min. Finances":"MF","Min. Intérieur":"MI","Min. Éducation":"MEN","Min. Santé":"MS","Min. Justice":"MJ"}[inst]||"DJ";
-      const tcode={"Décret":"DEC","Loi":"LOI","Arrêté":"ARR","Rapport":"RAP","Courrier":"COU","Convention":"CON"}[$('up-type').value];
-      const ref=`${code}/${tcode}/2024/${String(1000+Math.floor(Math.random()*8999))}`;
+      const inst=$('up-inst').value,code={"Présidence":"PRE","Assemblée nationale":"AN","Primature":"PM","Min. Économie et Finances":"MEF","Min. Budget":"MB","Min. Intérieur":"MI","Min. Jeunesse et Culture":"MJC","MENFOP":"MENFOP","MCPT":"MCPT"}[inst]||"DJ";
+      const type=$('up-type').value,num=String(100+Math.floor(Math.random()*899)),an=new Date().getFullYear();
+      /* Nomenclature réelle du Journal Officiel de Djibouti */
+      const ref=type==="Loi"||type==="Loi de Finances"?`${type} n° ${num}/AN/${String(an).slice(2)}/9ème L`
+        :type==="Décret"?`Décret n° ${an}-${num}/${code==="PRE"?"PRE":"PR/"+code}`
+        :type==="Arrêté"?`Arrêté n° ${an}-${num}/PR/${code}`
+        :`${code}/${type.slice(0,3).toUpperCase()}/${an}-${num}`;
       DOCS.unshift({ref,t:title,inst,type:$('up-type').value,st:"archive",conf:$('up-conf').value,date:new Date().toISOString().slice(0,10),
         aut:"Dépôt de démonstration",sum:"Document déposé via la démonstration : le pipeline OCR → IA → validation → OAIS a été simulé de bout en bout.",
         kw:["démonstration","dépôt"],hash:[...crypto.getRandomValues(new Uint8Array(32))].map(b=>b.toString(16).padStart(2,'0')).join('')});
@@ -661,8 +678,8 @@ function setMode(m){mode=m;
   $('s-q').placeholder=m==='ia'?"Posez une question — ex. Quels textes encadrent le télétravail ?":"Rechercher dans le fonds national…";
   renderExamples();}
 function renderExamples(){
-  const ex=mode==='ia'?["Quels textes encadrent le télétravail ?","Que prévoit la loi sur les données personnelles ?","Résume le rapport budgétaire 2024"]
-    :["décret 2024","budget","Tadjourah","données personnelles"];
+  const ex=mode==='ia'?["Quel texte régit les archives publiques ?","Quel est le montant du budget 2024 ?","Que contient le Code Numérique ?","Quel texte organise la décentralisation ?"]
+    :["archives publiques","budget 2024","code numérique","décentralisation","code du travail"];
   $('s-examples').innerHTML=ex.map(e=>`<button class="chip" onclick="$('s-q').value=this.textContent;doSearch()">${e}</button>`).join('');}
 function doSearch(){
   const q=$('s-q').value.trim().toLowerCase();if(!q)return;
@@ -671,10 +688,13 @@ function doSearch(){
   if(mode==='ia'){
     $('s-answer').style.display='block';
     let a;
-    if(q.includes('télétravail'))a="Le télétravail dans la fonction publique djiboutienne est encadré par l'arrêté PM/ARR/2024/0311 du 18 mars 2024. Il fixe une quotité maximale de deux jours par semaine, définit les conditions d'éligibilité des agents et précise les obligations réciproques de l'agent et de l'administration.";
-    else if(q.includes('données'))a="La loi AN/LOI/2023/0057 du 2 novembre 2023 institue le régime de protection des données à caractère personnel : elle consacre les droits des personnes concernées (accès, rectification, opposition), impose des obligations aux responsables de traitement et crée une autorité nationale de contrôle.";
-    else if(q.includes('budget')||q.includes('budgétaire'))a="Le rapport MF/RAP/2024/0873 dresse le bilan de l'exécution budgétaire du 1ᵉʳ semestre 2024 : taux d'engagement global de 47,2 %, avec une analyse détaillée des écarts par ministère. Le document est actuellement en cours de validation par la Direction du Budget.";
-    else a=`D'après les documents publics indexés, ${shown.length} document(s) se rapportent à votre question — les sources les plus pertinentes sont listées ci-dessous avec leur référence officielle.`;
+    if(q.includes('archive'))a="Les archives publiques et privées sont régies par le Décret n° 2024-248/PR/MJC du 30 septembre 2024, publié au Journal Officiel. Il définit les archives publiques et privées, organise leur collecte, leur tri, leur conservation et leur communication, et fixe les règles de sort final. Ce décret constitue la base légale de la présente plateforme nationale.";
+    else if(q.includes('budget')||q.includes('finance'))a="Le budget initial de l'État pour l'exercice 2024 est fixé par la Loi de Finances n° 64/AN/23/9ème L : il est présenté en équilibre, recettes et dépenses arrêtées à 152 490 386 972 FDJ. Pour l'exercice 2025, c'est la Loi n° 150/AN/24/9ème L qui porte le budget initial de l'État.";
+    else if(q.includes('numérique')||q.includes('données')||q.includes('cyber'))a="Le cadre numérique repose sur plusieurs textes : la Loi n° 019/AN/23/9ème L portant Code Numérique (protection des données personnelles, commerce électronique, cybersécurité), la Loi n° 18/AN/23/9ème L du 21 janvier 2024 ratifiant la Convention de Malabo de l'Union Africaine, et la Loi n° 195/AN/25/9ème L créant l'Autorité Nationale de Cybersécurité (ANC).";
+    else if(q.includes('décentralisation')||q.includes('région')||q.includes('tadjourah'))a="La décentralisation est organisée par la Loi n° 174/AN/02/4ème L du 7 juillet 2002 portant décentralisation et statut des régions (Tadjourah, Ali Sabieh, Dikhil, Obock, Arta), modifiée par la Loi n° 139/AN/06/5ème L. Elle institue les conseils régionaux et définit leurs compétences.";
+    else if(q.includes('travail')||q.includes('emploi'))a="Les relations professionnelles sont régies par la Loi n° 133/AN/05/5ème L du 26 janvier 2006 portant Code du Travail : contrat de travail, durée du travail, salaires, représentation du personnel et règlement des conflits.";
+    else if(q.includes('gouvernement')||q.includes('nomination'))a="La composition du Gouvernement résulte du Décret n° 2021-106/PRE du 24 mai 2021 portant nomination des membres du Gouvernement, pris à la suite du Décret n° 2021-105/PRE nommant le Premier ministre Abdoulkader Kamil Mohamed.";
+    else a=`D'après les textes officiels indexés (source : Journal Officiel — journalofficiel.dj), ${shown.length} document(s) se rapportent à votre question — les sources les plus pertinentes sont listées ci-dessous avec leur référence officielle.`;
     $('s-answer-txt').textContent=a;
   } else $('s-answer').style.display='none';
   $('s-results').innerHTML=shown.map(d=>{const[bc,bl]=STBADGE[d.st];
@@ -770,7 +790,10 @@ function citSearch(){
       <span class="ref">${d.ref}</span><span class="badge b-grey">${d.type}</span><span class="tiny">${d.date}</span></div>
     <b style="display:block;margin-top:6px">${esc(d.t)}</b>
     <p class="muted" style="margin-top:4px;max-width:80ch">${esc(d.sum)}</p>
-    <button class="btn ghost sm" style="margin-top:10px" onclick="toast('Téléchargement du document officiel — simulé')">⬇ Télécharger (PDF)</button></div>`).join('');
+    <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap">
+      <button class="btn ghost sm" onclick="toast('Téléchargement du document officiel — simulé')">⬇ Télécharger (PDF)</button>
+      ${d.jo?'<a class="btn ghost sm" style="text-decoration:none" href="https://www.journalofficiel.dj" target="_blank" rel="noopener">Consulter sur journalofficiel.dj ↗</a>':''}
+    </div></div>`).join('');
 }
 
 /* ============ Init ============ */
