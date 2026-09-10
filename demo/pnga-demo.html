@@ -55,8 +55,7 @@ code,.mono{font-family:var(--mono);font-size:.85em}
 @media(min-width:880px){.login-brand{display:flex}}
 .login-brand::after{content:"";position:absolute;right:-120px;top:-120px;width:420px;height:420px;border-radius:50%;
   background:radial-gradient(circle,rgba(53,116,212,.35),transparent 70%)}
-.flag{display:inline-flex;gap:0;border-radius:4px;overflow:hidden;box-shadow:0 0 0 1px rgba(255,255,255,.25)}
-.flag i{display:block;width:14px;height:20px}
+.flagsvg{display:block;border-radius:3px;box-shadow:0 0 0 1px rgba(16,35,58,.18);height:auto;flex:none}
 .brand-stats{display:flex;gap:28px;flex-wrap:wrap}
 .brand-stats div{border-left:2px solid rgba(255,255,255,.25);padding-left:14px}
 .brand-stats b{font-family:"Archivo";font-size:26px;display:block}
@@ -189,7 +188,7 @@ tbody tr:last-child td{border-bottom:none}
 <div id="login">
   <div class="login-brand">
     <div>
-      <span class="flag" aria-hidden="true"><i style="background:#6AB2E7"></i><i style="background:#12AD2B"></i><i style="background:#fff"></i></span>
+      <svg class="flagsvg" viewBox="0 0 300 200" width="48" role="img" aria-label="Drapeau de la République de Djibouti"><rect width="300" height="100" fill="#6AB2E8"/><rect y="100" width="300" height="100" fill="#12AD2B"/><path d="M0 0 L120 100 L0 200 Z" fill="#FFFFFF"/><polygon points="44,73 50.1,91.7 69.7,91.7 53.8,103.2 59.9,121.8 44,110.3 28.1,121.8 34.2,103.2 18.3,91.7 37.9,91.7" fill="#D7141A"/></svg>
       <h1 style="font-size:clamp(28px,3.2vw,40px);margin-top:26px;color:#fff">Plateforme Nationale de<br>Gestion des Archives</h1>
       <p style="margin-top:12px;color:#9FB4D4;max-width:46ch">Mémoire numérique de la République de Djibouti — cycle de vie complet des documents publics, de la numérisation à la préservation pérenne.</p>
     </div>
@@ -202,7 +201,7 @@ tbody tr:last-child td{border-bottom:none}
   </div>
   <div class="login-form">
     <div class="login-card">
-      <span class="flag" aria-hidden="true"><i style="background:#6AB2E7"></i><i style="background:#12AD2B"></i><i style="background:#fff"></i></span>
+      <svg class="flagsvg" viewBox="0 0 300 200" width="48" role="img" aria-label="Drapeau de la République de Djibouti"><rect width="300" height="100" fill="#6AB2E8"/><rect y="100" width="300" height="100" fill="#12AD2B"/><path d="M0 0 L120 100 L0 200 Z" fill="#FFFFFF"/><polygon points="44,73 50.1,91.7 69.7,91.7 53.8,103.2 59.9,121.8 44,110.3 28.1,121.8 34.2,103.2 18.3,91.7 37.9,91.7" fill="#D7141A"/></svg>
       <h1>Connexion à la PNGA</h1>
       <p class="muted">Archives Nationales — République de Djibouti</p>
       <div class="field"><label for="lg-user">Identifiant</label><input id="lg-user" value="admin" autocomplete="username"></div>
@@ -219,7 +218,7 @@ tbody tr:last-child td{border-bottom:none}
 <div id="app">
   <nav id="sidebar" aria-label="Navigation principale">
     <div class="side-head">
-      <span class="flag" aria-hidden="true"><i style="background:#6AB2E7;width:9px;height:26px"></i><i style="background:#12AD2B;width:9px;height:26px"></i><i style="background:#fff;width:9px;height:26px"></i></span>
+      <svg class="flagsvg" viewBox="0 0 300 200" width="40" role="img" aria-label="Drapeau de la République de Djibouti"><rect width="300" height="100" fill="#6AB2E8"/><rect y="100" width="300" height="100" fill="#12AD2B"/><path d="M0 0 L120 100 L0 200 Z" fill="#FFFFFF"/><polygon points="44,73 50.1,91.7 69.7,91.7 53.8,103.2 59.9,121.8 44,110.3 28.1,121.8 34.2,103.2 18.3,91.7 37.9,91.7" fill="#D7141A"/></svg>
       <div><b>PNGA</b><small>République de Djibouti</small></div>
     </div>
     <div class="side-label">Pilotage</div>
