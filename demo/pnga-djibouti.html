@@ -1,0 +1,813 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="PNGA — Plateforme Nationale de Gestion des Archives de la République de Djibouti. Démonstration interactive autonome fondée sur les textes officiels du Journal Officiel (journalofficiel.dj).">
+</head>
+<body>
+<title>PNGA Djibouti</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800&family=Public+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+:root{
+  --bg:#F4F7FB; --surface:#FFFFFF; --surface2:#EDF2F9; --line:#DCE4EF;
+  --ink:#16233A; --ink2:#5A6B85; --ink3:#8A99B2;
+  --accent:#1063CF; --accent-ink:#0B4CA0; --accent-soft:#E3EDFB;
+  --green:#2E9E4F; --green-soft:#E2F3E8;
+  --amber:#B45309; --amber-soft:#FCEEDC;
+  --red:#C0392B; --red-soft:#FAE4E1;
+  --purple:#7C3AED; --purple-soft:#EEE7FC;
+  --c1:#1063CF; --c2:#2E9E4F; --c3:#7C3AED; --c4:#D97706;
+  --side-bg:#0E1B31; --side-ink:#C7D4E8; --side-dim:#7488A8; --side-active:#1E3A63;
+  --shadow:0 1px 3px rgba(22,35,58,.08),0 4px 16px rgba(22,35,58,.06);
+  --mono:"IBM Plex Mono",ui-monospace,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0D1626; --surface:#131F33; --surface2:#1A2841; --line:#26385A;
+    --ink:#E6EDF7; --ink2:#8DA0BC; --ink3:#5F7292;
+    --accent:#3574D4; --accent-ink:#6FA0E6; --accent-soft:#182E4F;
+    --green:#2F9A5C; --green-soft:#12321F;
+    --amber:#C77E22; --amber-soft:#33240C;
+    --red:#D06254; --red-soft:#3A1712;
+    --purple:#8B6BD9; --purple-soft:#251A42;
+    --c1:#3574D4; --c2:#2F9A5C; --c3:#8B6BD9; --c4:#C77E22;
+    --side-bg:#0A1322; --shadow:0 1px 3px rgba(0,0,0,.4),0 4px 16px rgba(0,0,0,.3);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0D1626; --surface:#131F33; --surface2:#1A2841; --line:#26385A;
+  --ink:#E6EDF7; --ink2:#8DA0BC; --ink3:#5F7292;
+  --accent:#3574D4; --accent-ink:#6FA0E6; --accent-soft:#182E4F;
+  --green:#2F9A5C; --green-soft:#12321F;
+  --amber:#C77E22; --amber-soft:#33240C;
+  --red:#D06254; --red-soft:#3A1712;
+  --purple:#8B6BD9; --purple-soft:#251A42;
+  --c1:#3574D4; --c2:#2F9A5C; --c3:#8B6BD9; --c4:#C77E22;
+  --side-bg:#0A1322; --shadow:0 1px 3px rgba(0,0,0,.4),0 4px 16px rgba(0,0,0,.3);
+}
+*{box-sizing:border-box;margin:0}
+body{background:var(--bg);color:var(--ink);font:15px/1.55 "Public Sans",system-ui,sans-serif;min-height:100vh}
+h1,h2,h3,h4{font-family:"Archivo","Public Sans",system-ui,sans-serif;text-wrap:balance;line-height:1.2}
+button{font:inherit;cursor:pointer;border:none;background:none;color:inherit}
+input,select,textarea{font:inherit;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:8px 12px}
+input:focus,select:focus,textarea:focus,button:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+code,.mono{font-family:var(--mono);font-size:.85em}
+::selection{background:var(--accent-soft)}
+@media (prefers-reduced-motion: reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+
+/* ---------- Login ---------- */
+#login{position:fixed;inset:0;z-index:100;display:flex;background:var(--side-bg)}
+.login-brand{flex:1.1;display:none;flex-direction:column;justify-content:space-between;padding:56px;color:#EAF1FB;
+  background:linear-gradient(160deg,#0E1B31 0%,#12305C 55%,#0F4D8A 100%);position:relative;overflow:hidden}
+@media(min-width:880px){.login-brand{display:flex}}
+.login-brand::after{content:"";position:absolute;right:-120px;top:-120px;width:420px;height:420px;border-radius:50%;
+  background:radial-gradient(circle,rgba(53,116,212,.35),transparent 70%)}
+.flag{display:inline-flex;gap:0;border-radius:4px;overflow:hidden;box-shadow:0 0 0 1px rgba(255,255,255,.25)}
+.flag i{display:block;width:14px;height:20px}
+.brand-stats{display:flex;gap:28px;flex-wrap:wrap}
+.brand-stats div{border-left:2px solid rgba(255,255,255,.25);padding-left:14px}
+.brand-stats b{font-family:"Archivo";font-size:26px;display:block}
+.brand-stats span{font-size:12.5px;color:#9FB4D4}
+.login-form{flex:1;display:flex;align-items:center;justify-content:center;background:var(--bg);padding:32px 16px}
+.login-card{width:100%;max-width:400px}
+.login-card h1{font-size:26px;margin:18px 0 4px}
+.field{margin-top:16px}
+.field label{display:block;font-size:12.5px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--ink2);margin-bottom:6px}
+.field input{width:100%}
+.btn{display:inline-flex;align-items:center;gap:8px;background:var(--accent);color:#fff;border-radius:8px;padding:10px 18px;font-weight:600;border:1px solid transparent}
+.btn:hover{background:var(--accent-ink)}
+:root[data-theme="dark"] .btn:hover,:root:not([data-theme="light"]) .btn:hover{color:#fff}
+.btn.full{width:100%;justify-content:center;margin-top:22px}
+.btn.ghost{background:var(--surface);color:var(--ink);border-color:var(--line)}
+.btn.ghost:hover{background:var(--surface2)}
+.btn.sm{padding:6px 12px;font-size:13.5px}
+.demo-creds{margin-top:20px;background:var(--accent-soft);border:1px solid var(--line);border-radius:10px;padding:12px 14px;font-size:13px;color:var(--ink2)}
+.demo-creds code{color:var(--accent-ink);font-weight:600}
+.iso-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:22px}
+.iso-row span{font-size:11px;font-weight:600;letter-spacing:.05em;border:1px solid var(--line);border-radius:99px;padding:3px 10px;color:var(--ink2)}
+
+/* ---------- Shell ---------- */
+#app{display:none;min-height:100vh}
+#app.on{display:grid;grid-template-columns:246px 1fr}
+@media(max-width:940px){#app.on{grid-template-columns:1fr}
+  #sidebar{position:fixed;inset:0 30% 0 0;z-index:60;transform:translateX(-100%);transition:transform .2s}
+  #sidebar.open{transform:none;box-shadow:0 0 60px rgba(0,0,0,.5)}}
+#sidebar{background:var(--side-bg);color:var(--side-ink);display:flex;flex-direction:column;padding:18px 12px;gap:2px;overflow-y:auto}
+.side-head{display:flex;align-items:center;gap:10px;padding:4px 10px 16px;border-bottom:1px solid rgba(255,255,255,.08);margin-bottom:12px}
+.side-head b{font-family:"Archivo";font-size:17px;color:#fff;letter-spacing:.02em}
+.side-head small{display:block;font-size:10.5px;color:var(--side-dim);letter-spacing:.06em;text-transform:uppercase}
+.side-label{font-size:10.5px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--side-dim);padding:14px 12px 5px}
+.nav-item{display:flex;align-items:center;gap:10px;width:100%;text-align:left;padding:8px 12px;border-radius:8px;font-size:14px;color:var(--side-ink)}
+.nav-item:hover{background:rgba(255,255,255,.06)}
+.nav-item.active{background:var(--side-active);color:#fff;font-weight:600}
+.nav-item svg{flex:none;opacity:.8}
+main{padding:22px clamp(16px,3vw,36px) 60px;max-width:1240px;width:100%}
+.topbar{display:flex;align-items:center;gap:14px;margin-bottom:22px;flex-wrap:wrap}
+.topbar h2{font-size:21px}
+.topbar .crumb{font-size:12px;color:var(--ink3);letter-spacing:.05em;text-transform:uppercase;font-weight:600}
+.top-actions{margin-left:auto;display:flex;align-items:center;gap:10px}
+.avatar{width:34px;height:34px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px}
+#burger{display:none;font-size:20px;padding:4px 8px}
+@media(max-width:940px){#burger{display:block}}
+
+/* ---------- Composants ---------- */
+.grid{display:grid;gap:16px}
+.g4{grid-template-columns:repeat(4,1fr)}
+.g3{grid-template-columns:repeat(3,1fr)}
+.g2{grid-template-columns:repeat(2,1fr)}
+@media(max-width:1100px){.g4{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:700px){.g4,.g3,.g2{grid-template-columns:1fr}}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px 20px}
+.card.flat{box-shadow:none}
+.card h3{font-size:15.5px;margin-bottom:12px}
+.kpi{display:flex;flex-direction:column;gap:2px}
+.kpi .v{font-family:"Archivo";font-size:27px;font-weight:700;font-variant-numeric:tabular-nums}
+.kpi .l{font-size:12.5px;color:var(--ink2)}
+.kpi .d{font-size:12px;font-weight:600}
+.kpi .d.up{color:var(--green)}
+.badge{display:inline-flex;align-items:center;gap:5px;font-size:11.5px;font-weight:600;border-radius:99px;padding:2.5px 9px;white-space:nowrap}
+.b-blue{background:var(--accent-soft);color:var(--accent-ink)}
+.b-green{background:var(--green-soft);color:var(--green)}
+.b-amber{background:var(--amber-soft);color:var(--amber)}
+.b-red{background:var(--red-soft);color:var(--red)}
+.b-purple{background:var(--purple-soft);color:var(--purple)}
+.b-grey{background:var(--surface2);color:var(--ink2)}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th{font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink3);text-align:left;font-weight:600;padding:8px 12px;border-bottom:1px solid var(--line)}
+td{padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:middle}
+tbody tr{cursor:pointer}
+tbody tr:hover{background:var(--surface2)}
+tbody tr:last-child td{border-bottom:none}
+.tbl-wrap{overflow-x:auto}
+.num{font-variant-numeric:tabular-nums;text-align:right}
+.filters{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+.filters input,.filters select{min-width:0}
+.filters input[type=search]{flex:1;min-width:180px}
+.muted{color:var(--ink2);font-size:13px}
+.tiny{color:var(--ink3);font-size:12px}
+.ref{font-family:var(--mono);font-size:12.5px;color:var(--accent-ink);font-weight:500}
+.section{display:none}
+.section.on{display:block;animation:fade .18s ease}
+@keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+.alert{display:flex;gap:10px;align-items:flex-start;border-radius:10px;padding:11px 14px;font-size:13.5px;border:1px solid var(--line)}
+.alert.warn{background:var(--amber-soft);border-color:transparent;color:var(--amber)}
+.alert.info{background:var(--accent-soft);border-color:transparent;color:var(--accent-ink)}
+.progress{height:6px;background:var(--surface2);border-radius:99px;overflow:hidden}
+.progress i{display:block;height:100%;background:var(--accent);border-radius:99px;transition:width .4s}
+.legend{display:flex;gap:16px;font-size:12.5px;color:var(--ink2);flex-wrap:wrap}
+.legend b{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+.tooltip{position:fixed;z-index:80;background:var(--ink);color:var(--bg);font-size:12.5px;border-radius:8px;padding:7px 11px;pointer-events:none;display:none;box-shadow:var(--shadow);font-variant-numeric:tabular-nums}
+.tree ul{list-style:none;padding-left:20px}
+.tree>ul{padding-left:0}
+.tree li{margin:1px 0}
+.tnode{display:flex;align-items:center;gap:8px;padding:6px 10px;border-radius:8px;width:100%;text-align:left}
+.tnode:hover{background:var(--surface2)}
+.tnode .code{font-family:var(--mono);font-size:12px;font-weight:600;color:var(--accent-ink);background:var(--accent-soft);border-radius:5px;padding:1px 7px}
+.tnode .caret{width:14px;flex:none;color:var(--ink3);font-size:11px;transition:transform .15s}
+.tnode.openc .caret{transform:rotate(90deg)}
+.tree li.closed>ul{display:none}
+.steps{position:relative;padding-left:30px}
+.steps::before{content:"";position:absolute;left:11px;top:8px;bottom:8px;width:2px;background:var(--line)}
+.step{position:relative;padding:8px 0 14px}
+.step::before{content:"";position:absolute;left:-25px;top:12px;width:12px;height:12px;border-radius:50%;background:var(--surface);border:2px solid var(--ink3)}
+.step.done::before{background:var(--green);border-color:var(--green)}
+.step.now::before{background:var(--accent);border-color:var(--accent);box-shadow:0 0 0 4px var(--accent-soft)}
+.step b{font-size:14px}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(520px,100%);background:var(--surface);border-left:1px solid var(--line);z-index:70;
+  transform:translateX(100%);transition:transform .22s;overflow-y:auto;padding:24px;box-shadow:-12px 0 40px rgba(10,19,34,.18)}
+.drawer.open{transform:none}
+.kv{display:grid;grid-template-columns:150px 1fr;gap:6px 14px;font-size:13.5px}
+.kv dt{color:var(--ink2)}
+.kv dd{overflow-wrap:anywhere}
+.hero-cit{background:linear-gradient(150deg,#0E1B31,#0F4D8A);color:#EAF1FB;border-radius:14px;padding:34px clamp(20px,4vw,44px);margin-bottom:20px}
+.hero-cit h2{font-size:clamp(22px,3.4vw,30px);color:#fff}
+.chip{border:1px solid var(--line);background:var(--surface);border-radius:99px;padding:5px 13px;font-size:13px}
+.chip:hover{border-color:var(--accent);color:var(--accent-ink)}
+.switch{width:40px;height:22px;border-radius:99px;background:var(--surface2);border:1px solid var(--line);position:relative;flex:none}
+.switch i{position:absolute;top:2px;left:2px;width:16px;height:16px;border-radius:50%;background:var(--ink3);transition:.18s}
+.switch.on{background:var(--accent)}
+.switch.on i{left:20px;background:#fff}
+.note{font-size:11.5px;color:var(--ink3);border-top:1px solid var(--line);margin-top:26px;padding-top:10px}
+</style>
+
+<div class="tooltip" id="tip"></div>
+
+<!-- ================= CONNEXION ================= -->
+<div id="login">
+  <div class="login-brand">
+    <div>
+      <span class="flag" aria-hidden="true"><i style="background:#6AB2E7"></i><i style="background:#12AD2B"></i><i style="background:#fff"></i></span>
+      <h1 style="font-size:clamp(28px,3.2vw,40px);margin-top:26px;color:#fff">Plateforme Nationale de<br>Gestion des Archives</h1>
+      <p style="margin-top:12px;color:#9FB4D4;max-width:46ch">Mémoire numérique de la République de Djibouti — cycle de vie complet des documents publics, de la numérisation à la préservation pérenne.</p>
+    </div>
+    <div class="brand-stats">
+      <div><b>100 M+</b><span>documents visés</span></div>
+      <div><b>200+</b><span>institutions publiques</span></div>
+      <div><b>4 langues</b><span>FR · AR · EN · SO</span></div>
+      <div><b>99,99 %</b><span>disponibilité cible</span></div>
+    </div>
+  </div>
+  <div class="login-form">
+    <div class="login-card">
+      <span class="flag" aria-hidden="true"><i style="background:#6AB2E7"></i><i style="background:#12AD2B"></i><i style="background:#fff"></i></span>
+      <h1>Connexion à la PNGA</h1>
+      <p class="muted">Archives Nationales — République de Djibouti</p>
+      <div class="field"><label for="lg-user">Identifiant</label><input id="lg-user" value="admin" autocomplete="username"></div>
+      <div class="field"><label for="lg-pass">Mot de passe</label><input id="lg-pass" type="password" value="Pnga@Djibouti2024!" autocomplete="current-password"></div>
+      <button class="btn full" id="lg-btn" onclick="doLogin()">Se connecter</button>
+      <div class="demo-creds">Démonstration — comptes de test :<br>
+        <code>admin</code> / <code>Pnga@Djibouti2024!</code> &nbsp;·&nbsp; <code>archiviste</code> / <code>Archiviste@2024!</code></div>
+      <div class="iso-row"><span>ISO 15489</span><span>ISO 14721 · OAIS</span><span>ISO 27001</span><span>MoReq2010</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ================= APPLICATION ================= -->
+<div id="app">
+  <nav id="sidebar" aria-label="Navigation principale">
+    <div class="side-head">
+      <span class="flag" aria-hidden="true"><i style="background:#6AB2E7;width:9px;height:26px"></i><i style="background:#12AD2B;width:9px;height:26px"></i><i style="background:#fff;width:9px;height:26px"></i></span>
+      <div><b>PNGA</b><small>République de Djibouti</small></div>
+    </div>
+    <div class="side-label">Pilotage</div>
+    <button class="nav-item active" data-sec="dash">◫&nbsp; Tableau de bord</button>
+    <button class="nav-item" data-sec="audit">🛡&nbsp; Journal d'audit</button>
+    <div class="side-label">Fonds documentaire</div>
+    <button class="nav-item" data-sec="docs">🗂&nbsp; Documents</button>
+    <button class="nav-item" data-sec="upload">⬆&nbsp; Dépôt &amp; numérisation</button>
+    <button class="nav-item" data-sec="search">🔍&nbsp; Recherche &amp; IA</button>
+    <button class="nav-item" data-sec="plan">🌳&nbsp; Plan de classement</button>
+    <div class="side-label">Organisation</div>
+    <button class="nav-item" data-sec="inst">🏛&nbsp; Institutions</button>
+    <button class="nav-item" data-sec="wf">⇶&nbsp; Workflows</button>
+    <button class="nav-item" data-sec="phys">📦&nbsp; Archives physiques</button>
+    <div class="side-label">Public</div>
+    <button class="nav-item" data-sec="citizen">🌐&nbsp; Portail citoyen</button>
+    <div style="flex:1"></div>
+    <button class="nav-item" onclick="logout()">⏻&nbsp; Déconnexion</button>
+  </nav>
+
+  <main>
+    <div class="topbar">
+      <button id="burger" onclick="document.getElementById('sidebar').classList.toggle('open')" aria-label="Menu">☰</button>
+      <div><div class="crumb" id="crumb">Pilotage</div><h2 id="sec-title">Tableau de bord national</h2></div>
+      <div class="top-actions">
+        <button class="btn ghost sm" onclick="toggleTheme()" id="theme-btn" aria-label="Basculer le thème">◐ Thème</button>
+        <div class="avatar" title="Administrateur national">AD</div>
+      </div>
+    </div>
+
+    <!-- ===== Tableau de bord ===== -->
+    <section class="section on" id="sec-dash">
+      <div class="grid g4">
+        <div class="card kpi"><span class="v" id="k-total">—</span><span class="l">Documents dans le fonds</span><span class="d up">▲ 8,2 % ce trimestre</span></div>
+        <div class="card kpi"><span class="v" id="k-arch">—</span><span class="l">Documents archivés (OAIS)</span><span class="d up">▲ 5,1 %</span></div>
+        <div class="card kpi"><span class="v">18,4 To</span><span class="l">Stockage utilisé / 50 To</span><span class="d" style="color:var(--ink3)">MinIO · 3 répliques</span></div>
+        <div class="card kpi"><span class="v">96,3 %</span><span class="l">Confiance OCR moyenne</span><span class="d up">fra + ara + eng + som</span></div>
+      </div>
+
+      <div class="grid g2" style="margin-top:16px">
+        <div class="card">
+          <div style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:8px">
+            <h3>Flux documentaire — 12 derniers mois</h3>
+            <div class="legend"><span><b style="background:var(--c1)"></b>Reçus</span><span><b style="background:var(--c2)"></b>Archivés</span></div>
+          </div>
+          <div id="chart-trend"></div>
+        </div>
+        <div class="card">
+          <h3>Volume par type de document</h3>
+          <div id="chart-types"></div>
+        </div>
+      </div>
+
+      <div class="grid g2" style="margin-top:16px">
+        <div class="card">
+          <h3>Alertes actives</h3>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <div class="alert warn">⚠ <span><b>37 documents</b> atteignent leur échéance de conservation (DUA) sous 30 jours — décision de sort final requise.</span></div>
+            <div class="alert warn">⚠ <span>Le Ministère de l'Intérieur a consommé <b>91 %</b> de son quota de stockage (2,3 / 2,5 To).</span></div>
+            <div class="alert info">ℹ 12 documents en file d'attente OCR — temps de traitement estimé : 9 min.</div>
+          </div>
+        </div>
+        <div class="card">
+          <h3>Activité récente</h3>
+          <div id="feed" style="display:flex;flex-direction:column;gap:10px;font-size:13.5px"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== Documents ===== -->
+    <section class="section" id="sec-docs">
+      <div class="filters">
+        <input type="search" id="f-q" placeholder="Filtrer par titre, référence, auteur…" oninput="renderDocs()">
+        <select id="f-status" onchange="renderDocs()">
+          <option value="">Tous les statuts</option><option value="archive">Archivé</option>
+          <option value="validation">En validation</option><option value="ocr">OCR en cours</option><option value="publie">Publié</option>
+        </select>
+        <select id="f-conf" onchange="renderDocs()">
+          <option value="">Toute confidentialité</option><option>Public</option><option>Interne</option><option>Confidentiel</option><option>Secret</option>
+        </select>
+      </div>
+      <div class="card flat tbl-wrap" style="padding:0">
+        <table>
+          <thead><tr><th>Référence</th><th>Titre</th><th>Institution</th><th>Statut</th><th>Confidentialité</th><th class="num">Date</th></tr></thead>
+          <tbody id="doc-rows"></tbody>
+        </table>
+      </div>
+      <p class="tiny" style="margin-top:8px" id="doc-count"></p>
+    </section>
+
+    <!-- ===== Dépôt ===== -->
+    <section class="section" id="sec-upload">
+      <div class="grid g2">
+        <div class="card">
+          <h3>Nouveau document</h3>
+          <div class="field"><label for="up-title">Titre du document</label><input id="up-title" placeholder="Ex. Arrêté fixant les modalités…"></div>
+          <div class="grid g2" style="margin-top:4px">
+            <div class="field"><label for="up-type">Type</label>
+              <select id="up-type"><option>Décret</option><option>Loi</option><option>Loi de Finances</option><option>Arrêté</option><option>Rapport</option><option>Courrier</option></select></div>
+            <div class="field"><label for="up-inst">Institution</label>
+              <select id="up-inst"><option>Présidence</option><option>Assemblée nationale</option><option>Primature</option><option>Min. Économie et Finances</option><option>Min. Budget</option><option>Min. Intérieur</option><option>Min. Jeunesse et Culture</option><option>MENFOP</option><option>MCPT</option></select></div>
+          </div>
+          <div class="grid g2">
+            <div class="field"><label for="up-conf">Confidentialité</label>
+              <select id="up-conf"><option>Public</option><option>Interne</option><option>Confidentiel</option><option>Secret</option></select></div>
+            <div class="field"><label for="up-lang">Langue OCR</label>
+              <select id="up-lang"><option>Français</option><option>العربية</option><option>English</option><option>Soomaali</option></select></div>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px;margin-top:14px">
+            <button class="switch on" id="sw-ia" onclick="this.classList.toggle('on')" role="switch" aria-checked="true" aria-label="Analyse IA"><i></i></button>
+            <span style="font-size:13.5px">Analyse IA après OCR (résumé, mots-clés, entités, classement suggéré)</span>
+          </div>
+          <button class="btn full" id="up-btn" onclick="simulateUpload()">Déposer et lancer le traitement</button>
+        </div>
+        <div class="card">
+          <h3>Chaîne de traitement</h3>
+          <p class="muted" style="margin-bottom:14px">Chaque dépôt suit la chaîne normalisée ISO 15489. Cette démonstration la simule en temps réel.</p>
+          <div class="steps" id="pipe">
+            <div class="step" data-p="0"><b>Réception</b><div class="tiny">Empreintes SHA-256 + MD5, référence attribuée</div></div>
+            <div class="step" data-p="1"><b>OCR multilingue</b><div class="tiny">Tesseract — fra · ara · eng · som</div></div>
+            <div class="step" data-p="2"><b>Analyse IA</b><div class="tiny">Résumé, entités, classement PNC-DJ suggéré</div></div>
+            <div class="step" data-p="3"><b>Validation archiviste</b><div class="tiny">Contrôle qualité et métadonnées</div></div>
+            <div class="step" data-p="4"><b>Archivage OAIS</b><div class="tiny">Paquet d'information archivé (AIP), horodatage</div></div>
+          </div>
+          <div class="progress" style="margin-top:6px"><i id="pipe-bar" style="width:0%"></i></div>
+          <p class="tiny" id="pipe-msg" style="margin-top:8px">En attente d'un dépôt…</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== Recherche ===== -->
+    <section class="section" id="sec-search">
+      <div class="card">
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px">
+          <button class="chip" id="m-std" onclick="setMode('std')" style="border-color:var(--accent);color:var(--accent-ink)">Recherche standard</button>
+          <button class="chip" id="m-ia" onclick="setMode('ia')">Assistant IA</button>
+        </div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap">
+          <input type="search" id="s-q" style="flex:1;min-width:200px" placeholder="Rechercher dans le fonds national…" onkeydown="if(event.key==='Enter')doSearch()">
+          <button class="btn" onclick="doSearch()">Rechercher</button>
+        </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px" id="s-examples"></div>
+      </div>
+      <div id="s-answer" style="display:none;margin-top:16px" class="card">
+        <span class="badge b-purple">Assistant IA</span>
+        <p style="margin-top:10px;max-width:70ch" id="s-answer-txt"></p>
+        <p class="tiny" style="margin-top:8px">Réponse générée sur la base des documents publics indexés — démonstration hors-ligne.</p>
+      </div>
+      <div id="s-results" style="margin-top:16px;display:flex;flex-direction:column;gap:10px"></div>
+    </section>
+
+    <!-- ===== Plan de classement ===== -->
+    <section class="section" id="sec-plan">
+      <div class="card">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:8px">
+          <h3>Plan national de classement — PNC-DJ-2024 <span class="badge b-blue">v1.0 · national</span></h3>
+          <span class="tiny">Base légale : Décret n° 2024-248/PR/MJC portant règlementation des archives publiques et privées · DUA = durée d'utilité administrative · sort final C = conservation, D = destruction, T = tri</span>
+        </div>
+        <div class="tree" id="plan-tree"></div>
+      </div>
+    </section>
+
+    <!-- ===== Institutions ===== -->
+    <section class="section" id="sec-inst">
+      <div class="grid g3" id="inst-cards"></div>
+    </section>
+
+    <!-- ===== Workflows ===== -->
+    <section class="section" id="sec-wf">
+      <div class="grid g3" style="margin-bottom:16px">
+        <div class="card kpi"><span class="v">14</span><span class="l">Instances en cours</span></div>
+        <div class="card kpi"><span class="v">312</span><span class="l">Terminées ce mois</span></div>
+        <div class="card kpi"><span class="v" style="color:var(--amber)">3</span><span class="l">Étapes hors SLA</span></div>
+      </div>
+      <div class="card">
+        <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;align-items:baseline">
+          <h3>WF-2024-0891 — Circuit standard d'archivage</h3>
+          <span class="badge b-blue">En cours · étape 4/8</span>
+        </div>
+        <p class="muted" style="margin-bottom:14px">Document : <span class="ref">Décret n° 2024-248/PR/MJC</span> — règlementation des archives publiques et privées en République de Djibouti</p>
+        <div class="steps" id="wf-steps"></div>
+        <button class="btn sm" onclick="advanceWf()" id="wf-btn">Compléter l'étape en cours</button>
+      </div>
+    </section>
+
+    <!-- ===== Archives physiques ===== -->
+    <section class="section" id="sec-phys">
+      <div class="card" style="margin-bottom:16px">
+        <h3>Localiser une boîte</h3>
+        <div style="display:flex;gap:10px;flex-wrap:wrap">
+          <input id="box-q" class="mono" style="flex:1;min-width:200px" placeholder="Scanner ou saisir un code-barres — ex. DJB-2024-00147" onkeydown="if(event.key==='Enter')locateBox()">
+          <button class="btn" onclick="locateBox()">Localiser</button>
+        </div>
+        <div id="box-result" style="margin-top:12px"></div>
+      </div>
+      <div class="grid g3" id="depots"></div>
+      <div class="card flat tbl-wrap" style="padding:0;margin-top:16px">
+        <table>
+          <thead><tr><th>Code-barres</th><th>Contenu</th><th>Dépôt · position</th><th>Statut</th></tr></thead>
+          <tbody id="box-rows"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ===== Audit ===== -->
+    <section class="section" id="sec-audit">
+      <div class="alert info" style="margin-bottom:14px">🛡 Chaque écriture du journal est chaînée à la précédente par SHA-256 : toute altération rompt la chaîne et devient détectable (exigence ISO 27001, non-répudiation).</div>
+      <div class="card flat tbl-wrap" style="padding:0">
+        <table>
+          <thead><tr><th>Horodatage</th><th>Action</th><th>Ressource</th><th>Utilisateur</th><th>Adresse IP</th><th>Empreinte chaînée</th></tr></thead>
+          <tbody id="audit-rows"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ===== Portail citoyen ===== -->
+    <section class="section" id="sec-citizen">
+      <div class="hero-cit">
+        <h2>Archives publiques de la République de Djibouti</h2>
+        <p style="color:#B9CBE6;margin-top:8px;max-width:60ch">Consultez librement les textes officiels publiés au <b>Journal Officiel de la République de Djibouti</b> : lois, décrets, arrêtés et lois de finances. Seuls les documents de niveau <b>public</b> sont accessibles sans compte.</p>
+        <div style="display:flex;gap:10px;margin-top:18px;flex-wrap:wrap">
+          <input type="search" id="cit-q" style="flex:1;min-width:200px;border:none" placeholder="Ex. code numérique, budget 2024, archives publiques…" onkeydown="if(event.key==='Enter')citSearch()">
+          <button class="btn" style="background:#12AD2B" onclick="citSearch()">Rechercher</button>
+        </div>
+      </div>
+      <div id="cit-results" style="display:flex;flex-direction:column;gap:10px"></div>
+    </section>
+
+    <p class="note">PNGA — démonstration interactive autonome. Les références et intitulés des textes officiels proviennent du Journal Officiel de la République de Djibouti (journalofficiel.dj) ; les statuts de traitement, statistiques, empreintes et documents marqués « fictif » sont simulés. Version complète : FastAPI · PostgreSQL · Elasticsearch · MinIO · Next.js — conforme ISO 15489, ISO 14721 (OAIS), ISO 27001, MoReq2010 et au Décret n° 2024-248/PR/MJC.</p>
+  </main>
+</div>
+
+<!-- ===== Volet détail document ===== -->
+<div class="drawer" id="drawer" aria-label="Détail du document">
+  <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px">
+    <div><span class="ref" id="d-ref"></span><h3 style="margin-top:6px;font-size:18px" id="d-title"></h3></div>
+    <button class="btn ghost sm" onclick="closeDrawer()" aria-label="Fermer">✕</button>
+  </div>
+  <div style="display:flex;gap:8px;margin:12px 0 18px" id="d-badges"></div>
+  <h4 style="font-size:13px;text-transform:uppercase;letter-spacing:.05em;color:var(--ink2);margin-bottom:8px">Métadonnées (Dublin Core)</h4>
+  <dl class="kv" id="d-kv"></dl>
+  <h4 style="font-size:13px;text-transform:uppercase;letter-spacing:.05em;color:var(--ink2);margin:18px 0 8px">Résumé IA</h4>
+  <p style="font-size:14px" id="d-sum"></p>
+  <div id="d-kw" style="display:flex;gap:6px;flex-wrap:wrap;margin-top:10px"></div>
+  <h4 style="font-size:13px;text-transform:uppercase;letter-spacing:.05em;color:var(--ink2);margin:18px 0 8px">Intégrité</h4>
+  <p class="mono" style="font-size:11.5px;color:var(--ink2);overflow-wrap:anywhere">SHA-256 : <span id="d-hash"></span></p>
+  <div style="display:flex;gap:8px;margin-top:20px">
+    <button class="btn sm" onclick="toast('Téléchargement simulé — démonstration')">⬇ Télécharger</button>
+    <button class="btn ghost sm" onclick="toast('Certificat d\'intégrité vérifié ✓')">Vérifier l'intégrité</button>
+  </div>
+</div>
+
+<script>
+"use strict";
+/* ============ Données de démonstration (fictives) ============ */
+const MOIS=["Oct","Nov","Déc","Jan","Fév","Mar","Avr","Mai","Juin","Juil","Août","Sep"];
+const TREND={recus:[620,580,710,840,790,920,880,1010,970,1090,1180,1240],archives:[540,510,640,760,700,850,820,930,910,1020,1090,1150]};
+const TYPES=[["Décrets",4218],["Rapports",3651],["Courriers",2984],["Arrêtés",2312],["Lois",1147],["Conventions",893]];
+const INSTS=[
+ {n:"Présidence de la République",ar:"رئاسة الجمهورية",c:"PRE",docs:2841,go:1.9,q:4,users:34},
+ {n:"Assemblée nationale",ar:"الجمعية الوطنية",c:"AN",docs:1986,go:1.2,q:3,users:22},
+ {n:"Primature",ar:"الوزارة الأولى",c:"PM",docs:2213,go:1.4,q:3,users:28},
+ {n:"Min. de l'Économie et des Finances",ar:"وزارة الاقتصاد والمالية",c:"MEF",docs:4102,go:3.1,q:5,users:57},
+ {n:"Min. du Budget",ar:"وزارة الميزانية",c:"MB",docs:2755,go:2.1,q:3,users:33},
+ {n:"Min. de l'Intérieur",ar:"وزارة الداخلية",c:"MI",docs:3390,go:2.3,q:2.5,users:41},
+ {n:"Min. de la Jeunesse et de la Culture — tutelle des Archives nationales",ar:"وزارة الشباب والثقافة",c:"MJC",docs:3124,go:2.6,q:4,users:38},
+ {n:"MENFOP — Éducation nationale et Formation professionnelle",ar:"وزارة التربية الوطنية والتكوين المهني",c:"MENFOP",docs:2967,go:2.0,q:4,users:46},
+ {n:"Min. de la Communication, Postes et Télécommunications",ar:"وزارة الاتصال المكلفة بالبريد والمواصلات",c:"MCPT",docs:1618,go:1.1,q:2,users:19}];
+/* Textes officiels réels publiés au Journal Officiel de la République de Djibouti
+   (journalofficiel.dj). Les statuts de traitement, niveaux de confidentialité et
+   empreintes sont simulés par la plateforme de démonstration. */
+let DOCS=[
+ {ref:"Décret n° 2024-248/PR/MJC",t:"Décret portant règlementation des archives publiques et privées en République de Djibouti",inst:"Min. Jeunesse et Culture",type:"Décret",st:"publie",conf:"Public",date:"2024-09-30",aut:"Président de la République — contreseing MJC",sum:"Texte fondateur du cadre archivistique national : il définit les archives publiques et privées, leurs régimes de collecte, de tri, de conservation, de communication et de sort final. C'est la base légale de la plateforme nationale de gestion des archives.",kw:["archives publiques","conservation","sort final","patrimoine"],jo:1,hash:"a3f8c21e99d04b7e5512fa08c6d93b1e447a0cf2b8d1e6a35c90f4d7218e6b3a"},
+ {ref:"Loi de Finances n° 64/AN/23/9ème L",t:"Loi de Finances portant Budget Initial de l'État pour l'exercice 2024",inst:"Assemblée nationale",type:"Loi de Finances",st:"archive",conf:"Public",date:"2023-12",aut:"Assemblée nationale — 9ème législature",sum:"Budget initial de l'État pour 2024, présenté en équilibre : recettes et dépenses arrêtées à 152 490 386 972 FDJ. Comprend notamment des mesures de rationalisation de la dépense publique dont la restructuration du parc automobile de l'État.",kw:["budget","loi de finances","152 490 386 972 FDJ","exercice 2024"],jo:1,hash:"5b7e90d1c44a28f3ab61de07f9c2354e8810cbd6a2f47e91d05b3a68c1f2d947"},
+ {ref:"Loi n° 150/AN/24/9ème L",t:"Loi portant Budget Initial de l'État pour l'exercice 2025",inst:"Assemblée nationale",type:"Loi de Finances",st:"publie",conf:"Public",date:"2024-12",aut:"Assemblée nationale — 9ème législature",sum:"Budget initial de l'État pour l'exercice 2025, adopté par l'Assemblée nationale et publié au Journal Officiel.",kw:["budget","exercice 2025","loi de finances"],jo:1,hash:"3e91c07d5a48b26fe013d97ca5b48e62d10f7a39c8e51b06d247af83e19c5d70"},
+ {ref:"Loi n° 019/AN/23/9ème L",t:"Loi portant Code Numérique",inst:"Assemblée nationale",type:"Loi",st:"publie",conf:"Public",date:"2025-07-06",aut:"Assemblée nationale — 9ème législature",sum:"Cadre juridique global du numérique : protection des données à caractère personnel garantissant un haut niveau de protection aux citoyens et aux entreprises, commerce électronique, cybersécurité et lutte contre la cybercriminalité.",kw:["code numérique","données personnelles","cybersécurité"],jo:1,hash:"e84a1f09b37c62d5f1908ae44c7b25d6031f8e9ac2d75b48e6109f3ad4c8b761"},
+ {ref:"Loi n° 18/AN/23/9ème L",t:"Loi portant ratification de la Convention de l'Union Africaine sur la Cybersécurité et la Protection des données à caractère personnel",inst:"Assemblée nationale",type:"Loi",st:"archive",conf:"Public",date:"2024-01-21",aut:"Assemblée nationale — 9ème législature",sum:"Ratification de la Convention de Malabo : Djibouti adhère au cadre continental africain de cybersécurité et de protection des données personnelles.",kw:["Convention de Malabo","Union Africaine","cybersécurité"],jo:1,hash:"c19d4e72a80f356bd2478c01e5b96f3a7d20481ecb5f9a364d8e07c1b52a9f08"},
+ {ref:"Loi n° 195/AN/25/9ème L",t:"Loi portant création de l'Autorité Nationale de Cybersécurité",inst:"Assemblée nationale",type:"Loi",st:"publie",conf:"Public",date:"2025",aut:"Assemblée nationale — 9ème législature",sum:"Création de l'ANC, chargée de piloter l'écosystème national de cybersécurité et habilitée à conclure des accords de partenariat avec les acteurs publics et privés.",kw:["ANC","cybersécurité","autorité nationale"],jo:1,hash:"90c5d7e2a41b8f36cd0219e75a83f4b6d7e10c29fa4b85d3e612a09c7f3b54d8"},
+ {ref:"Décret n° 2021-106/PRE",t:"Décret portant nomination des membres du Gouvernement",inst:"Présidence",type:"Décret",st:"archive",conf:"Public",date:"2021-05-24",aut:"Président de la République",sum:"Composition du Gouvernement dirigé par le Premier ministre Abdoulkader Kamil Mohamed (nommé par le décret n° 2021-105/PRE du même jour) : justice, économie et finances, affaires étrangères et coopération internationale, etc.",kw:["nomination","gouvernement","Premier ministre"],jo:1,hash:"27b9f04ce16a83d5b7f2490ae1c6d8352e94b07fd1c8a5e36b40d92f1e7a63c0"},
+ {ref:"Loi n° 174/AN/02/4ème L",t:"Loi portant décentralisation et statut des régions",inst:"Assemblée nationale",type:"Loi",st:"archive",conf:"Public",date:"2002-07-07",aut:"Assemblée nationale — 4ème législature",sum:"Statut des régions de la République (Tadjourah, Ali Sabieh, Dikhil, Obock, Arta) et organisation des conseils régionaux. Modifiée par la loi n° 139/AN/06/5ème L.",kw:["décentralisation","régions","conseils régionaux","Tadjourah"],jo:1,hash:"6d20a8b5f97e14c3da65b1082ef4c9d7301a5f8be2c94d67a08e13f5c2b7d491"},
+ {ref:"Loi n° 133/AN/05/5ème L",t:"Loi portant Code du Travail",inst:"Assemblée nationale",type:"Loi",st:"archive",conf:"Public",date:"2006-01-26",aut:"Assemblée nationale — 5ème législature",sum:"Code du Travail de la République de Djibouti : régit les relations professionnelles entre travailleurs et employeurs — contrat de travail, durée, salaires, représentation du personnel, règlement des conflits.",kw:["code du travail","droit du travail","emploi"],jo:1,hash:"f13c78a90d25e6b4c8a17f30d9e2b56147c80ad3e5f9126b7d4e08a3c69f1b25"},
+ {ref:"Arrêté n° 2023-155/PR/MCPT",t:"Arrêté portant création, organisation et fonctionnement du comité de pilotage du Projet Djibouti Fondement Numérique (DFN)",inst:"Min. Communication (MCPT)",type:"Arrêté",st:"archive",conf:"Public",date:"2023",aut:"Ministère de la Communication, chargé des Postes et des Télécommunications",sum:"Gouvernance du projet Djibouti Fondement Numérique : composition, attributions et fonctionnement du comité de pilotage chargé de la transformation numérique de l'administration.",kw:["Djibouti Fondement Numérique","transformation numérique","comité de pilotage"],jo:1,hash:"08e4b2d79c51a6f3e8d04b17c92f5a36b1d7e04982c5fa61d3b8e97a04c6f512"},
+ {ref:"Décret n° 2024-097/PRE",t:"Décret fixant le tarif de vente du Journal Officiel de la République de Djibouti",inst:"Présidence",type:"Décret",st:"publie",conf:"Public",date:"2024",aut:"Président de la République",sum:"Fixation des tarifs de vente et d'abonnement du Journal Officiel, support de publication authentique des lois, décrets et arrêtés de la République.",kw:["journal officiel","tarif","publication"],jo:1,hash:"b6f0d3a82e97c15d4b28a60f7e19c3d5f2481b0e6a9d5c37e80f14b2d7a95c63"},
+ {ref:"Loi n° 107/AN/24/9ème L",t:"Loi portant organisation et fonctionnement des organisations de la société civile de Djibouti",inst:"Assemblée nationale",type:"Loi",st:"archive",conf:"Public",date:"2024",aut:"Assemblée nationale — 9ème législature",sum:"Cadre juridique des organisations de la société civile : constitution, déclaration, gouvernance, financement et contrôle.",kw:["société civile","associations","gouvernance"],jo:1,hash:"5fd2e83b19c740a6e5d21f98b03c6ad74e18f25c09b6d3a71e84f0c2b59d67a1"},
+ {ref:"MB/RAP/2024-S1",t:"Rapport d'exécution budgétaire — 1ᵉʳ semestre 2024 (exemple interne fictif)",inst:"Min. Budget",type:"Rapport",st:"validation",conf:"Interne",date:"2024-07-30",aut:"Direction Générale du Budget",sum:"Document interne fictif illustrant le circuit de validation : bilan semestriel de l'exécution de la Loi de Finances n° 64/AN/23/9ème L, analyse des écarts par ministère.",kw:["exécution budgétaire","suivi","démonstration"],hash:"7a1c50d9e83f26b4a08d17e62c95f3ba4d07c81fe2a95d36b70e14a8c2f6d590"},
+ {ref:"MS/COU/2024-118",t:"Courrier — transmission des statistiques sanitaires trimestrielles (exemple interne fictif)",inst:"Min. Santé",type:"Courrier",st:"ocr",conf:"Confidentiel",date:"2024-09-03",aut:"Secrétariat général, Ministère de la Santé",sum:"Document interne fictif illustrant la file OCR : transmission officielle de statistiques d'activité des structures sanitaires pour le 2ᵉ trimestre 2024.",kw:["statistiques","santé","démonstration"],hash:"d40b96e2c17a58f3b62d09ea4c81f7d5230a68bfe194c57d3ae02b86f1c94e73"}];
+const PLAN=[
+ ["100","Gouvernance et institutions",[["110","Actes du Président de la République","10 ans","C"],["120","Actes du Premier ministre","10 ans","C"],["130","Textes législatifs et réglementaires","Permanent","C"],["140","Relations internationales et traités","30 ans","C"]]],
+ ["200","Finances publiques",[["210","Budget de l'État et lois de finances","10 ans","C"],["220","Comptabilité publique","10 ans","T"],["230","Marchés publics","15 ans","T"],["240","Fiscalité et douanes","10 ans","D"]]],
+ ["300","Justice et ordre public",[["310","Décisions de justice","Permanent","C"],["320","État civil et nationalité","Permanent","C"],["330","Sécurité intérieure","20 ans","T"]]],
+ ["400","Secteurs sociaux",[["410","Éducation et formation","10 ans","T"],["420","Santé publique","20 ans","T"],["430","Travail et protection sociale","50 ans","C"]]],
+ ["500","Infrastructures et économie",[["510","Ports et zones franches","30 ans","C"],["520","Transports et équipement","15 ans","T"],["530","Énergie, eau et télécommunications","15 ans","T"]]]];
+const WF=[["Réception","Bureau d'ordre — 12 sept. 08:14",1],["Numérisation","Atelier scan — 12 sept. 09:02",1],["OCR + analyse IA","Automatique — 12 sept. 09:05 · confiance 97,1 %",1],["Validation archiviste","Assignée à M. Ahmed — SLA : 48 h",2],["Contrôle qualité","Validateur ministériel (MJC)",0],["Indexation","Moteur de recherche national",0],["Archivage OAIS","Génération du paquet AIP",0],["Publication","Selon niveau de confidentialité",0]];
+const DEPOTS=[
+ {n:"Dépôt central — Djibouti-ville",c:"DEP-DJB",cap:12000,use:8340,clim:1,feu:1,rfid:1},
+ {n:"Dépôt régional — Ali Sabieh",c:"DEP-ALS",cap:4000,use:1270,clim:1,feu:1,rfid:0},
+ {n:"Dépôt régional — Tadjourah",c:"DEP-TAD",cap:3000,use:940,clim:0,feu:1,rfid:0}];
+const BOXES=[
+ ["DJB-2024-00147","Journal Officiel — collection reliée 1977–1999","Dépôt central · salle A · travée 3 · tablette 2","place"],
+ ["DJB-2024-00151","Lois de finances et budgets — exercices 2000–2015","Dépôt central · salle B · travée 1 · tablette 4","emprunt"],
+ ["ALS-2023-00034","État civil Ali Sabieh 1998–2004","Ali Sabieh · salle unique · travée 2","place"],
+ ["DJB-2022-00092","Traités et accords internationaux 1977–1990","Dépôt central · salle sécurisée · coffre 1","place"],
+ ["TAD-2024-00011","Conseil régional de Tadjourah 2005–2020 (loi n° 174/AN/02)","Tadjourah · salle 1 · travée 1","place"]];
+const AUDIT=[
+ ["2024-10-02 09:41:07","VALIDATION","Décret n° 2024-248/PR/MJC","m.ahmed","10.4.2.31"],
+ ["2024-10-02 09:05:52","ANALYSE_IA","Décret n° 2024-248/PR/MJC","system","interne"],
+ ["2024-10-02 08:14:26","CREATION","Décret n° 2024-248/PR/MJC","f.houssein","10.4.2.18"],
+ ["2024-10-01 16:22:40","TELECHARGEMENT","Loi de Finances n° 64/AN/23/9ème L","admin","10.4.1.2"],
+ ["2024-10-01 14:03:11","CONNEXION","session","archiviste","41.223.85.14"],
+ ["2024-10-01 11:47:55","MODIFICATION","MB/RAP/2024-S1","a.omar","10.4.3.7"],
+ ["2024-09-30 17:30:02","EMPRUNT","DJB-2024-00151","d.robleh","10.4.2.44"]];
+const FEED=[
+ ["b-green","Archivage OAIS terminé","Loi n° 107/AN/24/9ème L — paquet AIP scellé","il y a 12 min"],
+ ["b-blue","Nouveau dépôt","MS/COU/2024-118 — OCR en file d'attente","il y a 38 min"],
+ ["b-purple","Analyse IA","Décret n° 2024-248/PR/MJC — 14 entités extraites","il y a 1 h"],
+ ["b-amber","SLA à surveiller","Validation MB/RAP/2024-S1 — échéance dans 6 h","il y a 2 h"],
+ ["b-blue","Emprunt physique","Boîte DJB-2024-00151 sortie du dépôt central","hier 17:30"]];
+
+/* ============ Utilitaires ============ */
+const $=id=>document.getElementById(id);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const fmt=n=>n.toLocaleString("fr-FR");
+const cssVar=v=>getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+const STBADGE={archive:['b-green','Archivé'],validation:['b-amber','En validation'],ocr:['b-blue','OCR en cours'],publie:['b-purple','Publié']};
+const CONFBADGE={Public:'b-green',Interne:'b-blue',Confidentiel:'b-amber',Secret:'b-red'};
+function toast(msg){const t=$('tip');t.textContent=msg;t.style.display='block';t.style.left='50%';t.style.top='24px';t.style.transform='translateX(-50%)';clearTimeout(t._h);t._h=setTimeout(()=>{t.style.display='none';t.style.transform=''},2200)}
+
+/* ============ Connexion / navigation ============ */
+function doLogin(){$('login').style.display='none';$('app').classList.add('on');drawCharts()}
+function logout(){$('app').classList.remove('on');$('login').style.display='flex'}
+const TITLES={dash:["Pilotage","Tableau de bord national"],docs:["Fonds documentaire","Documents"],upload:["Fonds documentaire","Dépôt & numérisation"],
+ search:["Fonds documentaire","Recherche & assistant IA"],plan:["Fonds documentaire","Plan de classement PNC-DJ"],inst:["Organisation","Institutions publiques"],
+ wf:["Organisation","Workflows BPM"],phys:["Organisation","Archives physiques"],audit:["Pilotage","Journal d'audit"],citizen:["Public","Portail citoyen"]};
+document.querySelectorAll('.nav-item[data-sec]').forEach(b=>b.onclick=()=>{
+  document.querySelectorAll('.nav-item').forEach(x=>x.classList.remove('active'));b.classList.add('active');
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('on'));
+  const k=b.dataset.sec;$('sec-'+k).classList.add('on');$('crumb').textContent=TITLES[k][0];$('sec-title').textContent=TITLES[k][1];
+  $('sidebar').classList.remove('open');closeDrawer();
+  if(k==='dash')drawCharts();
+});
+function toggleTheme(){
+  const r=document.documentElement,cur=r.dataset.theme||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');
+  r.dataset.theme=cur==='dark'?'light':'dark';drawCharts();
+}
+
+/* ============ Graphiques SVG ============ */
+function drawCharts(){drawTrend();drawTypes()}
+function drawTrend(){
+  const W=520,H=240,P={l:44,r:14,t:14,b:28},iw=W-P.l-P.r,ih=H-P.t-P.b,max=1400;
+  const x=i=>P.l+i/(11)*iw, y=v=>P.t+ih-(v/max)*ih;
+  const line=a=>a.map((v,i)=>(i?'L':'M')+x(i).toFixed(1)+' '+y(v).toFixed(1)).join(' ');
+  const c1=cssVar('--c1'),c2=cssVar('--c2'),grid=cssVar('--line'),ink3=cssVar('--ink3');
+  let g='';for(const v of [0,350,700,1050,1400]){const yy=y(v);
+    g+=`<line x1="${P.l}" y1="${yy}" x2="${W-P.r}" y2="${yy}" stroke="${grid}" stroke-width="1"/><text x="${P.l-8}" y="${yy+4}" text-anchor="end" font-size="10" fill="${ink3}">${fmt(v)}</text>`}
+  let xl='';for(let i=0;i<12;i+=2)xl+=`<text x="${x(i)}" y="${H-8}" text-anchor="middle" font-size="10" fill="${ink3}">${MOIS[i]}</text>`;
+  const area=line(TREND.recus)+`L${x(11)} ${y(0)}L${x(0)} ${y(0)}Z`;
+  const end1=TREND.recus[11],end2=TREND.archives[11];
+  $('chart-trend').innerHTML=
+`<svg viewBox="0 0 ${W} ${H}" style="width:100%;height:auto" role="img" aria-label="Flux mensuel : reçus et archivés">
+${g}${xl}
+<path d="${area}" fill="${c1}" opacity="0.08"/>
+<path d="${line(TREND.recus)}" fill="none" stroke="${c1}" stroke-width="2" stroke-linecap="round"/>
+<path d="${line(TREND.archives)}" fill="none" stroke="${c2}" stroke-width="2" stroke-linecap="round"/>
+<circle cx="${x(11)}" cy="${y(end1)}" r="4" fill="${c1}" stroke="${cssVar('--surface')}" stroke-width="2"/>
+<circle cx="${x(11)}" cy="${y(end2)}" r="4" fill="${c2}" stroke="${cssVar('--surface')}" stroke-width="2"/>
+<text x="${x(11)-6}" y="${y(end1)-9}" text-anchor="end" font-size="11" font-weight="600" fill="${cssVar('--ink')}">${fmt(end1)}</text>
+<rect id="tr-hit" x="${P.l}" y="${P.t}" width="${iw}" height="${ih}" fill="transparent"/>
+<line id="tr-cross" x1="0" y1="${P.t}" x2="0" y2="${P.t+ih}" stroke="${ink3}" stroke-width="1" stroke-dasharray="3 3" style="display:none"/>
+</svg>`;
+  const svg=$('chart-trend').querySelector('svg'),hit=svg.querySelector('#tr-hit'),cross=svg.querySelector('#tr-cross'),tip=$('tip');
+  hit.addEventListener('mousemove',e=>{
+    const r=svg.getBoundingClientRect(),sx=(e.clientX-r.left)*(W/r.width);
+    const i=Math.max(0,Math.min(11,Math.round((sx-P.l)/iw*11)));
+    cross.style.display='block';cross.setAttribute('x1',x(i));cross.setAttribute('x2',x(i));
+    tip.style.display='block';tip.style.transform='';tip.style.left=(e.clientX+14)+'px';tip.style.top=(e.clientY-10)+'px';
+    tip.innerHTML=`<b>${MOIS[i]}</b> · Reçus ${fmt(TREND.recus[i])} · Archivés ${fmt(TREND.archives[i])}`;});
+  hit.addEventListener('mouseleave',()=>{cross.style.display='none';tip.style.display='none'});
+}
+function drawTypes(){
+  const max=TYPES[0][1],c1=cssVar('--c1');
+  $('chart-types').innerHTML=TYPES.map(([n,v])=>{
+    const w=(v/max*100).toFixed(1);
+    return `<div style="display:grid;grid-template-columns:92px 1fr 56px;gap:10px;align-items:center;margin:9px 0" data-v="${n} : ${fmt(v)} documents">
+      <span style="font-size:13px;color:var(--ink2)">${n}</span>
+      <div style="background:var(--surface2);border-radius:4px;height:18px"><div style="width:${w}%;height:100%;background:${c1};border-radius:4px;min-width:4px"></div></div>
+      <span class="num" style="font-size:13px;font-variant-numeric:tabular-nums">${fmt(v)}</span></div>`}).join('');
+  $('chart-types').querySelectorAll('[data-v]').forEach(r=>{
+    r.addEventListener('mousemove',e=>{const t=$('tip');t.style.display='block';t.style.transform='';t.textContent=r.dataset.v;t.style.left=(e.clientX+14)+'px';t.style.top=(e.clientY-10)+'px'});
+    r.addEventListener('mouseleave',()=>$('tip').style.display='none')});
+}
+
+/* ============ Documents ============ */
+function renderDocs(){
+  const q=($('f-q').value||'').toLowerCase(),st=$('f-status').value,cf=$('f-conf').value;
+  const rows=DOCS.filter(d=>(!st||d.st===st)&&(!cf||d.conf===cf)&&(!q||(d.t+d.ref+d.aut+d.inst).toLowerCase().includes(q)));
+  $('doc-rows').innerHTML=rows.map((d,i)=>{const[bc,bl]=STBADGE[d.st];
+    return `<tr onclick="openDoc('${d.ref}')"><td class="ref">${d.ref}</td><td style="max-width:340px">${esc(d.t)}</td><td class="muted">${d.inst}</td>
+    <td><span class="badge ${bc}">${bl}</span></td><td><span class="badge ${CONFBADGE[d.conf]}">${d.conf}</span></td>
+    <td class="num tiny">${d.date}</td></tr>`}).join('')||`<tr><td colspan="6" class="muted" style="text-align:center;padding:28px">Aucun document ne correspond aux filtres.</td></tr>`;
+  $('doc-count').textContent=`${rows.length} document(s) affiché(s) sur ${DOCS.length} — fonds de démonstration.`;
+  updateKpis();
+}
+function updateKpis(){$('k-total').textContent=fmt(15205+DOCS.length-10);$('k-arch').textContent=fmt(11873)}
+function openDoc(ref){
+  const d=DOCS.find(x=>x.ref===ref);if(!d)return;
+  $('d-ref').textContent=d.ref;$('d-title').textContent=d.t;
+  const[bc,bl]=STBADGE[d.st];
+  $('d-badges').innerHTML=`<span class="badge ${bc}">${bl}</span><span class="badge ${CONFBADGE[d.conf]}">${d.conf}</span><span class="badge b-grey">${d.type}</span>`;
+  const cls=d.type==="Loi de Finances"?"210 — Budget de l'État et lois de finances":(d.type==="Loi"||d.type==="Décret"||d.type==="Arrêté")?"130 — Textes législatifs et réglementaires":"220 — Comptabilité publique";
+  $('d-kv').innerHTML=[["Créateur",d.aut],["Institution",d.inst],["Date du document",d.date],["Langue","Français"],
+    ["Source",d.jo?"Journal Officiel de la République de Djibouti (journalofficiel.dj)":"Production interne — exemple fictif"],
+    ["Classement","PNC-DJ · "+cls],["Conservation",(d.type==="Loi"||d.type==="Décret"||d.type==="Loi de Finances")?"Permanente (sort final : C)":"10 ans (DUA)"]]
+    .map(([k,v])=>`<dt>${k}</dt><dd>${esc(v)}</dd>`).join('');
+  $('d-sum').textContent=d.sum;
+  $('d-kw').innerHTML=d.kw.map(k=>`<span class="badge b-blue">${esc(k)}</span>`).join('');
+  $('d-hash').textContent=d.hash;
+  $('drawer').classList.add('open');
+}
+function closeDrawer(){$('drawer').classList.remove('open')}
+
+/* ============ Dépôt simulé ============ */
+let uploading=false;
+function simulateUpload(){
+  if(uploading)return;
+  const title=$('up-title').value.trim()||"Document sans titre";
+  uploading=true;$('up-btn').textContent="Traitement en cours…";
+  const steps=[...document.querySelectorAll('#pipe .step')];
+  steps.forEach(s=>s.classList.remove('done','now'));
+  const msgs=["Empreintes calculées — référence attribuée","OCR en cours (fra+ara)… confiance 96,8 %","Analyse IA : résumé et 9 entités extraites","Transmis à l'archiviste pour validation","Paquet AIP généré — document archivé ✓"];
+  let i=0;
+  (function next(){
+    if(i>0){steps[i-1].classList.replace('now','done')}
+    if(i>=steps.length){
+      const inst=$('up-inst').value,code={"Présidence":"PRE","Assemblée nationale":"AN","Primature":"PM","Min. Économie et Finances":"MEF","Min. Budget":"MB","Min. Intérieur":"MI","Min. Jeunesse et Culture":"MJC","MENFOP":"MENFOP","MCPT":"MCPT"}[inst]||"DJ";
+      const type=$('up-type').value,num=String(100+Math.floor(Math.random()*899)),an=new Date().getFullYear();
+      /* Nomenclature réelle du Journal Officiel de Djibouti */
+      const ref=type==="Loi"||type==="Loi de Finances"?`${type} n° ${num}/AN/${String(an).slice(2)}/9ème L`
+        :type==="Décret"?`Décret n° ${an}-${num}/${code==="PRE"?"PRE":"PR/"+code}`
+        :type==="Arrêté"?`Arrêté n° ${an}-${num}/PR/${code}`
+        :`${code}/${type.slice(0,3).toUpperCase()}/${an}-${num}`;
+      DOCS.unshift({ref,t:title,inst,type:$('up-type').value,st:"archive",conf:$('up-conf').value,date:new Date().toISOString().slice(0,10),
+        aut:"Dépôt de démonstration",sum:"Document déposé via la démonstration : le pipeline OCR → IA → validation → OAIS a été simulé de bout en bout.",
+        kw:["démonstration","dépôt"],hash:[...crypto.getRandomValues(new Uint8Array(32))].map(b=>b.toString(16).padStart(2,'0')).join('')});
+      renderDocs();$('pipe-msg').textContent=`Terminé — référence ${ref} ajoutée au fonds (voir Documents).`;
+      $('up-btn').textContent="Déposer et lancer le traitement";uploading=false;toast("Document archivé : "+ref);return;
+    }
+    steps[i].classList.add('now');$('pipe-bar').style.width=((i+1)/steps.length*100)+'%';$('pipe-msg').textContent=msgs[i];i++;setTimeout(next,900);
+  })();
+}
+
+/* ============ Recherche ============ */
+let mode='std';
+function setMode(m){mode=m;
+  $('m-std').style.cssText=m==='std'?'border-color:var(--accent);color:var(--accent-ink)':'';
+  $('m-ia').style.cssText=m==='ia'?'border-color:var(--purple);color:var(--purple)':'';
+  $('s-q').placeholder=m==='ia'?"Posez une question — ex. Quels textes encadrent le télétravail ?":"Rechercher dans le fonds national…";
+  renderExamples();}
+function renderExamples(){
+  const ex=mode==='ia'?["Quel texte régit les archives publiques ?","Quel est le montant du budget 2024 ?","Que contient le Code Numérique ?","Quel texte organise la décentralisation ?"]
+    :["archives publiques","budget 2024","code numérique","décentralisation","code du travail"];
+  $('s-examples').innerHTML=ex.map(e=>`<button class="chip" onclick="$('s-q').value=this.textContent;doSearch()">${e}</button>`).join('');}
+function doSearch(){
+  const q=$('s-q').value.trim().toLowerCase();if(!q)return;
+  const hits=DOCS.filter(d=>(d.t+d.sum+d.kw.join(' ')+d.ref).toLowerCase().includes(q)||q.split(/\s+/).some(w=>w.length>3&&(d.t+d.sum).toLowerCase().includes(w)));
+  const shown=hits.length?hits:DOCS.slice(0,3);
+  if(mode==='ia'){
+    $('s-answer').style.display='block';
+    let a;
+    if(q.includes('archive'))a="Les archives publiques et privées sont régies par le Décret n° 2024-248/PR/MJC du 30 septembre 2024, publié au Journal Officiel. Il définit les archives publiques et privées, organise leur collecte, leur tri, leur conservation et leur communication, et fixe les règles de sort final. Ce décret constitue la base légale de la présente plateforme nationale.";
+    else if(q.includes('budget')||q.includes('finance'))a="Le budget initial de l'État pour l'exercice 2024 est fixé par la Loi de Finances n° 64/AN/23/9ème L : il est présenté en équilibre, recettes et dépenses arrêtées à 152 490 386 972 FDJ. Pour l'exercice 2025, c'est la Loi n° 150/AN/24/9ème L qui porte le budget initial de l'État.";
+    else if(q.includes('numérique')||q.includes('données')||q.includes('cyber'))a="Le cadre numérique repose sur plusieurs textes : la Loi n° 019/AN/23/9ème L portant Code Numérique (protection des données personnelles, commerce électronique, cybersécurité), la Loi n° 18/AN/23/9ème L du 21 janvier 2024 ratifiant la Convention de Malabo de l'Union Africaine, et la Loi n° 195/AN/25/9ème L créant l'Autorité Nationale de Cybersécurité (ANC).";
+    else if(q.includes('décentralisation')||q.includes('région')||q.includes('tadjourah'))a="La décentralisation est organisée par la Loi n° 174/AN/02/4ème L du 7 juillet 2002 portant décentralisation et statut des régions (Tadjourah, Ali Sabieh, Dikhil, Obock, Arta), modifiée par la Loi n° 139/AN/06/5ème L. Elle institue les conseils régionaux et définit leurs compétences.";
+    else if(q.includes('travail')||q.includes('emploi'))a="Les relations professionnelles sont régies par la Loi n° 133/AN/05/5ème L du 26 janvier 2006 portant Code du Travail : contrat de travail, durée du travail, salaires, représentation du personnel et règlement des conflits.";
+    else if(q.includes('gouvernement')||q.includes('nomination'))a="La composition du Gouvernement résulte du Décret n° 2021-106/PRE du 24 mai 2021 portant nomination des membres du Gouvernement, pris à la suite du Décret n° 2021-105/PRE nommant le Premier ministre Abdoulkader Kamil Mohamed.";
+    else a=`D'après les textes officiels indexés (source : Journal Officiel — journalofficiel.dj), ${shown.length} document(s) se rapportent à votre question — les sources les plus pertinentes sont listées ci-dessous avec leur référence officielle.`;
+    $('s-answer-txt').textContent=a;
+  } else $('s-answer').style.display='none';
+  $('s-results').innerHTML=shown.map(d=>{const[bc,bl]=STBADGE[d.st];
+    return `<div class="card" style="cursor:pointer" onclick="openDoc('${d.ref}')">
+      <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center"><span class="ref">${d.ref}</span><span class="badge ${bc}">${bl}</span><span class="badge ${CONFBADGE[d.conf]}">${d.conf}</span></div>
+      <b style="display:block;margin-top:6px">${esc(d.t)}</b>
+      <p class="muted" style="margin-top:4px;max-width:80ch">${esc(d.sum)}</p></div>`}).join('');
+}
+
+/* ============ Plan de classement ============ */
+function renderPlan(){
+  $('plan-tree').innerHTML='<ul>'+PLAN.map(([c,n,kids])=>
+   `<li><button class="tnode openc" onclick="this.parentElement.classList.toggle('closed');this.classList.toggle('openc')">
+      <span class="caret">▶</span><span class="code">${c}</span><b>${n}</b><span class="tiny" style="margin-left:auto">${kids.length} séries</span></button>
+    <ul>${kids.map(([kc,kn,dua,sf])=>`<li><div class="tnode" style="cursor:default">
+      <span class="caret"></span><span class="code">${kc}</span><span>${kn}</span>
+      <span style="margin-left:auto;display:flex;gap:6px"><span class="badge b-grey">DUA ${dua}</span><span class="badge ${sf==='C'?'b-green':sf==='D'?'b-red':'b-amber'}">${sf}</span></span></div></li>`).join('')}</ul></li>`).join('')+'</ul>';
+}
+
+/* ============ Institutions ============ */
+function renderInsts(){
+  $('inst-cards').innerHTML=INSTS.map(i=>{const pct=Math.round(i.go/i.q*100);
+    return `<div class="card">
+    <div style="display:flex;justify-content:space-between;gap:8px;align-items:flex-start">
+      <div><b>${i.n}</b><div class="tiny" dir="rtl" style="text-align:left;margin-top:2px">${i.ar}</div></div>
+      <span class="badge b-blue mono">${i.c}</span></div>
+    <div style="display:flex;gap:22px;margin:14px 0 10px;font-variant-numeric:tabular-nums">
+      <div><b style="font-family:Archivo;font-size:19px">${fmt(i.docs)}</b><div class="tiny">documents</div></div>
+      <div><b style="font-family:Archivo;font-size:19px">${i.users}</b><div class="tiny">agents</div></div>
+      <div><b style="font-family:Archivo;font-size:19px">${i.go.toLocaleString('fr-FR')} To</b><div class="tiny">stockage</div></div></div>
+    <div class="progress" title="Quota de stockage"><i style="width:${pct}%;background:${pct>85?'var(--amber)':'var(--accent)'}"></i></div>
+    <div class="tiny" style="margin-top:5px">${pct} % du quota (${i.q} To)</div></div>`}).join('');
+}
+
+/* ============ Workflows ============ */
+function renderWf(){
+  $('wf-steps').innerHTML=WF.map(([n,d,st])=>
+   `<div class="step ${st===1?'done':st===2?'now':''}"><b>${n}</b>${st===2?' <span class="badge b-blue">en cours</span>':''}<div class="tiny">${d}</div></div>`).join('');
+  const done=WF.filter(s=>s[2]===1).length;
+  $('wf-btn').style.display=WF.some(s=>s[2]===2)?'':'none';
+}
+function advanceWf(){
+  const i=WF.findIndex(s=>s[2]===2);if(i<0)return;
+  WF[i][2]=1;WF[i][1]="Validée — à l'instant";
+  if(i+1<WF.length){WF[i+1][2]=2;WF[i+1][1]="Démarrée — à l'instant"}
+  renderWf();toast(i+1<WF.length?`Étape « ${WF[i][0]} » validée — passage à « ${WF[i+1][0]} »`:"Workflow terminé — document publié ✓");
+}
+
+/* ============ Archives physiques ============ */
+function renderPhys(){
+  $('depots').innerHTML=DEPOTS.map(d=>{const pct=Math.round(d.use/d.cap*100);
+    return `<div class="card"><div style="display:flex;justify-content:space-between;gap:8px"><b>${d.n}</b><span class="badge b-blue mono">${d.c}</span></div>
+    <div class="progress" style="margin:12px 0 5px"><i style="width:${pct}%;background:${pct>85?'var(--amber)':'var(--accent)'}"></i></div>
+    <div class="tiny">${fmt(d.use)} / ${fmt(d.cap)} boîtes (${pct} %)</div>
+    <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:10px">
+      <span class="badge ${d.clim?'b-green':'b-grey'}">Climatisation</span>
+      <span class="badge ${d.feu?'b-green':'b-grey'}">Anti-incendie</span>
+      <span class="badge ${d.rfid?'b-green':'b-grey'}">RFID</span></div></div>`}).join('');
+  $('box-rows').innerHTML=BOXES.map(([bc,ct,loc,st])=>
+   `<tr onclick="$('box-q').value='${bc}';locateBox()"><td class="ref">${bc}</td><td>${ct}</td><td class="muted">${loc}</td>
+    <td><span class="badge ${st==='place'?'b-green':'b-amber'}">${st==='place'?'En place':'Empruntée'}</span></td></tr>`).join('');
+}
+function locateBox(){
+  const q=$('box-q').value.trim().toUpperCase();
+  const b=BOXES.find(x=>x[0]===q);
+  $('box-result').innerHTML=b
+    ?`<div class="alert info">📍 <span><b>${b[0]}</b> — ${b[1]}<br>Localisation : <b>${b[2]}</b> · ${b[3]==='place'?'présente en rayonnage':'actuellement empruntée (retour attendu sous 7 jours)'}</span></div>`
+    :`<div class="alert warn">⚠ Aucune boîte ne porte le code <b class="mono">${esc(q||'—')}</b>. Essayez par exemple <b class="mono">DJB-2024-00147</b>.</div>`;
+}
+
+/* ============ Audit / activité ============ */
+function chainHash(s){let h=5381;for(const c of s)h=((h*33)^c.charCodeAt(0))>>>0;return h.toString(16).padStart(8,'0')}
+function renderAudit(){
+  let prev="genesis";
+  $('audit-rows').innerHTML=AUDIT.map(([ts,ac,res,us,ip])=>{
+    prev=chainHash(prev+ts+ac+res+us);
+    const cls=ac==='CONNEXION'?'b-purple':ac==='CREATION'?'b-blue':ac==='VALIDATION'?'b-green':ac==='EMPRUNT'?'b-amber':'b-grey';
+    return `<tr style="cursor:default"><td class="mono tiny">${ts}</td><td><span class="badge ${cls}">${ac}</span></td>
+      <td class="ref">${res}</td><td>${us}</td><td class="mono tiny">${ip}</td><td class="mono tiny" style="color:var(--ink3)">${prev}…</td></tr>`}).join('');
+}
+function renderFeed(){
+  $('feed').innerHTML=FEED.map(([b,t,d,w])=>
+   `<div style="display:flex;gap:10px;align-items:baseline"><span class="badge ${b}" style="flex:none">${t}</span>
+    <span style="flex:1">${d}</span><span class="tiny" style="flex:none">${w}</span></div>`).join('');
+}
+
+/* ============ Portail citoyen ============ */
+function citSearch(){
+  const q=($('cit-q')?.value||'').toLowerCase();
+  const pub=DOCS.filter(d=>d.conf==='Public'&&(!q||(d.t+d.sum+d.kw.join(' ')).toLowerCase().includes(q)));
+  $('cit-results').innerHTML=(pub.length?pub:DOCS.filter(d=>d.conf==='Public')).map(d=>
+   `<div class="card"><div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+      <span class="ref">${d.ref}</span><span class="badge b-grey">${d.type}</span><span class="tiny">${d.date}</span></div>
+    <b style="display:block;margin-top:6px">${esc(d.t)}</b>
+    <p class="muted" style="margin-top:4px;max-width:80ch">${esc(d.sum)}</p>
+    <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap">
+      <button class="btn ghost sm" onclick="toast('Téléchargement du document officiel — simulé')">⬇ Télécharger (PDF)</button>
+      ${d.jo?'<a class="btn ghost sm" style="text-decoration:none" href="https://www.journalofficiel.dj" target="_blank" rel="noopener">Consulter sur journalofficiel.dj ↗</a>':''}
+    </div></div>`).join('');
+}
+
+/* ============ Init ============ */
+renderDocs();renderExamples();renderPlan();renderInsts();renderWf();renderPhys();renderAudit();renderFeed();citSearch();updateKpis();
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeDrawer();$('sidebar').classList.remove('open')}});
+</script>
+
+</body>
+</html>
