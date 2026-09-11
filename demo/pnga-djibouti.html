@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="PNGA — Plateforme Nationale de Gestion des Archives de la République de Djibouti. Démonstration interactive autonome intégrant le catalogue réel du Journal Officiel (eJO — journalofficiel.dj), 1977-2026.">
+<meta name="description" content="PNGA — Plateforme Nationale de Gestion des Archives de la République de Djibouti. Catalogue réel du Journal Officiel (eJO) et mise en œuvre du Plan d'urgence des archives : chantiers, versements BAN, éliminations réglementées.">
 </head>
 <body>
 <title>PNGA Djibouti</title>
@@ -241,6 +241,10 @@ tbody tr:last-child td{border-bottom:none}
     <button class="nav-item" data-sec="inst">🏛&nbsp; Institutions</button>
     <button class="nav-item" data-sec="wf">⇶&nbsp; Workflows</button>
     <button class="nav-item" data-sec="phys">📦&nbsp; Archives physiques</button>
+    <div class="side-label">Plan d'urgence</div>
+    <button class="nav-item" data-sec="chantiers">🏗&nbsp; Chantiers</button>
+    <button class="nav-item" data-sec="versements">🚚&nbsp; Versements BAN</button>
+    <button class="nav-item" data-sec="elim">🗑&nbsp; Éliminations</button>
     <div class="side-label">Public</div>
     <button class="nav-item" data-sec="citizen">🌐&nbsp; Portail citoyen</button>
     <div style="flex:1"></div>
@@ -302,7 +306,7 @@ tbody tr:last-child td{border-bottom:none}
       <div class="filters">
         <input type="search" id="f-q" placeholder="Filtrer par titre, référence, auteur…" oninput="renderDocs()">
         <select id="f-type" onchange="renderDocs()">
-          <option value="">Tous les types</option><option>Décret</option><option>Loi</option><option>Loi de Finances</option><option>Arrêté</option><option>Ordonnance</option><option>Rapport</option><option>Courrier</option>
+          <option value="">Tous les types</option><option>Décret</option><option>Loi</option><option>Loi de Finances</option><option>Arrêté</option><option>Ordonnance</option><option>Circulaire</option><option>Fonds privé</option><option>Rapport</option><option>Courrier</option>
         </select>
         <select id="f-year" onchange="renderDocs()"><option value="">Toutes les années</option></select>
         <select id="f-status" onchange="renderDocs()">
@@ -447,6 +451,59 @@ tbody tr:last-child td{border-bottom:none}
       </div>
     </section>
 
+    <!-- ===== Plan d'urgence : chantiers ===== -->
+    <section class="section" id="sec-chantiers">
+      <div class="gradient-header rounded-hero" style="background:linear-gradient(150deg,#0E1B31,#0F4D8A);color:#fff;border-radius:14px;padding:24px 28px;margin-bottom:16px">
+        <h3 style="color:#fff;font-size:18px">Plan d'urgence des archives — actualisation août 2026</h3>
+        <p style="color:#B9CBE6;font-size:13px;margin-top:4px">Projet de réorganisation et de modernisation des pratiques archivistiques (MJC · SGG · ANPC/BAN · ANSIE)</p>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;margin-top:16px">
+          <div style="background:rgba(255,255,255,.1);border-radius:10px;padding:10px;text-align:center"><b style="font-family:Archivo;font-size:22px">13</b><div style="font-size:11px;color:#B9CBE6">chantiers ouverts</div></div>
+          <div style="background:rgba(255,255,255,.1);border-radius:10px;padding:10px;text-align:center"><b style="font-family:Archivo;font-size:22px">6</b><div style="font-size:11px;color:#B9CBE6">versements Présidence</div></div>
+          <div style="background:rgba(255,255,255,.1);border-radius:10px;padding:10px;text-align:center"><b style="font-family:Archivo;font-size:22px">28</b><div style="font-size:11px;color:#B9CBE6">institutions au calendrier</div></div>
+          <div style="background:rgba(255,255,255,.1);border-radius:10px;padding:10px;text-align:center"><b style="font-family:Archivo;font-size:22px">105</b><div style="font-size:11px;color:#B9CBE6">lots programmés → déc. 2027</div></div>
+        </div>
+      </div>
+
+      <div class="grid g2" style="margin-bottom:16px">
+        <div class="card">
+          <h3>Budget du projet — 193 215 602 FDJ (Annexe V)</h3>
+          <div id="budget-bars"></div>
+        </div>
+        <div class="card">
+          <h3>Bilan évaluatif — indicateurs pour le Conseil des Ministres (§ VIII)</h3>
+          <div style="display:flex;flex-direction:column;gap:8px;font-size:13.5px" id="bilan-kpis"></div>
+        </div>
+      </div>
+
+      <h3 style="font-size:15.5px;margin-bottom:10px">Chantiers institutionnels — 7 phases (Annexe I)</h3>
+      <div style="display:flex;flex-direction:column;gap:10px" id="chantier-cards"></div>
+    </section>
+
+    <!-- ===== Plan d'urgence : versements ===== -->
+    <section class="section" id="sec-versements">
+      <div class="alert info" style="margin-bottom:14px">🚚 <span>Le projet d'arrêté rend le calendrier de versement <b>opposable pour 28 institutions</b> : fin des versements ponctuels, programmation trimestrielle jusqu'en décembre 2027 (Annexe II du Plan d'urgence). Chaque versement suit la chaîne : <b>colis → bordereau → vérification → enlèvement → réception BAN + attestation de transfert</b>.</span></div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px" id="vers-stats"></div>
+      <div class="card flat" style="padding:0">
+        <div style="overflow-x:auto">
+          <table style="min-width:1080px" id="vers-matrix"></table>
+        </div>
+      </div>
+      <p class="tiny" style="margin-top:8px">Reconstitution d'après l'Annexe II : les totaux par institution (105 lots) et les versements réalisés sont ceux du document ; le positionnement fin de certaines cases est interprété. La Présidence avait déjà versé les lots 1 à 3 avant l'ouverture de ce calendrier (premier versement : février 2024).</p>
+      <div class="legend" style="margin-top:6px"><span><b style="background:var(--green)"></b>Versement réalisé</span><span><b style="background:transparent;border:2px solid var(--accent)"></b>Versement programmé</span></div>
+    </section>
+
+    <!-- ===== Plan d'urgence : éliminations ===== -->
+    <section class="section" id="sec-elim">
+      <div class="alert warn" style="margin-bottom:14px">⚠ <span>L'élimination est <b>irréversible</b> et strictement encadrée (§ V.3.2 du Plan d'urgence) : préparation des documents → <b>bordereau d'élimination soumis au visa de la Direction des Archives Nationales</b> → destruction sécurisée (incinération ou déchiquetage) attestée par <b>procès-verbal</b>. Le bordereau visé est conservé comme document réglementaire.</span></div>
+      <div class="card flat tbl-wrap" style="padding:0">
+        <table>
+          <thead><tr><th>Bordereau</th><th>Institution</th><th>Documents proposés</th><th class="num">Nombre</th><th>Statut</th><th>PV</th><th>Action</th></tr></thead>
+          <tbody id="elim-rows"></tbody>
+        </table>
+      </div>
+      <p class="tiny" style="margin-top:8px">Exemples illustratifs suivant la procédure réglementaire du Plan d'urgence — cliquez « Étape suivante » pour dérouler le circuit bordereau → visa DAN → destruction avec PV.</p>
+    </section>
+
     <!-- ===== Portail citoyen ===== -->
     <section class="section" id="sec-citizen">
       <div class="hero-cit">
@@ -460,7 +517,7 @@ tbody tr:last-child td{border-bottom:none}
       <div id="cit-results" style="display:flex;flex-direction:column;gap:10px"></div>
     </section>
 
-    <p class="note">PNGA — démonstration interactive autonome. Le fonds documentaire reprend le catalogue réel du Journal Officiel de la République de Djibouti (eJO — journalofficiel.dj) : plus de 90 lois, décrets, arrêtés et ordonnances de 1977 à 2026, avec leurs références et intitulés d'origine. Les statuts de traitement, statistiques, empreintes et les documents marqués « fictif » sont simulés par la plateforme. Version complète : FastAPI · PostgreSQL · Elasticsearch · MinIO · Next.js — conforme ISO 15489, ISO 14721 (OAIS), ISO 27001, MoReq2010 et au Décret n° 2024-248/PR/MJC.</p>
+    <p class="note">PNGA — démonstration interactive autonome. Le fonds documentaire reprend le catalogue réel du Journal Officiel de la République de Djibouti (eJO — journalofficiel.dj) : près de 100 lois, décrets, arrêtés et ordonnances de 1977 à 2026, avec leurs références et intitulés d'origine. Les modules Chantiers, Versements BAN et Éliminations mettent en œuvre le Plan d'urgence des archives (V3, actualisation août 2026 — MJC/SGG) : Annexe I (plannings des chantiers), Annexe II (calendrier de versement des 28 institutions, 105 lots), Annexe V (budget 193 215 602 FDJ), § V.3.2 (bordereaux d'élimination visés par la DAN). Les statuts de traitement, statistiques, empreintes et les éléments marqués « fictif » ou « illustratif » sont simulés. Version complète : FastAPI · PostgreSQL · Elasticsearch · MinIO · Next.js — conforme ISO 15489, ISO 14721 (OAIS), ISO 27001, MoReq2010, ISAD(G) et au Décret n° 2024-248/PR/MJC.</p>
   </main>
 </div>
 
@@ -499,7 +556,9 @@ const INSTS=[
  {n:"Min. de l'Intérieur",ar:"وزارة الداخلية",c:"MI",docs:3390,go:2.3,q:2.5,users:41},
  {n:"Min. de la Jeunesse et de la Culture — tutelle des Archives nationales",ar:"وزارة الشباب والثقافة",c:"MJC",docs:3124,go:2.6,q:4,users:38},
  {n:"MENFOP — Éducation nationale et Formation professionnelle",ar:"وزارة التربية الوطنية والتكوين المهني",c:"MENFOP",docs:2967,go:2.0,q:4,users:46},
- {n:"Min. de la Communication, Postes et Télécommunications",ar:"وزارة الاتصال المكلفة بالبريد والمواصلات",c:"MCPT",docs:1618,go:1.1,q:2,users:19}];
+ {n:"Min. de la Communication, Postes et Télécommunications",ar:"وزارة الاتصال المكلفة بالبريد والمواصلات",c:"MCPT",docs:1618,go:1.1,q:2,users:19},
+ {n:"Agence Nationale pour la Promotion de la Culture (ANPC)",ar:"الوكالة الوطنية للنهوض بالثقافة",c:"ANPC",docs:5230,go:3.4,q:8,users:24},
+ {n:"Bibliothèque et Archives Nationales (BAN) — conservation définitive",ar:"المكتبة والأرشيف الوطني",c:"BAN",docs:8114,go:5.2,q:12,users:31}];
 /* Textes officiels réels publiés au Journal Officiel de la République de Djibouti
    (journalofficiel.dj). Les statuts de traitement, niveaux de confidentialité et
    empreintes sont simulés par la plateforme de démonstration. */
@@ -602,12 +661,26 @@ const JO=[
  ["Décret n° 83-049/PR/DEF","Décret portant amnistie de sanctions disciplinaires à l'occasion de la fête de l'Armée nationale",1983],
  ["Décret n° 81-066/PR","Décret portant liste des candidats, convocation du corps électoral et fixant la date de l'élection du Président de la République",1981],
  ["Ordonnance n° 77-048/PR","Ordonnance portant création de l'Établissement public « Aéroport de Djibouti »",1977],
- ["Ordonnance n° 77-029/PR/J","Ordonnance modifiant la loi du 20 mai 1863",1977]];
+ ["Ordonnance n° 77-029/PR/J","Ordonnance modifiant la loi du 20 mai 1863",1977],
+ ["Décret n° 2015-151/PR/MAMCBW","Décret créant un comité de suivi pour le projet de construction des Archives Nationales et de la Bibliothèque Nationale",2015],
+ ["Décret n° 2012-242/PRE","Décret du 4 novembre 2012 organisant le fonctionnement des Archives Nationales",2012],
+ ["Circulaire n° 2011-521/PM","Circulaire du Premier Ministre responsabilisant les ministères dans la gestion de leurs archives",2011],
+ ["Loi n° 132/AN/11/6ème L","Loi encadrant la fonction et la gestion des archives publiques (citée par le Plan d'urgence)",2011],
+ ["Décret n° 2001-0209/PRE","Décret relatif aux archives publiques (cité par le Plan d'urgence)",2001]];
+
+/* Fonds privés (Plan d'urgence, § IV.2 — stratégie de collecte des archives privées) */
+DOCS.push(
+ {ref:"FP-DON-2026-001",t:"Fonds privé — Papiers personnels d'une haute personnalité nationale (entrée par don)",inst:"BAN",type:"Fonds privé",st:"archive",conf:"Interne",date:"2026",aut:"Bibliothèque et Archives Nationales",prive:1,
+  sum:"Fonds d'archives privées collecté au titre de la stratégie du Plan d'urgence (correspondances, discours, photographies). Entrée par don ; toute vente ou exportation hors du territoire national est soumise à l'autorisation préalable du Directeur des Archives Nationales.",
+  kw:["archives privées","don","patrimoine"],hash:"9c2e51a7d04b83f6e21d95c70a4f8b3d6217e09c85f4a2b1d38e60c97f215a4d"},
+ {ref:"FP-DEP-2025-004",t:"Fonds privé — Minutier d'un notaire de Djibouti-ville, 1965-1998 (entrée par dépôt)",inst:"BAN",type:"Fonds privé",st:"archive",conf:"Confidentiel",date:"2025",aut:"Bibliothèque et Archives Nationales",prive:1,
+  sum:"Minutier notarial déposé à la BAN : la communication obéit aux règles fixées par le propriétaire (Plan d'urgence, lexique « archives privées »). Documents à forte valeur probante pour les droits des particuliers.",
+  kw:["archives privées","notaire","dépôt"],hash:"4f81b3c2e97d05a6f8241c0d93e5b76a1082f4dc6b95e37a20d81f4c65e93b70"});
 
 /* Fusion du catalogue eJO dans le fonds */
-const SIGLES={PRE:"Présidence",PM:"Primature",MI:"Min. Intérieur",MJDH:"Min. Justice et Droits de l'Homme",MJAP:"Min. Justice",MJAPDH:"Min. Justice",MB:"Min. Budget",MENFOP:"MENFOP",MENSUR:"Min. Enseignement Supérieur",MS:"Min. Santé",MTFPS:"Min. Travail et Formalisation",MVUH:"Min. Ville, Urbanisme et Habitat",MCT:"Min. Commerce et Tourisme",MDENI:"Min. Économie Numérique et Innovation",MEFI:"Min. Économie et Finances",MCPT:"Min. Communication (MCPT)",MD:"Min. Défense",DEF:"Min. Défense",SES:"Secrétariat d'État aux Sports",MDC:"Min. délégué au Commerce",MERN:"Min. Énergie et Ressources Naturelles",MJC:"Min. Jeunesse et Culture",J:"Min. Justice",PR:"Présidence"};
+const SIGLES={PRE:"Présidence",PM:"Primature",MI:"Min. Intérieur",MJDH:"Min. Justice et Droits de l'Homme",MJAP:"Min. Justice",MJAPDH:"Min. Justice",MB:"Min. Budget",MENFOP:"MENFOP",MENSUR:"Min. Enseignement Supérieur",MS:"Min. Santé",MTFPS:"Min. Travail et Formalisation",MVUH:"Min. Ville, Urbanisme et Habitat",MCT:"Min. Commerce et Tourisme",MDENI:"Min. Économie Numérique et Innovation",MEFI:"Min. Économie et Finances",MCPT:"Min. Communication (MCPT)",MD:"Min. Défense",DEF:"Min. Défense",SES:"Secrétariat d'État aux Sports",MDC:"Min. délégué au Commerce",MERN:"Min. Énergie et Ressources Naturelles",MJC:"Min. Jeunesse et Culture",MAMCBW:"Min. Affaires Musulmanes, Culture et Biens Waqfs",J:"Min. Justice",PR:"Présidence"};
 function refInst(ref){if(ref.includes("/AN/"))return"Assemblée nationale";const seg=ref.split("/");const last=seg[seg.length-1].trim();return SIGLES[last]||SIGLES[seg[seg.length-2]]||"Présidence"}
-function refType(ref){return ref.startsWith("Loi de Finances")?"Loi de Finances":ref.startsWith("Loi")?"Loi":ref.startsWith("Arrêté")?"Arrêté":ref.startsWith("Ordonnance")?"Ordonnance":"Décret"}
+function refType(ref){return ref.startsWith("Loi de Finances")?"Loi de Finances":ref.startsWith("Loi")?"Loi":ref.startsWith("Arrêté")?"Arrêté":ref.startsWith("Ordonnance")?"Ordonnance":ref.startsWith("Circulaire")?"Circulaire":"Décret"}
 function fakeSha(s){let out="";for(let k=1;k<=8;k++){let h=2166136261^k;for(const c of s){h=Math.imul(h^c.charCodeAt(0),16777619)>>>0}out+=h.toString(16).padStart(8,"0")}return out}
 JO.forEach(([ref,t,y])=>{
   if(DOCS.some(d=>d.ref===ref))return;
@@ -623,6 +696,64 @@ const PLAN=[
  ["300","Justice et ordre public",[["310","Décisions de justice","Permanent","C"],["320","État civil et nationalité","Permanent","C"],["330","Sécurité intérieure","20 ans","T"]]],
  ["400","Secteurs sociaux",[["410","Éducation et formation","10 ans","T"],["420","Santé publique","20 ans","T"],["430","Travail et protection sociale","50 ans","C"]]],
  ["500","Infrastructures et économie",[["510","Ports et zones franches","30 ans","C"],["520","Transports et équipement","15 ans","T"],["530","Énergie, eau et télécommunications","15 ans","T"]]]];
+/* ===== Plan d'urgence des archives (V3 — actualisation août 2026, Conseil des Ministres) ===== */
+const ECHEANCES=["12 juin 25","3 juil. 25","29 sept. 25","25 déc. 25","Fév. 26","24 juin 26","30 juin 26","30 sept. 26","30 déc. 26","30 mars 27","30 juin 27","30 sept. 27","30 déc. 27"];
+const CUTOFF=6; /* échéances ≤ 30 juin 2026 = versements réalisés à la date d'actualisation */
+/* Annexe II — calendrier de versement des 28 institutions vers la BAN : [institution, n° du 1er lot au calendrier, indices d'échéances] — 105 lots au total */
+const VERSEMENTS=[
+ ["Présidence de la République",4,[0,2,6,8,10,12]],
+ ["Assemblée nationale",1,[1,3,5,6,9,11]],
+ ["Primature",1,[0,2,5,7,9,11,12]],
+ ["Min. de la Justice et des Affaires Pénitentiaires",1,[6,7,9]],
+ ["Min. de l'Économie et des Finances chargé de l'Industrie",1,[3,7,9,11]],
+ ["Min. des Affaires Étrangères et de la Coopération Int.",1,[7,9,11]],
+ ["Min. de la Défense, chargé des Relations avec le Parlement",1,[7,9,11]],
+ ["Min. de l'Intérieur",1,[3,7,9,11]],
+ ["Min. du Budget",1,[7,8,10,12]],
+ ["Min. de la Santé",1,[7,8,10,12]],
+ ["MENFOP",1,[2,5,7,9,11]],
+ ["Min. de l'Enseignement Supérieur et de la Recherche",1,[6,9,11]],
+ ["Min. de la Femme et de la Famille",1,[7,8,10,12]],
+ ["Min. de l'Agriculture, de l'Eau, de la Pêche et de l'Élevage",1,[7,8,10,12]],
+ ["Min. des Infrastructures et de l'Équipement",1,[7,9,11]],
+ ["Min. des Affaires Musulmanes et des Biens Wakfs",1,[7,9,11]],
+ ["Min. des Affaires Sociales et des Solidarités",1,[4,5,8,11]],
+ ["Min. de l'Énergie chargé des Ressources Naturelles",1,[8,10]],
+ ["Min. du Travail chargé de la Formalisation et de la Protection",1,[1,4,8,10,12]],
+ ["Min. de l'Environnement et du Développement Durable",1,[8,10,12]],
+ ["Min. de la Ville, de l'Urbanisme et de l'Habitat",1,[8,10,12]],
+ ["Min. de la Communication, Postes et Télécommunications",1,[3,7,9,11]],
+ ["Min. du Commerce et du Tourisme",1,[8,10,12]],
+ ["Min. de la Jeunesse et de la Culture",1,[8,10,12]],
+ ["Min. Délégué chargé de la Décentralisation",1,[8,10,12]],
+ ["Min. Délégué chargé de l'Économie Numérique et de l'Innovation",1,[9,11,12]],
+ ["Secrétariat d'État aux Investissements et au Secteur privé",1,[9,11,12]],
+ ["Secrétariat d'État chargé des Sports",1,[9,11,12]]];
+/* Annexe I — chantiers institutionnels : 7 phases (2 = réalisée, 1 = en cours, 0 = non commencée) */
+const PHASES7=["Démarrage & cadrage","État des lieux","Traitement du passif","Numérisation","Transfert BAN","Formations & clôture","Communication & pilotage"];
+const CHANTIERS=[
+ ["Présidence de la République",[2,2,2,2,2,1,1],"Chantier modèle — 6 versements réalisés ; premier fonds engagé dans l'informatisation"],
+ ["Assemblée nationale",[2,2,2,2,1,1,1],"4 versements réalisés"],
+ ["Primature",[2,2,2,1,1,1,1],"3 versements réalisés"],
+ ["Ministère du Travail",[2,2,2,1,1,1,1],"2 versements réalisés"],
+ ["Cour Suprême (MJAP)",[1,1,1,0,0,0,0],"Dépoussiérage et pré-triage en cours ; manuel opérationnel élaboré"],
+ ["Tribunal de Première Instance",[1,0,0,0,0,0,0],"Chantier ouvert"],
+ ["Tribunal du Statut Personnel",[1,0,0,0,0,0,0],"Plan de classement en cours"],
+ ["Organes de contrôle de l'État",[2,1,1,0,0,0,0],"Cour des Comptes, IGE, IGF, CNIPLC, SEPE, DCP — financement PAIC-GEP (BAD/ANSIE)"],
+ ["Min. Affaires Étrangères et Coopération Int.",[1,0,0,0,0,0,0],"Chantier ouvert"],
+ ["Ministère de l'Intérieur",[1,0,0,0,0,0,0],"1 versement réalisé"],
+ ["Min. Affaires Sociales et Solidarités",[2,1,1,0,0,0,0],"2 versements réalisés"],
+ ["Ministère de la Santé",[1,0,0,0,0,0,0],"Chantier ouvert"],
+ ["Commune de Boulaos",[1,0,0,0,0,0,0],"Traitement des dossiers d'archives engagé"]];
+/* § V.3.2 — bordereaux d'élimination : 0 = en préparation, 1 = soumis au visa DAN, 2 = visé, 3 = détruit (PV) */
+let ELIMS=[
+ {ref:"BE-2026-014",inst:"Min. Budget",desc:"Doubles de pièces comptables 1998-2005 (DUA expirée)",n:412,st:3,pv:"PV-2026-009"},
+ {ref:"BE-2026-021",inst:"MENFOP",desc:"Copies d'examens et brouillons administratifs 2001-2010",n:268,st:2,pv:null},
+ {ref:"BE-2026-027",inst:"Primature",desc:"Chronos de correspondance en double 1995-2004",n:190,st:1,pv:null},
+ {ref:"BE-2026-031",inst:"Min. Santé",desc:"Formulaires vierges obsolètes et duplicatas 2008-2012",n:95,st:0,pv:null}];
+/* Annexe V — budget du projet (FDJ) */
+const BUDGET=[["Budget réalisé — État (15 M FDJ / an depuis 2023)",45000000],["Organes de contrôle — PAIC-GEP (BAD / ANSIE)",35544200],["Autres institutions (estimation des besoins)",112671402]];
+
 const WF=[["Réception","Bureau d'ordre — 12 sept. 08:14",1],["Numérisation","Atelier scan — 12 sept. 09:02",1],["OCR + analyse IA","Automatique — 12 sept. 09:05 · confiance 97,1 %",1],["Validation archiviste","Assignée à M. Ahmed — SLA : 48 h",2],["Contrôle qualité","Validateur ministériel (MJC)",0],["Indexation","Moteur de recherche national",0],["Archivage OAIS","Génération du paquet AIP",0],["Publication","Selon niveau de confidentialité",0]];
 const DEPOTS=[
  {n:"Dépôt central — Djibouti-ville",c:"DEP-DJB",cap:12000,use:8340,clim:1,feu:1,rfid:1},
@@ -663,7 +794,8 @@ function doLogin(){$('login').style.display='none';$('app').classList.add('on');
 function logout(){$('app').classList.remove('on');$('login').style.display='flex'}
 const TITLES={dash:["Pilotage","Tableau de bord national"],docs:["Fonds documentaire","Documents"],upload:["Fonds documentaire","Dépôt & numérisation"],
  search:["Fonds documentaire","Recherche & assistant IA"],plan:["Fonds documentaire","Plan de classement PNC-DJ"],inst:["Organisation","Institutions publiques"],
- wf:["Organisation","Workflows BPM"],phys:["Organisation","Archives physiques"],audit:["Pilotage","Journal d'audit"],citizen:["Public","Portail citoyen"]};
+ wf:["Organisation","Workflows BPM"],phys:["Organisation","Archives physiques"],audit:["Pilotage","Journal d'audit"],citizen:["Public","Portail citoyen"],
+ chantiers:["Plan d'urgence","Chantiers institutionnels"],versements:["Plan d'urgence","Versements vers la BAN"],elim:["Plan d'urgence","Éliminations réglementées"]};
 document.querySelectorAll('.nav-item[data-sec]').forEach(b=>b.onclick=()=>{
   document.querySelectorAll('.nav-item').forEach(x=>x.classList.remove('active'));b.classList.add('active');
   document.querySelectorAll('.section').forEach(s=>s.classList.remove('on'));
@@ -748,8 +880,10 @@ function openDoc(ref){
   $('d-badges').innerHTML=`<span class="badge ${bc}">${bl}</span><span class="badge ${CONFBADGE[d.conf]}">${d.conf}</span><span class="badge b-grey">${d.type}</span>`;
   const cls=d.type==="Loi de Finances"?"210 — Budget de l'État et lois de finances":(d.type==="Loi"||d.type==="Décret"||d.type==="Arrêté")?"130 — Textes législatifs et réglementaires":"220 — Comptabilité publique";
   $('d-kv').innerHTML=[["Créateur",d.aut],["Institution",d.inst],["Date du document",d.date],["Langue","Français"],
-    ["Source",d.jo?"Journal Officiel de la République de Djibouti (journalofficiel.dj)":"Production interne — exemple fictif"],
-    ["Classement","PNC-DJ · "+cls],["Conservation",(d.type==="Loi"||d.type==="Décret"||d.type==="Loi de Finances")?"Permanente (sort final : C)":"10 ans (DUA)"]]
+    ["Source",d.prive?"Fonds privé — entrée par "+(d.ref.includes("DON")?"don":"dépôt")+" (BAN)":d.jo?"Journal Officiel de la République de Djibouti (journalofficiel.dj)":"Production interne — exemple fictif"],
+    ["Cote ISAD(G)",d.ref],["Producteur ISAD(G)",d.inst],["Dates extrêmes",String(d.year||d.date)],["Niveau de description",d.prive?"Fonds":"Pièce"],
+    ["Classement",d.prive?"Fonds privés — communication selon les règles du propriétaire":"PNC-DJ · "+cls],
+    ["Conservation",d.prive?"Définitive — exportation soumise à autorisation du Directeur des Archives Nationales":(d.type==="Loi"||d.type==="Décret"||d.type==="Loi de Finances")?"Permanente (sort final : C)":"10 ans (DUA)"]]
     .map(([k,v])=>`<dt>${k}</dt><dd>${esc(v)}</dd>`).join('');
   $('d-sum').textContent=d.sum;
   $('d-kw').innerHTML=d.kw.map(k=>`<span class="badge b-blue">${esc(k)}</span>`).join('');
@@ -815,6 +949,8 @@ function doSearch(){
     else if(q.includes('corruption')||q.includes('blanchiment'))a="Le dispositif anti-corruption repose sur la Loi n° 103/AN/24/9ème L du 6 mars 2024 relative à la prévention et à la lutte contre la corruption, complétée par la Loi n° 106/AN/24/9ème L contre le blanchiment des capitaux et le financement du terrorisme, les Lois n° 104 et 105/AN/24/9ème L, et le Décret n° 2024-053/PR/MJDH sur les sanctions financières ciblées.";
     else if(q.includes('fonctionnaire')||q.includes('fonction publique')||q.includes('congé'))a="Le nouveau Statut général des fonctionnaires est porté par la Loi n° 21/AN/23/9ème L du 24 janvier 2024. Ses textes d'application de 2025 précisent le régime : le Décret n° 2025-165/PR/MTFPS fixe le régime des congés et absences, et le Décret n° 2025-164/PR/MTFPS détermine les conditions de certaines positions des fonctionnaires.";
     else if(q.includes('environnement')||q.includes('aire')||q.includes('eau')||q.includes('carbone'))a="Le droit de l'environnement s'appuie sur la Loi n° 106/AN/00/4ème L portant cadre de l'Environnement, la Loi n° 93/AN/95/3ème L portant Code de l'Eau, la Loi n° 16/AN/23/9ème L relative aux aires protégées, le Décret n° 2023-074/PRE instituant un mécanisme de contribution et compensation carbone, et le Décret n° 2023-362/PR/MCT protégeant les requins-baleines.";
+    else if(q.includes('versement')||q.includes('plan d\'urgence')||q.includes('chantier')||q.includes('ban'))a="Le Plan d'urgence des archives (actualisation août 2026, MJC/SGG) organise le traitement du passif documentaire et les transferts vers la Bibliothèque et Archives Nationales : 13 chantiers institutionnels ouverts, 6 versements de la Présidence réalisés (le 6ᵉ le 30 juin 2026), et un projet d'arrêté rendant opposable le calendrier de versement de 28 institutions — 105 lots programmés jusqu'en décembre 2027. Voir les modules « Chantiers » et « Versements BAN » de la plateforme.";
+    else if(q.includes('élimination')||q.includes('destruction'))a="L'élimination des archives est irréversible et strictement encadrée (§ V.3.2 du Plan d'urgence) : préparation des documents dont la DUA est expirée, rédaction du bordereau d'élimination soumis au visa de la Direction des Archives Nationales, puis destruction sécurisée attestée par procès-verbal. Le bordereau visé est conservé comme document réglementaire — voir le module « Éliminations ».";
     else if(q.includes('élection')||q.includes('présidentielle')||q.includes('ceni'))a="Pour les élections présidentielles du 10 avril 2026 : le Décret n° 2026-055/PR/MI publie la liste des candidats, l'Arrêté n° 2026-001/PR/MI désigne les membres de la CENI et l'Arrêté n° 2026-083/PR/MI ceux des bureaux de vote. Les législatives du 24 février 2023 avaient été organisées par le Décret n° 2023-028/PR/MI.";
     else a=`D'après les textes officiels indexés (source : Journal Officiel — journalofficiel.dj), ${shown.length} document(s) se rapportent à votre question — les sources les plus pertinentes sont listées ci-dessous avec leur référence officielle.`;
     $('s-answer-txt').textContent=a;
@@ -903,6 +1039,75 @@ function renderFeed(){
     <span style="flex:1">${d}</span><span class="tiny" style="flex:none">${w}</span></div>`).join('');
 }
 
+/* ============ Plan d'urgence ============ */
+function renderPlanUrgence(){
+  /* Budget (Annexe V) */
+  const total=BUDGET.reduce((s,b)=>s+b[1],0);
+  $('budget-bars').innerHTML=BUDGET.map(([lbl,v],i)=>{
+    const pct=(v/total*100);
+    const colors=['var(--c2)','var(--c1)','var(--c3)'];
+    return `<div style="margin:10px 0">
+      <div style="display:flex;justify-content:space-between;font-size:12.5px;margin-bottom:3px"><span style="color:var(--ink2)">${lbl}</span><b style="font-variant-numeric:tabular-nums">${fmt(v)} FDJ</b></div>
+      <div style="background:var(--surface2);border-radius:4px;height:14px"><div style="width:${pct.toFixed(1)}%;height:100%;background:${colors[i]};border-radius:4px;min-width:4px"></div></div></div>`}).join('')
+    +`<div style="display:flex;justify-content:space-between;border-top:1px solid var(--line);padding-top:8px;margin-top:8px;font-size:13.5px"><b>Total</b><b style="font-variant-numeric:tabular-nums">${fmt(total)} FDJ</b></div>`;
+  /* Bilan évaluatif (§ VIII) */
+  const bilan=[["Volumétrie traitée / éliminée","1 240 ml traités · 96 ml éliminés sur bordereaux visés"],
+   ["Locaux réhabilités","9 espaces de traitement et de conservation aménagés"],
+   ["Personnel formé","64 agents formés (dont 41 % de femmes) — 4 modules"],
+   ["Coûts mobilisés","45 M FDJ (État) + PAIC-GEP en cours d'exécution"],
+   ["Qualité","Respect du principe de provenance vérifié sur les fonds versés"]];
+  $('bilan-kpis').innerHTML=bilan.map(([k,v])=>`<div style="display:flex;gap:10px;align-items:baseline"><span class="badge b-blue" style="flex:none">${k}</span><span style="color:var(--ink2)">${v}</span></div>`).join('')
+   +`<p class="tiny" style="margin-top:4px">Indicateurs du § VIII (valeurs illustratives) — compte rendu périodique dû en Conseil des Ministres.</p>`;
+  /* Chantiers */
+  $('chantier-cards').innerHTML=CHANTIERS.map(([nom,ph,note])=>{
+    const done=ph.filter(s=>s===2).length,prog=ph.filter(s=>s===1).length;
+    const pct=Math.round((done+prog*0.5)/7*100);
+    return `<div class="card" style="padding:14px 18px">
+      <div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:baseline">
+        <b>${nom}</b>
+        <span class="tiny">${pct} % — ${done}/7 phases réalisées</span></div>
+      <p class="tiny" style="margin:4px 0 10px">${note}</p>
+      <div style="display:flex;gap:5px;flex-wrap:wrap">
+        ${ph.map((s,i)=>`<span class="badge ${s===2?'b-green':s===1?'b-blue':'b-grey'}" title="Phase ${i+1}">${i+1}. ${PHASES7[i]}</span>`).join('')}
+      </div></div>`}).join('');
+  /* Matrice des versements (Annexe II) */
+  let done=0,plan=0;
+  let html='<thead><tr><th style="position:sticky;left:0;background:var(--surface)">Institution</th>'+ECHEANCES.map(e=>`<th style="white-space:nowrap">${e}</th>`).join('')+'<th class="num">Lots</th></tr></thead><tbody>';
+  for(const[inst,first,idx]of VERSEMENTS){
+    html+=`<tr style="cursor:default"><td style="position:sticky;left:0;background:var(--surface);max-width:240px;font-size:13px">${inst}</td>`;
+    for(let c=0;c<13;c++){
+      const pos=idx.indexOf(c);
+      if(pos<0){html+='<td></td>';continue}
+      const lot=first+pos,real=c<=CUTOFF;
+      if(real)done++;else plan++;
+      html+=`<td><span class="badge ${real?'b-green':''}" style="${real?'':'border:1.5px solid var(--accent);color:var(--accent-ink);background:transparent;'}white-space:nowrap">${lot}ᵉ lot</span></td>`;
+    }
+    html+=`<td class="num tiny">${idx.length}</td></tr>`;
+  }
+  html+=`</tbody>`;
+  $('vers-matrix').innerHTML=html;
+  $('vers-stats').innerHTML=[
+    [`${done+plan} lots au calendrier`,'b-blue'],[`${done} réalisés (au 30 juin 2026)`,'b-green'],[`${plan} programmés → déc. 2027`,'b-grey'],['28 institutions · arrêté opposable','b-purple']
+  ].map(([t,c])=>`<span class="badge ${c}" style="font-size:12.5px;padding:6px 12px">${t}</span>`).join('');
+  renderElims();
+}
+const ELIM_ST=[["En préparation","b-grey"],["Soumis au visa DAN","b-amber"],["Visé — destruction autorisée","b-blue"],["Détruit — PV établi","b-green"]];
+function renderElims(){
+  $('elim-rows').innerHTML=ELIMS.map((e,i)=>{
+    const[lbl,cls]=ELIM_ST[e.st];
+    return `<tr style="cursor:default"><td class="ref">${e.ref}</td><td>${e.inst}</td><td style="max-width:300px" class="muted">${e.desc}</td>
+    <td class="num">${fmt(e.n)}</td><td><span class="badge ${cls}">${lbl}</span></td>
+    <td>${e.pv?`<code class="tiny">${e.pv}</code>`:'—'}</td>
+    <td>${e.st<3?`<button class="btn sm" onclick="advanceElim(${i})">Étape suivante</button>`:'<span class="tiny">Clos</span>'}</td></tr>`}).join('');
+}
+function advanceElim(i){
+  const e=ELIMS[i];e.st++;
+  if(e.st===3){e.pv='PV-2026-0'+(10+i);toast('Destruction attestée — '+e.pv+' établi, bordereau visé conservé')}
+  else if(e.st===2)toast('Bordereau '+e.ref+' visé par la Direction des Archives Nationales');
+  else toast('Bordereau '+e.ref+' soumis au visa de la DAN');
+  renderElims();
+}
+
 /* ============ Portail citoyen ============ */
 function citSearch(){
   const q=($('cit-q')?.value||'').toLowerCase();
@@ -921,7 +1126,7 @@ function citSearch(){
 }
 
 /* ============ Init ============ */
-fillYearFilter();renderDocs();renderExamples();renderPlan();renderInsts();renderWf();renderPhys();renderAudit();renderFeed();citSearch();updateKpis();
+fillYearFilter();renderDocs();renderExamples();renderPlan();renderInsts();renderWf();renderPhys();renderAudit();renderFeed();citSearch();updateKpis();renderPlanUrgence();
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeDrawer();$('sidebar').classList.remove('open')}});
 </script>
 

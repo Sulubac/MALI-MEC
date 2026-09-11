@@ -148,6 +148,17 @@ class Document(Base):
     metadata_mets = Column(JSON, default={})
     metadata_custom = Column(JSON, default={})
 
+    # Description archivistique ISAD(G) — Plan d'urgence § V.2.1
+    isad_cote = Column(String(100), index=True)            # cote unique de repérage
+    isad_dates_extremes = Column(String(50))                # ex. "1965-1998"
+    isad_description_level = Column(String(30))             # fonds | serie | dossier | piece
+    isad_producer = Column(String(255))                     # producteur du fonds
+
+    # Archives privées — Plan d'urgence § IV.2 (dons, legs, dépôts)
+    is_private_archive = Column(Boolean, default=False)
+    acquisition_mode = Column(String(30))                   # don | legs | depot
+    export_authorization = Column(String(100))              # autorisation du Directeur des AN
+
     keywords = Column(JSON, default=[])
     entities_persons = Column(JSON, default=[])
     entities_organizations = Column(JSON, default=[])

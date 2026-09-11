@@ -29,7 +29,7 @@ class AuditLog(Base):
     after_state = Column(JSON)
     changes = Column(JSON)
     error_message = Column(Text)
-    metadata = Column(JSON, default={})
+    extra_metadata = Column("metadata", JSON, default={})
     hash_chain = Column(String(64))
     is_sensitive = Column(Boolean, default=False)
     created_at = Column(DateTime(timezone=True), server_default=func.now())

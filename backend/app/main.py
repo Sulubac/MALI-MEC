@@ -11,7 +11,7 @@ import time
 
 from app.config import settings
 from app.database import init_db, close_db
-from app.api import auth, documents, search, institutions, dashboard, workflows, users, physical, classification
+from app.api import auth, documents, search, institutions, dashboard, workflows, users, physical, classification, plan_urgence
 
 logger = structlog.get_logger()
 
@@ -23,6 +23,9 @@ async def lifespan(app: FastAPI):
     logger.info("Starting PNGA - Plateforme Nationale de Gestion des Archives", version=settings.APP_VERSION)
     await init_db()
     await _seed_initial_data()
+    from app.database import AsyncSessionLocal
+    async with AsyncSessionLocal() as session:
+        await plan_urgence.seed_plan_urgence(session)
     yield
     await close_db()
     logger.info("PNGA shutdown complete")
@@ -116,6 +119,10 @@ async def _seed_initial_data():
             ("MJ", "Ministère de la Justice", "وزارة العدل", InstitutionType.MINISTERE, 11.5860, 43.1470),
             ("MT", "Ministère des Transports", "وزارة النقل", InstitutionType.MINISTERE, 11.5930, 43.1440),
             ("SGG", "Secrétariat Général du Gouvernement", "الأمانة العامة للحكومة", InstitutionType.SGG, 11.5940, 43.1450),
+            ("MJC", "Ministère de la Jeunesse et de la Culture", "وزارة الشباب والثقافة", InstitutionType.MINISTERE, 11.5890, 43.1435),
+            # Plan d'urgence des archives : ANPC (tutelle culturelle) et BAN (conservation définitive)
+            ("ANPC", "Agence Nationale pour la Promotion de la Culture", "الوكالة الوطنية للنهوض بالثقافة", InstitutionType.ETABLISSEMENT_PUBLIC, 11.5875, 43.1490),
+            ("BAN", "Bibliothèque et Archives Nationales", "المكتبة والأرشيف الوطني", InstitutionType.ETABLISSEMENT_PUBLIC, 11.5872, 43.1492),
         ]
 
         for code, name, name_ar, inst_type, lat, lon in ministries:
@@ -310,3 +317,4 @@ app.include_router(workflows.router, prefix=PREFIX)
 app.include_router(users.router, prefix=PREFIX)
 app.include_router(physical.router, prefix=PREFIX)
 app.include_router(classification.router, prefix=PREFIX)
+app.include_router(plan_urgence.router, prefix=PREFIX)
