@@ -1,0 +1,1134 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="PNGA — Plateforme Nationale de Gestion des Archives de la République de Djibouti. Catalogue réel du Journal Officiel (eJO) et mise en œuvre du Plan d'urgence des archives : chantiers, versements BAN, éliminations réglementées.">
+</head>
+<body>
+<title>PNGA Djibouti</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800&family=Public+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+:root{
+  --bg:#F4F7FB; --surface:#FFFFFF; --surface2:#EDF2F9; --line:#DCE4EF;
+  --ink:#16233A; --ink2:#5A6B85; --ink3:#8A99B2;
+  --accent:#1063CF; --accent-ink:#0B4CA0; --accent-soft:#E3EDFB;
+  --green:#2E9E4F; --green-soft:#E2F3E8;
+  --amber:#B45309; --amber-soft:#FCEEDC;
+  --red:#C0392B; --red-soft:#FAE4E1;
+  --purple:#7C3AED; --purple-soft:#EEE7FC;
+  --c1:#1063CF; --c2:#2E9E4F; --c3:#7C3AED; --c4:#D97706;
+  --side-bg:#0E1B31; --side-ink:#C7D4E8; --side-dim:#7488A8; --side-active:#1E3A63;
+  --shadow:0 1px 3px rgba(22,35,58,.08),0 4px 16px rgba(22,35,58,.06);
+  --mono:"IBM Plex Mono",ui-monospace,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0D1626; --surface:#131F33; --surface2:#1A2841; --line:#26385A;
+    --ink:#E6EDF7; --ink2:#8DA0BC; --ink3:#5F7292;
+    --accent:#3574D4; --accent-ink:#6FA0E6; --accent-soft:#182E4F;
+    --green:#2F9A5C; --green-soft:#12321F;
+    --amber:#C77E22; --amber-soft:#33240C;
+    --red:#D06254; --red-soft:#3A1712;
+    --purple:#8B6BD9; --purple-soft:#251A42;
+    --c1:#3574D4; --c2:#2F9A5C; --c3:#8B6BD9; --c4:#C77E22;
+    --side-bg:#0A1322; --shadow:0 1px 3px rgba(0,0,0,.4),0 4px 16px rgba(0,0,0,.3);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0D1626; --surface:#131F33; --surface2:#1A2841; --line:#26385A;
+  --ink:#E6EDF7; --ink2:#8DA0BC; --ink3:#5F7292;
+  --accent:#3574D4; --accent-ink:#6FA0E6; --accent-soft:#182E4F;
+  --green:#2F9A5C; --green-soft:#12321F;
+  --amber:#C77E22; --amber-soft:#33240C;
+  --red:#D06254; --red-soft:#3A1712;
+  --purple:#8B6BD9; --purple-soft:#251A42;
+  --c1:#3574D4; --c2:#2F9A5C; --c3:#8B6BD9; --c4:#C77E22;
+  --side-bg:#0A1322; --shadow:0 1px 3px rgba(0,0,0,.4),0 4px 16px rgba(0,0,0,.3);
+}
+*{box-sizing:border-box;margin:0}
+body{background:var(--bg);color:var(--ink);font:15px/1.55 "Public Sans",system-ui,sans-serif;min-height:100vh}
+h1,h2,h3,h4{font-family:"Archivo","Public Sans",system-ui,sans-serif;text-wrap:balance;line-height:1.2}
+button{font:inherit;cursor:pointer;border:none;background:none;color:inherit}
+input,select,textarea{font:inherit;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:8px 12px}
+input:focus,select:focus,textarea:focus,button:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+code,.mono{font-family:var(--mono);font-size:.85em}
+::selection{background:var(--accent-soft)}
+@media (prefers-reduced-motion: reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+
+/* ---------- Login ---------- */
+#login{position:fixed;inset:0;z-index:100;display:flex;background:var(--side-bg)}
+.login-brand{flex:1.1;display:none;flex-direction:column;justify-content:space-between;padding:56px;color:#EAF1FB;
+  background:linear-gradient(160deg,#0E1B31 0%,#12305C 55%,#0F4D8A 100%);position:relative;overflow:hidden}
+@media(min-width:880px){.login-brand{display:flex}}
+.login-brand::after{content:"";position:absolute;right:-120px;top:-120px;width:420px;height:420px;border-radius:50%;
+  background:radial-gradient(circle,rgba(53,116,212,.35),transparent 70%)}
+.flagsvg{display:block;border-radius:3px;box-shadow:0 0 0 1px rgba(16,35,58,.18);height:auto;flex:none}
+.brand-stats{display:flex;gap:28px;flex-wrap:wrap}
+.brand-stats div{border-left:2px solid rgba(255,255,255,.25);padding-left:14px}
+.brand-stats b{font-family:"Archivo";font-size:26px;display:block}
+.brand-stats span{font-size:12.5px;color:#9FB4D4}
+.login-form{flex:1;display:flex;align-items:center;justify-content:center;background:var(--bg);padding:32px 16px}
+.login-card{width:100%;max-width:400px}
+.login-card h1{font-size:26px;margin:18px 0 4px}
+.field{margin-top:16px}
+.field label{display:block;font-size:12.5px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--ink2);margin-bottom:6px}
+.field input{width:100%}
+.btn{display:inline-flex;align-items:center;gap:8px;background:var(--accent);color:#fff;border-radius:8px;padding:10px 18px;font-weight:600;border:1px solid transparent}
+.btn:hover{background:var(--accent-ink)}
+:root[data-theme="dark"] .btn:hover,:root:not([data-theme="light"]) .btn:hover{color:#fff}
+.btn.full{width:100%;justify-content:center;margin-top:22px}
+.btn.ghost{background:var(--surface);color:var(--ink);border-color:var(--line)}
+.btn.ghost:hover{background:var(--surface2)}
+.btn.sm{padding:6px 12px;font-size:13.5px}
+.demo-creds{margin-top:20px;background:var(--accent-soft);border:1px solid var(--line);border-radius:10px;padding:12px 14px;font-size:13px;color:var(--ink2)}
+.demo-creds code{color:var(--accent-ink);font-weight:600}
+.iso-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:22px}
+.iso-row span{font-size:11px;font-weight:600;letter-spacing:.05em;border:1px solid var(--line);border-radius:99px;padding:3px 10px;color:var(--ink2)}
+
+/* ---------- Shell ---------- */
+#app{display:none;min-height:100vh}
+#app.on{display:grid;grid-template-columns:246px 1fr}
+@media(max-width:940px){#app.on{grid-template-columns:1fr}
+  #sidebar{position:fixed;inset:0 30% 0 0;z-index:60;transform:translateX(-100%);transition:transform .2s}
+  #sidebar.open{transform:none;box-shadow:0 0 60px rgba(0,0,0,.5)}}
+#sidebar{background:var(--side-bg);color:var(--side-ink);display:flex;flex-direction:column;padding:18px 12px;gap:2px;overflow-y:auto}
+.side-head{display:flex;align-items:center;gap:10px;padding:4px 10px 16px;border-bottom:1px solid rgba(255,255,255,.08);margin-bottom:12px}
+.side-head b{font-family:"Archivo";font-size:17px;color:#fff;letter-spacing:.02em}
+.side-head small{display:block;font-size:10.5px;color:var(--side-dim);letter-spacing:.06em;text-transform:uppercase}
+.side-label{font-size:10.5px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--side-dim);padding:14px 12px 5px}
+.nav-item{display:flex;align-items:center;gap:10px;width:100%;text-align:left;padding:8px 12px;border-radius:8px;font-size:14px;color:var(--side-ink)}
+.nav-item:hover{background:rgba(255,255,255,.06)}
+.nav-item.active{background:var(--side-active);color:#fff;font-weight:600}
+.nav-item svg{flex:none;opacity:.8}
+main{padding:22px clamp(16px,3vw,36px) 60px;max-width:1240px;width:100%}
+.topbar{display:flex;align-items:center;gap:14px;margin-bottom:22px;flex-wrap:wrap}
+.topbar h2{font-size:21px}
+.topbar .crumb{font-size:12px;color:var(--ink3);letter-spacing:.05em;text-transform:uppercase;font-weight:600}
+.top-actions{margin-left:auto;display:flex;align-items:center;gap:10px}
+.avatar{width:34px;height:34px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px}
+#burger{display:none;font-size:20px;padding:4px 8px}
+@media(max-width:940px){#burger{display:block}}
+
+/* ---------- Composants ---------- */
+.grid{display:grid;gap:16px}
+.g4{grid-template-columns:repeat(4,1fr)}
+.g3{grid-template-columns:repeat(3,1fr)}
+.g2{grid-template-columns:repeat(2,1fr)}
+@media(max-width:1100px){.g4{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:700px){.g4,.g3,.g2{grid-template-columns:1fr}}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px 20px}
+.card.flat{box-shadow:none}
+.card h3{font-size:15.5px;margin-bottom:12px}
+.kpi{display:flex;flex-direction:column;gap:2px}
+.kpi .v{font-family:"Archivo";font-size:27px;font-weight:700;font-variant-numeric:tabular-nums}
+.kpi .l{font-size:12.5px;color:var(--ink2)}
+.kpi .d{font-size:12px;font-weight:600}
+.kpi .d.up{color:var(--green)}
+.badge{display:inline-flex;align-items:center;gap:5px;font-size:11.5px;font-weight:600;border-radius:99px;padding:2.5px 9px;white-space:nowrap}
+.b-blue{background:var(--accent-soft);color:var(--accent-ink)}
+.b-green{background:var(--green-soft);color:var(--green)}
+.b-amber{background:var(--amber-soft);color:var(--amber)}
+.b-red{background:var(--red-soft);color:var(--red)}
+.b-purple{background:var(--purple-soft);color:var(--purple)}
+.b-grey{background:var(--surface2);color:var(--ink2)}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th{font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink3);text-align:left;font-weight:600;padding:8px 12px;border-bottom:1px solid var(--line)}
+td{padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:middle}
+tbody tr{cursor:pointer}
+tbody tr:hover{background:var(--surface2)}
+tbody tr:last-child td{border-bottom:none}
+.tbl-wrap{overflow-x:auto}
+.num{font-variant-numeric:tabular-nums;text-align:right}
+.filters{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+.filters input,.filters select{min-width:0}
+.filters input[type=search]{flex:1;min-width:180px}
+.muted{color:var(--ink2);font-size:13px}
+.tiny{color:var(--ink3);font-size:12px}
+.ref{font-family:var(--mono);font-size:12.5px;color:var(--accent-ink);font-weight:500}
+.section{display:none}
+.section.on{display:block;animation:fade .18s ease}
+@keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+.alert{display:flex;gap:10px;align-items:flex-start;border-radius:10px;padding:11px 14px;font-size:13.5px;border:1px solid var(--line)}
+.alert.warn{background:var(--amber-soft);border-color:transparent;color:var(--amber)}
+.alert.info{background:var(--accent-soft);border-color:transparent;color:var(--accent-ink)}
+.progress{height:6px;background:var(--surface2);border-radius:99px;overflow:hidden}
+.progress i{display:block;height:100%;background:var(--accent);border-radius:99px;transition:width .4s}
+.legend{display:flex;gap:16px;font-size:12.5px;color:var(--ink2);flex-wrap:wrap}
+.legend b{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+.tooltip{position:fixed;z-index:80;background:var(--ink);color:var(--bg);font-size:12.5px;border-radius:8px;padding:7px 11px;pointer-events:none;display:none;box-shadow:var(--shadow);font-variant-numeric:tabular-nums}
+.tree ul{list-style:none;padding-left:20px}
+.tree>ul{padding-left:0}
+.tree li{margin:1px 0}
+.tnode{display:flex;align-items:center;gap:8px;padding:6px 10px;border-radius:8px;width:100%;text-align:left}
+.tnode:hover{background:var(--surface2)}
+.tnode .code{font-family:var(--mono);font-size:12px;font-weight:600;color:var(--accent-ink);background:var(--accent-soft);border-radius:5px;padding:1px 7px}
+.tnode .caret{width:14px;flex:none;color:var(--ink3);font-size:11px;transition:transform .15s}
+.tnode.openc .caret{transform:rotate(90deg)}
+.tree li.closed>ul{display:none}
+.steps{position:relative;padding-left:30px}
+.steps::before{content:"";position:absolute;left:11px;top:8px;bottom:8px;width:2px;background:var(--line)}
+.step{position:relative;padding:8px 0 14px}
+.step::before{content:"";position:absolute;left:-25px;top:12px;width:12px;height:12px;border-radius:50%;background:var(--surface);border:2px solid var(--ink3)}
+.step.done::before{background:var(--green);border-color:var(--green)}
+.step.now::before{background:var(--accent);border-color:var(--accent);box-shadow:0 0 0 4px var(--accent-soft)}
+.step b{font-size:14px}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(520px,100%);background:var(--surface);border-left:1px solid var(--line);z-index:70;
+  transform:translateX(100%);transition:transform .22s;overflow-y:auto;padding:24px;box-shadow:-12px 0 40px rgba(10,19,34,.18)}
+.drawer.open{transform:none}
+.kv{display:grid;grid-template-columns:150px 1fr;gap:6px 14px;font-size:13.5px}
+.kv dt{color:var(--ink2)}
+.kv dd{overflow-wrap:anywhere}
+.hero-cit{background:linear-gradient(150deg,#0E1B31,#0F4D8A);color:#EAF1FB;border-radius:14px;padding:34px clamp(20px,4vw,44px);margin-bottom:20px}
+.hero-cit h2{font-size:clamp(22px,3.4vw,30px);color:#fff}
+.chip{border:1px solid var(--line);background:var(--surface);border-radius:99px;padding:5px 13px;font-size:13px}
+.chip:hover{border-color:var(--accent);color:var(--accent-ink)}
+.switch{width:40px;height:22px;border-radius:99px;background:var(--surface2);border:1px solid var(--line);position:relative;flex:none}
+.switch i{position:absolute;top:2px;left:2px;width:16px;height:16px;border-radius:50%;background:var(--ink3);transition:.18s}
+.switch.on{background:var(--accent)}
+.switch.on i{left:20px;background:#fff}
+.note{font-size:11.5px;color:var(--ink3);border-top:1px solid var(--line);margin-top:26px;padding-top:10px}
+</style>
+
+<div class="tooltip" id="tip"></div>
+
+<!-- ================= CONNEXION ================= -->
+<div id="login">
+  <div class="login-brand">
+    <div>
+      <svg class="flagsvg" viewBox="0 0 300 200" width="48" role="img" aria-label="Drapeau de la République de Djibouti"><rect width="300" height="100" fill="#6AB2E8"/><rect y="100" width="300" height="100" fill="#12AD2B"/><path d="M0 0 L120 100 L0 200 Z" fill="#FFFFFF"/><polygon points="44,73 50.1,91.7 69.7,91.7 53.8,103.2 59.9,121.8 44,110.3 28.1,121.8 34.2,103.2 18.3,91.7 37.9,91.7" fill="#D7141A"/></svg>
+      <h1 style="font-size:clamp(28px,3.2vw,40px);margin-top:26px;color:#fff">Plateforme Nationale de<br>Gestion des Archives</h1>
+      <p style="margin-top:12px;color:#9FB4D4;max-width:46ch">Mémoire numérique de la République de Djibouti — cycle de vie complet des documents publics, de la numérisation à la préservation pérenne.</p>
+    </div>
+    <div class="brand-stats">
+      <div><b>100 M+</b><span>documents visés</span></div>
+      <div><b>200+</b><span>institutions publiques</span></div>
+      <div><b>4 langues</b><span>FR · AR · EN · SO</span></div>
+      <div><b>99,99 %</b><span>disponibilité cible</span></div>
+    </div>
+  </div>
+  <div class="login-form">
+    <div class="login-card">
+      <svg class="flagsvg" viewBox="0 0 300 200" width="48" role="img" aria-label="Drapeau de la République de Djibouti"><rect width="300" height="100" fill="#6AB2E8"/><rect y="100" width="300" height="100" fill="#12AD2B"/><path d="M0 0 L120 100 L0 200 Z" fill="#FFFFFF"/><polygon points="44,73 50.1,91.7 69.7,91.7 53.8,103.2 59.9,121.8 44,110.3 28.1,121.8 34.2,103.2 18.3,91.7 37.9,91.7" fill="#D7141A"/></svg>
+      <h1>Connexion à la PNGA</h1>
+      <p class="muted">Archives Nationales — République de Djibouti</p>
+      <div class="field"><label for="lg-user">Identifiant</label><input id="lg-user" value="admin" autocomplete="username"></div>
+      <div class="field"><label for="lg-pass">Mot de passe</label><input id="lg-pass" type="password" value="Pnga@Djibouti2024!" autocomplete="current-password"></div>
+      <button class="btn full" id="lg-btn" onclick="doLogin()">Se connecter</button>
+      <div class="demo-creds">Démonstration — comptes de test :<br>
+        <code>admin</code> / <code>Pnga@Djibouti2024!</code> &nbsp;·&nbsp; <code>archiviste</code> / <code>Archiviste@2024!</code></div>
+      <div class="iso-row"><span>ISO 15489</span><span>ISO 14721 · OAIS</span><span>ISO 27001</span><span>MoReq2010</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ================= APPLICATION ================= -->
+<div id="app">
+  <nav id="sidebar" aria-label="Navigation principale">
+    <div class="side-head">
+      <svg class="flagsvg" viewBox="0 0 300 200" width="40" role="img" aria-label="Drapeau de la République de Djibouti"><rect width="300" height="100" fill="#6AB2E8"/><rect y="100" width="300" height="100" fill="#12AD2B"/><path d="M0 0 L120 100 L0 200 Z" fill="#FFFFFF"/><polygon points="44,73 50.1,91.7 69.7,91.7 53.8,103.2 59.9,121.8 44,110.3 28.1,121.8 34.2,103.2 18.3,91.7 37.9,91.7" fill="#D7141A"/></svg>
+      <div><b>PNGA</b><small>République de Djibouti</small></div>
+    </div>
+    <div class="side-label">Pilotage</div>
+    <button class="nav-item active" data-sec="dash">◫&nbsp; Tableau de bord</button>
+    <button class="nav-item" data-sec="audit">🛡&nbsp; Journal d'audit</button>
+    <div class="side-label">Fonds documentaire</div>
+    <button class="nav-item" data-sec="docs">🗂&nbsp; Documents</button>
+    <button class="nav-item" data-sec="upload">⬆&nbsp; Dépôt &amp; numérisation</button>
+    <button class="nav-item" data-sec="search">🔍&nbsp; Recherche &amp; IA</button>
+    <button class="nav-item" data-sec="plan">🌳&nbsp; Plan de classement</button>
+    <div class="side-label">Organisation</div>
+    <button class="nav-item" data-sec="inst">🏛&nbsp; Institutions</button>
+    <button class="nav-item" data-sec="wf">⇶&nbsp; Workflows</button>
+    <button class="nav-item" data-sec="phys">📦&nbsp; Archives physiques</button>
+    <div class="side-label">Plan d'urgence</div>
+    <button class="nav-item" data-sec="chantiers">🏗&nbsp; Chantiers</button>
+    <button class="nav-item" data-sec="versements">🚚&nbsp; Versements BAN</button>
+    <button class="nav-item" data-sec="elim">🗑&nbsp; Éliminations</button>
+    <div class="side-label">Public</div>
+    <button class="nav-item" data-sec="citizen">🌐&nbsp; Portail citoyen</button>
+    <div style="flex:1"></div>
+    <button class="nav-item" onclick="logout()">⏻&nbsp; Déconnexion</button>
+  </nav>
+
+  <main>
+    <div class="topbar">
+      <button id="burger" onclick="document.getElementById('sidebar').classList.toggle('open')" aria-label="Menu">☰</button>
+      <div><div class="crumb" id="crumb">Pilotage</div><h2 id="sec-title">Tableau de bord national</h2></div>
+      <div class="top-actions">
+        <button class="btn ghost sm" onclick="toggleTheme()" id="theme-btn" aria-label="Basculer le thème">◐ Thème</button>
+        <div class="avatar" title="Administrateur national">AD</div>
+      </div>
+    </div>
+
+    <!-- ===== Tableau de bord ===== -->
+    <section class="section on" id="sec-dash">
+      <div class="grid g4">
+        <div class="card kpi"><span class="v" id="k-total">—</span><span class="l">Documents dans le fonds</span><span class="d up">▲ 8,2 % ce trimestre</span></div>
+        <div class="card kpi"><span class="v" id="k-arch">—</span><span class="l">Documents archivés (OAIS)</span><span class="d up">▲ 5,1 %</span></div>
+        <div class="card kpi"><span class="v">18,4 To</span><span class="l">Stockage utilisé / 50 To</span><span class="d" style="color:var(--ink3)">MinIO · 3 répliques</span></div>
+        <div class="card kpi"><span class="v">96,3 %</span><span class="l">Confiance OCR moyenne</span><span class="d up">fra + ara + eng + som</span></div>
+      </div>
+
+      <div class="grid g2" style="margin-top:16px">
+        <div class="card">
+          <div style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:8px">
+            <h3>Flux documentaire — 12 derniers mois</h3>
+            <div class="legend"><span><b style="background:var(--c1)"></b>Reçus</span><span><b style="background:var(--c2)"></b>Archivés</span></div>
+          </div>
+          <div id="chart-trend"></div>
+        </div>
+        <div class="card">
+          <h3>Volume par type de document</h3>
+          <div id="chart-types"></div>
+        </div>
+      </div>
+
+      <div class="grid g2" style="margin-top:16px">
+        <div class="card">
+          <h3>Alertes actives</h3>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <div class="alert warn">⚠ <span><b>37 documents</b> atteignent leur échéance de conservation (DUA) sous 30 jours — décision de sort final requise.</span></div>
+            <div class="alert warn">⚠ <span>Le Ministère de l'Intérieur a consommé <b>91 %</b> de son quota de stockage (2,3 / 2,5 To).</span></div>
+            <div class="alert info">ℹ 12 documents en file d'attente OCR — temps de traitement estimé : 9 min.</div>
+          </div>
+        </div>
+        <div class="card">
+          <h3>Activité récente</h3>
+          <div id="feed" style="display:flex;flex-direction:column;gap:10px;font-size:13.5px"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== Documents ===== -->
+    <section class="section" id="sec-docs">
+      <div class="alert info" style="margin-bottom:14px">📜 <span>Le fonds ci-dessous reprend le <b>catalogue réel du Journal Officiel de la République de Djibouti</b> (eJO — journalofficiel.dj) : lois, décrets, arrêtés et ordonnances de 1977 à 2026, référencés à l'identique.</span></div>
+      <div class="filters">
+        <input type="search" id="f-q" placeholder="Filtrer par titre, référence, auteur…" oninput="renderDocs()">
+        <select id="f-type" onchange="renderDocs()">
+          <option value="">Tous les types</option><option>Décret</option><option>Loi</option><option>Loi de Finances</option><option>Arrêté</option><option>Ordonnance</option><option>Circulaire</option><option>Fonds privé</option><option>Rapport</option><option>Courrier</option>
+        </select>
+        <select id="f-year" onchange="renderDocs()"><option value="">Toutes les années</option></select>
+        <select id="f-status" onchange="renderDocs()">
+          <option value="">Tous les statuts</option><option value="archive">Archivé</option>
+          <option value="validation">En validation</option><option value="ocr">OCR en cours</option><option value="publie">Publié</option>
+        </select>
+        <select id="f-conf" onchange="renderDocs()">
+          <option value="">Toute confidentialité</option><option>Public</option><option>Interne</option><option>Confidentiel</option><option>Secret</option>
+        </select>
+      </div>
+      <div class="card flat tbl-wrap" style="padding:0">
+        <table>
+          <thead><tr><th>Référence</th><th>Titre</th><th>Institution</th><th>Statut</th><th>Confidentialité</th><th class="num">Date</th></tr></thead>
+          <tbody id="doc-rows"></tbody>
+        </table>
+      </div>
+      <p class="tiny" style="margin-top:8px" id="doc-count"></p>
+    </section>
+
+    <!-- ===== Dépôt ===== -->
+    <section class="section" id="sec-upload">
+      <div class="grid g2">
+        <div class="card">
+          <h3>Nouveau document</h3>
+          <div class="field"><label for="up-title">Titre du document</label><input id="up-title" placeholder="Ex. Arrêté fixant les modalités…"></div>
+          <div class="grid g2" style="margin-top:4px">
+            <div class="field"><label for="up-type">Type</label>
+              <select id="up-type"><option>Décret</option><option>Loi</option><option>Loi de Finances</option><option>Arrêté</option><option>Rapport</option><option>Courrier</option></select></div>
+            <div class="field"><label for="up-inst">Institution</label>
+              <select id="up-inst"><option>Présidence</option><option>Assemblée nationale</option><option>Primature</option><option>Min. Économie et Finances</option><option>Min. Budget</option><option>Min. Intérieur</option><option>Min. Jeunesse et Culture</option><option>MENFOP</option><option>MCPT</option></select></div>
+          </div>
+          <div class="grid g2">
+            <div class="field"><label for="up-conf">Confidentialité</label>
+              <select id="up-conf"><option>Public</option><option>Interne</option><option>Confidentiel</option><option>Secret</option></select></div>
+            <div class="field"><label for="up-lang">Langue OCR</label>
+              <select id="up-lang"><option>Français</option><option>العربية</option><option>English</option><option>Soomaali</option></select></div>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px;margin-top:14px">
+            <button class="switch on" id="sw-ia" onclick="this.classList.toggle('on')" role="switch" aria-checked="true" aria-label="Analyse IA"><i></i></button>
+            <span style="font-size:13.5px">Analyse IA après OCR (résumé, mots-clés, entités, classement suggéré)</span>
+          </div>
+          <button class="btn full" id="up-btn" onclick="simulateUpload()">Déposer et lancer le traitement</button>
+        </div>
+        <div class="card">
+          <h3>Chaîne de traitement</h3>
+          <p class="muted" style="margin-bottom:14px">Chaque dépôt suit la chaîne normalisée ISO 15489. Cette démonstration la simule en temps réel.</p>
+          <div class="steps" id="pipe">
+            <div class="step" data-p="0"><b>Réception</b><div class="tiny">Empreintes SHA-256 + MD5, référence attribuée</div></div>
+            <div class="step" data-p="1"><b>OCR multilingue</b><div class="tiny">Tesseract — fra · ara · eng · som</div></div>
+            <div class="step" data-p="2"><b>Analyse IA</b><div class="tiny">Résumé, entités, classement PNC-DJ suggéré</div></div>
+            <div class="step" data-p="3"><b>Validation archiviste</b><div class="tiny">Contrôle qualité et métadonnées</div></div>
+            <div class="step" data-p="4"><b>Archivage OAIS</b><div class="tiny">Paquet d'information archivé (AIP), horodatage</div></div>
+          </div>
+          <div class="progress" style="margin-top:6px"><i id="pipe-bar" style="width:0%"></i></div>
+          <p class="tiny" id="pipe-msg" style="margin-top:8px">En attente d'un dépôt…</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== Recherche ===== -->
+    <section class="section" id="sec-search">
+      <div class="card">
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px">
+          <button class="chip" id="m-std" onclick="setMode('std')" style="border-color:var(--accent);color:var(--accent-ink)">Recherche standard</button>
+          <button class="chip" id="m-ia" onclick="setMode('ia')">Assistant IA</button>
+        </div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap">
+          <input type="search" id="s-q" style="flex:1;min-width:200px" placeholder="Rechercher dans le fonds national…" onkeydown="if(event.key==='Enter')doSearch()">
+          <button class="btn" onclick="doSearch()">Rechercher</button>
+        </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px" id="s-examples"></div>
+      </div>
+      <div id="s-answer" style="display:none;margin-top:16px" class="card">
+        <span class="badge b-purple">Assistant IA</span>
+        <p style="margin-top:10px;max-width:70ch" id="s-answer-txt"></p>
+        <p class="tiny" style="margin-top:8px">Réponse générée sur la base des documents publics indexés — démonstration hors-ligne.</p>
+      </div>
+      <div id="s-results" style="margin-top:16px;display:flex;flex-direction:column;gap:10px"></div>
+    </section>
+
+    <!-- ===== Plan de classement ===== -->
+    <section class="section" id="sec-plan">
+      <div class="card">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:8px">
+          <h3>Plan national de classement — PNC-DJ-2024 <span class="badge b-blue">v1.0 · national</span></h3>
+          <span class="tiny">Base légale : Décret n° 2024-248/PR/MJC portant règlementation des archives publiques et privées · DUA = durée d'utilité administrative · sort final C = conservation, D = destruction, T = tri</span>
+        </div>
+        <div class="tree" id="plan-tree"></div>
+      </div>
+    </section>
+
+    <!-- ===== Institutions ===== -->
+    <section class="section" id="sec-inst">
+      <div class="grid g3" id="inst-cards"></div>
+    </section>
+
+    <!-- ===== Workflows ===== -->
+    <section class="section" id="sec-wf">
+      <div class="grid g3" style="margin-bottom:16px">
+        <div class="card kpi"><span class="v">14</span><span class="l">Instances en cours</span></div>
+        <div class="card kpi"><span class="v">312</span><span class="l">Terminées ce mois</span></div>
+        <div class="card kpi"><span class="v" style="color:var(--amber)">3</span><span class="l">Étapes hors SLA</span></div>
+      </div>
+      <div class="card">
+        <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;align-items:baseline">
+          <h3>WF-2024-0891 — Circuit standard d'archivage</h3>
+          <span class="badge b-blue">En cours · étape 4/8</span>
+        </div>
+        <p class="muted" style="margin-bottom:14px">Document : <span class="ref">Décret n° 2024-248/PR/MJC</span> — règlementation des archives publiques et privées en République de Djibouti</p>
+        <div class="steps" id="wf-steps"></div>
+        <button class="btn sm" onclick="advanceWf()" id="wf-btn">Compléter l'étape en cours</button>
+      </div>
+    </section>
+
+    <!-- ===== Archives physiques ===== -->
+    <section class="section" id="sec-phys">
+      <div class="card" style="margin-bottom:16px">
+        <h3>Localiser une boîte</h3>
+        <div style="display:flex;gap:10px;flex-wrap:wrap">
+          <input id="box-q" class="mono" style="flex:1;min-width:200px" placeholder="Scanner ou saisir un code-barres — ex. DJB-2024-00147" onkeydown="if(event.key==='Enter')locateBox()">
+          <button class="btn" onclick="locateBox()">Localiser</button>
+        </div>
+        <div id="box-result" style="margin-top:12px"></div>
+      </div>
+      <div class="grid g3" id="depots"></div>
+      <div class="card flat tbl-wrap" style="padding:0;margin-top:16px">
+        <table>
+          <thead><tr><th>Code-barres</th><th>Contenu</th><th>Dépôt · position</th><th>Statut</th></tr></thead>
+          <tbody id="box-rows"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ===== Audit ===== -->
+    <section class="section" id="sec-audit">
+      <div class="alert info" style="margin-bottom:14px">🛡 Chaque écriture du journal est chaînée à la précédente par SHA-256 : toute altération rompt la chaîne et devient détectable (exigence ISO 27001, non-répudiation).</div>
+      <div class="card flat tbl-wrap" style="padding:0">
+        <table>
+          <thead><tr><th>Horodatage</th><th>Action</th><th>Ressource</th><th>Utilisateur</th><th>Adresse IP</th><th>Empreinte chaînée</th></tr></thead>
+          <tbody id="audit-rows"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ===== Plan d'urgence : chantiers ===== -->
+    <section class="section" id="sec-chantiers">
+      <div class="gradient-header rounded-hero" style="background:linear-gradient(150deg,#0E1B31,#0F4D8A);color:#fff;border-radius:14px;padding:24px 28px;margin-bottom:16px">
+        <h3 style="color:#fff;font-size:18px">Plan d'urgence des archives — actualisation août 2026</h3>
+        <p style="color:#B9CBE6;font-size:13px;margin-top:4px">Projet de réorganisation et de modernisation des pratiques archivistiques (MJC · SGG · ANPC/BAN · ANSIE)</p>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;margin-top:16px">
+          <div style="background:rgba(255,255,255,.1);border-radius:10px;padding:10px;text-align:center"><b style="font-family:Archivo;font-size:22px">13</b><div style="font-size:11px;color:#B9CBE6">chantiers ouverts</div></div>
+          <div style="background:rgba(255,255,255,.1);border-radius:10px;padding:10px;text-align:center"><b style="font-family:Archivo;font-size:22px">6</b><div style="font-size:11px;color:#B9CBE6">versements Présidence</div></div>
+          <div style="background:rgba(255,255,255,.1);border-radius:10px;padding:10px;text-align:center"><b style="font-family:Archivo;font-size:22px">28</b><div style="font-size:11px;color:#B9CBE6">institutions au calendrier</div></div>
+          <div style="background:rgba(255,255,255,.1);border-radius:10px;padding:10px;text-align:center"><b style="font-family:Archivo;font-size:22px">105</b><div style="font-size:11px;color:#B9CBE6">lots programmés → déc. 2027</div></div>
+        </div>
+      </div>
+
+      <div class="grid g2" style="margin-bottom:16px">
+        <div class="card">
+          <h3>Budget du projet — 193 215 602 FDJ (Annexe V)</h3>
+          <div id="budget-bars"></div>
+        </div>
+        <div class="card">
+          <h3>Bilan évaluatif — indicateurs pour le Conseil des Ministres (§ VIII)</h3>
+          <div style="display:flex;flex-direction:column;gap:8px;font-size:13.5px" id="bilan-kpis"></div>
+        </div>
+      </div>
+
+      <h3 style="font-size:15.5px;margin-bottom:10px">Chantiers institutionnels — 7 phases (Annexe I)</h3>
+      <div style="display:flex;flex-direction:column;gap:10px" id="chantier-cards"></div>
+    </section>
+
+    <!-- ===== Plan d'urgence : versements ===== -->
+    <section class="section" id="sec-versements">
+      <div class="alert info" style="margin-bottom:14px">🚚 <span>Le projet d'arrêté rend le calendrier de versement <b>opposable pour 28 institutions</b> : fin des versements ponctuels, programmation trimestrielle jusqu'en décembre 2027 (Annexe II du Plan d'urgence). Chaque versement suit la chaîne : <b>colis → bordereau → vérification → enlèvement → réception BAN + attestation de transfert</b>.</span></div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px" id="vers-stats"></div>
+      <div class="card flat" style="padding:0">
+        <div style="overflow-x:auto">
+          <table style="min-width:1080px" id="vers-matrix"></table>
+        </div>
+      </div>
+      <p class="tiny" style="margin-top:8px">Reconstitution d'après l'Annexe II : les totaux par institution (105 lots) et les versements réalisés sont ceux du document ; le positionnement fin de certaines cases est interprété. La Présidence avait déjà versé les lots 1 à 3 avant l'ouverture de ce calendrier (premier versement : février 2024).</p>
+      <div class="legend" style="margin-top:6px"><span><b style="background:var(--green)"></b>Versement réalisé</span><span><b style="background:transparent;border:2px solid var(--accent)"></b>Versement programmé</span></div>
+    </section>
+
+    <!-- ===== Plan d'urgence : éliminations ===== -->
+    <section class="section" id="sec-elim">
+      <div class="alert warn" style="margin-bottom:14px">⚠ <span>L'élimination est <b>irréversible</b> et strictement encadrée (§ V.3.2 du Plan d'urgence) : préparation des documents → <b>bordereau d'élimination soumis au visa de la Direction des Archives Nationales</b> → destruction sécurisée (incinération ou déchiquetage) attestée par <b>procès-verbal</b>. Le bordereau visé est conservé comme document réglementaire.</span></div>
+      <div class="card flat tbl-wrap" style="padding:0">
+        <table>
+          <thead><tr><th>Bordereau</th><th>Institution</th><th>Documents proposés</th><th class="num">Nombre</th><th>Statut</th><th>PV</th><th>Action</th></tr></thead>
+          <tbody id="elim-rows"></tbody>
+        </table>
+      </div>
+      <p class="tiny" style="margin-top:8px">Exemples illustratifs suivant la procédure réglementaire du Plan d'urgence — cliquez « Étape suivante » pour dérouler le circuit bordereau → visa DAN → destruction avec PV.</p>
+    </section>
+
+    <!-- ===== Portail citoyen ===== -->
+    <section class="section" id="sec-citizen">
+      <div class="hero-cit">
+        <h2>Archives publiques de la République de Djibouti</h2>
+        <p style="color:#B9CBE6;margin-top:8px;max-width:60ch">Consultez librement les textes officiels publiés au <b>Journal Officiel de la République de Djibouti</b> : lois, décrets, arrêtés et lois de finances. Seuls les documents de niveau <b>public</b> sont accessibles sans compte.</p>
+        <div style="display:flex;gap:10px;margin-top:18px;flex-wrap:wrap">
+          <input type="search" id="cit-q" style="flex:1;min-width:200px;border:none" placeholder="Ex. code numérique, budget 2024, archives publiques…" onkeydown="if(event.key==='Enter')citSearch()">
+          <button class="btn" style="background:#12AD2B" onclick="citSearch()">Rechercher</button>
+        </div>
+      </div>
+      <div id="cit-results" style="display:flex;flex-direction:column;gap:10px"></div>
+    </section>
+
+    <p class="note">PNGA — démonstration interactive autonome. Le fonds documentaire reprend le catalogue réel du Journal Officiel de la République de Djibouti (eJO — journalofficiel.dj) : près de 100 lois, décrets, arrêtés et ordonnances de 1977 à 2026, avec leurs références et intitulés d'origine. Les modules Chantiers, Versements BAN et Éliminations mettent en œuvre le Plan d'urgence des archives (V3, actualisation août 2026 — MJC/SGG) : Annexe I (plannings des chantiers), Annexe II (calendrier de versement des 28 institutions, 105 lots), Annexe V (budget 193 215 602 FDJ), § V.3.2 (bordereaux d'élimination visés par la DAN). Les statuts de traitement, statistiques, empreintes et les éléments marqués « fictif » ou « illustratif » sont simulés. Version complète : FastAPI · PostgreSQL · Elasticsearch · MinIO · Next.js — conforme ISO 15489, ISO 14721 (OAIS), ISO 27001, MoReq2010, ISAD(G) et au Décret n° 2024-248/PR/MJC.</p>
+  </main>
+</div>
+
+<!-- ===== Volet détail document ===== -->
+<div class="drawer" id="drawer" aria-label="Détail du document">
+  <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px">
+    <div><span class="ref" id="d-ref"></span><h3 style="margin-top:6px;font-size:18px" id="d-title"></h3></div>
+    <button class="btn ghost sm" onclick="closeDrawer()" aria-label="Fermer">✕</button>
+  </div>
+  <div style="display:flex;gap:8px;margin:12px 0 18px" id="d-badges"></div>
+  <h4 style="font-size:13px;text-transform:uppercase;letter-spacing:.05em;color:var(--ink2);margin-bottom:8px">Métadonnées (Dublin Core)</h4>
+  <dl class="kv" id="d-kv"></dl>
+  <h4 style="font-size:13px;text-transform:uppercase;letter-spacing:.05em;color:var(--ink2);margin:18px 0 8px">Résumé IA</h4>
+  <p style="font-size:14px" id="d-sum"></p>
+  <div id="d-kw" style="display:flex;gap:6px;flex-wrap:wrap;margin-top:10px"></div>
+  <h4 style="font-size:13px;text-transform:uppercase;letter-spacing:.05em;color:var(--ink2);margin:18px 0 8px">Intégrité</h4>
+  <p class="mono" style="font-size:11.5px;color:var(--ink2);overflow-wrap:anywhere">SHA-256 : <span id="d-hash"></span></p>
+  <div style="display:flex;gap:8px;margin-top:20px">
+    <button class="btn sm" onclick="toast('Téléchargement simulé — démonstration')">⬇ Télécharger</button>
+    <button class="btn ghost sm" onclick="toast('Certificat d\'intégrité vérifié ✓')">Vérifier l'intégrité</button>
+  </div>
+</div>
+
+<script>
+"use strict";
+/* ============ Données de démonstration (fictives) ============ */
+const MOIS=["Oct","Nov","Déc","Jan","Fév","Mar","Avr","Mai","Juin","Juil","Août","Sep"];
+const TREND={recus:[620,580,710,840,790,920,880,1010,970,1090,1180,1240],archives:[540,510,640,760,700,850,820,930,910,1020,1090,1150]};
+const TYPES=[["Décrets",4218],["Rapports",3651],["Courriers",2984],["Arrêtés",2312],["Lois",1147],["Conventions",893]];
+const INSTS=[
+ {n:"Présidence de la République",ar:"رئاسة الجمهورية",c:"PRE",docs:2841,go:1.9,q:4,users:34},
+ {n:"Assemblée nationale",ar:"الجمعية الوطنية",c:"AN",docs:1986,go:1.2,q:3,users:22},
+ {n:"Primature",ar:"الوزارة الأولى",c:"PM",docs:2213,go:1.4,q:3,users:28},
+ {n:"Min. de l'Économie et des Finances",ar:"وزارة الاقتصاد والمالية",c:"MEF",docs:4102,go:3.1,q:5,users:57},
+ {n:"Min. du Budget",ar:"وزارة الميزانية",c:"MB",docs:2755,go:2.1,q:3,users:33},
+ {n:"Min. de l'Intérieur",ar:"وزارة الداخلية",c:"MI",docs:3390,go:2.3,q:2.5,users:41},
+ {n:"Min. de la Jeunesse et de la Culture — tutelle des Archives nationales",ar:"وزارة الشباب والثقافة",c:"MJC",docs:3124,go:2.6,q:4,users:38},
+ {n:"MENFOP — Éducation nationale et Formation professionnelle",ar:"وزارة التربية الوطنية والتكوين المهني",c:"MENFOP",docs:2967,go:2.0,q:4,users:46},
+ {n:"Min. de la Communication, Postes et Télécommunications",ar:"وزارة الاتصال المكلفة بالبريد والمواصلات",c:"MCPT",docs:1618,go:1.1,q:2,users:19},
+ {n:"Agence Nationale pour la Promotion de la Culture (ANPC)",ar:"الوكالة الوطنية للنهوض بالثقافة",c:"ANPC",docs:5230,go:3.4,q:8,users:24},
+ {n:"Bibliothèque et Archives Nationales (BAN) — conservation définitive",ar:"المكتبة والأرشيف الوطني",c:"BAN",docs:8114,go:5.2,q:12,users:31}];
+/* Textes officiels réels publiés au Journal Officiel de la République de Djibouti
+   (journalofficiel.dj). Les statuts de traitement, niveaux de confidentialité et
+   empreintes sont simulés par la plateforme de démonstration. */
+let DOCS=[
+ {ref:"Décret n° 2024-248/PR/MJC",t:"Décret portant règlementation des archives publiques et privées en République de Djibouti",inst:"Min. Jeunesse et Culture",type:"Décret",st:"publie",conf:"Public",date:"2024-09-30",aut:"Président de la République — contreseing MJC",sum:"Texte fondateur du cadre archivistique national : il définit les archives publiques et privées, leurs régimes de collecte, de tri, de conservation, de communication et de sort final. C'est la base légale de la plateforme nationale de gestion des archives.",kw:["archives publiques","conservation","sort final","patrimoine"],jo:1,hash:"a3f8c21e99d04b7e5512fa08c6d93b1e447a0cf2b8d1e6a35c90f4d7218e6b3a"},
+ {ref:"Loi de Finances n° 64/AN/23/9ème L",t:"Loi de Finances portant Budget Initial de l'État pour l'exercice 2024",inst:"Assemblée nationale",type:"Loi de Finances",st:"archive",conf:"Public",date:"2023-12",aut:"Assemblée nationale — 9ème législature",sum:"Budget initial de l'État pour 2024, présenté en équilibre : recettes et dépenses arrêtées à 152 490 386 972 FDJ. Comprend notamment des mesures de rationalisation de la dépense publique dont la restructuration du parc automobile de l'État.",kw:["budget","loi de finances","152 490 386 972 FDJ","exercice 2024"],jo:1,hash:"5b7e90d1c44a28f3ab61de07f9c2354e8810cbd6a2f47e91d05b3a68c1f2d947"},
+ {ref:"Loi n° 150/AN/24/9ème L",t:"Loi portant Budget Initial de l'État pour l'exercice 2025",inst:"Assemblée nationale",type:"Loi de Finances",st:"publie",conf:"Public",date:"2024-12",aut:"Assemblée nationale — 9ème législature",sum:"Budget initial de l'État pour l'exercice 2025, adopté par l'Assemblée nationale et publié au Journal Officiel.",kw:["budget","exercice 2025","loi de finances"],jo:1,hash:"3e91c07d5a48b26fe013d97ca5b48e62d10f7a39c8e51b06d247af83e19c5d70"},
+ {ref:"Loi n° 019/AN/23/9ème L",t:"Loi portant Code Numérique",inst:"Assemblée nationale",type:"Loi",st:"publie",conf:"Public",date:"2025-07-06",aut:"Assemblée nationale — 9ème législature",sum:"Cadre juridique global du numérique : protection des données à caractère personnel garantissant un haut niveau de protection aux citoyens et aux entreprises, commerce électronique, cybersécurité et lutte contre la cybercriminalité.",kw:["code numérique","données personnelles","cybersécurité"],jo:1,hash:"e84a1f09b37c62d5f1908ae44c7b25d6031f8e9ac2d75b48e6109f3ad4c8b761"},
+ {ref:"Loi n° 18/AN/23/9ème L",t:"Loi portant ratification de la Convention de l'Union Africaine sur la Cybersécurité et la Protection des données à caractère personnel",inst:"Assemblée nationale",type:"Loi",st:"archive",conf:"Public",date:"2024-01-21",aut:"Assemblée nationale — 9ème législature",sum:"Ratification de la Convention de Malabo : Djibouti adhère au cadre continental africain de cybersécurité et de protection des données personnelles.",kw:["Convention de Malabo","Union Africaine","cybersécurité"],jo:1,hash:"c19d4e72a80f356bd2478c01e5b96f3a7d20481ecb5f9a364d8e07c1b52a9f08"},
+ {ref:"Loi n° 195/AN/25/9ème L",t:"Loi portant création de l'Autorité Nationale de Cybersécurité",inst:"Assemblée nationale",type:"Loi",st:"publie",conf:"Public",date:"2025",aut:"Assemblée nationale — 9ème législature",sum:"Création de l'ANC, chargée de piloter l'écosystème national de cybersécurité et habilitée à conclure des accords de partenariat avec les acteurs publics et privés.",kw:["ANC","cybersécurité","autorité nationale"],jo:1,hash:"90c5d7e2a41b8f36cd0219e75a83f4b6d7e10c29fa4b85d3e612a09c7f3b54d8"},
+ {ref:"Décret n° 2021-106/PRE",t:"Décret portant nomination des membres du Gouvernement",inst:"Présidence",type:"Décret",st:"archive",conf:"Public",date:"2021-05-24",aut:"Président de la République",sum:"Composition du Gouvernement dirigé par le Premier ministre Abdoulkader Kamil Mohamed (nommé par le décret n° 2021-105/PRE du même jour) : justice, économie et finances, affaires étrangères et coopération internationale, etc.",kw:["nomination","gouvernement","Premier ministre"],jo:1,hash:"27b9f04ce16a83d5b7f2490ae1c6d8352e94b07fd1c8a5e36b40d92f1e7a63c0"},
+ {ref:"Loi n° 174/AN/02/4ème L",t:"Loi portant décentralisation et statut des régions",inst:"Assemblée nationale",type:"Loi",st:"archive",conf:"Public",date:"2002-07-07",aut:"Assemblée nationale — 4ème législature",sum:"Statut des régions de la République (Tadjourah, Ali Sabieh, Dikhil, Obock, Arta) et organisation des conseils régionaux. Modifiée par la loi n° 139/AN/06/5ème L.",kw:["décentralisation","régions","conseils régionaux","Tadjourah"],jo:1,hash:"6d20a8b5f97e14c3da65b1082ef4c9d7301a5f8be2c94d67a08e13f5c2b7d491"},
+ {ref:"Loi n° 133/AN/05/5ème L",t:"Loi portant Code du Travail",inst:"Assemblée nationale",type:"Loi",st:"archive",conf:"Public",date:"2006-01-26",aut:"Assemblée nationale — 5ème législature",sum:"Code du Travail de la République de Djibouti : régit les relations professionnelles entre travailleurs et employeurs — contrat de travail, durée, salaires, représentation du personnel, règlement des conflits.",kw:["code du travail","droit du travail","emploi"],jo:1,hash:"f13c78a90d25e6b4c8a17f30d9e2b56147c80ad3e5f9126b7d4e08a3c69f1b25"},
+ {ref:"Arrêté n° 2023-155/PR/MCPT",t:"Arrêté portant création, organisation et fonctionnement du comité de pilotage du Projet Djibouti Fondement Numérique (DFN)",inst:"Min. Communication (MCPT)",type:"Arrêté",st:"archive",conf:"Public",date:"2023",aut:"Ministère de la Communication, chargé des Postes et des Télécommunications",sum:"Gouvernance du projet Djibouti Fondement Numérique : composition, attributions et fonctionnement du comité de pilotage chargé de la transformation numérique de l'administration.",kw:["Djibouti Fondement Numérique","transformation numérique","comité de pilotage"],jo:1,hash:"08e4b2d79c51a6f3e8d04b17c92f5a36b1d7e04982c5fa61d3b8e97a04c6f512"},
+ {ref:"Décret n° 2024-097/PRE",t:"Décret fixant le tarif de vente du Journal Officiel de la République de Djibouti",inst:"Présidence",type:"Décret",st:"publie",conf:"Public",date:"2024",aut:"Président de la République",sum:"Fixation des tarifs de vente et d'abonnement du Journal Officiel, support de publication authentique des lois, décrets et arrêtés de la République.",kw:["journal officiel","tarif","publication"],jo:1,hash:"b6f0d3a82e97c15d4b28a60f7e19c3d5f2481b0e6a9d5c37e80f14b2d7a95c63"},
+ {ref:"Loi n° 107/AN/24/9ème L",t:"Loi portant organisation et fonctionnement des organisations de la société civile de Djibouti",inst:"Assemblée nationale",type:"Loi",st:"archive",conf:"Public",date:"2024",aut:"Assemblée nationale — 9ème législature",sum:"Cadre juridique des organisations de la société civile : constitution, déclaration, gouvernance, financement et contrôle.",kw:["société civile","associations","gouvernance"],jo:1,hash:"5fd2e83b19c740a6e5d21f98b03c6ad74e18f25c09b6d3a71e84f0c2b59d67a1"},
+ {ref:"MB/RAP/2024-S1",t:"Rapport d'exécution budgétaire — 1ᵉʳ semestre 2024 (exemple interne fictif)",inst:"Min. Budget",type:"Rapport",st:"validation",conf:"Interne",date:"2024-07-30",aut:"Direction Générale du Budget",sum:"Document interne fictif illustrant le circuit de validation : bilan semestriel de l'exécution de la Loi de Finances n° 64/AN/23/9ème L, analyse des écarts par ministère.",kw:["exécution budgétaire","suivi","démonstration"],hash:"7a1c50d9e83f26b4a08d17e62c95f3ba4d07c81fe2a95d36b70e14a8c2f6d590"},
+ {ref:"MS/COU/2024-118",t:"Courrier — transmission des statistiques sanitaires trimestrielles (exemple interne fictif)",inst:"Min. Santé",type:"Courrier",st:"ocr",conf:"Confidentiel",date:"2024-09-03",aut:"Secrétariat général, Ministère de la Santé",sum:"Document interne fictif illustrant la file OCR : transmission officielle de statistiques d'activité des structures sanitaires pour le 2ᵉ trimestre 2024.",kw:["statistiques","santé","démonstration"],hash:"d40b96e2c17a58f3b62d09ea4c81f7d5230a68bfe194c57d3ae02b86f1c94e73"}];
+
+/* Catalogue eJO — textes réels référencés sur journalofficiel.dj (intitulés d'origine), 1977-2026 */
+const JO=[
+ ["Décret n° 2026-092/PRE","Décret portant nomination des membres du Gouvernement",2026],
+ ["Décret n° 2026-105/PRE","Décret fixant les attributions des Ministères",2026],
+ ["Décret n° 2026-055/PR/MI","Décret portant publication de la liste des candidats pour les élections présidentielles du 10 avril 2026",2026],
+ ["Décret n° 2026-051/PR/MJDH","Décret portant mesures de Grâce Présidentielle",2026],
+ ["Arrêté n° 2026-083/PR/MI","Arrêté portant désignation des membres des bureaux de vote pour les élections présidentielles du vendredi 10 avril 2026",2026],
+ ["Arrêté n° 2026-001/PR/MI","Arrêté portant désignation des membres de la Commission Électorale Nationale Indépendante (CENI)",2026],
+ ["Arrêté n° 2026-053/PR/MB","Arrêté portant affectation d'une parcelle de terrain au profit du Ministère de l'Intérieur",2026],
+ ["Loi n° 189/AN/25/9ème L","Loi portant budget rectificatif de l'État pour l'exercice 2025",2025],
+ ["Décret n° 2025-284/PR/MB","Décret portant cadre institutionnel relatif aux réformes des Finances publiques",2025],
+ ["Décret n° 2025-165/PR/MTFPS","Décret fixant le régime des congés et absences des fonctionnaires",2025],
+ ["Décret n° 2025-164/PR/MTFPS","Décret déterminant les conditions de certaines positions des fonctionnaires",2025],
+ ["Décret n° 2025-076/PR/MJDH","Décret portant mesures de grâce présidentielle à l'occasion de l'Aïd el-Fitr",2025],
+ ["Décret n° 2025-036/PR/MVUH","Décret portant approbation des Règlements Particuliers d'Urbanisme (RPU) des différentes zones des communes de Ras Dika, Boulaos et Balbala",2025],
+ ["Arrêté n° 2025-133/PR/MENFOP","Arrêté accordant l'autorisation d'ouvrir une école privée d'enseignement préscolaire, primaire, moyen et secondaire « École Privée Les Élites »",2025],
+ ["Arrêté n° 2025-015/PRE","Arrêté portant approbation du Budget Prévisionnel 2025 de l'Autorité de Régulation Multisectorielle de Djibouti",2025],
+ ["Arrêté n° 2025-016/PRE","Arrêté portant approbation du Bilan d'Ouverture de l'ARMD au 01/01/2024",2025],
+ ["Loi n° 103/AN/24/9ème L","Loi relative à la prévention et à la lutte contre la corruption et des infractions assimilées",2024],
+ ["Loi n° 104/AN/24/9ème L","Loi modifiant la loi n° 110/AN/11/6ème L relative à la lutte contre le financement du terrorisme",2024],
+ ["Loi n° 105/AN/24/9ème L","Loi modifiant la loi n° 111/AN/11/6ème L relative à la lutte contre le terrorisme et autres infractions graves",2024],
+ ["Loi n° 106/AN/24/9ème L","Loi relative à la lutte contre le blanchiment des capitaux, le financement du terrorisme et la prolifération des armes de destruction massive",2024],
+ ["Loi n° 21/AN/23/9ème L","Loi portant nouveau Statut général des fonctionnaires",2024],
+ ["Loi n° 145/AN/24/9ème L","Loi portant approbation des comptes financiers de l'exercice 2022 de la Caisse Nationale de Sécurité Sociale",2024],
+ ["Loi n° 140/AN/24/9ème L","Loi portant adoption des comptes financiers de l'ANPH, arrêtés au 31/12/2023",2024],
+ ["Décret n° 2024-053/PR/MJDH","Décret portant régime de mise en œuvre de sanctions financières ciblées liées au financement du terrorisme et la prolifération des armes de destruction massive",2024],
+ ["Décret n° 2024-212/PR/MB","Décret portant adoption d'un référentiel géodésique unique pour tous les travaux géodésiques et cartographiques sur l'ensemble du territoire national",2024],
+ ["Décret n° 2024-105/PR/MENFOP","Décret portant création du Brevet de l'Enseignement Fondamental",2024],
+ ["Décret n° 2024-313/PR/MI","Décret portant création du Comité Interministériel de la Sécurité Routière",2024],
+ ["Décret n° 2024-335/PR/MENSUR","Décret portant création du diplôme national menant au grade de « Docteur » et organisant les conditions et modalités d'accès et de délivrance",2024],
+ ["Décret n° 2024-071/PR/MJDH","Décret portant mesures de Grâce Présidentielle",2024],
+ ["Décret n° 2024-298/PR/MDC","Décret portant organisation des opérations électorales de la Chambre de Commerce de Djibouti",2024],
+ ["Décret n° 2024-091/PRE","Décret portant désignation des membres du Conseil de Régulation de l'Autorité de Régulation Multisectorielle de Djibouti",2024],
+ ["Arrêté n° 2024-036/PR/MJAPDH","Arrêté portant approbation et rendant exécutoire le Budget Prévisionnel de l'École Nationale des Études Judiciaires pour l'exercice 2024",2024],
+ ["Arrêté n° 2024-154/PR/MS","Arrêté approuvant et rendant exécutoire le Budget Prévisionnel 2025 de la CAMME",2024],
+ ["Arrêté n° 2024-016/PR/MVUH","Arrêté portant approbation du Budget Prévisionnel pour l'exercice 2024 de la Société Immobilière et d'Aménagement Foncier",2024],
+ ["Arrêté n° 2024-008/PR/MD","Arrêté portant approbation du budget prévisionnel 2024 de la Caisse Militaire de Retraite",2024],
+ ["Arrêté n° 2024-140/PR/MENSUR","Arrêté portant création et conditions d'obtention du Diplôme d'État Infirmier de Bloc Opératoire « Grade Master » de l'Institut Supérieur des Sciences de la Santé",2024],
+ ["Arrêté n° 2024-032/PR/MJAP","Arrêté portant organisation de la Formation Continue des Élèves Huissiers à l'École Nationale d'Études Judiciaires",2024],
+ ["Arrêté n° 2024-015/PR/SES","Arrêté approuvant et rendant exécutoire le budget prévisionnel 2024 de l'Agence Nationale pour la Promotion du Sport",2024],
+ ["Arrêté n° 2024-027/PR/MCT","Arrêté portant approbation du Budget de l'Office Djiboutien de la Propriété Industrielle et Commerciale de l'année 2024",2024],
+ ["Loi n° 16/AN/23/9ème L","Loi relative aux aires protégées",2023],
+ ["Loi de Finances n° 45/AN/23/9ème L","Loi de Finances portant budget rectificatif de l'État pour l'exercice 2023",2023],
+ ["Décret n° 2023-244/PR/MDENI","Décret portant organisation et fonctionnement du Haut Conseil Supérieur de l'Économie et de l'Innovation",2023],
+ ["Décret n° 2023-271/PR/MEFI","Décret portant approbation de la charte d'éthique et de déontologie de l'auditeur interne",2023],
+ ["Décret n° 2023-372/PR/MS","Décret portant nomination des membres du Conseil d'Administration de l'Hôpital Régional d'Ali-Sabieh",2023],
+ ["Décret n° 2023-074/PRE","Décret instituant un mécanisme de contribution et de compensation carbone",2023],
+ ["Décret n° 2023-028/PR/MI","Décret portant publication des listes des candidats titulaires et suppléants pour les élections législatives du vendredi 24 février 2023",2023],
+ ["Décret n° 2023-362/PR/MCT","Décret portant sur la protection et l'attraction touristique des Requins-Baleines à Djibouti",2023],
+ ["Décret n° 2023-216/PR/MDENI","Décret portant instauration de la plateforme Djibouti Port Community System",2023],
+ ["Décret n° 2023-178/PR/MTFPS","Décret portant création du Statut Particulier des Ingénieurs et Techniciens des Systèmes Spatiaux",2023],
+ ["Décret n° 2023-209/PR/MENSUR","Décret fixant la procédure d'autorisation d'opérations de lancement ou de guidage d'objets spatiaux",2023],
+ ["Décret n° 2023-259/PR/MCT","Décret portant nomination des membres du Conseil d'Administration de l'Agence Nationale du Tourisme (ANT)",2023],
+ ["Arrêté n° 2023-187/PR/MENSUR","Arrêté approuvant et rendant exécutoire le budget prévisionnel de l'exercice 2024 de l'Université de Djibouti",2023],
+ ["Arrêté n° 2023-148/PR/MB","Arrêté portant attribution de deux parcelles de terrain sises à Nagad et Jaban As",2023],
+ ["Arrêté n° 2023-124/PR/MB","Arrêté portant affectation d'une parcelle de terrain",2023],
+ ["Arrêté n° 2023-040/PR/MI","Arrêté accordant une indemnité aux membres des bureaux de vote lors des élections législatives du vendredi 24 février 2023",2023],
+ ["Arrêté n° 2023-054/PR/MJDH","Arrêté portant organisation de la formation des greffiers stagiaires à l'École Nationale d'Études Judiciaires",2023],
+ ["Arrêté n° 2023-109/PRE","Arrêté portant Règlement intérieur du Comité de Règlement des Différends",2023],
+ ["Loi n° 175/AN/22/8ème L","Loi portant organisation et fonctionnement du Ministère du Commerce et du Tourisme",2022],
+ ["Loi n° 149/AN/22/8ème L","Loi portant transformation de l'Office Djiboutien de Développement de l'Énergie Géothermique (ODDEG) en Établissement Public Industriel et Commercial",2022],
+ ["Loi n° 167/AN/22/8ème L","Loi relative aux activités de lancement, d'exploitation ou de guidage d'objets spatiaux",2022],
+ ["Loi n° 181/AN/22/8ème L","Loi de Finances initiale pour l'exercice 2023",2022],
+ ["Décret n° 2022-001/PRE","Décret portant remaniement ministériel",2022],
+ ["Décret n° 2022-240/PR/MJAPDH","Décret portant régimes des formations de l'École Nationale d'Études Judiciaires",2022],
+ ["Décret n° 2022-092/PR/MCT","Décret portant organisation et fonctionnement de l'Agence Djiboutienne des Normes et de la Qualité",2022],
+ ["Arrêté n° 2022-068/PR/MS","Arrêté portant création des Comités en charge de l'organisation et du suivi du Symposium de la Santé",2022],
+ ["Loi n° 100/AN/20/8ème L","Loi portant création de l'Agence Djiboutienne des Normes et de la Qualité",2021],
+ ["Décret n° 2021-111/PRE","Décret portant nomination du Secrétaire Général du Gouvernement à la Présidence de la République",2021],
+ ["Décret n° 2021-105/PRE","Décret portant nomination du Premier Ministre",2021],
+ ["Décret n° 2021-010/MERN/MHUE/MDC/PR","Décret portant application des articles 11 et 12 de la loi n° 90/AN/15/7ème L relatifs aux performances énergétiques minimales et à leur affichage",2021],
+ ["Décret n° 2015-218/PR","Décret portant Statuts du Laboratoire Central du Bâtiment et de l'Équipement (LCBE)",2015],
+ ["Loi n° 61/AN/14/7ème L","Loi portant constitution et maintien des stocks d'urgence de produits pétroliers",2014],
+ ["Loi n° 31/AN/14/7ème L","Loi portant réorganisation du Ministère des Affaires Musulmanes, de la Culture et des Biens Waqfs",2014],
+ ["Loi n° 66/AN/14/7ème L","Loi relative à la cybersécurité et à la lutte contre la cybercriminalité",2014],
+ ["Décret n° 2011-076/PRE","Décret fixant les attributions des Ministères",2011],
+ ["Loi n° 106/AN/00/4ème L","Loi portant sur le cadre de l'Environnement",2000],
+ ["Loi n° 93/AN/95/3ème L","Loi portant Code de l'Eau",1995],
+ ["Décret n° 92-0096/PRE","Décret fixant les modalités d'organisation du référendum constitutionnel du 4 septembre 1992",1992],
+ ["Loi n° 73/AN/89/2ème L","Loi portant codification du régime des prestations familiales",1989],
+ ["Décret n° 83-049/PR/DEF","Décret portant amnistie de sanctions disciplinaires à l'occasion de la fête de l'Armée nationale",1983],
+ ["Décret n° 81-066/PR","Décret portant liste des candidats, convocation du corps électoral et fixant la date de l'élection du Président de la République",1981],
+ ["Ordonnance n° 77-048/PR","Ordonnance portant création de l'Établissement public « Aéroport de Djibouti »",1977],
+ ["Ordonnance n° 77-029/PR/J","Ordonnance modifiant la loi du 20 mai 1863",1977],
+ ["Décret n° 2015-151/PR/MAMCBW","Décret créant un comité de suivi pour le projet de construction des Archives Nationales et de la Bibliothèque Nationale",2015],
+ ["Décret n° 2012-242/PRE","Décret du 4 novembre 2012 organisant le fonctionnement des Archives Nationales",2012],
+ ["Circulaire n° 2011-521/PM","Circulaire du Premier Ministre responsabilisant les ministères dans la gestion de leurs archives",2011],
+ ["Loi n° 132/AN/11/6ème L","Loi encadrant la fonction et la gestion des archives publiques (citée par le Plan d'urgence)",2011],
+ ["Décret n° 2001-0209/PRE","Décret relatif aux archives publiques (cité par le Plan d'urgence)",2001]];
+
+/* Fonds privés (Plan d'urgence, § IV.2 — stratégie de collecte des archives privées) */
+DOCS.push(
+ {ref:"FP-DON-2026-001",t:"Fonds privé — Papiers personnels d'une haute personnalité nationale (entrée par don)",inst:"BAN",type:"Fonds privé",st:"archive",conf:"Interne",date:"2026",aut:"Bibliothèque et Archives Nationales",prive:1,
+  sum:"Fonds d'archives privées collecté au titre de la stratégie du Plan d'urgence (correspondances, discours, photographies). Entrée par don ; toute vente ou exportation hors du territoire national est soumise à l'autorisation préalable du Directeur des Archives Nationales.",
+  kw:["archives privées","don","patrimoine"],hash:"9c2e51a7d04b83f6e21d95c70a4f8b3d6217e09c85f4a2b1d38e60c97f215a4d"},
+ {ref:"FP-DEP-2025-004",t:"Fonds privé — Minutier d'un notaire de Djibouti-ville, 1965-1998 (entrée par dépôt)",inst:"BAN",type:"Fonds privé",st:"archive",conf:"Confidentiel",date:"2025",aut:"Bibliothèque et Archives Nationales",prive:1,
+  sum:"Minutier notarial déposé à la BAN : la communication obéit aux règles fixées par le propriétaire (Plan d'urgence, lexique « archives privées »). Documents à forte valeur probante pour les droits des particuliers.",
+  kw:["archives privées","notaire","dépôt"],hash:"4f81b3c2e97d05a6f8241c0d93e5b76a1082f4dc6b95e37a20d81f4c65e93b70"});
+
+/* Fusion du catalogue eJO dans le fonds */
+const SIGLES={PRE:"Présidence",PM:"Primature",MI:"Min. Intérieur",MJDH:"Min. Justice et Droits de l'Homme",MJAP:"Min. Justice",MJAPDH:"Min. Justice",MB:"Min. Budget",MENFOP:"MENFOP",MENSUR:"Min. Enseignement Supérieur",MS:"Min. Santé",MTFPS:"Min. Travail et Formalisation",MVUH:"Min. Ville, Urbanisme et Habitat",MCT:"Min. Commerce et Tourisme",MDENI:"Min. Économie Numérique et Innovation",MEFI:"Min. Économie et Finances",MCPT:"Min. Communication (MCPT)",MD:"Min. Défense",DEF:"Min. Défense",SES:"Secrétariat d'État aux Sports",MDC:"Min. délégué au Commerce",MERN:"Min. Énergie et Ressources Naturelles",MJC:"Min. Jeunesse et Culture",MAMCBW:"Min. Affaires Musulmanes, Culture et Biens Waqfs",J:"Min. Justice",PR:"Présidence"};
+function refInst(ref){if(ref.includes("/AN/"))return"Assemblée nationale";const seg=ref.split("/");const last=seg[seg.length-1].trim();return SIGLES[last]||SIGLES[seg[seg.length-2]]||"Présidence"}
+function refType(ref){return ref.startsWith("Loi de Finances")?"Loi de Finances":ref.startsWith("Loi")?"Loi":ref.startsWith("Arrêté")?"Arrêté":ref.startsWith("Ordonnance")?"Ordonnance":ref.startsWith("Circulaire")?"Circulaire":"Décret"}
+function fakeSha(s){let out="";for(let k=1;k<=8;k++){let h=2166136261^k;for(const c of s){h=Math.imul(h^c.charCodeAt(0),16777619)>>>0}out+=h.toString(16).padStart(8,"0")}return out}
+JO.forEach(([ref,t,y])=>{
+  if(DOCS.some(d=>d.ref===ref))return;
+  DOCS.push({ref,t,inst:refInst(ref),type:refType(ref),st:"publie",conf:"Public",date:String(y),aut:refInst(ref),jo:1,
+    sum:"Texte officiel publié au Journal Officiel de la République de Djibouti — intitulé intégral : « "+t+" ». Le texte complet est consultable sur journalofficiel.dj.",
+    kw:[],hash:fakeSha(ref)});
+});
+DOCS.forEach(d=>{d.year=parseInt(d.date)||0});
+DOCS.sort((a,b)=>b.year-a.year||a.ref.localeCompare(b.ref,'fr'));
+const PLAN=[
+ ["100","Gouvernance et institutions",[["110","Actes du Président de la République","10 ans","C"],["120","Actes du Premier ministre","10 ans","C"],["130","Textes législatifs et réglementaires","Permanent","C"],["140","Relations internationales et traités","30 ans","C"]]],
+ ["200","Finances publiques",[["210","Budget de l'État et lois de finances","10 ans","C"],["220","Comptabilité publique","10 ans","T"],["230","Marchés publics","15 ans","T"],["240","Fiscalité et douanes","10 ans","D"]]],
+ ["300","Justice et ordre public",[["310","Décisions de justice","Permanent","C"],["320","État civil et nationalité","Permanent","C"],["330","Sécurité intérieure","20 ans","T"]]],
+ ["400","Secteurs sociaux",[["410","Éducation et formation","10 ans","T"],["420","Santé publique","20 ans","T"],["430","Travail et protection sociale","50 ans","C"]]],
+ ["500","Infrastructures et économie",[["510","Ports et zones franches","30 ans","C"],["520","Transports et équipement","15 ans","T"],["530","Énergie, eau et télécommunications","15 ans","T"]]]];
+/* ===== Plan d'urgence des archives (V3 — actualisation août 2026, Conseil des Ministres) ===== */
+const ECHEANCES=["12 juin 25","3 juil. 25","29 sept. 25","25 déc. 25","Fév. 26","24 juin 26","30 juin 26","30 sept. 26","30 déc. 26","30 mars 27","30 juin 27","30 sept. 27","30 déc. 27"];
+const CUTOFF=6; /* échéances ≤ 30 juin 2026 = versements réalisés à la date d'actualisation */
+/* Annexe II — calendrier de versement des 28 institutions vers la BAN : [institution, n° du 1er lot au calendrier, indices d'échéances] — 105 lots au total */
+const VERSEMENTS=[
+ ["Présidence de la République",4,[0,2,6,8,10,12]],
+ ["Assemblée nationale",1,[1,3,5,6,9,11]],
+ ["Primature",1,[0,2,5,7,9,11,12]],
+ ["Min. de la Justice et des Affaires Pénitentiaires",1,[6,7,9]],
+ ["Min. de l'Économie et des Finances chargé de l'Industrie",1,[3,7,9,11]],
+ ["Min. des Affaires Étrangères et de la Coopération Int.",1,[7,9,11]],
+ ["Min. de la Défense, chargé des Relations avec le Parlement",1,[7,9,11]],
+ ["Min. de l'Intérieur",1,[3,7,9,11]],
+ ["Min. du Budget",1,[7,8,10,12]],
+ ["Min. de la Santé",1,[7,8,10,12]],
+ ["MENFOP",1,[2,5,7,9,11]],
+ ["Min. de l'Enseignement Supérieur et de la Recherche",1,[6,9,11]],
+ ["Min. de la Femme et de la Famille",1,[7,8,10,12]],
+ ["Min. de l'Agriculture, de l'Eau, de la Pêche et de l'Élevage",1,[7,8,10,12]],
+ ["Min. des Infrastructures et de l'Équipement",1,[7,9,11]],
+ ["Min. des Affaires Musulmanes et des Biens Wakfs",1,[7,9,11]],
+ ["Min. des Affaires Sociales et des Solidarités",1,[4,5,8,11]],
+ ["Min. de l'Énergie chargé des Ressources Naturelles",1,[8,10]],
+ ["Min. du Travail chargé de la Formalisation et de la Protection",1,[1,4,8,10,12]],
+ ["Min. de l'Environnement et du Développement Durable",1,[8,10,12]],
+ ["Min. de la Ville, de l'Urbanisme et de l'Habitat",1,[8,10,12]],
+ ["Min. de la Communication, Postes et Télécommunications",1,[3,7,9,11]],
+ ["Min. du Commerce et du Tourisme",1,[8,10,12]],
+ ["Min. de la Jeunesse et de la Culture",1,[8,10,12]],
+ ["Min. Délégué chargé de la Décentralisation",1,[8,10,12]],
+ ["Min. Délégué chargé de l'Économie Numérique et de l'Innovation",1,[9,11,12]],
+ ["Secrétariat d'État aux Investissements et au Secteur privé",1,[9,11,12]],
+ ["Secrétariat d'État chargé des Sports",1,[9,11,12]]];
+/* Annexe I — chantiers institutionnels : 7 phases (2 = réalisée, 1 = en cours, 0 = non commencée) */
+const PHASES7=["Démarrage & cadrage","État des lieux","Traitement du passif","Numérisation","Transfert BAN","Formations & clôture","Communication & pilotage"];
+const CHANTIERS=[
+ ["Présidence de la République",[2,2,2,2,2,1,1],"Chantier modèle — 6 versements réalisés ; premier fonds engagé dans l'informatisation"],
+ ["Assemblée nationale",[2,2,2,2,1,1,1],"4 versements réalisés"],
+ ["Primature",[2,2,2,1,1,1,1],"3 versements réalisés"],
+ ["Ministère du Travail",[2,2,2,1,1,1,1],"2 versements réalisés"],
+ ["Cour Suprême (MJAP)",[1,1,1,0,0,0,0],"Dépoussiérage et pré-triage en cours ; manuel opérationnel élaboré"],
+ ["Tribunal de Première Instance",[1,0,0,0,0,0,0],"Chantier ouvert"],
+ ["Tribunal du Statut Personnel",[1,0,0,0,0,0,0],"Plan de classement en cours"],
+ ["Organes de contrôle de l'État",[2,1,1,0,0,0,0],"Cour des Comptes, IGE, IGF, CNIPLC, SEPE, DCP — financement PAIC-GEP (BAD/ANSIE)"],
+ ["Min. Affaires Étrangères et Coopération Int.",[1,0,0,0,0,0,0],"Chantier ouvert"],
+ ["Ministère de l'Intérieur",[1,0,0,0,0,0,0],"1 versement réalisé"],
+ ["Min. Affaires Sociales et Solidarités",[2,1,1,0,0,0,0],"2 versements réalisés"],
+ ["Ministère de la Santé",[1,0,0,0,0,0,0],"Chantier ouvert"],
+ ["Commune de Boulaos",[1,0,0,0,0,0,0],"Traitement des dossiers d'archives engagé"]];
+/* § V.3.2 — bordereaux d'élimination : 0 = en préparation, 1 = soumis au visa DAN, 2 = visé, 3 = détruit (PV) */
+let ELIMS=[
+ {ref:"BE-2026-014",inst:"Min. Budget",desc:"Doubles de pièces comptables 1998-2005 (DUA expirée)",n:412,st:3,pv:"PV-2026-009"},
+ {ref:"BE-2026-021",inst:"MENFOP",desc:"Copies d'examens et brouillons administratifs 2001-2010",n:268,st:2,pv:null},
+ {ref:"BE-2026-027",inst:"Primature",desc:"Chronos de correspondance en double 1995-2004",n:190,st:1,pv:null},
+ {ref:"BE-2026-031",inst:"Min. Santé",desc:"Formulaires vierges obsolètes et duplicatas 2008-2012",n:95,st:0,pv:null}];
+/* Annexe V — budget du projet (FDJ) */
+const BUDGET=[["Budget réalisé — État (15 M FDJ / an depuis 2023)",45000000],["Organes de contrôle — PAIC-GEP (BAD / ANSIE)",35544200],["Autres institutions (estimation des besoins)",112671402]];
+
+const WF=[["Réception","Bureau d'ordre — 12 sept. 08:14",1],["Numérisation","Atelier scan — 12 sept. 09:02",1],["OCR + analyse IA","Automatique — 12 sept. 09:05 · confiance 97,1 %",1],["Validation archiviste","Assignée à M. Ahmed — SLA : 48 h",2],["Contrôle qualité","Validateur ministériel (MJC)",0],["Indexation","Moteur de recherche national",0],["Archivage OAIS","Génération du paquet AIP",0],["Publication","Selon niveau de confidentialité",0]];
+const DEPOTS=[
+ {n:"Dépôt central — Djibouti-ville",c:"DEP-DJB",cap:12000,use:8340,clim:1,feu:1,rfid:1},
+ {n:"Dépôt régional — Ali Sabieh",c:"DEP-ALS",cap:4000,use:1270,clim:1,feu:1,rfid:0},
+ {n:"Dépôt régional — Tadjourah",c:"DEP-TAD",cap:3000,use:940,clim:0,feu:1,rfid:0}];
+const BOXES=[
+ ["DJB-2024-00147","Journal Officiel — collection reliée 1977–1999","Dépôt central · salle A · travée 3 · tablette 2","place"],
+ ["DJB-2024-00151","Lois de finances et budgets — exercices 2000–2015","Dépôt central · salle B · travée 1 · tablette 4","emprunt"],
+ ["ALS-2023-00034","État civil Ali Sabieh 1998–2004","Ali Sabieh · salle unique · travée 2","place"],
+ ["DJB-2022-00092","Traités et accords internationaux 1977–1990","Dépôt central · salle sécurisée · coffre 1","place"],
+ ["TAD-2024-00011","Conseil régional de Tadjourah 2005–2020 (loi n° 174/AN/02)","Tadjourah · salle 1 · travée 1","place"]];
+const AUDIT=[
+ ["2024-10-02 09:41:07","VALIDATION","Décret n° 2024-248/PR/MJC","m.ahmed","10.4.2.31"],
+ ["2024-10-02 09:05:52","ANALYSE_IA","Décret n° 2024-248/PR/MJC","system","interne"],
+ ["2024-10-02 08:14:26","CREATION","Décret n° 2024-248/PR/MJC","f.houssein","10.4.2.18"],
+ ["2024-10-01 16:22:40","TELECHARGEMENT","Loi de Finances n° 64/AN/23/9ème L","admin","10.4.1.2"],
+ ["2024-10-01 14:03:11","CONNEXION","session","archiviste","41.223.85.14"],
+ ["2024-10-01 11:47:55","MODIFICATION","MB/RAP/2024-S1","a.omar","10.4.3.7"],
+ ["2024-09-30 17:30:02","EMPRUNT","DJB-2024-00151","d.robleh","10.4.2.44"]];
+const FEED=[
+ ["b-green","Archivage OAIS terminé","Loi n° 107/AN/24/9ème L — paquet AIP scellé","il y a 12 min"],
+ ["b-blue","Nouveau dépôt","MS/COU/2024-118 — OCR en file d'attente","il y a 38 min"],
+ ["b-purple","Analyse IA","Décret n° 2024-248/PR/MJC — 14 entités extraites","il y a 1 h"],
+ ["b-amber","SLA à surveiller","Validation MB/RAP/2024-S1 — échéance dans 6 h","il y a 2 h"],
+ ["b-blue","Emprunt physique","Boîte DJB-2024-00151 sortie du dépôt central","hier 17:30"]];
+
+/* ============ Utilitaires ============ */
+const $=id=>document.getElementById(id);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const fmt=n=>n.toLocaleString("fr-FR");
+const cssVar=v=>getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+const STBADGE={archive:['b-green','Archivé'],validation:['b-amber','En validation'],ocr:['b-blue','OCR en cours'],publie:['b-purple','Publié']};
+const CONFBADGE={Public:'b-green',Interne:'b-blue',Confidentiel:'b-amber',Secret:'b-red'};
+function toast(msg){const t=$('tip');t.textContent=msg;t.style.display='block';t.style.left='50%';t.style.top='24px';t.style.transform='translateX(-50%)';clearTimeout(t._h);t._h=setTimeout(()=>{t.style.display='none';t.style.transform=''},2200)}
+
+/* ============ Connexion / navigation ============ */
+function doLogin(){$('login').style.display='none';$('app').classList.add('on');drawCharts()}
+function logout(){$('app').classList.remove('on');$('login').style.display='flex'}
+const TITLES={dash:["Pilotage","Tableau de bord national"],docs:["Fonds documentaire","Documents"],upload:["Fonds documentaire","Dépôt & numérisation"],
+ search:["Fonds documentaire","Recherche & assistant IA"],plan:["Fonds documentaire","Plan de classement PNC-DJ"],inst:["Organisation","Institutions publiques"],
+ wf:["Organisation","Workflows BPM"],phys:["Organisation","Archives physiques"],audit:["Pilotage","Journal d'audit"],citizen:["Public","Portail citoyen"],
+ chantiers:["Plan d'urgence","Chantiers institutionnels"],versements:["Plan d'urgence","Versements vers la BAN"],elim:["Plan d'urgence","Éliminations réglementées"]};
+document.querySelectorAll('.nav-item[data-sec]').forEach(b=>b.onclick=()=>{
+  document.querySelectorAll('.nav-item').forEach(x=>x.classList.remove('active'));b.classList.add('active');
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('on'));
+  const k=b.dataset.sec;$('sec-'+k).classList.add('on');$('crumb').textContent=TITLES[k][0];$('sec-title').textContent=TITLES[k][1];
+  $('sidebar').classList.remove('open');closeDrawer();
+  if(k==='dash')drawCharts();
+});
+function toggleTheme(){
+  const r=document.documentElement,cur=r.dataset.theme||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');
+  r.dataset.theme=cur==='dark'?'light':'dark';drawCharts();
+}
+
+/* ============ Graphiques SVG ============ */
+function drawCharts(){drawTrend();drawTypes()}
+function drawTrend(){
+  const W=520,H=240,P={l:44,r:14,t:14,b:28},iw=W-P.l-P.r,ih=H-P.t-P.b,max=1400;
+  const x=i=>P.l+i/(11)*iw, y=v=>P.t+ih-(v/max)*ih;
+  const line=a=>a.map((v,i)=>(i?'L':'M')+x(i).toFixed(1)+' '+y(v).toFixed(1)).join(' ');
+  const c1=cssVar('--c1'),c2=cssVar('--c2'),grid=cssVar('--line'),ink3=cssVar('--ink3');
+  let g='';for(const v of [0,350,700,1050,1400]){const yy=y(v);
+    g+=`<line x1="${P.l}" y1="${yy}" x2="${W-P.r}" y2="${yy}" stroke="${grid}" stroke-width="1"/><text x="${P.l-8}" y="${yy+4}" text-anchor="end" font-size="10" fill="${ink3}">${fmt(v)}</text>`}
+  let xl='';for(let i=0;i<12;i+=2)xl+=`<text x="${x(i)}" y="${H-8}" text-anchor="middle" font-size="10" fill="${ink3}">${MOIS[i]}</text>`;
+  const area=line(TREND.recus)+`L${x(11)} ${y(0)}L${x(0)} ${y(0)}Z`;
+  const end1=TREND.recus[11],end2=TREND.archives[11];
+  $('chart-trend').innerHTML=
+`<svg viewBox="0 0 ${W} ${H}" style="width:100%;height:auto" role="img" aria-label="Flux mensuel : reçus et archivés">
+${g}${xl}
+<path d="${area}" fill="${c1}" opacity="0.08"/>
+<path d="${line(TREND.recus)}" fill="none" stroke="${c1}" stroke-width="2" stroke-linecap="round"/>
+<path d="${line(TREND.archives)}" fill="none" stroke="${c2}" stroke-width="2" stroke-linecap="round"/>
+<circle cx="${x(11)}" cy="${y(end1)}" r="4" fill="${c1}" stroke="${cssVar('--surface')}" stroke-width="2"/>
+<circle cx="${x(11)}" cy="${y(end2)}" r="4" fill="${c2}" stroke="${cssVar('--surface')}" stroke-width="2"/>
+<text x="${x(11)-6}" y="${y(end1)-9}" text-anchor="end" font-size="11" font-weight="600" fill="${cssVar('--ink')}">${fmt(end1)}</text>
+<rect id="tr-hit" x="${P.l}" y="${P.t}" width="${iw}" height="${ih}" fill="transparent"/>
+<line id="tr-cross" x1="0" y1="${P.t}" x2="0" y2="${P.t+ih}" stroke="${ink3}" stroke-width="1" stroke-dasharray="3 3" style="display:none"/>
+</svg>`;
+  const svg=$('chart-trend').querySelector('svg'),hit=svg.querySelector('#tr-hit'),cross=svg.querySelector('#tr-cross'),tip=$('tip');
+  hit.addEventListener('mousemove',e=>{
+    const r=svg.getBoundingClientRect(),sx=(e.clientX-r.left)*(W/r.width);
+    const i=Math.max(0,Math.min(11,Math.round((sx-P.l)/iw*11)));
+    cross.style.display='block';cross.setAttribute('x1',x(i));cross.setAttribute('x2',x(i));
+    tip.style.display='block';tip.style.transform='';tip.style.left=(e.clientX+14)+'px';tip.style.top=(e.clientY-10)+'px';
+    tip.innerHTML=`<b>${MOIS[i]}</b> · Reçus ${fmt(TREND.recus[i])} · Archivés ${fmt(TREND.archives[i])}`;});
+  hit.addEventListener('mouseleave',()=>{cross.style.display='none';tip.style.display='none'});
+}
+function drawTypes(){
+  const max=TYPES[0][1],c1=cssVar('--c1');
+  $('chart-types').innerHTML=TYPES.map(([n,v])=>{
+    const w=(v/max*100).toFixed(1);
+    return `<div style="display:grid;grid-template-columns:92px 1fr 56px;gap:10px;align-items:center;margin:9px 0" data-v="${n} : ${fmt(v)} documents">
+      <span style="font-size:13px;color:var(--ink2)">${n}</span>
+      <div style="background:var(--surface2);border-radius:4px;height:18px"><div style="width:${w}%;height:100%;background:${c1};border-radius:4px;min-width:4px"></div></div>
+      <span class="num" style="font-size:13px;font-variant-numeric:tabular-nums">${fmt(v)}</span></div>`}).join('');
+  $('chart-types').querySelectorAll('[data-v]').forEach(r=>{
+    r.addEventListener('mousemove',e=>{const t=$('tip');t.style.display='block';t.style.transform='';t.textContent=r.dataset.v;t.style.left=(e.clientX+14)+'px';t.style.top=(e.clientY-10)+'px'});
+    r.addEventListener('mouseleave',()=>$('tip').style.display='none')});
+}
+
+/* ============ Documents ============ */
+function fillYearFilter(){
+  const years=[...new Set(DOCS.map(d=>d.year).filter(Boolean))].sort((a,b)=>b-a);
+  $('f-year').innerHTML='<option value="">Toutes les années</option>'+years.map(y=>`<option>${y}</option>`).join('');
+}
+function renderDocs(){
+  const q=($('f-q').value||'').toLowerCase(),st=$('f-status').value,cf=$('f-conf').value,
+        ty=$('f-type').value,yr=$('f-year').value;
+  const rows=DOCS.filter(d=>(!st||d.st===st)&&(!cf||d.conf===cf)&&(!ty||d.type===ty)&&(!yr||String(d.year)===yr)
+    &&(!q||(d.t+d.ref+d.aut+d.inst).toLowerCase().includes(q)));
+  $('doc-rows').innerHTML=rows.map(d=>{const[bc,bl]=STBADGE[d.st];
+    return `<tr onclick="openDoc('${d.ref}')"><td class="ref">${d.ref}</td><td style="max-width:380px">${esc(d.t)}</td><td class="muted">${d.inst}</td>
+    <td><span class="badge ${bc}">${bl}</span></td><td><span class="badge ${CONFBADGE[d.conf]}">${d.conf}</span></td>
+    <td class="num tiny">${d.date}</td></tr>`}).join('')||`<tr><td colspan="6" class="muted" style="text-align:center;padding:28px">Aucun document ne correspond aux filtres.</td></tr>`;
+  const njo=DOCS.filter(d=>d.jo).length;
+  $('doc-count').textContent=`${rows.length} texte(s) affiché(s) sur ${DOCS.length} — dont ${njo} textes officiels référencés sur le Journal Officiel (journalofficiel.dj) et ${DOCS.length-njo} exemples internes fictifs.`;
+  updateKpis();
+}
+function updateKpis(){$('k-total').textContent=fmt(15139+DOCS.length);$('k-arch').textContent=fmt(11873)}
+function openDoc(ref){
+  const d=DOCS.find(x=>x.ref===ref);if(!d)return;
+  $('d-ref').textContent=d.ref;$('d-title').textContent=d.t;
+  const[bc,bl]=STBADGE[d.st];
+  $('d-badges').innerHTML=`<span class="badge ${bc}">${bl}</span><span class="badge ${CONFBADGE[d.conf]}">${d.conf}</span><span class="badge b-grey">${d.type}</span>`;
+  const cls=d.type==="Loi de Finances"?"210 — Budget de l'État et lois de finances":(d.type==="Loi"||d.type==="Décret"||d.type==="Arrêté")?"130 — Textes législatifs et réglementaires":"220 — Comptabilité publique";
+  $('d-kv').innerHTML=[["Créateur",d.aut],["Institution",d.inst],["Date du document",d.date],["Langue","Français"],
+    ["Source",d.prive?"Fonds privé — entrée par "+(d.ref.includes("DON")?"don":"dépôt")+" (BAN)":d.jo?"Journal Officiel de la République de Djibouti (journalofficiel.dj)":"Production interne — exemple fictif"],
+    ["Cote ISAD(G)",d.ref],["Producteur ISAD(G)",d.inst],["Dates extrêmes",String(d.year||d.date)],["Niveau de description",d.prive?"Fonds":"Pièce"],
+    ["Classement",d.prive?"Fonds privés — communication selon les règles du propriétaire":"PNC-DJ · "+cls],
+    ["Conservation",d.prive?"Définitive — exportation soumise à autorisation du Directeur des Archives Nationales":(d.type==="Loi"||d.type==="Décret"||d.type==="Loi de Finances")?"Permanente (sort final : C)":"10 ans (DUA)"]]
+    .map(([k,v])=>`<dt>${k}</dt><dd>${esc(v)}</dd>`).join('');
+  $('d-sum').textContent=d.sum;
+  $('d-kw').innerHTML=d.kw.map(k=>`<span class="badge b-blue">${esc(k)}</span>`).join('');
+  $('d-hash').textContent=d.hash;
+  $('drawer').classList.add('open');
+}
+function closeDrawer(){$('drawer').classList.remove('open')}
+
+/* ============ Dépôt simulé ============ */
+let uploading=false;
+function simulateUpload(){
+  if(uploading)return;
+  const title=$('up-title').value.trim()||"Document sans titre";
+  uploading=true;$('up-btn').textContent="Traitement en cours…";
+  const steps=[...document.querySelectorAll('#pipe .step')];
+  steps.forEach(s=>s.classList.remove('done','now'));
+  const msgs=["Empreintes calculées — référence attribuée","OCR en cours (fra+ara)… confiance 96,8 %","Analyse IA : résumé et 9 entités extraites","Transmis à l'archiviste pour validation","Paquet AIP généré — document archivé ✓"];
+  let i=0;
+  (function next(){
+    if(i>0){steps[i-1].classList.replace('now','done')}
+    if(i>=steps.length){
+      const inst=$('up-inst').value,code={"Présidence":"PRE","Assemblée nationale":"AN","Primature":"PM","Min. Économie et Finances":"MEF","Min. Budget":"MB","Min. Intérieur":"MI","Min. Jeunesse et Culture":"MJC","MENFOP":"MENFOP","MCPT":"MCPT"}[inst]||"DJ";
+      const type=$('up-type').value,num=String(100+Math.floor(Math.random()*899)),an=new Date().getFullYear();
+      /* Nomenclature réelle du Journal Officiel de Djibouti */
+      const ref=type==="Loi"||type==="Loi de Finances"?`${type} n° ${num}/AN/${String(an).slice(2)}/9ème L`
+        :type==="Décret"?`Décret n° ${an}-${num}/${code==="PRE"?"PRE":"PR/"+code}`
+        :type==="Arrêté"?`Arrêté n° ${an}-${num}/PR/${code}`
+        :`${code}/${type.slice(0,3).toUpperCase()}/${an}-${num}`;
+      DOCS.unshift({ref,t:title,inst,type:$('up-type').value,st:"archive",conf:$('up-conf').value,date:new Date().toISOString().slice(0,10),
+        aut:"Dépôt de démonstration",sum:"Document déposé via la démonstration : le pipeline OCR → IA → validation → OAIS a été simulé de bout en bout.",
+        kw:["démonstration","dépôt"],hash:[...crypto.getRandomValues(new Uint8Array(32))].map(b=>b.toString(16).padStart(2,'0')).join('')});
+      renderDocs();$('pipe-msg').textContent=`Terminé — référence ${ref} ajoutée au fonds (voir Documents).`;
+      $('up-btn').textContent="Déposer et lancer le traitement";uploading=false;toast("Document archivé : "+ref);return;
+    }
+    steps[i].classList.add('now');$('pipe-bar').style.width=((i+1)/steps.length*100)+'%';$('pipe-msg').textContent=msgs[i];i++;setTimeout(next,900);
+  })();
+}
+
+/* ============ Recherche ============ */
+let mode='std';
+function setMode(m){mode=m;
+  $('m-std').style.cssText=m==='std'?'border-color:var(--accent);color:var(--accent-ink)':'';
+  $('m-ia').style.cssText=m==='ia'?'border-color:var(--purple);color:var(--purple)':'';
+  $('s-q').placeholder=m==='ia'?"Posez une question — ex. Quels textes encadrent le télétravail ?":"Rechercher dans le fonds national…";
+  renderExamples();}
+function renderExamples(){
+  const ex=mode==='ia'?["Quel texte régit les archives publiques ?","Quel est le montant du budget 2024 ?","Que contient le Code Numérique ?","Quels textes luttent contre la corruption ?","Quel est le statut des fonctionnaires ?"]
+    :["archives publiques","budget 2024","code numérique","corruption","aires protégées","élections 2026"];
+  $('s-examples').innerHTML=ex.map(e=>`<button class="chip" onclick="$('s-q').value=this.textContent;doSearch()">${e}</button>`).join('');}
+function doSearch(){
+  const q=$('s-q').value.trim().toLowerCase();if(!q)return;
+  const hits=DOCS.filter(d=>(d.t+d.sum+d.kw.join(' ')+d.ref).toLowerCase().includes(q)||q.split(/\s+/).some(w=>w.length>3&&(d.t+d.sum).toLowerCase().includes(w)));
+  const shown=hits.length?hits:DOCS.slice(0,3);
+  if(mode==='ia'){
+    $('s-answer').style.display='block';
+    let a;
+    if(q.includes('archive'))a="Les archives publiques et privées sont régies par le Décret n° 2024-248/PR/MJC du 30 septembre 2024, publié au Journal Officiel. Il définit les archives publiques et privées, organise leur collecte, leur tri, leur conservation et leur communication, et fixe les règles de sort final. Ce décret constitue la base légale de la présente plateforme nationale.";
+    else if(q.includes('budget')||q.includes('finance'))a="Le budget initial de l'État pour l'exercice 2024 est fixé par la Loi de Finances n° 64/AN/23/9ème L : il est présenté en équilibre, recettes et dépenses arrêtées à 152 490 386 972 FDJ. Pour l'exercice 2025, c'est la Loi n° 150/AN/24/9ème L qui porte le budget initial de l'État.";
+    else if(q.includes('numérique')||q.includes('données')||q.includes('cyber'))a="Le cadre numérique repose sur plusieurs textes : la Loi n° 019/AN/23/9ème L portant Code Numérique (protection des données personnelles, commerce électronique, cybersécurité), la Loi n° 18/AN/23/9ème L du 21 janvier 2024 ratifiant la Convention de Malabo de l'Union Africaine, et la Loi n° 195/AN/25/9ème L créant l'Autorité Nationale de Cybersécurité (ANC).";
+    else if(q.includes('décentralisation')||q.includes('région')||q.includes('tadjourah'))a="La décentralisation est organisée par la Loi n° 174/AN/02/4ème L du 7 juillet 2002 portant décentralisation et statut des régions (Tadjourah, Ali Sabieh, Dikhil, Obock, Arta), modifiée par la Loi n° 139/AN/06/5ème L. Elle institue les conseils régionaux et définit leurs compétences.";
+    else if(q.includes('travail')||q.includes('emploi'))a="Les relations professionnelles sont régies par la Loi n° 133/AN/05/5ème L du 26 janvier 2006 portant Code du Travail : contrat de travail, durée du travail, salaires, représentation du personnel et règlement des conflits.";
+    else if(q.includes('gouvernement')||q.includes('nomination'))a="La composition du Gouvernement résulte des décrets présidentiels de nomination : le Décret n° 2021-106/PRE du 24 mai 2021 (pris après le Décret n° 2021-105/PRE nommant le Premier ministre Abdoulkader Kamil Mohamed), puis le Décret n° 2026-092/PRE portant nomination des membres du Gouvernement. Le Décret n° 2026-105/PRE fixe les attributions des Ministères.";
+    else if(q.includes('corruption')||q.includes('blanchiment'))a="Le dispositif anti-corruption repose sur la Loi n° 103/AN/24/9ème L du 6 mars 2024 relative à la prévention et à la lutte contre la corruption, complétée par la Loi n° 106/AN/24/9ème L contre le blanchiment des capitaux et le financement du terrorisme, les Lois n° 104 et 105/AN/24/9ème L, et le Décret n° 2024-053/PR/MJDH sur les sanctions financières ciblées.";
+    else if(q.includes('fonctionnaire')||q.includes('fonction publique')||q.includes('congé'))a="Le nouveau Statut général des fonctionnaires est porté par la Loi n° 21/AN/23/9ème L du 24 janvier 2024. Ses textes d'application de 2025 précisent le régime : le Décret n° 2025-165/PR/MTFPS fixe le régime des congés et absences, et le Décret n° 2025-164/PR/MTFPS détermine les conditions de certaines positions des fonctionnaires.";
+    else if(q.includes('environnement')||q.includes('aire')||q.includes('eau')||q.includes('carbone'))a="Le droit de l'environnement s'appuie sur la Loi n° 106/AN/00/4ème L portant cadre de l'Environnement, la Loi n° 93/AN/95/3ème L portant Code de l'Eau, la Loi n° 16/AN/23/9ème L relative aux aires protégées, le Décret n° 2023-074/PRE instituant un mécanisme de contribution et compensation carbone, et le Décret n° 2023-362/PR/MCT protégeant les requins-baleines.";
+    else if(q.includes('versement')||q.includes('plan d\'urgence')||q.includes('chantier')||q.includes('ban'))a="Le Plan d'urgence des archives (actualisation août 2026, MJC/SGG) organise le traitement du passif documentaire et les transferts vers la Bibliothèque et Archives Nationales : 13 chantiers institutionnels ouverts, 6 versements de la Présidence réalisés (le 6ᵉ le 30 juin 2026), et un projet d'arrêté rendant opposable le calendrier de versement de 28 institutions — 105 lots programmés jusqu'en décembre 2027. Voir les modules « Chantiers » et « Versements BAN » de la plateforme.";
+    else if(q.includes('élimination')||q.includes('destruction'))a="L'élimination des archives est irréversible et strictement encadrée (§ V.3.2 du Plan d'urgence) : préparation des documents dont la DUA est expirée, rédaction du bordereau d'élimination soumis au visa de la Direction des Archives Nationales, puis destruction sécurisée attestée par procès-verbal. Le bordereau visé est conservé comme document réglementaire — voir le module « Éliminations ».";
+    else if(q.includes('élection')||q.includes('présidentielle')||q.includes('ceni'))a="Pour les élections présidentielles du 10 avril 2026 : le Décret n° 2026-055/PR/MI publie la liste des candidats, l'Arrêté n° 2026-001/PR/MI désigne les membres de la CENI et l'Arrêté n° 2026-083/PR/MI ceux des bureaux de vote. Les législatives du 24 février 2023 avaient été organisées par le Décret n° 2023-028/PR/MI.";
+    else a=`D'après les textes officiels indexés (source : Journal Officiel — journalofficiel.dj), ${shown.length} document(s) se rapportent à votre question — les sources les plus pertinentes sont listées ci-dessous avec leur référence officielle.`;
+    $('s-answer-txt').textContent=a;
+  } else $('s-answer').style.display='none';
+  $('s-results').innerHTML=shown.map(d=>{const[bc,bl]=STBADGE[d.st];
+    return `<div class="card" style="cursor:pointer" onclick="openDoc('${d.ref}')">
+      <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center"><span class="ref">${d.ref}</span><span class="badge ${bc}">${bl}</span><span class="badge ${CONFBADGE[d.conf]}">${d.conf}</span></div>
+      <b style="display:block;margin-top:6px">${esc(d.t)}</b>
+      <p class="muted" style="margin-top:4px;max-width:80ch">${esc(d.sum)}</p></div>`}).join('');
+}
+
+/* ============ Plan de classement ============ */
+function renderPlan(){
+  $('plan-tree').innerHTML='<ul>'+PLAN.map(([c,n,kids])=>
+   `<li><button class="tnode openc" onclick="this.parentElement.classList.toggle('closed');this.classList.toggle('openc')">
+      <span class="caret">▶</span><span class="code">${c}</span><b>${n}</b><span class="tiny" style="margin-left:auto">${kids.length} séries</span></button>
+    <ul>${kids.map(([kc,kn,dua,sf])=>`<li><div class="tnode" style="cursor:default">
+      <span class="caret"></span><span class="code">${kc}</span><span>${kn}</span>
+      <span style="margin-left:auto;display:flex;gap:6px"><span class="badge b-grey">DUA ${dua}</span><span class="badge ${sf==='C'?'b-green':sf==='D'?'b-red':'b-amber'}">${sf}</span></span></div></li>`).join('')}</ul></li>`).join('')+'</ul>';
+}
+
+/* ============ Institutions ============ */
+function renderInsts(){
+  $('inst-cards').innerHTML=INSTS.map(i=>{const pct=Math.round(i.go/i.q*100);
+    return `<div class="card">
+    <div style="display:flex;justify-content:space-between;gap:8px;align-items:flex-start">
+      <div><b>${i.n}</b><div class="tiny" dir="rtl" style="text-align:left;margin-top:2px">${i.ar}</div></div>
+      <span class="badge b-blue mono">${i.c}</span></div>
+    <div style="display:flex;gap:22px;margin:14px 0 10px;font-variant-numeric:tabular-nums">
+      <div><b style="font-family:Archivo;font-size:19px">${fmt(i.docs)}</b><div class="tiny">documents</div></div>
+      <div><b style="font-family:Archivo;font-size:19px">${i.users}</b><div class="tiny">agents</div></div>
+      <div><b style="font-family:Archivo;font-size:19px">${i.go.toLocaleString('fr-FR')} To</b><div class="tiny">stockage</div></div></div>
+    <div class="progress" title="Quota de stockage"><i style="width:${pct}%;background:${pct>85?'var(--amber)':'var(--accent)'}"></i></div>
+    <div class="tiny" style="margin-top:5px">${pct} % du quota (${i.q} To)</div></div>`}).join('');
+}
+
+/* ============ Workflows ============ */
+function renderWf(){
+  $('wf-steps').innerHTML=WF.map(([n,d,st])=>
+   `<div class="step ${st===1?'done':st===2?'now':''}"><b>${n}</b>${st===2?' <span class="badge b-blue">en cours</span>':''}<div class="tiny">${d}</div></div>`).join('');
+  const done=WF.filter(s=>s[2]===1).length;
+  $('wf-btn').style.display=WF.some(s=>s[2]===2)?'':'none';
+}
+function advanceWf(){
+  const i=WF.findIndex(s=>s[2]===2);if(i<0)return;
+  WF[i][2]=1;WF[i][1]="Validée — à l'instant";
+  if(i+1<WF.length){WF[i+1][2]=2;WF[i+1][1]="Démarrée — à l'instant"}
+  renderWf();toast(i+1<WF.length?`Étape « ${WF[i][0]} » validée — passage à « ${WF[i+1][0]} »`:"Workflow terminé — document publié ✓");
+}
+
+/* ============ Archives physiques ============ */
+function renderPhys(){
+  $('depots').innerHTML=DEPOTS.map(d=>{const pct=Math.round(d.use/d.cap*100);
+    return `<div class="card"><div style="display:flex;justify-content:space-between;gap:8px"><b>${d.n}</b><span class="badge b-blue mono">${d.c}</span></div>
+    <div class="progress" style="margin:12px 0 5px"><i style="width:${pct}%;background:${pct>85?'var(--amber)':'var(--accent)'}"></i></div>
+    <div class="tiny">${fmt(d.use)} / ${fmt(d.cap)} boîtes (${pct} %)</div>
+    <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:10px">
+      <span class="badge ${d.clim?'b-green':'b-grey'}">Climatisation</span>
+      <span class="badge ${d.feu?'b-green':'b-grey'}">Anti-incendie</span>
+      <span class="badge ${d.rfid?'b-green':'b-grey'}">RFID</span></div></div>`}).join('');
+  $('box-rows').innerHTML=BOXES.map(([bc,ct,loc,st])=>
+   `<tr onclick="$('box-q').value='${bc}';locateBox()"><td class="ref">${bc}</td><td>${ct}</td><td class="muted">${loc}</td>
+    <td><span class="badge ${st==='place'?'b-green':'b-amber'}">${st==='place'?'En place':'Empruntée'}</span></td></tr>`).join('');
+}
+function locateBox(){
+  const q=$('box-q').value.trim().toUpperCase();
+  const b=BOXES.find(x=>x[0]===q);
+  $('box-result').innerHTML=b
+    ?`<div class="alert info">📍 <span><b>${b[0]}</b> — ${b[1]}<br>Localisation : <b>${b[2]}</b> · ${b[3]==='place'?'présente en rayonnage':'actuellement empruntée (retour attendu sous 7 jours)'}</span></div>`
+    :`<div class="alert warn">⚠ Aucune boîte ne porte le code <b class="mono">${esc(q||'—')}</b>. Essayez par exemple <b class="mono">DJB-2024-00147</b>.</div>`;
+}
+
+/* ============ Audit / activité ============ */
+function chainHash(s){let h=5381;for(const c of s)h=((h*33)^c.charCodeAt(0))>>>0;return h.toString(16).padStart(8,'0')}
+function renderAudit(){
+  let prev="genesis";
+  $('audit-rows').innerHTML=AUDIT.map(([ts,ac,res,us,ip])=>{
+    prev=chainHash(prev+ts+ac+res+us);
+    const cls=ac==='CONNEXION'?'b-purple':ac==='CREATION'?'b-blue':ac==='VALIDATION'?'b-green':ac==='EMPRUNT'?'b-amber':'b-grey';
+    return `<tr style="cursor:default"><td class="mono tiny">${ts}</td><td><span class="badge ${cls}">${ac}</span></td>
+      <td class="ref">${res}</td><td>${us}</td><td class="mono tiny">${ip}</td><td class="mono tiny" style="color:var(--ink3)">${prev}…</td></tr>`}).join('');
+}
+function renderFeed(){
+  $('feed').innerHTML=FEED.map(([b,t,d,w])=>
+   `<div style="display:flex;gap:10px;align-items:baseline"><span class="badge ${b}" style="flex:none">${t}</span>
+    <span style="flex:1">${d}</span><span class="tiny" style="flex:none">${w}</span></div>`).join('');
+}
+
+/* ============ Plan d'urgence ============ */
+function renderPlanUrgence(){
+  /* Budget (Annexe V) */
+  const total=BUDGET.reduce((s,b)=>s+b[1],0);
+  $('budget-bars').innerHTML=BUDGET.map(([lbl,v],i)=>{
+    const pct=(v/total*100);
+    const colors=['var(--c2)','var(--c1)','var(--c3)'];
+    return `<div style="margin:10px 0">
+      <div style="display:flex;justify-content:space-between;font-size:12.5px;margin-bottom:3px"><span style="color:var(--ink2)">${lbl}</span><b style="font-variant-numeric:tabular-nums">${fmt(v)} FDJ</b></div>
+      <div style="background:var(--surface2);border-radius:4px;height:14px"><div style="width:${pct.toFixed(1)}%;height:100%;background:${colors[i]};border-radius:4px;min-width:4px"></div></div></div>`}).join('')
+    +`<div style="display:flex;justify-content:space-between;border-top:1px solid var(--line);padding-top:8px;margin-top:8px;font-size:13.5px"><b>Total</b><b style="font-variant-numeric:tabular-nums">${fmt(total)} FDJ</b></div>`;
+  /* Bilan évaluatif (§ VIII) */
+  const bilan=[["Volumétrie traitée / éliminée","1 240 ml traités · 96 ml éliminés sur bordereaux visés"],
+   ["Locaux réhabilités","9 espaces de traitement et de conservation aménagés"],
+   ["Personnel formé","64 agents formés (dont 41 % de femmes) — 4 modules"],
+   ["Coûts mobilisés","45 M FDJ (État) + PAIC-GEP en cours d'exécution"],
+   ["Qualité","Respect du principe de provenance vérifié sur les fonds versés"]];
+  $('bilan-kpis').innerHTML=bilan.map(([k,v])=>`<div style="display:flex;gap:10px;align-items:baseline"><span class="badge b-blue" style="flex:none">${k}</span><span style="color:var(--ink2)">${v}</span></div>`).join('')
+   +`<p class="tiny" style="margin-top:4px">Indicateurs du § VIII (valeurs illustratives) — compte rendu périodique dû en Conseil des Ministres.</p>`;
+  /* Chantiers */
+  $('chantier-cards').innerHTML=CHANTIERS.map(([nom,ph,note])=>{
+    const done=ph.filter(s=>s===2).length,prog=ph.filter(s=>s===1).length;
+    const pct=Math.round((done+prog*0.5)/7*100);
+    return `<div class="card" style="padding:14px 18px">
+      <div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:baseline">
+        <b>${nom}</b>
+        <span class="tiny">${pct} % — ${done}/7 phases réalisées</span></div>
+      <p class="tiny" style="margin:4px 0 10px">${note}</p>
+      <div style="display:flex;gap:5px;flex-wrap:wrap">
+        ${ph.map((s,i)=>`<span class="badge ${s===2?'b-green':s===1?'b-blue':'b-grey'}" title="Phase ${i+1}">${i+1}. ${PHASES7[i]}</span>`).join('')}
+      </div></div>`}).join('');
+  /* Matrice des versements (Annexe II) */
+  let done=0,plan=0;
+  let html='<thead><tr><th style="position:sticky;left:0;background:var(--surface)">Institution</th>'+ECHEANCES.map(e=>`<th style="white-space:nowrap">${e}</th>`).join('')+'<th class="num">Lots</th></tr></thead><tbody>';
+  for(const[inst,first,idx]of VERSEMENTS){
+    html+=`<tr style="cursor:default"><td style="position:sticky;left:0;background:var(--surface);max-width:240px;font-size:13px">${inst}</td>`;
+    for(let c=0;c<13;c++){
+      const pos=idx.indexOf(c);
+      if(pos<0){html+='<td></td>';continue}
+      const lot=first+pos,real=c<=CUTOFF;
+      if(real)done++;else plan++;
+      html+=`<td><span class="badge ${real?'b-green':''}" style="${real?'':'border:1.5px solid var(--accent);color:var(--accent-ink);background:transparent;'}white-space:nowrap">${lot}ᵉ lot</span></td>`;
+    }
+    html+=`<td class="num tiny">${idx.length}</td></tr>`;
+  }
+  html+=`</tbody>`;
+  $('vers-matrix').innerHTML=html;
+  $('vers-stats').innerHTML=[
+    [`${done+plan} lots au calendrier`,'b-blue'],[`${done} réalisés (au 30 juin 2026)`,'b-green'],[`${plan} programmés → déc. 2027`,'b-grey'],['28 institutions · arrêté opposable','b-purple']
+  ].map(([t,c])=>`<span class="badge ${c}" style="font-size:12.5px;padding:6px 12px">${t}</span>`).join('');
+  renderElims();
+}
+const ELIM_ST=[["En préparation","b-grey"],["Soumis au visa DAN","b-amber"],["Visé — destruction autorisée","b-blue"],["Détruit — PV établi","b-green"]];
+function renderElims(){
+  $('elim-rows').innerHTML=ELIMS.map((e,i)=>{
+    const[lbl,cls]=ELIM_ST[e.st];
+    return `<tr style="cursor:default"><td class="ref">${e.ref}</td><td>${e.inst}</td><td style="max-width:300px" class="muted">${e.desc}</td>
+    <td class="num">${fmt(e.n)}</td><td><span class="badge ${cls}">${lbl}</span></td>
+    <td>${e.pv?`<code class="tiny">${e.pv}</code>`:'—'}</td>
+    <td>${e.st<3?`<button class="btn sm" onclick="advanceElim(${i})">Étape suivante</button>`:'<span class="tiny">Clos</span>'}</td></tr>`}).join('');
+}
+function advanceElim(i){
+  const e=ELIMS[i];e.st++;
+  if(e.st===3){e.pv='PV-2026-0'+(10+i);toast('Destruction attestée — '+e.pv+' établi, bordereau visé conservé')}
+  else if(e.st===2)toast('Bordereau '+e.ref+' visé par la Direction des Archives Nationales');
+  else toast('Bordereau '+e.ref+' soumis au visa de la DAN');
+  renderElims();
+}
+
+/* ============ Portail citoyen ============ */
+function citSearch(){
+  const q=($('cit-q')?.value||'').toLowerCase();
+  let pub=DOCS.filter(d=>d.conf==='Public'&&(!q||(d.t+d.ref+d.sum+d.kw.join(' ')).toLowerCase().includes(q)));
+  if(!pub.length)pub=DOCS.filter(d=>d.conf==='Public');
+  const total=pub.length;pub=pub.slice(0,25);
+  $('cit-results').innerHTML=(total>25?`<p class="tiny" style="margin-bottom:2px">${total} textes trouvés — affichage des 25 premiers. Affinez votre recherche pour des résultats plus précis.</p>`:'')+pub.map(d=>
+   `<div class="card"><div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+      <span class="ref">${d.ref}</span><span class="badge b-grey">${d.type}</span><span class="tiny">${d.date}</span></div>
+    <b style="display:block;margin-top:6px">${esc(d.t)}</b>
+    <p class="muted" style="margin-top:4px;max-width:80ch">${esc(d.sum)}</p>
+    <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap">
+      <button class="btn ghost sm" onclick="toast('Téléchargement du document officiel — simulé')">⬇ Télécharger (PDF)</button>
+      ${d.jo?'<a class="btn ghost sm" style="text-decoration:none" href="https://www.journalofficiel.dj" target="_blank" rel="noopener">Consulter sur journalofficiel.dj ↗</a>':''}
+    </div></div>`).join('');
+}
+
+/* ============ Init ============ */
+fillYearFilter();renderDocs();renderExamples();renderPlan();renderInsts();renderWf();renderPhys();renderAudit();renderFeed();citSearch();updateKpis();renderPlanUrgence();
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeDrawer();$('sidebar').classList.remove('open')}});
+</script>
+
+</body>
+</html>
