@@ -1,6 +1,6 @@
 # Bugs trouvés
 
-Build testé : e2e initial sur le commit précédent (`ac…` → backend), corrigés dans **b28a833**. Tous les bugs ci-dessous ont été reproduits par un test automatisé qui échouait **avant** le correctif et réussit après (règle « le test d'abord »). Aucun S1 ouvert.
+Build testé : `b6220e5` (état avant la suite de tests), corrigés dans **b28a833**. Tous les bugs ci-dessous ont été reproduits par un test automatisé qui échouait **avant** le correctif et réussit après (règle « le test d'abord »). Aucun S1 ouvert.
 
 | ID | gravité | titre | état |
 | --- | --- | --- | --- |

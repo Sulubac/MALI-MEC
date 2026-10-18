@@ -4,7 +4,7 @@ Build : b28a833   Date : 2026-10-18   Env : local, Postgres 16 jetable, serveur 
 
 Le plan suit les flux de `replica/recon.md` (F01 à F04), plus deux blocs transverses (comptes et sécurité, e-mails). Chaque ligne est un test automatisé dans `clone/e2e/`. Les colonnes « steps » et « expected » du modèle sont fondues dans « cas » : le titre du test dit l'action, puis le résultat attendu. Contrôles ajoutés à **chaque** test : échec sur une erreur JavaScript de page, une erreur de console ou une réponse 5xx (hors 4xx attendus dans les cas négatifs).
 
-Résultat : **79 réussis sur 79** (suite complète, 3 exécutions consécutives sans test instable après correction des tests eux-mêmes ; voir « Stabilité »). Tests unitaires et base : 54 sur 54 (`npm test`).
+Résultat : **79 réussis sur 79** à la dernière exécution complète (80 tests au total avec une capture visuelle non bloquante). Tests unitaires et base : 54 sur 54 (`npm test`). Voir « Stabilité » : une exécution intermédiaire a échoué à cause d'un test, corrigé ensuite.
 
 | case | flow | type | cas | auto | result |
 | --- | --- | --- | --- | --- | --- |
@@ -94,7 +94,7 @@ Vide, très long (80 à 120 caractères sans espace), accents et emoji, adresse 
 
 ## Stabilité
 
-La première exécution complète a révélé 8 échecs (7 vrais bugs, 1 test instable sur le titre de page). Après correction, plusieurs tests se sont révélés instables **à cause des tests** (attente d'un rafraîchissement de la liste de créneaux ; adresses réutilisées déclenchant la limite de débit lors des répétitions) : corrigés, puis `F02-E1` et `F02-N4` répétés 6 fois sans échec. Aucun test n'est ignoré ni désactivé.
+La première exécution complète a révélé 8 échecs (7 vrais bugs, 1 test instable sur le titre de page). Après correction, deux tests se sont révélés instables **à cause des tests** (attente d'un rafraîchissement de la liste de créneaux ; adresses réutilisées déclenchant la limite de débit lors des répétitions) : corrigés, puis `F02-E1` et `F02-N4` répétés 6 fois sans échec, et une dernière exécution complète entièrement verte. Aucun test n'est ignoré ni désactivé. Le nombre d'exécutions complètes consécutives reste faible : relancer la suite plusieurs fois avant de la considérer comme stable.
 
 ## Non automatisé : passe manuelle à faire
 
