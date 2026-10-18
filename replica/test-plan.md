@@ -1,0 +1,117 @@
+# Plan de test : Planifier (clone de planification)
+
+Build : b28a833   Date : 2026-10-18   Env : local, Postgres 16 jetable, serveur de production (`next start`), Chromium (Playwright 1.56)
+
+Le plan suit les flux de `replica/recon.md` (F01 à F04), plus deux blocs transverses (comptes et sécurité, e-mails). Chaque ligne est un test automatisé dans `clone/e2e/`. Les colonnes « steps » et « expected » du modèle sont fondues dans « cas » : le titre du test dit l'action, puis le résultat attendu. Contrôles ajoutés à **chaque** test : échec sur une erreur JavaScript de page, une erreur de console ou une réponse 5xx (hors 4xx attendus dans les cas négatifs).
+
+Résultat : **79 réussis sur 79** (suite complète, 3 exécutions consécutives sans test instable après correction des tests eux-mêmes ; voir « Stabilité »). Tests unitaires et base : 54 sur 54 (`npm test`).
+
+| case | flow | type | cas | auto | result |
+| --- | --- | --- | --- | --- | --- |
+| F01-H1 | F01 l'hôte met en place son lien | nominal | parcours complet : inscription, confirmation, connexion, type, lien public | e2e | réussi |
+| F01-H2 | F01 l'hôte met en place son lien | nominal | modifier un type garde son lien et met à jour la page publique | e2e | réussi |
+| F01-H3 | F01 l'hôte met en place son lien | nominal | plages hebdomadaires : un seul jour ouvré avec une plage → seuls ces jours sont réservables | e2e | réussi |
+| F01-H4 | F01 l'hôte met en place son lien | nominal | exception : un jour indisponible n'est plus réservable | e2e | réussi |
+| F01-H5 | F01 l'hôte met en place son lien | nominal | changer de fuseau décale les créneaux proposés | e2e | réussi |
+| F01-E1 | F01 l'hôte met en place son lien | limite | nom : vide refusé, 80 caractères acceptés, saisie conservée après erreur | e2e | réussi |
+| F01-E2 | F01 l'hôte met en place son lien | limite | accents et emoji : le nom est conservé, le lien est propre | e2e | réussi |
+| F01-E3 | F01 l'hôte met en place son lien | limite | deux types au même nom obtiennent deux liens distincts | e2e | réussi |
+| F01-E4 | F01 l'hôte met en place son lien | limite | règles : valeurs conservées au rechargement ; limite semaine < jour refusée sans perdre la saisie | e2e | réussi |
+| F01-E5 | F01 l'hôte met en place son lien | limite | suppression : refusée avec réservations, acceptée sans, lien public ensuite en 404 | e2e | réussi |
+| F01-E6 | F01 l'hôte met en place son lien | limite | type inactif : absent de la page publique et en 404 ; réactivé, il revient | e2e | réussi |
+| F01-E7 | F01 l'hôte met en place son lien | limite | aucun jour ouvré : la page publique affiche un état vide | e2e | réussi |
+| F01-E8 | F01 l'hôte met en place son lien | limite | questions : liste à choix avec une seule option refusée, saisie conservée | e2e | réussi |
+| F01-N1 | F01 l'hôte met en place son lien | négatif | inscription : mot de passe faible, nom pris, nom réservé, e-mail invalide | e2e | réussi |
+| F01-E9 | F01 l'hôte met en place son lien | limite | mot de passe : 128 caractères acceptés, 129 refusés, Unicode accepté | e2e | réussi |
+| F01-A | F01 l'hôte met en place son lien | accessibilité | accessibilité des écrans de l'hôte | e2e | réussi |
+| F02-H1 | F02 l'invité réserve | nominal | parcours nominal : confirmation, réservation visible côté hôte, e-mails | e2e | réussi |
+| F02-H2 | F02 l'invité réserve | nominal | invité dans un autre fuseau : heures affichées dans son fuseau, stockées en UTC | e2e | réussi |
+| F02-E1 | F02 l'invité réserve | limite | créneau pris pendant la saisie : message clair, autre créneau possible, jamais de double réservation | e2e | réussi |
+| F02-E2 | F02 l'invité réserve | limite | double clic sur « Confirmer » : une seule réservation | e2e | réussi |
+| F02-E3 | F02 l'invité réserve | limite | deux onglets du même invité sur le même créneau : une réservation, l'autre refusée | e2e | réussi |
+| F02-E4 | F02 l'invité réserve | limite | contenu hostile : nom avec balises affiché tel quel, jamais interprété | e2e | réussi |
+| F02-E5 | F02 l'invité réserve | limite | accents, emoji, adresse avec « + » et nom de 120 caractères | e2e | réussi |
+| F02-E6 | F02 l'invité réserve | limite | rafraîchir au milieu du parcours puis recommencer fonctionne ; retour arrière après confirmation ne duplique rien | e2e | réussi |
+| F02-E7 | F02 l'invité réserve | limite | hors connexion : message clair, rien n'est créé, réessayer fonctionne | e2e | réussi |
+| F02-E8 | F02 l'invité réserve | limite | réseau lent : bouton occupé, une seule réservation | e2e | réussi |
+| F02-E9 | F02 l'invité réserve | limite | questions : obligatoires refusées en gardant la saisie, réponses enregistrées | e2e | réussi |
+| F02-E10 | F02 l'invité réserve | limite | redirection personnalisée après la réservation | e2e | réussi |
+| F02-E11 | F02 l'invité réserve | limite | préavis de 7 jours : aucun créneau avant | e2e | réussi |
+| F02-E12 | F02 l'invité réserve | limite | limite d'un rendez-vous par jour : les autres créneaux du jour disparaissent | e2e | réussi |
+| F02-E13 | F02 l'invité réserve | limite | fuseau extrême (UTC+14) : pas de plantage, jours cohérents | e2e | réussi |
+| F02-E14 | F02 l'invité réserve | limite | l'invité change de fuseau dans la page : les heures se recalculent | e2e | réussi |
+| F02-N1 | F02 l'invité réserve | négatif | coordonnées invalides : messages clairs, aucune réservation | e2e | réussi |
+| F02-N2 | F02 l'invité réserve | négatif | liens invalides : hôte inconnu, type inconnu, type inactif → 404 | e2e | réussi |
+| F02-N4 | F02 l'invité réserve | négatif | limite de débit : au-delà de 10 réservations par heure pour une même adresse, message clair | e2e | réussi |
+| F02-N3 | F02 l'invité réserve | négatif | nom d'utilisateur dans l'URL avec des majuscules : la page s'ouvre | e2e | réussi |
+| F02-M | F02 l'invité réserve | mobile (390 px) | parcours complet en 390 px sans débordement | e2e | réussi |
+| F02-K | F02 l'invité réserve | clavier seul | parcours au clavier seul | e2e | réussi |
+| F02-A | F02 l'invité réserve | accessibilité | accessibilité : accueil de l'hôte, page de réservation, formulaire, confirmation | e2e | réussi |
+| F03-H1 | F03 l'invité annule ou replanifie | nominal | annulation avec motif : statut, e-mails aux deux, créneau libéré | e2e | réussi |
+| F03-H2 | F03 l'invité annule ou replanifie | nominal | replanification : nouvelle réservation, ancienne annulée, coordonnées préremplies | e2e | réussi |
+| F03-E1 | F03 l'invité annule ou replanifie | limite | annulation dans deux onglets : une seule annulation, pas d'e-mails en double | e2e | réussi |
+| F03-E2 | F03 l'invité annule ou replanifie | limite | jeton invalide ou tronqué : 404 | e2e | réussi |
+| F03-E3 | F03 l'invité annule ou replanifie | limite | réservation annulée : plus de formulaire, proposition de réserver à nouveau | e2e | réussi |
+| F03-E4 | F03 l'invité annule ou replanifie | limite | jeton d'un autre hôte dans ?reschedule= : ignoré, réservation normale | e2e | réussi |
+| F03-E5 | F03 l'invité annule ou replanifie | limite | fichier d'agenda (.ics) : valide, échappé, 404 une fois annulé | e2e | réussi |
+| F03-E6 | F03 l'invité annule ou replanifie | limite | motif hostile : affiché tel quel côté hôte, limité à 500 caractères | e2e | réussi |
+| F03-E7 | F03 l'invité annule ou replanifie | limite | réservation passée : plus d'actions d'annulation ni de replanification | e2e | réussi |
+| F03-E8 | F03 l'invité annule ou replanifie | limite | annulation tardive : un lien d'annulation tronqué ou rejoué ne plante pas | e2e | réussi |
+| F03-A | F03 l'invité annule ou replanifie | accessibilité | accessibilité : page de gestion avant et après annulation | e2e | réussi |
+| F04-H1 | F04 l'hôte gère ses réunions | nominal | onglets avec compteurs ; l'hôte annule, la réunion passe dans « Annulées », e-mails envoyés | e2e | réussi |
+| F04-E1 | F04 l'hôte gère ses réunions | limite | états vides de chaque onglet | e2e | réussi |
+| F04-E2 | F04 l'hôte gère ses réunions | limite | cloisonnement : un autre hôte ne voit, n'ouvre ni n'annule rien | e2e | réussi |
+| F04-E3 | F04 l'hôte gère ses réunions | limite | session expirée : les pages protégées renvoient à la connexion, la saisie en cours n'est pas un plantage | e2e | réussi |
+| F04-E4 | F04 l'hôte gère ses réunions | limite | déconnexion dans un onglet : l'autre onglet est renvoyé à la connexion au prochain clic | e2e | réussi |
+| F04-E6 | F04 l'hôte gère ses réunions | limite | tableau des réunions à 390 px : une adresse e-mail courte reste sur une ligne | e2e | réussi |
+| F04-E5 | F04 l'hôte gère ses réunions | limite | nom d'invité très long sans espace : pas de débordement horizontal à 390 px | e2e | réussi |
+| A-H1 | Comptes et sécurité (transverse) | nominal | lien de confirmation : à usage unique, un nouveau lien invalide l'ancien, le simple chargement ne le consomme pas | e2e | réussi |
+| A-H2 | Comptes et sécurité (transverse) | nominal | mot de passe oublié : même réponse pour une adresse inconnue, lien unique, sessions coupées | e2e | réussi |
+| A-E1 | Comptes et sécurité (transverse) | limite | e-mail saisi avec majuscules et espaces : la connexion fonctionne | e2e | réussi |
+| A-E2 | Comptes et sécurité (transverse) | limite | limite de débit : la connexion est bloquée après 8 essais pour une adresse, le message est clair | e2e | réussi |
+| A-E3 | Comptes et sécurité (transverse) | limite | inscription avec une adresse déjà inscrite : même écran, un seul compte, courrier explicatif | e2e | réussi |
+| A-E4 | Comptes et sécurité (transverse) | limite | cookie de session : HttpOnly, Secure, SameSite=Lax, préfixe __Host- ; absent du JavaScript | e2e | réussi |
+| A-E5 | Comptes et sécurité (transverse) | limite | « se déconnecter partout » ferme les autres appareils ; la déconnexion simple n'en ferme qu'un | e2e | réussi |
+| A-E6 | Comptes et sécurité (transverse) | limite | suppression de compte : mot de passe exigé, tout est effacé, liens publics en 404 | e2e | réussi |
+| A-E7 | Comptes et sécurité (transverse) | limite | la suppression de compte exige la case de confirmation | e2e | réussi |
+| A-E8 | Comptes et sécurité (transverse) | limite | en-têtes de sécurité sur les pages | e2e | réussi |
+| A-E9 | Comptes et sécurité (transverse) | limite | point d'entrée de la file de tâches : refusé sans secret ou avec un mauvais secret | e2e | réussi |
+| A-E10 | Comptes et sécurité (transverse) | limite | pages protégées sans session : redirection vers la connexion | e2e | réussi |
+| A-E11 | Comptes et sécurité (transverse) | limite | jetons de vérification et de réinitialisation falsifiés : message d'erreur, jamais de 500 | e2e | réussi |
+| A-E12 | Comptes et sécurité (transverse) | limite | une session est refusée si le compte n'est plus vérifié ou si la ligne a expiré | e2e | réussi |
+| A-A | Comptes et sécurité (transverse) | accessibilité | accessibilité des écrans d'authentification | e2e | réussi |
+| A-T | Comptes et sécurité (transverse) | titres de page | chaque écran a un titre propre (onglets distincts, titre descriptif) | e2e | réussi |
+| A-O | Comptes et sécurité (transverse) | hors ligne | connexion hors ligne : message clair, pas d'écran d'erreur, réessayer fonctionne | e2e | réussi |
+| E-H1 | E-mails et file de tâches (transverse) | nominal | confirmation : fuseau de l'invité, lien de gestion, durée ; notification à l'hôte dans son fuseau | e2e | réussi |
+| E-H2 | E-mails et file de tâches (transverse) | nominal | rappel 24 h avant : pas d'envoi anticipé, un seul envoi même si le planificateur passe deux fois | e2e | réussi |
+| E-E1 | E-mails et file de tâches (transverse) | limite | réservation annulée avant le rappel : aucun rappel, seule l'annulation est envoyée | e2e | réussi |
+| E-E2 | E-mails et file de tâches (transverse) | limite | une erreur d'envoi est retentée puis visible dans la file, sans bloquer la réservation | e2e | réussi |
+| E-E3 | E-mails et file de tâches (transverse) | limite | un invité qui n'a rien réservé ne reçoit rien ; aucune réservation = aucun e-mail | e2e | réussi |
+
+## Listes de contrôle appliquées à chaque flux
+
+Vide, très long (80 à 120 caractères sans espace), accents et emoji, adresse avec « + », contenu hostile (balises HTML), double clic, deux onglets, retour arrière, rafraîchissement en cours de parcours, réseau lent (1,5 s), hors ligne, session expirée, données d'un second utilisateur, fuseaux (Los Angeles, Tokyo, UTC+14), mobile 390 px, clavier seul, accessibilité (axe, WCAG 2.1 AA), limites de débit.
+
+## Stabilité
+
+La première exécution complète a révélé 8 échecs (7 vrais bugs, 1 test instable sur le titre de page). Après correction, plusieurs tests se sont révélés instables **à cause des tests** (attente d'un rafraîchissement de la liste de créneaux ; adresses réutilisées déclenchant la limite de débit lors des répétitions) : corrigés, puis `F02-E1` et `F02-N4` répétés 6 fois sans échec. Aucun test n'est ignoré ni désactivé.
+
+## Non automatisé : passe manuelle à faire
+
+Ces points dépendent de services réels ou d'appareils, et n'ont **pas** été vérifiés :
+
+- [ ] **E-mail réel via Resend** : domaine vérifié (SPF, DKIM), arrivée en boîte de réception et pas en indésirables, rendu dans Gmail, Outlook et Apple Mail, lien cliquable. Les tests utilisent la boîte d'envoi locale et une API simulée.
+- [ ] **Fichier .ics** importé dans Google Agenda, Apple Calendrier et Outlook (le format est testé, pas l'import).
+- [ ] **Changement d'heure réel** (dernier dimanche de mars et d'octobre) : parcours de réservation une semaine avant, pendant et après, dans le navigateur. Le calcul est testé unitairement.
+- [ ] **Lecteur d'écran** (VoiceOver sur iPhone, NVDA sur Windows) sur la page de réservation et le formulaire de connexion. axe ne détecte qu'une partie des problèmes.
+- [ ] **iPhone Safari et Chrome Android** : champs date et heure natifs de l'éditeur de disponibilités, majuscule automatique dans l'URL, clavier qui masque le bouton « Confirmer ».
+- [ ] **Limites de débit derrière le vrai proxy** : vérifier que `x-forwarded-for` est bien posé par la plateforme (sinon la limite par IP est contournable).
+- [ ] **Plusieurs instances du serveur** en parallèle : la concurrence est testée au niveau base, pas sur plusieurs processus applicatifs.
+- [ ] **Volume** : liste des réunions avec plus de 1 000 réservations (pas de pagination).
+- [ ] **Sauvegarde et restauration** de la base chez l'hébergeur.
+
+## Cas du modèle non applicables
+
+- Carte refusée (Stripe) : pas de paiement dans ce clone.
+- Connexion Google / Google Calendar : pas encore construits.
+- Aucun test n'a été lancé contre l'application d'origine (règle du skill).
