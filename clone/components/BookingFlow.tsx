@@ -2,7 +2,8 @@
 import { useEffect, useMemo, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { bookAction } from "@/app/actions";
-import { Button, EmptyState, Field, Notice, Select, TextInput } from "./ui";
+import type { Question } from "@/lib/types";
+import { Button, EmptyState, Field, Notice, Select, TextArea, TextInput } from "./ui";
 
 type Props = {
   username: string;
@@ -14,6 +15,7 @@ type Props = {
   description: string;
   locationLabel: string;
   slots: string[];
+  questions: Question[];
   reschedule?: { token: string; guestName: string; guestEmail: string };
 };
 
@@ -39,6 +41,8 @@ export function BookingFlow(p: Props) {
   const [slot, setSlot] = useState<string | null>(null);
   const [name, setName] = useState(p.reschedule?.guestName ?? "");
   const [email, setEmail] = useState(p.reschedule?.guestEmail ?? "");
+  const [answers, setAnswers] = useState<Record<string, string>>({});
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
   const [error, setError] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
 
@@ -81,13 +85,19 @@ export function BookingFlow(p: Props) {
     e.preventDefault();
     if (!slot) return;
     setError(null);
+    setFieldErrors({});
     startTransition(async () => {
       const res = await bookAction({
         username: p.username, slug: p.slug, startAt: slot, guestName: name, guestEmail: email,
-        guestTimezone: tz, rescheduleToken: p.reschedule?.token,
+        guestTimezone: tz, answers, rescheduleToken: p.reschedule?.token,
       });
-      if (res.ok) { router.push(`/booking/${res.token}`); return; }
+      if (res.ok) {
+        if (res.redirectUrl) window.location.assign(res.redirectUrl);
+        else router.push(`/booking/${res.token}`);
+        return;
+      }
       setError(res.message);
+      if (res.fieldErrors) setFieldErrors(res.fieldErrors);
       if (res.code !== "invalid") { setSlot(null); router.refresh(); }
     });
   }
@@ -170,6 +180,37 @@ export function BookingFlow(p: Props) {
                 <Field id="guest-email" label="Adresse e-mail">
                   <TextInput id="guest-email" type="email" required autoComplete="email" value={email} onChange={(e) => setEmail(e.target.value)} />
                 </Field>
+                {p.questions.map((q) => {
+                  const id = `q-${q.id}`;
+                  const err = fieldErrors[q.id];
+                  const label = q.required ? `${q.label} (obligatoire)` : q.label;
+                  const set = (v: string) => setAnswers((a) => ({ ...a, [q.id]: v }));
+                  if (q.kind === "checkbox") {
+                    return (
+                      <div key={q.id} className="space-y-1">
+                        <label className="flex items-start gap-2 text-sm font-semibold">
+                          <input type="checkbox" className="mt-1 h-4 w-4 accent-[var(--color-accent)]" checked={answers[q.id] === "true"} onChange={(e) => set(e.target.checked ? "true" : "")} aria-describedby={err ? `${id}-error` : undefined} />
+                          {label}
+                        </label>
+                        {err && <p id={`${id}-error`} className="text-sm text-danger">{err}</p>}
+                      </div>
+                    );
+                  }
+                  return (
+                    <Field key={q.id} id={id} label={label} error={err}>
+                      {q.kind === "textarea" ? (
+                        <TextArea id={id} maxLength={1000} value={answers[q.id] ?? ""} onChange={(e) => set(e.target.value)} error={err} />
+                      ) : q.kind === "select" ? (
+                        <Select id={id} value={answers[q.id] ?? ""} onChange={(e) => set(e.target.value)} error={err}>
+                          <option value="">Choisir…</option>
+                          {q.options.map((o) => <option key={o} value={o}>{o}</option>)}
+                        </Select>
+                      ) : (
+                        <TextInput id={id} maxLength={1000} value={answers[q.id] ?? ""} onChange={(e) => set(e.target.value)} error={err} />
+                      )}
+                    </Field>
+                  );
+                })}
                 <Button type="submit" loading={pending}>Confirmer le {longDay(dayKey(slot, tz))} à {timeLabel(slot, tz)}</Button>
               </form>
             )}

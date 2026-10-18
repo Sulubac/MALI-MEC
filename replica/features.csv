@@ -1,22 +1,22 @@
 feature,area,priority,original,clone,notes
 Inscription par e-mail ou Google,onboarding,must,yes,no,Pas d'auth : un seul hôte de démonstration (replica-backend)
 Connexion d'un calendrier (lecture occupé),onboarding,must,yes,no,Nécessite OAuth (replica-backend)
-Définir des disponibilités hebdomadaires,availability,must,yes,partial,Une plage par jour ; plusieurs plages par jour manquent
-Exceptions de date,availability,should,yes,no,
-Fuseau horaire hôte et invité,availability,must,yes,partial,"Invité : détecté et modifiable ; fuseau de l'hôte fixé dans les données de départ, pas modifiable"
-Créer un type d'événement one-on-one (nom durée lieu),event types,must,yes,partial,Création + activer/désactiver ; modifier et supprimer manquent
+Définir des disponibilités hebdomadaires,availability,must,yes,yes,"Plusieurs plages par jour, copie sur lun.–ven."
+Exceptions de date,availability,should,yes,yes,Jour indisponible ou horaires particuliers
+Fuseau horaire hôte et invité,availability,must,yes,yes,Fuseau de l'hôte modifiable ; invité : détecté et modifiable
+Créer un type d'événement one-on-one (nom durée lieu),event types,must,yes,yes,"Création, modification (le lien ne change pas), suppression (refusée s'il y a des réservations), activation"
 Types Group / Collective / Round robin,event types,could,yes,no,Collective et round robin probablement payants
-Préavis minimum,scheduling rules,must,yes,partial,Calculé et testé (240 min par défaut) ; pas de réglage dans l'écran
-Tampons avant/après,scheduling rules,should,yes,partial,Calculés et testés ; pas de réglage dans l'écran
-Limites par jour/semaine/mois,scheduling rules,should,yes,partial,Limite par jour calculée et testée ; semaine/mois et réglage manquent
+Préavis minimum,scheduling rules,must,yes,yes,Réglable dans l'éditeur
+Tampons avant/après,scheduling rules,should,yes,yes,Réglables dans l'éditeur
+Limites par jour/semaine/mois,scheduling rules,should,yes,partial,"Par jour et par semaine, réglables ; par mois manquant"
 Page de réservation publique (calendrier + créneaux),booking,must,yes,yes,"S07, S08 ; testé de bout en bout, clavier seul compris"
-Formulaire invité avec questions personnalisées,booking,should,yes,partial,Nom et e-mail seulement
+Formulaire invité avec questions personnalisées,booking,should,yes,yes,"Texte court/long, liste de choix, case à cocher ; obligatoire ou non ; réponses visibles côté hôte"
 Confirmation + ajout au calendrier,booking,must,yes,yes,Page de confirmation + fichier .ics
 E-mails de confirmation et rappel,notifications,must,yes,no,Aucun envoi (replica-backend)
 Annulation par l'invité,booking,must,yes,yes,Avec motif
 Replanification par l'invité,booking,must,yes,yes,Via un nouveau créneau ; l'ancien est annulé après réservation
-Page de confirmation personnalisée ou redirection,booking,could,yes,no,
-Liste des réunions planifiées,dashboard,must,yes,yes,Annulation par l'hôte incluse ; pas de filtre ni de tri
+Page de confirmation personnalisée ou redirection,booking,could,yes,partial,Redirection https vers une adresse choisie ; page de confirmation personnalisable manquante
+Liste des réunions planifiées,dashboard,must,yes,yes,"Onglets à venir / passées / annulées, réponses de l'invité, annulation par l'hôte ; pas de tri ni de recherche"
 Webhooks (créé/annulé),integrations,could,yes,no,
 Workflows (rappels et suivis),notifications,could,yes,no,Plans payants
 Formulaires de routage,teams,could,yes,no,Plan Teams

@@ -4,6 +4,8 @@
 
 export type Rule = { weekday: number; start: string; end: string }; // weekday 0 = dimanche, "HH:MM"
 export type Busy = { start: number; end: number };
+/** Exception pour une date locale de l'hôte : remplace les plages hebdomadaires ; aucune plage = indisponible. */
+export type Override = { date: string; ranges: { start: string; end: string }[] };
 
 export type SlotRules = {
   durationMinutes: number;
@@ -13,6 +15,7 @@ export type SlotRules = {
   bufferBeforeMinutes: number;
   bufferAfterMinutes: number;
   limitPerDay: number | null;
+  limitPerWeek: number | null;
 };
 
 const MIN = 60_000;
@@ -48,6 +51,14 @@ export function zonedToUtc(y: number, m: number, d: number, hh: number, mm: numb
   return t;
 }
 
+/** Lundi de la semaine d'une date "YYYY-MM-DD" (clé de semaine). */
+export function mondayKey(dateKey: string): string {
+  const [y, m, d] = dateKey.split("-").map(Number);
+  const dow = (new Date(Date.UTC(y, m - 1, d)).getUTCDay() + 6) % 7;
+  const mon = new Date(Date.UTC(y, m - 1, d - dow));
+  return `${mon.getUTCFullYear()}-${String(mon.getUTCMonth() + 1).padStart(2, "0")}-${String(mon.getUTCDate()).padStart(2, "0")}`;
+}
+
 function toMinutes(hhmm: string): number {
   const [h, m] = hhmm.split(":").map(Number);
   return h * 60 + m;
@@ -59,8 +70,9 @@ export function computeSlots(args: {
   slot: SlotRules;
   busy: Busy[];
   now: number;
+  overrides?: Override[];
 }): string[] {
-  const { rules, hostTz, slot, busy, now } = args;
+  const { rules, hostTz, slot, busy, now, overrides = [] } = args;
   const out: string[] = [];
   const earliest = now + slot.minNoticeMinutes * MIN;
   const latest = now + slot.maxDaysAhead * 24 * 60 * MIN;
@@ -81,7 +93,15 @@ export function computeSlots(args: {
       if (taken >= slot.limitPerDay) continue;
     }
 
-    for (const r of rules.filter((x) => x.weekday === weekday)) {
+    if (slot.limitPerWeek != null) {
+      const wk = mondayKey(dateKey);
+      const taken = busy.filter((b) => mondayKey(localDate(b.start, hostTz)) === wk).length;
+      if (taken >= slot.limitPerWeek) continue;
+    }
+
+    const override = overrides.find((o) => o.date === dateKey);
+    const ranges = override ? override.ranges : rules.filter((x) => x.weekday === weekday);
+    for (const r of ranges) {
       const from = toMinutes(r.start), to = toMinutes(r.end);
       for (let t = from; t + slot.durationMinutes <= to; t += slot.stepMinutes) {
         const start = zonedToUtc(y, m, d, Math.floor(t / 60), t % 60, hostTz);

@@ -1,5 +1,13 @@
 export type Host = { id: string; username: string; displayName: string; timezone: string };
 
+export type Question = {
+  id: string;
+  label: string;
+  kind: "text" | "textarea" | "select" | "checkbox";
+  options: string[];
+  required: boolean;
+};
+
 export type EventType = {
   id: string;
   ownerId: string;
@@ -16,8 +24,16 @@ export type EventType = {
   bufferBeforeMinutes: number;
   bufferAfterMinutes: number;
   limitPerDay: number | null;
+  limitPerWeek: number | null;
   stepMinutes: number;
+  questions: Question[];
+  confirmationRedirectUrl: string;
 };
+
+/** Réglages modifiables d'un type d'événement (tout sauf identité, propriétaire et lien). */
+export type EventTypeInput = Pick<EventType,
+  "name" | "description" | "durationMinutes" | "locationKind" | "locationDetail" | "minNoticeMinutes" | "maxDaysAhead" |
+  "bufferBeforeMinutes" | "bufferAfterMinutes" | "limitPerDay" | "limitPerWeek" | "questions" | "confirmationRedirectUrl">;
 
 export type Booking = {
   id: string;
@@ -28,6 +44,7 @@ export type Booking = {
   guestName: string;
   guestEmail: string;
   guestTimezone: string;
+  answers: Record<string, string>;
   status: "confirmed" | "cancelled";
   cancelReason: string | null;
   cancelledBy: "host" | "guest" | null;

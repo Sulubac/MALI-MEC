@@ -2,6 +2,7 @@ import { ButtonLink, Button, Card, EmptyState } from "@/components/ui";
 import { CopyLink } from "@/components/CopyLink";
 import { toggleEventTypeAction } from "@/app/actions";
 import { getCurrentHost, listEventTypes } from "@/lib/store";
+import { DeleteEventType } from "@/components/DeleteEventType";
 import { LOCATION_LABEL } from "@/lib/format";
 
 export default function EventTypesPage() {
@@ -36,6 +37,10 @@ export default function EventTypesPage() {
                       <Button type="submit" variant="ghost" size="sm">{t.active ? "Désactiver" : "Activer"}</Button>
                     </form>
                     <span className="text-sm text-muted">{t.active ? "Actif" : "Inactif"}</span>
+                  </div>
+                  <div className="flex flex-wrap items-center gap-2 border-t border-border pt-3">
+                    <ButtonLink href={`/event-types/${t.id}/edit`} variant="secondary" size="sm">Modifier</ButtonLink>
+                    <DeleteEventType id={t.id} name={t.name} />
                   </div>
                 </div>
               </Card>

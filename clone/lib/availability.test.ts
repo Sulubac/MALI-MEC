@@ -1,10 +1,10 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { computeSlots, zonedToUtc, localDate } from "./availability.ts";
+import { computeSlots, zonedToUtc, localDate, mondayKey } from "./availability.ts";
 
 const base = {
   durationMinutes: 30, stepMinutes: 30, minNoticeMinutes: 0, maxDaysAhead: 14,
-  bufferBeforeMinutes: 0, bufferAfterMinutes: 0, limitPerDay: null,
+  bufferBeforeMinutes: 0, bufferAfterMinutes: 0, limitPerDay: null, limitPerWeek: null,
 };
 const monday9to11 = [{ weekday: 1, start: "09:00", end: "11:00" }];
 // lundi 2026-11-02 00:00 UTC (Paris = UTC+1 en novembre)
@@ -56,4 +56,36 @@ test("changement d'heure : le créneau de 09:00 reste à 09:00 locale avant et a
 
 test("localDate respecte le fuseau", () => {
   assert.equal(localDate(Date.UTC(2026, 10, 2, 23, 30), "Europe/Paris"), "2026-11-03");
+});
+
+test("une exception de date remplace les plages hebdomadaires", () => {
+  const overrides = [{ date: "2026-11-02", ranges: [{ start: "14:00", end: "15:00" }] }];
+  const s = computeSlots({ rules: monday9to11, hostTz: "Europe/Paris", slot: base, busy: [], now: NOW, overrides });
+  assert.deepEqual(s.filter((x) => x.startsWith("2026-11-02")), ["2026-11-02T13:00:00.000Z", "2026-11-02T13:30:00.000Z"]);
+});
+
+test("une exception sans plage rend la journée indisponible", () => {
+  const overrides = [{ date: "2026-11-02", ranges: [] }];
+  const s = computeSlots({ rules: monday9to11, hostTz: "Europe/Paris", slot: base, busy: [], now: NOW, overrides });
+  assert.equal(s.filter((x) => x.startsWith("2026-11-02")).length, 0);
+  assert.ok(s.some((x) => x.startsWith("2026-11-09"))); // le lundi suivant reste ouvert
+});
+
+test("plusieurs plages le même jour", () => {
+  const rules = [{ weekday: 1, start: "09:00", end: "09:30" }, { weekday: 1, start: "14:00", end: "14:30" }];
+  const s = computeSlots({ rules, hostTz: "Europe/Paris", slot: base, busy: [], now: NOW });
+  assert.deepEqual(s.filter((x) => x.startsWith("2026-11-02")), ["2026-11-02T08:00:00.000Z", "2026-11-02T13:00:00.000Z"]);
+});
+
+test("limite par semaine : atteinte sur la semaine, libre la suivante", () => {
+  const rules = [1, 2, 3].map((weekday) => ({ weekday, start: "09:00", end: "09:30" }));
+  const busy = [{ start: Date.UTC(2026, 10, 2, 8, 0), end: Date.UTC(2026, 10, 2, 8, 30) }];
+  const s = computeSlots({ rules, hostTz: "Europe/Paris", slot: { ...base, limitPerWeek: 1 }, busy, now: NOW });
+  assert.ok(!s.some((x) => x.startsWith("2026-11-03") || x.startsWith("2026-11-04")));
+  assert.ok(s.some((x) => x.startsWith("2026-11-09")));
+});
+
+test("mondayKey : dimanche appartient à la semaine qui finit", () => {
+  assert.equal(mondayKey("2026-11-08"), "2026-11-02");
+  assert.equal(mondayKey("2026-11-02"), "2026-11-02");
 });

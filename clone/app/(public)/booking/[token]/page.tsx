@@ -23,6 +23,9 @@ export default async function BookingPage({ params }: { params: Promise<{ token:
         <p className="text-muted">Fuseau : {b.guestTimezone.replace(/_/g, " ")}</p>
         {et && <p><span className="text-muted">Lieu</span> {LOCATION_LABEL[et.locationKind]}{et.locationDetail ? ` : ${et.locationDetail}` : ""}</p>}
         <p><span className="text-muted">Invité</span> {b.guestName} ({b.guestEmail})</p>
+        {et?.questions.filter((q) => b.answers[q.id]).map((q) => (
+          <p key={q.id} className="break-words"><span className="text-muted">{q.label}</span> {q.kind === "checkbox" ? "Oui" : b.answers[q.id]}</p>
+        ))}
         {cancelled && b.cancelReason && <p><span className="text-muted">Motif</span> {b.cancelReason}</p>}
       </Card>
       {!cancelled && !past && (

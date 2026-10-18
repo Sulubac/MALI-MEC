@@ -18,7 +18,7 @@ export default async function BookPage({ params, searchParams }: {
     <BookingFlow
       username={username} slug={slug} hostName={host.displayName} hostTimezone={host.timezone}
       eventName={et.name} durationMinutes={et.durationMinutes} description={et.description}
-      locationLabel={LOCATION_LABEL[et.locationKind]} slots={listSlots(host, et)}
+      locationLabel={LOCATION_LABEL[et.locationKind]} slots={listSlots(host, et)} questions={et.questions}
       reschedule={valid ? { token: old.manageToken, guestName: old.guestName, guestEmail: old.guestEmail } : undefined}
     />
   );
