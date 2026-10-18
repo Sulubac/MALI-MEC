@@ -87,7 +87,8 @@ test("échec d'envoi : nouvelle tentative avec attente, puis lettre morte avec l
   assert.equal((await W.processDueJobs()).done, 0);
 });
 
-test("choix du transport d'e-mail", opts, () => {
+test("choix du transport d'e-mail", async () => {
+  const E = await import("./email.ts");
   assert.equal(E.transport({ NODE_ENV: "development" } as NodeJS.ProcessEnv), "outbox");
   assert.equal(E.transport({ NODE_ENV: "production" } as NodeJS.ProcessEnv), "none");
   assert.equal(E.transport({ NODE_ENV: "production", RESEND_API_KEY: "re_x" } as NodeJS.ProcessEnv), "resend");
@@ -95,6 +96,7 @@ test("choix du transport d'e-mail", opts, () => {
 });
 
 test("Resend : requête conforme, erreur remontée quand l'API refuse", async () => {
+  const E = await import("./email.ts"); // ne touche pas à la base : tourne aussi sans TEST_DATABASE_URL
   const realFetch = globalThis.fetch;
   const calls: { url: string; init: RequestInit }[] = [];
   const env = { ...process.env };
