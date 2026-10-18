@@ -4,7 +4,7 @@ import "../styles/tokens.css";
 import "../styles/globals.css";
 
 export const metadata: Metadata = {
-  title: "Planifier",
+  title: { default: "Planifier", template: "%s · Planifier" },
   description: "Partagez un lien, laissez les autres réserver un créneau libre.",
 };
 

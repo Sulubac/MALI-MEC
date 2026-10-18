@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { LoginForm } from "@/components/AuthForms";
 import { currentUser } from "@/lib/auth";
@@ -7,3 +8,5 @@ export default async function LoginPage({ searchParams }: { searchParams: Promis
   const sp = await searchParams;
   return <LoginForm notice={sp.verified ? "verified" : sp.reset ? "reset" : undefined} />;
 }
+
+export const metadata: Metadata = { title: "Connexion" };

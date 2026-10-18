@@ -23,7 +23,7 @@ function RangesEditor({ label, ranges, onChange }: { label: string; ranges: Rang
           <input type="time" aria-label={`${label}, plage ${i + 1}, début`} value={r.start} onChange={(e) => set(i, { start: e.target.value })} className={TIME} />
           <span aria-hidden>→</span>
           <input type="time" aria-label={`${label}, plage ${i + 1}, fin`} value={r.end} onChange={(e) => set(i, { end: e.target.value })} className={TIME} />
-          <Button type="button" variant="ghost" size="sm" aria-label={`${label}, supprimer la plage ${i + 1}`} onClick={() => onChange(ranges.filter((_, j) => j !== i))}>Retirer</Button>
+          <Button type="button" variant="ghost" size="sm" aria-label={`Retirer la plage ${i + 1} : ${label}`} onClick={() => onChange(ranges.filter((_, j) => j !== i))}>Retirer</Button>
         </div>
       ))}
       <Button type="button" variant="ghost" size="sm" onClick={() => onChange([...ranges, { start: "14:00", end: "17:00" }])}>Ajouter une plage</Button>
@@ -78,7 +78,7 @@ export function AvailabilityForm({ rules, overrides: initialOverrides, timezone 
                     {label}
                   </label>
                   {on && (
-                    <Button type="button" variant="ghost" size="sm" aria-label={`Copier les horaires du ${label.toLowerCase()} sur les autres jours ouvrés`}
+                    <Button type="button" variant="ghost" size="sm" aria-label={`Copier sur lun.–ven. les horaires du ${label.toLowerCase()}`}
                       onClick={() => setWeek({ ...week, ...Object.fromEntries([1, 2, 3, 4, 5].filter((d) => d !== n).map((d) => [d, ranges.map((r) => ({ ...r }))])) })}>
                       Copier sur lun.–ven.
                     </Button>

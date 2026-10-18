@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { DeleteAccountForm } from "@/components/AuthForms";
 import { Button } from "@/components/ui";
 import { logoutEverywhereAction } from "@/app/actions";
@@ -21,3 +22,5 @@ export default async function AccountPage() {
     </div>
   );
 }
+
+export const metadata: Metadata = { title: "Compte" };

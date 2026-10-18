@@ -3,11 +3,19 @@ import { BookingFlow } from "@/components/BookingFlow";
 import { LOCATION_LABEL } from "@/lib/format";
 import { getBookingContext, getEventTypeBySlug, getHostByUsername, listSlots } from "@/lib/store";
 
+export async function generateMetadata({ params }: { params: Promise<{ username: string; slug: string }> }) {
+  const { username, slug } = await params;
+  const host = await getHostByUsername(username.toLowerCase());
+  const et = host ? await getEventTypeBySlug(host.id, slug.toLowerCase()) : null;
+  return { title: et && host ? `${et.name} avec ${host.displayName}` : "Page introuvable" };
+}
+
 export default async function BookPage({ params, searchParams }: {
   params: Promise<{ username: string; slug: string }>;
   searchParams: Promise<{ reschedule?: string }>;
 }) {
-  const { username, slug } = await params;
+  const { username: rawUser, slug: rawSlug } = await params;
+  const username = rawUser.toLowerCase(), slug = rawSlug.toLowerCase();
   const { reschedule } = await searchParams;
   const host = await getHostByUsername(username);
   const et = host ? await getEventTypeBySlug(host.id, slug) : null;

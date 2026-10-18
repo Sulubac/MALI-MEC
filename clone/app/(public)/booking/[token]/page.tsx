@@ -4,6 +4,8 @@ import { cancelBookingAsGuestAction } from "@/app/actions";
 import { formatDateTime, LOCATION_LABEL } from "@/lib/format";
 import { getBookingContext } from "@/lib/store";
 
+export const metadata = { title: "Votre rendez-vous", robots: { index: false } };
+
 export default async function BookingPage({ params }: { params: Promise<{ token: string }> }) {
   const { token } = await params;
   const ctx = await getBookingContext(token);
@@ -14,15 +16,15 @@ export default async function BookingPage({ params }: { params: Promise<{ token:
   return (
     <div className="mx-auto max-w-xl space-y-6">
       {cancelled ? <Notice>Cette réservation est annulée.</Notice> : <Notice tone="success">C'est confirmé. Un e-mail de confirmation vous est destiné.</Notice>}
-      <h1 className="break-words">{et.name}</h1>
-      <Card className="space-y-2 p-4 text-sm">
+      <h1 className="wrap-anywhere">{et.name}</h1>
+      <Card className="wrap-anywhere space-y-2 p-4 text-sm">
         <p><span className="text-muted">Avec</span> {host.displayName}</p>
         <p className={cancelled ? "line-through" : ""}><span className="text-muted">Quand</span> {formatDateTime(b.startAt, b.guestTimezone)}</p>
         <p className="text-muted">Fuseau : {b.guestTimezone.replace(/_/g, " ")}</p>
         {<p><span className="text-muted">Lieu</span> {LOCATION_LABEL[et.locationKind]}{et.locationDetail ? ` : ${et.locationDetail}` : ""}</p>}
         <p><span className="text-muted">Invité</span> {b.guestName} ({b.guestEmail})</p>
         {et?.questions.filter((q) => b.answers[q.id]).map((q) => (
-          <p key={q.id} className="break-words"><span className="text-muted">{q.label}</span> {q.kind === "checkbox" ? "Oui" : b.answers[q.id]}</p>
+          <p key={q.id}><span className="text-muted">{q.label}</span> {q.kind === "checkbox" ? "Oui" : b.answers[q.id]}</p>
         ))}
         {cancelled && b.cancelReason && <p><span className="text-muted">Motif</span> {b.cancelReason}</p>}
       </Card>

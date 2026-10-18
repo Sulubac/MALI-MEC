@@ -98,11 +98,11 @@ export function EventTypeForm({ initial }: { initial?: EventType }) {
 
       <aside aria-label="Aperçu de la page de réservation" className="lg:sticky lg:top-8 lg:self-start">
         <p className="mb-2 text-sm font-semibold">Aperçu pour l'invité</p>
-        <Card className="space-y-2 p-4">
+        <Card className="wrap-anywhere space-y-2 p-4">
           <p className="text-sm text-muted">Alex Martin</p>
-          <p className="break-words text-lg font-semibold">{name || "Nom du rendez-vous"}</p>
+          <p className="text-lg font-semibold">{name || "Nom du rendez-vous"}</p>
           <p className="text-sm text-muted">{duration} min · {LOCATION_LABEL[location]}</p>
-          {description && <p className="whitespace-pre-line break-words text-sm">{description}</p>}
+          {description && <p className="whitespace-pre-line text-sm">{description}</p>}
           {questions.length > 0 && (
             <ul className="mt-2 space-y-1 border-t border-border pt-2 text-sm text-muted">
               {questions.map((q) => <li key={q.id}>{q.label || "Question sans intitulé"}{q.required ? " *" : ""}</li>)}

@@ -49,10 +49,12 @@ export async function signupAction(_prev: FormState, fd: FormData): Promise<Form
   const r = await signUp(v);
   if (r.status === "username_taken") return { fieldErrors: { username: "Ce nom est déjà pris." } };
   // Même réponse que l'adresse soit nouvelle ou déjà inscrite : on ne révèle pas qui a un compte.
-  if (r.status === "created") mailLater(v.email, T.verifyEmail(appUrl(`/verify?token=${r.token}`)));
+  // Adresse normalisée (comme celle stockée) : le courrier part toujours vers la même forme.
+  const to = v.email.trim().toLowerCase();
+  if (r.status === "created") mailLater(to, T.verifyEmail(appUrl(`/verify?token=${r.token}`)));
   else {
-    const reset = await requestPasswordReset(v.email);
-    if (reset) mailLater(v.email, T.accountExists(appUrl(`/reset?token=${reset.token}`)));
+    const reset = await requestPasswordReset(to);
+    if (reset) mailLater(to, T.accountExists(appUrl(`/reset?token=${reset.token}`)));
   }
   return { saved: true };
 }
@@ -169,8 +171,8 @@ export async function bookAction(input: {
   username: string; slug: string; startAt: string; guestName: string; guestEmail: string; guestTimezone: string;
   answers?: Record<string, string>; rescheduleToken?: string;
 }): Promise<BookResult> {
-  const host = await getHostByUsername(input.username);
-  const et = host ? await getEventTypeBySlug(host.id, input.slug) : null;
+  const host = await getHostByUsername(input.username.toLowerCase());
+  const et = host ? await getEventTypeBySlug(host.id, input.slug.toLowerCase()) : null;
   if (!host || !et || !et.active) return { ok: false, code: "invalid", message: "Cette page de réservation n'existe plus." };
   const name = input.guestName.trim();
   const email = input.guestEmail.trim();

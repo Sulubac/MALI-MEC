@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { ResetForm } from "@/components/AuthForms";
 import { getEmailTokenStatus } from "@/lib/auth-core";
 import { Notice } from "@/components/ui";
@@ -9,3 +10,5 @@ export default async function ResetPage({ searchParams }: { searchParams: Promis
   }
   return <ResetForm token={token} />;
 }
+
+export const metadata: Metadata = { title: "Nouveau mot de passe" };

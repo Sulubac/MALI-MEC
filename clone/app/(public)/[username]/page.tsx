@@ -4,8 +4,14 @@ import { Card, EmptyState } from "@/components/ui";
 import { LOCATION_LABEL } from "@/lib/format";
 import { getHostByUsername, listEventTypes } from "@/lib/store";
 
+export async function generateMetadata({ params }: { params: Promise<{ username: string }> }) {
+  const host = await getHostByUsername((await params).username.toLowerCase());
+  return { title: host ? `Réserver avec ${host.displayName}` : "Page introuvable" };
+}
+
 export default async function HostPage({ params }: { params: Promise<{ username: string }> }) {
-  const { username } = await params;
+  const { username: raw } = await params;
+  const username = raw.toLowerCase();
   const host = await getHostByUsername(username);
   if (!host) notFound();
   const types = await listEventTypes(host.id, { activeOnly: true });
@@ -13,7 +19,7 @@ export default async function HostPage({ params }: { params: Promise<{ username:
     <div className="space-y-6">
       <div>
         <p className="text-sm text-muted">Réserver avec</p>
-        <h1>{host.displayName}</h1>
+        <h1 className="wrap-anywhere">{host.displayName}</h1>
       </div>
       {types.length === 0 ? (
         <EmptyState title="Aucun rendez-vous disponible">{host.displayName} n'a pas de créneau à proposer pour l'instant.</EmptyState>
@@ -25,7 +31,7 @@ export default async function HostPage({ params }: { params: Promise<{ username:
                 <Card className="flex items-stretch overflow-hidden transition-shadow duration-fast hover:shadow-pop">
                   <div className="w-1.5 shrink-0" style={{ backgroundColor: t.color }} aria-hidden />
                   <div className="p-4">
-                    <h2 className="break-words">{t.name}</h2>
+                    <h2 className="wrap-anywhere">{t.name}</h2>
                     <p className="text-sm text-muted">{t.durationMinutes} min · {LOCATION_LABEL[t.locationKind]}</p>
                   </div>
                 </Card>

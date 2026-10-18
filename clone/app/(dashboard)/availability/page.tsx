@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { AvailabilityForm } from "@/components/AvailabilityForm";
 import { requireHost } from "@/lib/auth";
 import { getOverrides, getRules } from "@/lib/store";
@@ -11,3 +12,5 @@ export default async function AvailabilityPage() {
     </div>
   );
 }
+
+export const metadata: Metadata = { title: "Disponibilités" };

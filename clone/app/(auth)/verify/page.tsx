@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { VerifyForm } from "@/components/AuthForms";
 import { getEmailTokenStatus } from "@/lib/auth-core";
 
@@ -6,3 +7,5 @@ export default async function VerifyPage({ searchParams }: { searchParams: Promi
   const { token = "" } = await searchParams;
   return <VerifyForm token={token} valid={!!token && (await getEmailTokenStatus(token, "verify_email"))} />;
 }
+
+export const metadata: Metadata = { title: "Confirmer votre adresse" };

@@ -87,10 +87,16 @@ export function BookingFlow(p: Props) {
     setError(null);
     setFieldErrors({});
     startTransition(async () => {
-      const res = await bookAction({
-        username: p.username, slug: p.slug, startAt: slot, guestName: name, guestEmail: email,
-        guestTimezone: tz, answers, rescheduleToken: p.reschedule?.token,
-      });
+      let res: Awaited<ReturnType<typeof bookAction>>;
+      try {
+        res = await bookAction({
+          username: p.username, slug: p.slug, startAt: slot, guestName: name, guestEmail: email,
+          guestTimezone: tz, answers, rescheduleToken: p.reschedule?.token,
+        });
+      } catch {
+        setError("Impossible de joindre le serveur. Vérifiez votre connexion, puis réessayez : votre créneau est conservé.");
+        return;
+      }
       if (res.ok) {
         if (res.redirectUrl) window.location.assign(res.redirectUrl);
         else router.push(`/booking/${res.token}`);
@@ -106,11 +112,11 @@ export function BookingFlow(p: Props) {
 
   return (
     <div className="grid gap-6 md:grid-cols-[18rem_1fr]">
-      <div className="space-y-2">
+      <div className="wrap-anywhere space-y-2">
         <p className="text-sm text-muted">{p.hostName}</p>
-        <h1 className="break-words">{p.eventName}</h1>
+        <h1>{p.eventName}</h1>
         <p className="text-sm text-muted">{p.durationMinutes} min · {p.locationLabel}</p>
-        {p.description && <p className="whitespace-pre-line break-words text-sm">{p.description}</p>}
+        {p.description && <p className="whitespace-pre-line text-sm">{p.description}</p>}
         {p.reschedule && <Notice tone="success">Vous choisissez un nouveau créneau pour remplacer votre réservation.</Notice>}
       </div>
 

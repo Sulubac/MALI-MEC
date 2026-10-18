@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { Button, EmptyState } from "@/components/ui";
 import { cancelBookingAsHostAction } from "@/app/actions";
@@ -43,7 +44,7 @@ export default async function BookingsPage({ searchParams }: { searchParams: Pro
         <EmptyState title={view.empty}>{view.hint}</EmptyState>
       ) : (
         <div className="relative overflow-x-auto rounded-lg border border-border">
-          <table className="w-full text-left text-sm">
+          <table className="w-full min-w-[46rem] text-left text-sm">
             <caption className="sr-only">Réunions : {view.label.toLowerCase()}</caption>
             <thead className="bg-surface">
               <tr>
@@ -60,8 +61,8 @@ export default async function BookingsPage({ searchParams }: { searchParams: Pro
                 return (
                   <tr key={b.id} className={b.status === "cancelled" ? "text-muted" : ""}>
                     <td className="px-4 py-3 align-top">{formatDateTime(b.startAt, host.timezone)}</td>
-                    <td className="px-4 py-3 align-top">
-                      <span className="break-words font-semibold">{b.guestName}</span><br />
+                    <td className="wrap-anywhere px-4 py-3 align-top">
+                      <span className="font-semibold">{b.guestName}</span><br />
                       <span className="text-muted">{b.guestEmail}</span>
                       {answered.length > 0 && (
                         <details className="mt-1">
@@ -70,7 +71,7 @@ export default async function BookingsPage({ searchParams }: { searchParams: Pro
                             {answered.map((q) => (
                               <div key={q.id}>
                                 <dt className="text-muted">{q.label}</dt>
-                                <dd className="whitespace-pre-line break-words">{q.kind === "checkbox" ? "Oui" : b.answers[q.id]}</dd>
+                                <dd className="whitespace-pre-line">{q.kind === "checkbox" ? "Oui" : b.answers[q.id]}</dd>
                               </div>
                             ))}
                           </dl>
@@ -78,8 +79,8 @@ export default async function BookingsPage({ searchParams }: { searchParams: Pro
                       )}
                       {b.status === "cancelled" && b.cancelReason && <p className="mt-1">Motif : {b.cancelReason}</p>}
                     </td>
-                    <td className="px-4 py-3 align-top">{et?.name}</td>
-                    <td className="px-4 py-3 text-right align-top">
+                    <td className="wrap-anywhere px-4 py-3 align-top">{et?.name}</td>
+                    <td className="whitespace-nowrap px-4 py-3 text-right align-top">
                       {b.status === "confirmed" && view.key === "a-venir" && (
                         <form action={cancelBookingAsHostAction}>
                           <input type="hidden" name="token" value={b.manageToken} />
@@ -97,3 +98,5 @@ export default async function BookingsPage({ searchParams }: { searchParams: Pro
     </div>
   );
 }
+
+export const metadata: Metadata = { title: "Réunions" };

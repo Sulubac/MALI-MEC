@@ -2,6 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer utilities {
+  /* Contenu saisi par des utilisateurs (noms, adresses, descriptions) : un mot très long se coupe au lieu de déborder,
+     y compris dans les grilles et les tableaux. À ne pas poser sur le texte de l'interface. */
+  .wrap-anywhere { overflow-wrap: anywhere; }
+}
+
 @layer base {
   html { color-scheme: light; }
   body { @apply bg-bg font-sans text-base text-text antialiased; }

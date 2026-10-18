@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { ButtonLink, Button, Card, EmptyState } from "@/components/ui";
 import { CopyLink } from "@/components/CopyLink";
 import { toggleEventTypeAction } from "@/app/actions";
@@ -27,7 +28,7 @@ export default async function EventTypesPage() {
                 <div className="h-1" style={{ backgroundColor: t.color }} aria-hidden />
                 <div className="space-y-3 p-4">
                   <div>
-                    <h2 className="break-words">{t.name}</h2>
+                    <h2 className="wrap-anywhere">{t.name}</h2>
                     <p className="text-sm text-muted">{t.durationMinutes} min · {LOCATION_LABEL[t.locationKind]}</p>
                   </div>
                   <div className="flex flex-wrap items-center gap-2">
@@ -52,3 +53,5 @@ export default async function EventTypesPage() {
     </div>
   );
 }
+
+export const metadata: Metadata = { title: "Types d'événements" };
