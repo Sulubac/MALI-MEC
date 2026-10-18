@@ -1,0 +1,25 @@
+feature,area,priority,original,clone,notes
+Inscription par e-mail ou Google,onboarding,must,yes,no,
+Connexion d'un calendrier (lecture occupé),onboarding,must,yes,no,OAuth Google/Microsoft
+Définir des disponibilités hebdomadaires,availability,must,yes,no,
+Exceptions de date,availability,should,yes,no,
+Fuseau horaire hôte et invité,availability,must,yes,no,
+Créer un type d'événement one-on-one (nom durée lieu),event types,must,yes,no,
+Types Group / Collective / Round robin,event types,could,yes,no,Collective et round robin probablement payants
+Préavis minimum,scheduling rules,must,yes,no,
+Tampons avant/après,scheduling rules,should,yes,no,
+Limites par jour/semaine/mois,scheduling rules,should,yes,no,
+Page de réservation publique (calendrier + créneaux),booking,must,yes,no,
+Formulaire invité avec questions personnalisées,booking,should,yes,no,
+Confirmation + ajout au calendrier,booking,must,yes,no,
+E-mails de confirmation et rappel,notifications,must,yes,no,
+Annulation par l'invité,booking,must,yes,no,
+Replanification par l'invité,booking,must,yes,no,
+Page de confirmation personnalisée ou redirection,booking,could,yes,no,
+Liste des réunions planifiées,dashboard,must,yes,no,
+Webhooks (créé/annulé),integrations,could,yes,no,
+Workflows (rappels et suivis),notifications,could,yes,no,Plans payants
+Formulaires de routage,teams,could,yes,no,Plan Teams
+Paiement à la réservation,payments,could,yes,no,À vérifier
+SSO / administration d'équipe,enterprise,skip,yes,no,Hors périmètre
+Réseau d'utilisateurs et marque Calendly,brand,skip,yes,no,Non clonable
