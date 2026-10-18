@@ -1,16 +1,17 @@
 "use client";
-import { useActionState, useState } from "react";
-import { saveEventTypeAction, type FormState } from "@/app/actions";
+import { useState } from "react";
+import { saveEventTypeAction } from "@/app/actions";
 import type { EventType, Question } from "@/lib/types";
 import { LOCATION_LABEL } from "@/lib/format";
 import { Button, ButtonLink, Card, Field, Notice, Select, TextArea, TextInput } from "./ui";
 import { QuestionsEditor } from "./QuestionsEditor";
+import { useKeptForm } from "./useKeptForm";
 
 const DURATIONS = [15, 30, 45, 60, 90];
 const NOTICES: [number, string][] = [[0, "Aucun"], [60, "1 heure"], [240, "4 heures"], [1440, "1 jour"], [2880, "2 jours"], [10080, "1 semaine"]];
 
 export function EventTypeForm({ initial }: { initial?: EventType }) {
-  const [state, action, pending] = useActionState<FormState, FormData>(saveEventTypeAction, {});
+  const [state, action, pending] = useKeptForm(saveEventTypeAction);
   const e = state.fieldErrors ?? {};
   const [name, setName] = useState(initial?.name ?? "");
   const [duration, setDuration] = useState(String(initial?.durationMinutes ?? 30));
@@ -23,7 +24,7 @@ export function EventTypeForm({ initial }: { initial?: EventType }) {
 
   return (
     <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_20rem]">
-      <form action={action} className="max-w-xl space-y-6" noValidate>
+      <form onSubmit={action} className="max-w-xl space-y-6" noValidate>
         {initial && <input type="hidden" name="id" value={initial.id} />}
         <input type="hidden" name="questions" value={JSON.stringify(questions)} />
         {state.error && <Notice>{state.error}</Notice>}

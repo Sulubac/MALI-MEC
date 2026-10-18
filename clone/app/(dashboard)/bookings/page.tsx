@@ -1,8 +1,9 @@
 import Link from "next/link";
 import { Button, EmptyState } from "@/components/ui";
-import { cancelBookingAction } from "@/app/actions";
+import { cancelBookingAsHostAction } from "@/app/actions";
 import { formatDateTime } from "@/lib/format";
-import { getCurrentHost, getEventTypeById, listBookings } from "@/lib/store";
+import { requireHost } from "@/lib/auth";
+import { listBookings, listEventTypes } from "@/lib/store";
 import type { Booking } from "@/lib/types";
 
 const VIEWS = [
@@ -18,9 +19,10 @@ function bucket(b: Booking, now: number): (typeof VIEWS)[number]["key"] {
 
 export default async function BookingsPage({ searchParams }: { searchParams: Promise<{ vue?: string }> }) {
   const { vue } = await searchParams;
-  const host = getCurrentHost();
+  const { host } = await requireHost();
   const now = Date.now();
-  const all = listBookings(host.id);
+  const all = await listBookings(host.id);
+  const types = new Map((await listEventTypes(host.id)).map((t) => [t.id, t]));
   const view = VIEWS.find((v) => v.key === vue) ?? VIEWS[0];
   const counts = Object.fromEntries(VIEWS.map((v) => [v.key, all.filter((b) => bucket(b, now) === v.key).length]));
   const rows = all.filter((b) => bucket(b, now) === view.key);
@@ -53,7 +55,7 @@ export default async function BookingsPage({ searchParams }: { searchParams: Pro
             </thead>
             <tbody className="divide-y divide-border">
               {rows.map((b) => {
-                const et = getEventTypeById(b.eventTypeId);
+                const et = types.get(b.eventTypeId);
                 const answered = et?.questions.filter((q) => b.answers[q.id]) ?? [];
                 return (
                   <tr key={b.id} className={b.status === "cancelled" ? "text-muted" : ""}>
@@ -79,9 +81,8 @@ export default async function BookingsPage({ searchParams }: { searchParams: Pro
                     <td className="px-4 py-3 align-top">{et?.name}</td>
                     <td className="px-4 py-3 text-right align-top">
                       {b.status === "confirmed" && view.key === "a-venir" && (
-                        <form action={cancelBookingAction}>
+                        <form action={cancelBookingAsHostAction}>
                           <input type="hidden" name="token" value={b.manageToken} />
-                          <input type="hidden" name="by" value="host" />
                           <Button type="submit" variant="ghost" size="sm" aria-label={`Annuler la réunion avec ${b.guestName}`}>Annuler</Button>
                         </form>
                       )}

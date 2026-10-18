@@ -127,3 +127,45 @@ export function parseAvailability(weeklyRaw: string, overridesRaw: string, tz: s
   if (Object.keys(errors).length) return { ok: false, errors };
   return { ok: true, value: { rules, overrides: out.sort((a, b) => a.date.localeCompare(b.date)), timezone: tz } };
 }
+
+// ---------- Comptes ----------
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+// Noms qui entreraient en conflit avec des pages de l'application
+export const RESERVED_USERNAMES = new Set([
+  "login", "signup", "logout", "forgot", "reset", "verify", "account", "api", "event-types", "availability",
+  "bookings", "booking", "admin", "app", "static", "icon", "settings", "help", "support", "new", "edit",
+]);
+
+export function validateEmail(email: string): string | null {
+  const e = email.trim();
+  if (!EMAIL_RE.test(e) || e.length > 254) return "Cette adresse e-mail ne semble pas valide.";
+  return null;
+}
+
+export function validatePassword(pw: string): string | null {
+  if (pw.length < 10) return "Choisissez au moins 10 caractères.";
+  if (pw.length > 128) return "128 caractères au maximum.";
+  if (/^(.)\1+$/.test(pw)) return "Ce mot de passe est trop simple.";
+  return null;
+}
+
+export type SignupInput = { email: string; password: string; username: string; displayName: string; timezone: string };
+
+export function parseSignup(get: (k: string) => string): Parsed<SignupInput> {
+  const errors: Record<string, string> = {};
+  const email = get("email").trim();
+  const emailErr = validateEmail(email);
+  if (emailErr) errors.email = emailErr;
+  const password = get("password");
+  const pwErr = validatePassword(password);
+  if (pwErr) errors.password = pwErr;
+  const username = get("username").trim().toLowerCase();
+  if (!/^[a-z0-9-]{3,40}$/.test(username)) errors.username = "3 à 40 caractères : lettres minuscules, chiffres et tirets.";
+  else if (RESERVED_USERNAMES.has(username)) errors.username = "Ce nom est réservé, choisissez-en un autre.";
+  const displayName = get("displayName").trim();
+  if (!displayName || displayName.length > 80) errors.displayName = "Indiquez votre nom (80 caractères au plus).";
+  let timezone = get("timezone").trim() || "UTC";
+  try { new Intl.DateTimeFormat("fr-FR", { timeZone: timezone }); } catch { timezone = "UTC"; }
+  if (Object.keys(errors).length) return { ok: false, errors };
+  return { ok: true, value: { email, password, username, displayName, timezone } };
+}

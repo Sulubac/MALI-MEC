@@ -1,11 +1,13 @@
 import { notFound } from "next/navigation";
 import { EventTypeForm } from "@/components/EventTypeForm";
-import { getCurrentHost, getEventTypeById } from "@/lib/store";
+import { requireHost } from "@/lib/auth";
+import { getOwnedEventType } from "@/lib/store";
 
 export default async function EditEventTypePage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  const et = getEventTypeById(id);
-  if (!et || et.ownerId !== getCurrentHost().id) notFound();
+  const { host } = await requireHost();
+  const et = await getOwnedEventType(host.id, id);
+  if (!et) notFound();
   return (
     <div className="space-y-6">
       <h1 className="break-words">Modifier « {et.name} »</h1>

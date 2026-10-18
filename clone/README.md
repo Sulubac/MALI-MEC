@@ -1,0 +1,28 @@
+# Planifier (clone)
+
+Application de prise de rendez-vous : Next.js 15, Postgres, e-mails via Resend.
+
+## Démarrer en local
+
+```bash
+cp .env.example .env.local        # puis renseignez DATABASE_URL (un Postgres local suffit)
+npm install
+npm run migrate                    # applique db/migrations/*.sql
+node --experimental-strip-types --env-file-if-exists=.env.local scripts/seed.mjs   # compte de démonstration (jamais en production)
+npm run dev                        # http://localhost:3000
+```
+
+Hors production et sans `RESEND_API_KEY`, les e-mails sont écrits dans la table `email_outbox` (`select * from email_outbox;`) : c'est là qu'on récupère les liens de confirmation en local.
+
+## Tests
+
+```bash
+# TEST_DATABASE_URL : une base dédiée, déjà migrée. Elle est vidée à chaque test.
+TEST_DATABASE_URL=postgres://… npm test
+```
+
+Sans `TEST_DATABASE_URL`, les tests Postgres sont ignorés (les tests de calcul et de validation tournent quand même).
+
+## Production
+
+Voir `../replica/backend.md` : variables, domaine d'envoi, planificateur de la file de tâches, limites connues.

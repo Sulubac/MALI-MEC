@@ -1,13 +1,14 @@
-import { getBookingByToken, getEventTypeById } from "@/lib/store";
+import { getBookingContext } from "@/lib/store";
 
 const stamp = (iso: string) => new Date(iso).toISOString().replace(/[-:]/g, "").replace(/\.\d{3}/, "");
 const esc = (s: string) => s.replace(/\\/g, "\\\\").replace(/;/g, "\;").replace(/,/g, "\\,").replace(/\n/g, "\\n");
 
 export async function GET(_req: Request, { params }: { params: Promise<{ token: string }> }) {
   const { token } = await params;
-  const b = getBookingByToken(token);
-  if (!b || b.status !== "confirmed") return new Response("Introuvable", { status: 404 });
-  const et = getEventTypeById(b.eventTypeId);
+  const ctx = await getBookingContext(token);
+  if (!ctx || ctx.booking.status !== "confirmed") return new Response("Introuvable", { status: 404 });
+  const b = ctx.booking;
+  const et = ctx.eventType;
   const body = [
     "BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//Planifier//FR", "CALSCALE:GREGORIAN", "BEGIN:VEVENT",
     `UID:${b.id}@planifier`, `DTSTAMP:${stamp(new Date().toISOString())}`,

@@ -6,6 +6,7 @@ const LINKS = [
   { href: "/event-types", label: "Types d'événements" },
   { href: "/availability", label: "Disponibilités" },
   { href: "/bookings", label: "Réunions" },
+  { href: "/account", label: "Compte" },
 ];
 
 export function SideNav({ publicHref }: { publicHref: string }) {

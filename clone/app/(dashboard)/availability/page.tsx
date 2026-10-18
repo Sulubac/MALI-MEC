@@ -1,12 +1,13 @@
 import { AvailabilityForm } from "@/components/AvailabilityForm";
-import { getCurrentHost, getOverrides, getRules } from "@/lib/store";
+import { requireHost } from "@/lib/auth";
+import { getOverrides, getRules } from "@/lib/store";
 
-export default function AvailabilityPage() {
-  const host = getCurrentHost();
+export default async function AvailabilityPage() {
+  const { host } = await requireHost();
   return (
     <div className="space-y-6">
       <h1>Disponibilités</h1>
-      <AvailabilityForm rules={getRules(host.id)} overrides={getOverrides(host.id)} timezone={host.timezone} />
+      <AvailabilityForm rules={await getRules(host.id)} overrides={await getOverrides(host.id)} timezone={host.timezone} />
     </div>
   );
 }

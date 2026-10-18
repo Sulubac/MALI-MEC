@@ -1,8 +1,9 @@
 "use client";
-import { useActionState, useMemo, useState } from "react";
-import { saveAvailabilityAction, type FormState } from "@/app/actions";
+import { useMemo, useState } from "react";
+import { saveAvailabilityAction } from "@/app/actions";
 import type { Override, Rule } from "@/lib/availability";
 import { Button, Field, Notice, Select } from "./ui";
+import { useKeptForm } from "./useKeptForm";
 
 type Range = { start: string; end: string };
 
@@ -31,7 +32,7 @@ function RangesEditor({ label, ranges, onChange }: { label: string; ranges: Rang
 }
 
 export function AvailabilityForm({ rules, overrides: initialOverrides, timezone }: { rules: Rule[]; overrides: Override[]; timezone: string }) {
-  const [state, action, pending] = useActionState<FormState, FormData>(saveAvailabilityAction, {});
+  const [state, action, pending] = useKeptForm(saveAvailabilityAction);
   const e = state.fieldErrors ?? {};
   const [week, setWeek] = useState<Record<number, Range[]>>(() => {
     const m: Record<number, Range[]> = {};
@@ -51,7 +52,7 @@ export function AvailabilityForm({ rules, overrides: initialOverrides, timezone 
   const setOv = (i: number, patch: Partial<Override>) => setOverrides(overrides.map((o, j) => (j === i ? { ...o, ...patch } : o)));
 
   return (
-    <form action={action} className="max-w-2xl space-y-8" noValidate>
+    <form onSubmit={action} className="max-w-2xl space-y-8" noValidate>
       <input type="hidden" name="weekly" value={JSON.stringify(weekly)} />
       <input type="hidden" name="overrides" value={JSON.stringify(overrides)} />
       {e.form && <Notice>{e.form}</Notice>}

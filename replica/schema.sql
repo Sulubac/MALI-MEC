@@ -1,3 +1,4 @@
+-- REMPLACÉ par clone/db/migrations/001_init.sql (comptes gérés par l'application, sans RLS). Conservé comme variante Supabase.
 -- Schéma du clone de planification (périmètre : replica/recon.md, boucle principale)
 -- Postgres (Supabase). Heures en timestamptz (UTC). Accès : row level security.
 

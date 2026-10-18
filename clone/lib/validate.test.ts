@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { parseAvailability, parseEventTypeForm, parseQuestions } from "./validate.ts";
+import { parseAvailability, parseEventTypeForm, parseQuestions, parseSignup, validatePassword } from "./validate.ts";
 
 const ok = (o: Record<string, string>) => (k: string) => o[k] ?? "";
 const valid = { name: "Test", duration: "30", locationKind: "video", minNotice: "240", maxDays: "60", bufferBefore: "0", bufferAfter: "10", limitPerDay: "", limitPerWeek: "", redirectUrl: "", questions: "[]" };
@@ -34,4 +34,23 @@ test("exceptions : doublon, date invalide, fuseau inconnu", () => {
   assert.ok(!parseAvailability("[]", JSON.stringify([{ date: "pas-une-date", ranges: [] }]), "Europe/Paris").ok);
   const r = parseAvailability("[]", "[]", "Mars/Olympus");
   assert.ok(!r.ok && r.errors.timezone);
+});
+
+const signup = { email: "a@example.com", password: "un-mot-de-passe-solide", username: "alice", displayName: "Alice", timezone: "Europe/Paris" };
+test("inscription valide, fuseau inconnu ramené à UTC", () => {
+  const r = parseSignup(ok({ ...signup, timezone: "Mars/Olympus" }));
+  assert.ok(r.ok && r.value.timezone === "UTC");
+});
+test("inscription : erreurs de champs et noms réservés", () => {
+  const r = parseSignup(ok({ ...signup, email: "pas-un-email", password: "court", username: "Login", displayName: " " }));
+  assert.ok(!r.ok);
+  if (!r.ok) assert.deepEqual(Object.keys(r.errors).sort(), ["displayName", "email", "password", "username"]);
+  assert.ok(!parseSignup(ok({ ...signup, username: "account" })).ok);
+  assert.ok(!parseSignup(ok({ ...signup, username: "a b" })).ok);
+});
+test("mot de passe : longueur et répétitions", () => {
+  assert.ok(validatePassword("123456789") !== null);
+  assert.ok(validatePassword("aaaaaaaaaaaa") !== null);
+  assert.equal(validatePassword("une phrase de passe correcte"), null);
+  assert.ok(validatePassword("x".repeat(129)) !== null);
 });

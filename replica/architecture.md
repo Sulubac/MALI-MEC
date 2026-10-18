@@ -1,3 +1,5 @@
+> **Mise à jour (replica-backend)** : comptes gérés par l'application et contrôle d'accès dans la couche de données (au lieu de Supabase Auth et RLS) ; migration dans `clone/db/migrations/001_init.sql`. Détails et écarts : `replica/backend.md`.
+
 # Architecture : clone de planification (reconstruction des fonctions principales de Calendly)
 
 Basé sur `replica/recon.md` (déduite de sources secondaires : à recouper avec des captures réelles avant de figer le schéma).

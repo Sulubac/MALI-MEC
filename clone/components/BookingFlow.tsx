@@ -98,7 +98,7 @@ export function BookingFlow(p: Props) {
       }
       setError(res.message);
       if (res.fieldErrors) setFieldErrors(res.fieldErrors);
-      if (res.code !== "invalid") { setSlot(null); router.refresh(); }
+      if (res.code === "slot_taken" || res.code === "slot_unavailable") { setSlot(null); router.refresh(); }
     });
   }
 

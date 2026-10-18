@@ -6,9 +6,9 @@ import { getHostByUsername, listEventTypes } from "@/lib/store";
 
 export default async function HostPage({ params }: { params: Promise<{ username: string }> }) {
   const { username } = await params;
-  const host = getHostByUsername(username);
+  const host = await getHostByUsername(username);
   if (!host) notFound();
-  const types = listEventTypes(host.id, { activeOnly: true });
+  const types = await listEventTypes(host.id, { activeOnly: true });
   return (
     <div className="space-y-6">
       <div>

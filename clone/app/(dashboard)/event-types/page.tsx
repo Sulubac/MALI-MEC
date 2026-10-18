@@ -1,13 +1,14 @@
 import { ButtonLink, Button, Card, EmptyState } from "@/components/ui";
 import { CopyLink } from "@/components/CopyLink";
 import { toggleEventTypeAction } from "@/app/actions";
-import { getCurrentHost, listEventTypes } from "@/lib/store";
+import { requireHost } from "@/lib/auth";
+import { listEventTypes } from "@/lib/store";
 import { DeleteEventType } from "@/components/DeleteEventType";
 import { LOCATION_LABEL } from "@/lib/format";
 
-export default function EventTypesPage() {
-  const host = getCurrentHost();
-  const types = listEventTypes(host.id);
+export default async function EventTypesPage() {
+  const { host } = await requireHost();
+  const types = await listEventTypes(host.id);
   return (
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-3">
