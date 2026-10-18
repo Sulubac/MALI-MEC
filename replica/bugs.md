@@ -1,6 +1,6 @@
 # Bugs trouvés
 
-Build testé : `b6220e5` (état avant la suite de tests), corrigés dans **b28a833**. Tous les bugs ci-dessous ont été reproduits par un test automatisé qui échouait **avant** le correctif et réussit après (règle « le test d'abord »). Aucun S1 ouvert.
+Build testé : `b6220e5` (état avant la suite de tests), corrigés dans **b28a833**. Sept bugs sur huit ont été reproduits par un test automatisé qui échouait **avant** le correctif et réussit après (règle « le test d'abord »). Exception : BUG-007, dont le test (`A-T`) a été écrit en même temps que le correctif, après qu'un test d'accessibilité instable eut signalé le titre vide ; il n'a donc jamais été vu en échec. Aucun S1 ouvert.
 
 | ID | gravité | titre | état |
 | --- | --- | --- | --- |
