@@ -1,7 +1,7 @@
 # Architecture: ActiveNet clone (clean-room)
 
 Inputs: `recon.md`, `features.csv` (inferred from public sources). Schema: `schema.sql` (loaded and checked on Postgres 16:
-39 statements pass; a second overlapping reservation and a second seat on a capacity-1 activity are rejected by the database).
+the file loads without error; a second overlapping reservation and a second seat on a capacity-1 activity are rejected by the database).
 
 ## 1. Stack (reuses what already works in the Calendly clone in `clone/`)
 | layer | choice | why |
@@ -17,7 +17,7 @@ Inputs: `recon.md`, `features.csv` (inferred from public sources). Schema: `sche
 Multi-tenant: one `organizations` row per municipality/club; every table carries `org_id` (directly or via its parent).
 Access rule: no RLS. One data-layer function per query, taking `(orgId, actor)`; staff role checked per action; citizens only see rows where `account_id` is theirs. Unit tests assert cross-org and cross-account reads return nothing.
 
-## 2. Schema summary (31 tables)
+## 2. Schema summary (26 tables)
 Tenancy/auth: organizations, users, staff_members, sessions, auth_tokens. People: persons.
 Catalogue: locations, facilities, facility_hours, activities, activity_questions, waivers, pass_types.
 Transactions: orders (cart = order in status `cart`, one open cart per account), order_lines, registrations, payments, stripe_events, pass_holdings, reservations, dropin_sessions, dropin_attendance.
