@@ -1,0 +1,29 @@
+feature,area,priority,original,clone,notes
+Household account with email verification,auth,must,yes,no,Fontana/Kitchener help; 13+ rule
+Family members under one account,account,must,yes,no,Haldimand
+Program search with filters,discovery,must,yes,no,age/day/location/category inferred
+Program detail with fees and spots,discovery,must,yes,no,
+Cart with participant picker,checkout,must,yes,no,Niagara Falls
+Custom questions per activity,checkout,should,yes,no,inferred
+Waiver with e-signature,checkout,must,yes,no,inferred
+Card payment at checkout,payments,must,yes,no,Stripe in clone
+Confirmation page and email,checkout,must,yes,no,EPD
+Waitlist when full,registration,must,yes,no,Haldimand/EPD
+Eligibility rules (age) and capacity,registration,must,yes,no,
+Express registration,registration,could,yes,no,vendor page; low evidence
+Memberships and passes with auto-renew,passes,should,yes,no,St. Mary's
+Facility search and availability,facilities,must,yes,no,GetApp
+Facility reservation with conflict check,facilities,must,yes,no,
+Drop-in reservations and attendance,drop-in,should,yes,no,vendor blog
+Staff: create and publish activities,staff,must,yes,no,
+Staff: roster and check-in,staff,should,yes,no,
+Staff: facility calendar,staff,should,yes,no,
+Staff: front-desk point of sale,staff,should,yes,no,club page (dated)
+Staff: reports and export,staff,should,yes,no,Capterra: limited templates
+Refunds and cancellations,payments,must,yes,no,policy inferred
+Payment plans,payments,could,yes,no,Capterra: limited control
+Custom branding per organization,admin,could,yes,no,Capterra: weak in original
+AI tools,ai,skip,yes,no,proprietary; skip
+Leagues, camps, club and campus modules,modules,skip,yes,no,out of slice
+Mobile apps,mobile,skip,yes,no,out of slice
+Accounting/GL integration,integrations,skip,yes,no,later
