@@ -169,3 +169,13 @@ export function parseSignup(get: (k: string) => string): Parsed<SignupInput> {
   if (Object.keys(errors).length) return { ok: false, errors };
   return { ok: true, value: { email, password, username, displayName, timezone } };
 }
+
+/** Propose un nom pour le lien public à partir de l'adresse ou du nom (minuscules, sans accents, tirets), jamais un nom réservé. */
+export function suggestUsername(email: string, name?: string): string {
+  const clean = (x: string) => x.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
+  let base = clean(email.split("@")[0]) || clean(name ?? "") || "utilisateur";
+  if (base.length < 3) base = (base + "-rdv").slice(0, 40);
+  base = base.slice(0, 40).replace(/-+$/g, "");
+  if (base.length < 3 || RESERVED_USERNAMES.has(base)) base = `${base || "membre"}-1`.slice(0, 40);
+  return base;
+}

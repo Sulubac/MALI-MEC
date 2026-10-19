@@ -93,7 +93,7 @@ export function authorizationUrl(cfg: GoogleConfig, p: { state: string; challeng
   return u.toString();
 }
 
-export type TokenSet = { accessToken: string; expiresInSec: number; refreshToken?: string; scopes: string[]; email?: string };
+export type TokenSet = { accessToken: string; expiresInSec: number; refreshToken?: string; scopes: string[]; email?: string; idToken?: string };
 
 async function tokenRequest(cfg: GoogleConfig, params: Record<string, string>, timeoutMs = TIMEOUT_MS): Promise<TokenSet> {
   const res = await call(cfg.tokenUrl, {
@@ -113,8 +113,60 @@ async function tokenRequest(cfg: GoogleConfig, params: Record<string, string>, t
   const j = JSON.parse(text) as { access_token: string; expires_in: number; refresh_token?: string; scope?: string; id_token?: string };
   return {
     accessToken: j.access_token, expiresInSec: j.expires_in, refreshToken: j.refresh_token,
-    scopes: (j.scope ?? "").split(/\s+/).filter(Boolean), email: j.id_token ? emailFromIdToken(j.id_token) : undefined,
+    scopes: (j.scope ?? "").split(/\s+/).filter(Boolean), email: j.id_token ? emailFromIdToken(j.id_token) : undefined, idToken: j.id_token,
   };
+}
+
+// ---------- Connexion par Google (OpenID Connect) ----------
+/** La connexion ne demande que l'identité : l'accès à l'agenda reste un consentement séparé, demandé à part. */
+export const SIGNIN_SCOPES = ["openid", "email", "profile"];
+
+export function signInUrl(cfg: GoogleConfig, p: { state: string; challenge: string; nonce: string }): string {
+  const u = new URL(cfg.authUrl);
+  u.searchParams.set("client_id", cfg.clientId);
+  u.searchParams.set("redirect_uri", cfg.redirectUri);
+  u.searchParams.set("response_type", "code");
+  u.searchParams.set("scope", SIGNIN_SCOPES.join(" "));
+  u.searchParams.set("state", p.state);
+  u.searchParams.set("nonce", p.nonce);                  // lié à la session du navigateur : empêche le rejeu d'un jeton d'identité
+  u.searchParams.set("code_challenge", p.challenge);
+  u.searchParams.set("code_challenge_method", "S256");
+  u.searchParams.set("prompt", "select_account");        // laisse choisir le compte Google ; pas d'accès hors ligne
+  return u.toString();
+}
+
+export type IdClaims = { sub: string; email: string; name: string };
+export type IdTokenCheck =
+  | { ok: true; claims: IdClaims }
+  | { ok: false; reason: "invalid" | "issuer" | "audience" | "expired" | "nonce" | "email_unverified" | "no_identity" };
+
+/** Nom affichable : sans caractères de contrôle, espaces réduits, 80 caractères au plus ; à défaut, la partie locale de l'adresse. */
+export function cleanName(name: string | undefined, email: string): string {
+  const n = (name ?? "").replace(/[\u0000-\u001f\u007f]/g, " ").replace(/\s+/g, " ").trim().slice(0, 80);
+  return n || email.split("@")[0].slice(0, 80);
+}
+
+/**
+ * Vérifie les revendications du jeton d'identité reçu directement du point d'accès de Google en HTTPS avec le secret du client
+ * (Google précise que la signature n'a alors pas à être revérifiée) : émetteur, destinataire, expiration, nonce, adresse vérifiée.
+ */
+export function checkIdToken(idToken: string | undefined, expect: { clientId: string; nonce: string; nowMs?: number }): IdTokenCheck {
+  let c: Record<string, unknown>;
+  try {
+    const part = idToken?.split(".")[1];
+    if (!part) return { ok: false, reason: "invalid" };
+    c = JSON.parse(Buffer.from(part, "base64url").toString("utf8"));
+  } catch { return { ok: false, reason: "invalid" }; }
+  if (!c || typeof c !== "object") return { ok: false, reason: "invalid" };
+  if (c.iss !== "https://accounts.google.com" && c.iss !== "accounts.google.com") return { ok: false, reason: "issuer" };
+  const aud = Array.isArray(c.aud) ? c.aud : [c.aud];
+  if (!aud.includes(expect.clientId)) return { ok: false, reason: "audience" };
+  if (typeof c.exp !== "number" || c.exp * 1000 < (expect.nowMs ?? Date.now()) - 60_000) return { ok: false, reason: "expired" };
+  if (typeof c.nonce !== "string" || c.nonce !== expect.nonce) return { ok: false, reason: "nonce" };
+  if (typeof c.sub !== "string" || !c.sub || c.sub.length > 255 || typeof c.email !== "string" || !c.email.includes("@")) return { ok: false, reason: "no_identity" };
+  if (c.email_verified !== true && c.email_verified !== "true") return { ok: false, reason: "email_unverified" };
+  const email = c.email.trim().toLowerCase();
+  return { ok: true, claims: { sub: c.sub, email, name: cleanName(typeof c.name === "string" ? c.name : undefined, email) } };
 }
 
 /** Le jeton d'identité vient directement du point d'accès de Google en HTTPS : on lit ses revendications sans revérifier la signature. */

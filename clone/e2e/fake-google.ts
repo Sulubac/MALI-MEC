@@ -6,17 +6,21 @@ import http from "node:http";
 
 type Ev = { id: string; summary?: string; description?: string; location?: string; start: { dateTime: string }; end: { dateTime: string }; transparency?: string };
 type Cal = { busy: { start: number; end: number }[]; events: Map<string, Ev>; deleted: Set<string> };
-type Opts = { consent: "approve" | "deny"; deniedScopes: string[]; noRefreshToken: boolean; loginEmail: string };
+type Opts = {
+  consent: "approve" | "deny"; deniedScopes: string[]; noRefreshToken: boolean; loginEmail: string;
+  loginSub: string; loginName: string; emailVerified: boolean | "true"; idTokenAudience: string; nonceMode: "ok" | "wrong" | "missing"; idTokenExpired: boolean; idTokenIssuer: string;
+};
+const DEFAULT_OPTS: Opts = { consent: "approve", deniedScopes: [], noRefreshToken: false, loginEmail: "host@gmail.test", loginSub: "", loginName: "Alex Martin", emailVerified: true, idTokenAudience: "", nonceMode: "ok", idTokenExpired: false, idTokenIssuer: "https://accounts.google.com" };
 
 export const FAKE = { clientId: "client-test.apps.example", clientSecret: "secret-test" };
 
 export function startFakeGoogle(port: number): Promise<{ close: () => Promise<void>; url: string }> {
-  const codes = new Map<string, { email: string; scopes: string[]; challenge: string; redirect: string }>();
+  const codes = new Map<string, { email: string; scopes: string[]; challenge: string; redirect: string; nonce: string; offline: boolean; sub: string }>();
   const refresh = new Map<string, { email: string; scopes: string[]; revoked: boolean }>();
   const access = new Map<string, { email: string; scopes: string[]; exp: number }>();
   const cals = new Map<string, Cal>();
   const log: string[] = [];
-  let opts: Opts = { consent: "approve", deniedScopes: [], noRefreshToken: false, loginEmail: "host@gmail.test" };
+  let opts: Opts = { ...DEFAULT_OPTS };
   let fails: { target: string; status: number; times: number }[] = [];
   let delays: { target: string; ms: number; times: number }[] = [];
   const cal = (email: string) => { if (!cals.has(email)) cals.set(email, { busy: [], events: new Map(), deleted: new Set() }); return cals.get(email)!; };
@@ -38,7 +42,7 @@ export function startFakeGoogle(port: number): Promise<{ close: () => Promise<vo
     log.push(`${req.method} ${path}`);
 
     // ----- commandes de test -----
-    if (path === "/__control/reset") { codes.clear(); refresh.clear(); access.clear(); cals.clear(); log.length = 0; fails = []; delays = []; opts = { consent: "approve", deniedScopes: [], noRefreshToken: false, loginEmail: "host@gmail.test" }; return send(res, 200, {}); }
+    if (path === "/__control/reset") { codes.clear(); refresh.clear(); access.clear(); cals.clear(); log.length = 0; fails = []; delays = []; opts = { ...DEFAULT_OPTS }; return send(res, 200, {}); }
     if (path === "/__control/options") { opts = { ...opts, ...JSON.parse(body) }; return send(res, 200, opts); }
     if (path === "/__control/busy") { const b = JSON.parse(body); cal(b.email).busy.push({ start: Date.parse(b.start), end: Date.parse(b.end) }); return send(res, 200, {}); }
     if (path === "/__control/fail") { fails.push(JSON.parse(body)); return send(res, 200, {}); }
@@ -55,7 +59,13 @@ export function startFakeGoogle(port: number): Promise<{ close: () => Promise<vo
       const q = u.searchParams;
       if (q.get("client_id") !== FAKE.clientId) return send(res, 400, { error: "invalid_client" });
       if (q.get("response_type") !== "code" || q.get("code_challenge_method") !== "S256" || !q.get("code_challenge") || !q.get("state") || !q.get("redirect_uri")) return send(res, 400, { error: "invalid_request" });
-      if (q.get("access_type") !== "offline" || q.get("prompt") !== "consent") return send(res, 400, { error: "refresh token non demandé" });
+      const requestedScopes = (q.get("scope") ?? "").split(" ");
+      const wantsCalendar = requestedScopes.some((x) => x.includes("/auth/calendar"));
+      if (wantsCalendar && (q.get("access_type") !== "offline" || q.get("prompt") !== "consent")) return send(res, 400, { error: "refresh token non demandé" });
+      if (!wantsCalendar) { // connexion : identité seulement, nonce obligatoire, choix du compte, pas d'accès hors ligne
+        if (!q.get("nonce") || q.get("prompt") !== "select_account" || q.get("access_type")) return send(res, 400, { error: "demande de connexion mal formée" });
+        if (requestedScopes.some((x) => !["openid", "email", "profile"].includes(x))) return send(res, 400, { error: "portées inattendues pour une connexion" });
+      }
       const redirect = new URL(q.get("redirect_uri")!);
       redirect.searchParams.set("state", q.get("state")!);
       if (opts.consent === "deny") redirect.searchParams.set("error", "access_denied");
@@ -63,7 +73,7 @@ export function startFakeGoogle(port: number): Promise<{ close: () => Promise<vo
         const requested = (q.get("scope") ?? "").split(" ");
         const granted = requested.filter((s) => !opts.deniedScopes.includes(s));
         const code = randomBytes(12).toString("hex");
-        codes.set(code, { email: opts.loginEmail, scopes: granted, challenge: q.get("code_challenge")!, redirect: q.get("redirect_uri")! });
+        codes.set(code, { email: opts.loginEmail, scopes: granted, challenge: q.get("code_challenge")!, redirect: q.get("redirect_uri")!, nonce: q.get("nonce") ?? "", offline: q.get("access_type") === "offline", sub: opts.loginSub || `sub-${createHash("sha1").update(opts.loginEmail).digest("hex").slice(0, 12)}` });
         redirect.searchParams.set("code", code);
       }
       res.writeHead(302, { location: redirect.toString() }); return res.end();
@@ -73,10 +83,16 @@ export function startFakeGoogle(port: number): Promise<{ close: () => Promise<vo
       const status = takeFail("token"); if (status) return send(res, status, { error: "temporarily_unavailable" });
       const f = new URLSearchParams(body);
       if (f.get("client_id") !== FAKE.clientId || f.get("client_secret") !== FAKE.clientSecret) return send(res, 401, { error: "invalid_client" });
-      const issue = (email: string, scopes: string[], withRefresh: string | null) => {
+      const issue = (email: string, scopes: string[], withRefresh: string | null, c?: { nonce: string; sub: string }) => {
         const tok = "ya29." + randomBytes(12).toString("hex");
         access.set(tok, { email, scopes, exp: Date.now() + 3599_000 });
-        const idToken = ["x", Buffer.from(JSON.stringify({ email })).toString("base64url"), "y"].join(".");
+        const claims: Record<string, unknown> = {
+          iss: opts.idTokenIssuer, aud: opts.idTokenAudience || FAKE.clientId, sub: c?.sub ?? `sub-${createHash("sha1").update(email).digest("hex").slice(0, 12)}`, email,
+          email_verified: opts.emailVerified, name: opts.loginName, iat: Math.floor(Date.now() / 1000),
+          exp: Math.floor(Date.now() / 1000) + (opts.idTokenExpired ? -3600 : 3600),
+        };
+        if (c && opts.nonceMode !== "missing") claims.nonce = opts.nonceMode === "wrong" ? "autre-nonce" : c.nonce;
+        const idToken = ["x", Buffer.from(JSON.stringify(claims)).toString("base64url"), "y"].join(".");
         return { access_token: tok, expires_in: 3599, scope: scopes.join(" "), token_type: "Bearer", id_token: idToken, ...(withRefresh ? { refresh_token: withRefresh } : {}) };
       };
       if (f.get("grant_type") === "authorization_code") {
@@ -86,8 +102,8 @@ export function startFakeGoogle(port: number): Promise<{ close: () => Promise<vo
         if (f.get("redirect_uri") !== c.redirect) return send(res, 400, { error: "redirect_uri_mismatch" });
         if (createHash("sha256").update(f.get("code_verifier") ?? "").digest("base64url") !== c.challenge) return send(res, 400, { error: "invalid_grant", error_description: "Missing code verifier / mismatch" });
         let rt: string | null = null;
-        if (!opts.noRefreshToken) { rt = "1//" + randomBytes(16).toString("hex"); refresh.set(rt, { email: c.email, scopes: c.scopes, revoked: false }); }
-        return send(res, 200, issue(c.email, c.scopes, rt));
+        if (c.offline && !opts.noRefreshToken) { rt = "1//" + randomBytes(16).toString("hex"); refresh.set(rt, { email: c.email, scopes: c.scopes, revoked: false }); }
+        return send(res, 200, issue(c.email, c.scopes, rt, { nonce: c.nonce, sub: c.sub }));
       }
       if (f.get("grant_type") === "refresh_token") {
         const r = refresh.get(f.get("refresh_token") ?? "");
