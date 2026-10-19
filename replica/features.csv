@@ -12,7 +12,7 @@ Limites par jour/semaine/mois,scheduling rules,should,yes,partial,"Par jour et p
 Page de réservation publique (calendrier + créneaux),booking,must,yes,yes,"S07, S08 ; testé de bout en bout, clavier seul compris"
 Formulaire invité avec questions personnalisées,booking,should,yes,yes,"Texte court/long, liste de choix, case à cocher ; obligatoire ou non ; réponses visibles côté hôte"
 Confirmation + ajout au calendrier,booking,must,yes,yes,Page de confirmation + fichier .ics
-E-mails de confirmation et rappel,notifications,must,yes,yes,"Confirmation invité, notification hôte, annulation, rappel 24 h. Testé via boîte d'envoi locale et API Resend simulée ; envoi réel à vérifier avec votre clé Resend"
+E-mails de confirmation et rappel,notifications,must,yes,partial,"Confirmation invité, notification hôte, annulation, rappel 24 h : code complet, testé via la boîte d'envoi locale et une API Resend simulée. NON vérifié avec un vrai envoi (domaine, SPF/DKIM, arrivée en boîte de réception) : passe à « yes » après un envoi réel"
 Annulation par l'invité,booking,must,yes,yes,Avec motif
 Replanification par l'invité,booking,must,yes,yes,Via un nouveau créneau ; l'ancien est annulé après réservation
 Page de confirmation personnalisée ou redirection,booking,could,yes,partial,Redirection https vers une adresse choisie ; page de confirmation personnalisable manquante
