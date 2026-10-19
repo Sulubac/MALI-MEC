@@ -54,9 +54,9 @@ export class GoogleError extends Error {
 
 const TIMEOUT_MS = 6000;
 
-async function call(url: string, init: RequestInit): Promise<Response> {
+async function call(url: string, init: RequestInit, timeoutMs = TIMEOUT_MS): Promise<Response> {
   try {
-    return await fetch(url, { ...init, signal: AbortSignal.timeout(TIMEOUT_MS) });
+    return await fetch(url, { ...init, signal: AbortSignal.timeout(timeoutMs) });
   } catch (e) {
     throw new GoogleError("temporary", `réseau : ${e instanceof Error ? e.message : String(e)}`);
   }
@@ -95,12 +95,12 @@ export function authorizationUrl(cfg: GoogleConfig, p: { state: string; challeng
 
 export type TokenSet = { accessToken: string; expiresInSec: number; refreshToken?: string; scopes: string[]; email?: string };
 
-async function tokenRequest(cfg: GoogleConfig, params: Record<string, string>): Promise<TokenSet> {
+async function tokenRequest(cfg: GoogleConfig, params: Record<string, string>, timeoutMs = TIMEOUT_MS): Promise<TokenSet> {
   const res = await call(cfg.tokenUrl, {
     method: "POST",
     headers: { "content-type": "application/x-www-form-urlencoded" },
     body: new URLSearchParams({ client_id: cfg.clientId, client_secret: cfg.clientSecret, ...params }),
-  });
+  }, timeoutMs);
   const text = await res.text();
   if (!res.ok) {
     let code = "";
@@ -128,8 +128,8 @@ export function emailFromIdToken(idToken: string): string | undefined {
 export const exchangeCode = (cfg: GoogleConfig, code: string, verifier: string) =>
   tokenRequest(cfg, { grant_type: "authorization_code", code, redirect_uri: cfg.redirectUri, code_verifier: verifier });
 
-export const refreshAccessToken = (cfg: GoogleConfig, refreshToken: string) =>
-  tokenRequest(cfg, { grant_type: "refresh_token", refresh_token: refreshToken });
+export const refreshAccessToken = (cfg: GoogleConfig, refreshToken: string, timeoutMs = TIMEOUT_MS) =>
+  tokenRequest(cfg, { grant_type: "refresh_token", refresh_token: refreshToken }, timeoutMs);
 
 /** Meilleur effort : l'utilisateur déconnecte son agenda, on le dit à Google, mais un échec n'empêche pas la déconnexion locale. */
 export async function revokeToken(cfg: GoogleConfig, token: string): Promise<boolean> {
@@ -142,12 +142,15 @@ export async function revokeToken(cfg: GoogleConfig, token: string): Promise<boo
 // ---------- Calendar ----------
 export type BusyInterval = { start: number; end: number };
 
-export async function freeBusy(cfg: GoogleConfig, accessToken: string, fromMs: number, toMs: number): Promise<BusyInterval[]> {
+/** Délai court pour l'affichage de la page publique (un agenda lent ne doit pas faire attendre l'invité), plus long à la réservation. */
+export const DISPLAY_TIMEOUT_MS = 2500;
+
+export async function freeBusy(cfg: GoogleConfig, accessToken: string, fromMs: number, toMs: number, timeoutMs = TIMEOUT_MS): Promise<BusyInterval[]> {
   const res = await call(`${cfg.apiBase}/freeBusy`, {
     method: "POST",
     headers: { authorization: `Bearer ${accessToken}`, "content-type": "application/json" },
     body: JSON.stringify({ timeMin: new Date(fromMs).toISOString(), timeMax: new Date(toMs).toISOString(), items: [{ id: "primary" }] }),
-  });
+  }, timeoutMs);
   const text = await res.text();
   if (!res.ok) throw classify(res.status, text);
   const j = JSON.parse(text) as { calendars?: Record<string, { busy?: { start: string; end: string }[]; errors?: { reason: string }[] }> };

@@ -24,7 +24,8 @@ const MESSAGES: Record<string, { tone: "success" | "danger"; text: string }> = {
 export default async function IntegrationsPage({ searchParams }: { searchParams: Promise<{ connected?: string; disconnected?: string; error?: string }> }) {
   const { host } = await requireHost();
   const sp = await searchParams;
-  const msg = MESSAGES[sp.error ?? (sp.connected === "readonly" ? "readonly" : sp.connected ? "connected" : sp.disconnected ? "disconnected" : "")];
+  const key = sp.error ?? (sp.connected === "readonly" ? "readonly" : sp.connected ? "connected" : sp.disconnected ? "disconnected" : "");
+  const msg = Object.hasOwn(MESSAGES, key) ? MESSAGES[key] : undefined; // « __proto__ », « constructor »… ne sont pas des messages
   const configured = googleConfig() !== null;
   const view = await getCalendarView(host.id);
 
@@ -50,7 +51,7 @@ export default async function IntegrationsPage({ searchParams }: { searchParams:
           <form action={connectGoogleAction}><Button type="submit">Connecter Google Agenda</Button></form>
         </Card>
       ) : view.status === "revoked" ? (
-        <Card className="max-w-xl space-y-4 p-4">
+        <Card className="wrap-anywhere max-w-xl space-y-4 p-4">
           <h2 className="text-base">Google Agenda : reconnexion nécessaire</h2>
           <Notice>Google a mis fin à l'accès ({view.email}). Vos rendez-vous ne tiennent plus compte de votre agenda tant que vous ne l'avez pas reconnecté.</Notice>
           <div className="flex flex-wrap gap-3">
@@ -60,7 +61,7 @@ export default async function IntegrationsPage({ searchParams }: { searchParams:
         </Card>
       ) : (
         <div className="space-y-6">
-          <Card className="max-w-xl space-y-1 p-4">
+          <Card className="wrap-anywhere max-w-xl space-y-1 p-4">
             <h2 className="text-base">Google Agenda connecté</h2>
             <p className="text-sm">Compte : <span className="font-semibold">{view.email}</span></p>
             {view.lastError && <p role="status" className="text-sm text-danger">Dernier problème : {view.lastError}</p>}

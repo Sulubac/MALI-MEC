@@ -18,6 +18,7 @@ export function startFakeGoogle(port: number): Promise<{ close: () => Promise<vo
   const log: string[] = [];
   let opts: Opts = { consent: "approve", deniedScopes: [], noRefreshToken: false, loginEmail: "host@gmail.test" };
   let fails: { target: string; status: number; times: number }[] = [];
+  let delays: { target: string; ms: number; times: number }[] = [];
   const cal = (email: string) => { if (!cals.has(email)) cals.set(email, { busy: [], events: new Map(), deleted: new Set() }); return cals.get(email)!; };
 
   const send = (res: http.ServerResponse, status: number, body?: unknown, headers: Record<string, string> = {}) => {
@@ -25,6 +26,8 @@ export function startFakeGoogle(port: number): Promise<{ close: () => Promise<vo
     res.end(body === undefined ? undefined : JSON.stringify(body));
   };
   const readBody = (req: http.IncomingMessage) => new Promise<string>((ok) => { let d = ""; req.on("data", (c) => (d += c)); req.on("end", () => ok(d)); });
+  const takeDelay = (target: string) => { const d = delays.find((x) => x.target === target && x.times > 0); if (d) { d.times--; return d.ms; } return 0; };
+  const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
   const takeFail = (target: string) => { const f = fails.find((x) => x.target === target && x.times > 0); if (f) { f.times--; return f.status; } return 0; };
   const gErr = (status: number, message: string) => ({ error: { code: status, message } });
 
@@ -35,10 +38,11 @@ export function startFakeGoogle(port: number): Promise<{ close: () => Promise<vo
     log.push(`${req.method} ${path}`);
 
     // ----- commandes de test -----
-    if (path === "/__control/reset") { codes.clear(); refresh.clear(); access.clear(); cals.clear(); log.length = 0; fails = []; opts = { consent: "approve", deniedScopes: [], noRefreshToken: false, loginEmail: "host@gmail.test" }; return send(res, 200, {}); }
+    if (path === "/__control/reset") { codes.clear(); refresh.clear(); access.clear(); cals.clear(); log.length = 0; fails = []; delays = []; opts = { consent: "approve", deniedScopes: [], noRefreshToken: false, loginEmail: "host@gmail.test" }; return send(res, 200, {}); }
     if (path === "/__control/options") { opts = { ...opts, ...JSON.parse(body) }; return send(res, 200, opts); }
     if (path === "/__control/busy") { const b = JSON.parse(body); cal(b.email).busy.push({ start: Date.parse(b.start), end: Date.parse(b.end) }); return send(res, 200, {}); }
     if (path === "/__control/fail") { fails.push(JSON.parse(body)); return send(res, 200, {}); }
+    if (path === "/__control/delay") { delays.push(JSON.parse(body)); return send(res, 200, {}); }
     if (path === "/__control/revoke-all") { const { email } = JSON.parse(body); for (const r of refresh.values()) if (r.email === email) r.revoked = true; for (const [k, a] of access) if (a.email === email) access.delete(k); return send(res, 200, {}); }
     if (path === "/__control/expire-access") { access.clear(); return send(res, 200, {}); }
     if (path === "/__control/state") {
@@ -108,6 +112,7 @@ export function startFakeGoogle(port: number): Promise<{ close: () => Promise<vo
       const rest = path.slice("/calendar/v3".length);
 
       if (rest === "/freeBusy" && req.method === "POST") {
+        { const d = takeDelay("freebusy"); if (d) await sleep(d); }
         const status = takeFail("freebusy"); if (status) return send(res, status, gErr(status, "Backend Error"));
         const j = JSON.parse(body);
         if (!j.timeMin || !j.timeMax || !Array.isArray(j.items) || !j.items.length) return send(res, 400, gErr(400, "Required"));

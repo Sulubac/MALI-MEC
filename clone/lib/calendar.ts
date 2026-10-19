@@ -3,7 +3,7 @@ import { decryptSecret, encryptSecret } from "./crypto.ts";
 import { pool, query } from "./db.ts";
 import { appUrl } from "./email.ts";
 import {
-  canReadBusy, canWriteEvents, deleteEvent, eventIdFor, freeBusy, GoogleError, googleConfig, insertEvent, refreshAccessToken,
+  canReadBusy, canWriteEvents, deleteEvent, DISPLAY_TIMEOUT_MS, eventIdFor, freeBusy, GoogleError, googleConfig, insertEvent, refreshAccessToken,
   revokeToken, type BusyInterval, type GoogleConfig, type TokenSet,
 } from "./google.ts";
 import { enqueueEmail, type CalendarJob } from "./queue.ts";
@@ -35,6 +35,7 @@ export async function getCalendarView(userId: string): Promise<CalendarView | nu
 
 export async function saveConnection(userId: string, t: TokenSet & { refreshToken: string }): Promise<{ canWrite: boolean }> {
   const canWrite = canWriteEvents(t.scopes);
+  const previous = await getConn(userId);
   await query(
     `insert into calendar_connections (user_id, provider, external_account, refresh_token_enc, scopes, write_bookings)
      values ($1, 'google', $2, $3, $4, $5)
@@ -45,6 +46,14 @@ export async function saveConnection(userId: string, t: TokenSet & { refreshToke
   );
   tokenCache.delete(userId);
   busyCache.delete(userId);
+  // L'ancien jeton reste valable chez Google tant qu'on ne le révoque pas : on le retire, pour ne laisser qu'un seul accès actif.
+  if (previous) {
+    try {
+      const old = decryptSecret(previous.refresh_token_enc, userId);
+      const cfg = googleConfig();
+      if (cfg && old !== t.refreshToken) await revokeToken(cfg, old);
+    } catch { /* ancien jeton illisible ou déjà révoqué : rien à faire */ }
+  }
   return { canWrite };
 }
 
@@ -81,7 +90,7 @@ async function markRevoked(c: Conn, why: string): Promise<void> {
   if (r.length) await enqueueEmail(pool(), { template: "calendar_reconnect", userId: c.user_id, audience: "host" }, { key: `email:calendar_reconnect:${c.id}:${Date.now()}` });
 }
 
-async function accessToken(cfg: GoogleConfig, c: Conn, forceRefresh = false): Promise<string> {
+async function accessToken(cfg: GoogleConfig, c: Conn, forceRefresh = false, timeoutMs?: number): Promise<string> {
   const hit = tokenCache.get(c.user_id);
   if (hit && hit.exp > Date.now() + 60_000 && !forceRefresh) return hit.token;
   let refreshToken: string;
@@ -93,7 +102,7 @@ async function accessToken(cfg: GoogleConfig, c: Conn, forceRefresh = false): Pr
     throw new GoogleError("invalid_grant", "jeton illisible (clé de chiffrement)");
   }
   try {
-    const t = await refreshAccessToken(cfg, refreshToken);
+    const t = await refreshAccessToken(cfg, refreshToken, timeoutMs);
     tokenCache.set(c.user_id, { token: t.accessToken, exp: Date.now() + t.expiresInSec * 1000 });
     return t.accessToken;
   } catch (e) {
@@ -103,11 +112,11 @@ async function accessToken(cfg: GoogleConfig, c: Conn, forceRefresh = false): Pr
 }
 
 /** Exécute un appel avec le jeton d'accès ; un 401 provoque un seul rafraîchissement puis une nouvelle tentative. */
-async function withToken<T>(cfg: GoogleConfig, c: Conn, fn: (token: string) => Promise<T>): Promise<T> {
+async function withToken<T>(cfg: GoogleConfig, c: Conn, fn: (token: string) => Promise<T>, timeoutMs?: number): Promise<T> {
   try {
-    return await fn(await accessToken(cfg, c));
+    return await fn(await accessToken(cfg, c, false, timeoutMs));
   } catch (e) {
-    if (e instanceof GoogleError && e.kind === "unauthorized") return fn(await accessToken(cfg, c, true));
+    if (e instanceof GoogleError && e.kind === "unauthorized") return fn(await accessToken(cfg, c, true, timeoutMs));
     throw e;
   }
 }
@@ -129,14 +138,18 @@ export async function externalBusy(hostId: string, fromMs: number, toMs: number,
   const cached = busyCache.get(hostId);
   if (!opts.fresh && cached && cached.from <= fromMs && cached.to >= toMs && Date.now() - cached.at < 30_000) return { busy: cached.busy, ok: true };
   try {
-    const busy = await withToken(cfg, c, (tok) => freeBusy(cfg, tok, fromMs, toMs));
+    const timeout = opts.fresh ? undefined : DISPLAY_TIMEOUT_MS; // affichage : court ; réservation : le délai normal
+    const busy = await withToken(cfg, c, (tok) => freeBusy(cfg, tok, fromMs, toMs, timeout), timeout);
     busyCache.set(hostId, { from: fromMs, to: toMs, at: Date.now(), busy });
     return { busy, ok: true };
   } catch (e) {
     if (e instanceof GoogleError && e.kind === "invalid_grant") return { busy: [], ok: true }; // révoquée : l'hôte est prévenu, on n'interroge plus
-    if (e instanceof GoogleError && e.kind === "forbidden") {
-      // Erreur durable (API Calendar désactivée sur le projet, autorisation insuffisante) : réessayer ne servirait à rien et refuser toute réservation non plus.
-      await markRevoked(c, "Google a refusé l'accès à l'agenda (autorisation insuffisante ou API Google Calendar non activée) : reconnectez-le en acceptant toutes les autorisations.");
+    if (e instanceof GoogleError && (e.kind === "forbidden" || e.kind === "bad_request" || e.kind === "unauthorized")) {
+      // Erreur durable : réessayer ne servirait à rien, et refuser toute réservation non plus. L'hôte est prévenu, les réservations continuent.
+      const why = e.kind === "forbidden" ? "Google a refusé l'accès à l'agenda (autorisation insuffisante ou API Google Calendar non activée) : reconnectez-le en acceptant toutes les autorisations."
+        : e.kind === "unauthorized" ? "Google ne reconnaît plus l'accès à l'agenda : reconnectez-le."
+        : "Google a rejeté la lecture de l'agenda : reconnectez-le, et si le problème persiste contactez l'administrateur du service.";
+      await markRevoked(c, why);
       return { busy: [], ok: true };
     }
     return { busy: cached && cached.from <= fromMs && cached.to >= toMs ? cached.busy : [], ok: false };

@@ -298,3 +298,67 @@ test("échec d'écriture non temporaire : message lisible pour l'hôte, détail 
   const j = (await DB.query<{ last_error: string }>("select last_error from jobs where kind = 'calendar_write'"))[0];
   assert.match(j.last_error, /403/); // le détail reste disponible pour le diagnostic
 });
+
+// ===== Deuxième passe de test : hypothèses de défauts =====
+test("reconnecter révoque l'ancien jeton chez Google (sinon il reste valable, orphelin)", opts, async () => {
+  await connect(host.id);
+  await connect(host.id); // reconnexion : un nouveau jeton remplace l'ancien en base
+  const st = await fakeState();
+  assert.equal(st.refreshTokens.length, 2);
+  assert.equal(st.refreshTokens.filter((t) => !t.revoked).length, 1, "un seul jeton doit rester valable chez Google");
+});
+
+test("Google refuse la requête (400, durable) : l'hôte est prévenu et les réservations continuent (pas de blocage)", opts, async () => {
+  await connect(host.id);
+  await control("fail", { target: "freebusy", status: 400, times: 5 });
+  const b = await S.createBooking(host, et, { startAt: await slotAt(2), ...guest });
+  assert.equal(b.status, "confirmed");
+  assert.match((await C.getCalendarView(host.id))!.lastError ?? "", /rejeté|refusé/i);
+});
+
+test("10 réservations simultanées avec l'agenda connecté : une seule réussit, un seul événement Google", opts, async () => {
+  await connect(host.id);
+  const slot = await slotAt(2);
+  const res = await Promise.allSettled(Array.from({ length: 10 }, (_, i) => S.createBooking(host, et, { startAt: slot, ...guest, guestEmail: `g${i}@example.com` })));
+  assert.equal(res.filter((r) => r.status === "fulfilled").length, 1);
+  await runJobs();
+  assert.equal((await fakeState()).events.length, 1);
+});
+
+test("événement sur toute la journée : tous les créneaux du jour disparaissent", opts, async () => {
+  await connect(host.id);
+  const slots = await S.listSlots(host, et);
+  const day = slots[0].slice(0, 10);
+  const sameDay = slots.filter((s) => s.startsWith(day));
+  assert.ok(sameDay.length > 3);
+  await control("busy", { email: "host@gmail.test", start: `${day}T00:00:00Z`, end: `${day}T23:59:59Z` });
+  assert.equal((await S.listSlots(host, et)).filter((s) => s.startsWith(day)).length, 0);
+});
+
+test("changement d'heure d'automne : l'événement garde l'instant exact et le fuseau de l'hôte (09:00 à Paris avant et après)", opts, async () => {
+  await connect(host.id);
+  const all = await S.listSlots(host, et, Date.parse("2026-10-20T00:00:00Z"));
+  const before = all.find((s) => s.startsWith("2026-10-23") && new Date(s).getUTCHours() === 7)!; // 09:00 CEST = 07:00Z
+  const after = all.find((s) => s.startsWith("2026-10-27") && new Date(s).getUTCHours() === 8)!;   // 09:00 CET = 08:00Z
+  assert.ok(before && after);
+  for (const s of [before, after]) await S.createBooking(host, et, { startAt: s, ...guest, guestEmail: `${s.slice(8, 10)}@example.com` }, Date.parse("2026-10-20T00:00:00Z"));
+  await runJobs();
+  const local = new Intl.DateTimeFormat("fr-FR", { timeZone: "Europe/Paris", hour: "2-digit", minute: "2-digit" });
+  const evs = (await fakeState()).events;
+  assert.equal(evs.length, 2);
+  for (const e of evs) { assert.equal(e.start.timeZone, "Europe/Paris"); assert.equal(local.format(new Date(e.start.dateTime)), "09:00"); }
+});
+
+test("accents, emoji, nom de 120 caractères, retours à la ligne dans une réponse : événement lisible, sans saut de ligne dans le titre", opts, async () => {
+  await connect(host.id);
+  await S.updateEventType(host.id, et.id, { ...base, name: "Séance ☕ d'été" });
+  const t = (await S.getOwnedEventType(host.id, et.id))!;
+  const longName = "Éloïse 😀 " + "N".repeat(110);
+  await S.createBooking(host, t, { startAt: await slotAt(2), ...guest, guestName: longName, answers: { q1: "ligne 1\nligne 2 😀" } });
+  await runJobs();
+  const e = (await fakeState()).events[0];
+  assert.equal(e.summary, `Séance ☕ d'été : ${longName}`);
+  assert.ok(!/[\r\n]/.test(e.summary));
+  assert.match(e.description, /ligne 1\nligne 2 😀/);
+});
+

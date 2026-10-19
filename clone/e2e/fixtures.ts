@@ -30,6 +30,8 @@ export { expect };
 
 /** Analyse d'accessibilité (axe) : zéro violation attendue, avec le détail en cas d'échec. */
 export async function expectAccessible(page: import("@playwright/test").Page) {
+  // Pendant une navigation, Next remplace le <title> : on attend qu'il soit posé. S'il ne l'est jamais, l'attente échoue (vrai défaut).
+  await page.waitForFunction(() => document.title.trim().length > 0, undefined, { timeout: 5000 });
   const res = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"]).analyze();
   const where = `${new URL(page.url()).pathname} « ${await page.title()} »`;
   const summary = res.violations.map((v) => `[${where}] ${v.id} (${v.impact}) : ${v.help} — ${v.nodes.slice(0, 3).map((n) => n.target.join(" ")).join(" | ")}`);
