@@ -2,7 +2,7 @@ import { after, before, beforeEach, test } from "node:test";
 import assert from "node:assert/strict";
 import { FAKE, startFakeGoogle } from "../e2e/fake-google.ts";
 import {
-  authorizationUrl, canReadBusy, canWriteEvents, deleteEvent, eventIdFor, exchangeCode, freeBusy, GoogleError, googleConfig,
+  authorizationUrl, checkIdToken, cleanName, signInUrl, SIGNIN_SCOPES, canReadBusy, canWriteEvents, deleteEvent, eventIdFor, exchangeCode, freeBusy, GoogleError, googleConfig,
   insertEvent, newOAuthState, refreshAccessToken, revokeToken, type GoogleConfig,
 } from "./google.ts";
 
@@ -150,3 +150,58 @@ test("aides de portée", () => {
   assert.ok(canWriteEvents([P + "calendar.events.owned"]));
   assert.ok(!canReadBusy(["openid", "email"]));
 });
+
+// ===== Connexion par Google : jeton d'identité =====
+const NOW = Date.UTC(2030, 0, 1, 12, 0, 0);
+const idTok = (over: Record<string, unknown> = {}) => ["h", Buffer.from(JSON.stringify({
+  iss: "https://accounts.google.com", aud: FAKE.clientId, sub: "sub-1", email: "Alex@Example.com", email_verified: true, name: "Alex Martin",
+  nonce: "N1", exp: Math.floor(NOW / 1000) + 3600, ...over,
+})).toString("base64url"), "s"].join(".");
+const check = (over: Record<string, unknown> = {}, nonce = "N1") => checkIdToken(idTok(over), { clientId: FAKE.clientId, nonce, nowMs: NOW });
+
+test("adresse de connexion : identité seulement, nonce, PKCE, choix du compte, pas d'accès hors ligne", () => {
+  const u = new URL(signInUrl(cfg, { state: "S", challenge: "C", nonce: "N" }));
+  assert.equal(u.searchParams.get("scope"), SIGNIN_SCOPES.join(" "));
+  assert.ok(!/calendar/.test(u.searchParams.get("scope")!), "aucune portée d'agenda pour une simple connexion");
+  assert.equal(u.searchParams.get("nonce"), "N");
+  assert.equal(u.searchParams.get("code_challenge_method"), "S256");
+  assert.equal(u.searchParams.get("prompt"), "select_account");
+  assert.equal(u.searchParams.get("access_type"), null);
+});
+
+test("jeton d'identité valide : revendications normalisées (adresse en minuscules)", () => {
+  const r = check();
+  assert.ok(r.ok);
+  if (r.ok) assert.deepEqual(r.claims, { sub: "sub-1", email: "alex@example.com", name: "Alex Martin" });
+});
+
+test("jeton d'identité : émetteur, destinataire, expiration, nonce, adresse non vérifiée, identité absente", () => {
+  assert.deepEqual(check({ iss: "accounts.google.com" }).ok, true);
+  assert.equal((check({ iss: "https://evil.example" }) as { reason: string }).reason, "issuer");
+  assert.equal((check({ aud: "autre-client" }) as { reason: string }).reason, "audience");
+  assert.equal(check({ aud: ["x", FAKE.clientId] }).ok, true);
+  assert.equal((check({ exp: Math.floor(NOW / 1000) - 3600 }) as { reason: string }).reason, "expired");
+  assert.equal(check({ exp: Math.floor(NOW / 1000) - 30 }).ok, true, "marge d'une minute pour l'horloge");
+  assert.equal((check({}, "AUTRE") as { reason: string }).reason, "nonce");
+  assert.equal((check({ nonce: undefined }) as { reason: string }).reason, "nonce");
+  assert.equal((check({ email_verified: false }) as { reason: string }).reason, "email_unverified");
+  assert.equal((check({ email_verified: undefined }) as { reason: string }).reason, "email_unverified");
+  assert.equal(check({ email_verified: "true" }).ok, true, "Google renvoie parfois la chaîne « true »");
+  assert.equal((check({ sub: "" }) as { reason: string }).reason, "no_identity");
+  assert.equal((check({ sub: "x".repeat(300) }) as { reason: string }).reason, "no_identity");
+  assert.equal((check({ email: "pas-une-adresse" }) as { reason: string }).reason, "no_identity");
+});
+
+test("jeton d'identité mal formé : refusé sans exception", () => {
+  for (const bad of [undefined, "", "abc", "a.b.c", "a..c", `a.${Buffer.from("[]").toString("base64url")}.c`, `a.${Buffer.from("null").toString("base64url")}.c`]) {
+    assert.equal(checkIdToken(bad, { clientId: FAKE.clientId, nonce: "N1", nowMs: NOW }).ok, false, `refus attendu pour ${String(bad)}`);
+  }
+});
+
+test("nom affiché : caractères de contrôle retirés, 80 caractères, repli sur la partie locale de l'adresse", () => {
+  assert.equal(cleanName("  Alex \n\t Martin\u0000 ", "a@b.c"), "Alex Martin");
+  assert.equal(cleanName("x".repeat(200), "a@b.c").length, 80);
+  assert.equal(cleanName("   ", "alex.martin@example.com"), "alex.martin");
+  assert.equal(cleanName(undefined, "zoe@example.com"), "zoe");
+});
+

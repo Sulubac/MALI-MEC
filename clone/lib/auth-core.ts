@@ -31,7 +31,11 @@ export async function verifyPassword(password: string, stored: string): Promise<
 let dummy: Promise<string> | undefined;
 const dummyHash = () => (dummy ??= hashPassword("mot-de-passe-factice-jamais-valide"));
 
-export type AuthUser = { id: string; email: string; emailVerified: boolean };
+export type AuthUser = {
+  id: string; email: string; emailVerified: boolean;
+  hasPassword: boolean;   // false pour un compte créé avec Google (mot de passe aléatoire que personne ne connaît)
+  sessionAgeSec: number;  // ancienneté de la session : sert à exiger une connexion récente pour les actions sensibles
+};
 
 type SignUpInput = { email: string; password: string; username: string; displayName: string; timezone: string };
 export type SignUpResult =
@@ -101,7 +105,7 @@ export async function checkCredentials(email: string, password: string): Promise
   const ok = await verifyPassword(password, u ? u.password_hash : await dummyHash());
   if (!u || !ok) return { status: "invalid" };
   if (!u.email_verified_at) return { status: "unverified" };
-  return { status: "ok", user: { id: u.id, email: u.email, emailVerified: true } };
+  return { status: "ok", user: { id: u.id, email: u.email, emailVerified: true, hasPassword: true, sessionAgeSec: 0 } };
 }
 
 // ---------- Sessions ----------
@@ -114,14 +118,14 @@ export async function createSession(userId: string): Promise<{ token: string; ex
 
 export async function getSessionUser(token: string): Promise<AuthUser | null> {
   if (!token) return null;
-  const r = await query<{ id: string; email: string; email_verified_at: Date | null; sid: string; last_seen_at: Date }>(
-    `select u.id, u.email, u.email_verified_at, s.id as sid, s.last_seen_at
+  const r = await query<{ id: string; email: string; email_verified_at: Date | null; sid: string; last_seen_at: Date; created_at: Date; password_set: boolean }>(
+    `select u.id, u.email, u.email_verified_at, u.password_set, s.id as sid, s.last_seen_at, s.created_at
      from sessions s join users u on u.id = s.user_id
      where s.token_hash = $1 and s.expires_at > now()`, [sha256(token)]);
   const u = r[0];
   if (!u || !u.email_verified_at) return null;
   if (Date.now() - u.last_seen_at.getTime() > 5 * 60_000) await query("update sessions set last_seen_at = now() where id = $1", [u.sid]);
-  return { id: u.id, email: u.email, emailVerified: true };
+  return { id: u.id, email: u.email, emailVerified: true, hasPassword: u.password_set, sessionAgeSec: Math.max(0, Math.floor((Date.now() - u.created_at.getTime()) / 1000)) };
 }
 
 export async function deleteSession(token: string): Promise<void> {
@@ -146,7 +150,7 @@ export async function resetPassword(token: string, newPassword: string): Promise
       "select id, user_id from email_tokens where token_hash = $1 and purpose = 'reset_password' and used_at is null and expires_at > now() for update", [sha256(token)]);
     if (!t.rows[0]) return false;
     await c.query("update email_tokens set used_at = now() where id = $1", [t.rows[0].id]);
-    await c.query("update users set password_hash = $2 where id = $1", [t.rows[0].user_id, passwordHash]);
+    await c.query("update users set password_hash = $2, password_set = true where id = $1", [t.rows[0].user_id, passwordHash]);
     await c.query("delete from sessions where user_id = $1", [t.rows[0].user_id]); // toute session ouverte est coupée
     return true;
   });
@@ -162,6 +166,18 @@ export async function deleteAccount(userId: string, password: string, beforeDele
   const r = await query<{ password_hash: string }>("select password_hash from users where id = $1", [userId]);
   if (!r[0] || !(await verifyPassword(password, r[0].password_hash))) return false;
   if (beforeDelete) await beforeDelete(); // appelé seulement après vérification du mot de passe (ex. révoquer l'accès Google)
+  await query("delete from users where id = $1", [userId]);
+  return true;
+}
+
+/**
+ * Suppression d'un compte sans mot de passe (créé avec Google) : l'utilisateur doit retaper son adresse e-mail exacte.
+ * L'appelant exige en plus une session récente. Refuse si le compte a un vrai mot de passe (il faut alors l'utiliser).
+ */
+export async function deleteAccountPasswordless(userId: string, typedEmail: string, beforeDelete?: () => Promise<void>): Promise<boolean> {
+  const r = await query<{ email: string; password_set: boolean }>("select email, password_set from users where id = $1", [userId]);
+  if (!r[0] || r[0].password_set || r[0].email.toLowerCase() !== typedEmail.trim().toLowerCase()) return false;
+  if (beforeDelete) await beforeDelete();
   await query("delete from users where id = $1", [userId]);
   return true;
 }

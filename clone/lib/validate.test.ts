@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { parseAvailability, parseEventTypeForm, parseQuestions, parseSignup, validatePassword } from "./validate.ts";
+import { parseAvailability, parseEventTypeForm, parseQuestions, parseSignup, suggestUsername, validatePassword } from "./validate.ts";
 
 const ok = (o: Record<string, string>) => (k: string) => o[k] ?? "";
 const valid = { name: "Test", duration: "30", locationKind: "video", minNotice: "240", maxDays: "60", bufferBefore: "0", bufferAfter: "10", limitPerDay: "", limitPerWeek: "", redirectUrl: "", questions: "[]" };
@@ -54,3 +54,15 @@ test("mot de passe : longueur et répétitions", () => {
   assert.equal(validatePassword("une phrase de passe correcte"), null);
   assert.ok(validatePassword("x".repeat(129)) !== null);
 });
+
+test("suggestion de nom public : minuscules, accents retirés, tirets, jamais réservé, longueurs valides", () => {
+  assert.equal(suggestUsername("Alex.Martin@example.com"), "alex-martin");
+  assert.equal(suggestUsername("éloïse_zoë@example.com"), "eloise-zoe");
+  assert.equal(suggestUsername("account@example.com"), "account-1");      // réservé
+  assert.equal(suggestUsername("ab@example.com"), "ab-rdv");              // trop court
+  assert.equal(suggestUsername("@example.com", "Camille Durand"), "camille-durand");
+  assert.equal(suggestUsername("!!!@example.com"), "utilisateur");
+  assert.ok(suggestUsername(`${"a".repeat(80)}@example.com`).length <= 40);
+  for (const e of ["a@b.c", "x.y.z@d.e", "123@d.e", "login@d.e", "--@d.e"]) assert.match(suggestUsername(e), /^[a-z0-9-]{3,40}$/, e);
+});
+

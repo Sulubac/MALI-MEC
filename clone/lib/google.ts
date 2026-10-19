@@ -3,7 +3,8 @@
 import { createHash, randomBytes } from "node:crypto";
 import { appUrl } from "./email.ts";
 
-export const GOOGLE_OAUTH_COOKIE = "g_oauth";
+export const GOOGLE_OAUTH_COOKIE = "g_oauth";   // connexion de l'agenda
+export const GOOGLE_LOGIN_COOKIE = "g_login";   // connexion / liaison du compte
 const CAL = "https://www.googleapis.com/auth/";
 // Portées par défaut. `calendar.events` est celle dont le nom est certain ; une portée plus étroite
 // (ex. calendar.events.owned) peut la remplacer via GOOGLE_CALENDAR_SCOPES après vérification dans la documentation Google.

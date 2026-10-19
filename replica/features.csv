@@ -1,5 +1,5 @@
 feature,area,priority,original,clone,notes
-Inscription par e-mail ou Google,onboarding,must,yes,partial,"E-mail + mot de passe : vérification, connexion, réinitialisation, suppression de compte. Connexion Google non faite"
+Inscription par e-mail ou Google,onboarding,must,yes,partial,"E-mail + mot de passe : complet (vérification, connexion, réinitialisation, suppression). Google (écran S01) : construit avec règles de liaison, testé contre un FAUX Google, NON vérifié avec le vrai Google : passe à « yes » après un essai réel avec vos identifiants"
 Connexion d'un calendrier (lecture occupé),onboarding,must,yes,partial,"Google Agenda : lecture des plages occupées + écriture et suppression des réservations, écran S02, révocation gérée. Testé contre un FAUX Google ; non vérifié avec le vrai Google (à faire avec vos identifiants). Outlook et agendas multiples absents"
 Définir des disponibilités hebdomadaires,availability,must,yes,yes,"Plusieurs plages par jour, copie sur lun.–ven."
 Exceptions de date,availability,should,yes,yes,Jour indisponible ou horaires particuliers

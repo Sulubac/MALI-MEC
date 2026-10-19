@@ -179,3 +179,19 @@ export function suggestUsername(email: string, name?: string): string {
   if (base.length < 3 || RESERVED_USERNAMES.has(base)) base = `${base || "membre"}-1`.slice(0, 40);
   return base;
 }
+
+export type GoogleProfileInput = { username: string; displayName: string; timezone: string };
+
+/** Profil demandé après la première connexion avec Google : nom public, nom affiché, fuseau (l'e-mail vient de Google, pas du formulaire). */
+export function parseGoogleProfile(get: (k: string) => string): Parsed<GoogleProfileInput> {
+  const errors: Record<string, string> = {};
+  const username = get("username").trim().toLowerCase();
+  if (!/^[a-z0-9-]{3,40}$/.test(username)) errors.username = "3 à 40 caractères : lettres minuscules, chiffres et tirets.";
+  else if (RESERVED_USERNAMES.has(username)) errors.username = "Ce nom est réservé, choisissez-en un autre.";
+  const displayName = get("displayName").replace(/[\u0000-\u001f\u007f]/g, " ").replace(/\s+/g, " ").trim();
+  if (!displayName || displayName.length > 80) errors.displayName = "Indiquez votre nom (80 caractères au plus).";
+  let timezone = get("timezone").trim() || "UTC";
+  try { new Intl.DateTimeFormat("fr-FR", { timeZone: timezone }); } catch { timezone = "UTC"; }
+  if (Object.keys(errors).length) return { ok: false, errors };
+  return { ok: true, value: { username, displayName, timezone } };
+}

@@ -1,6 +1,6 @@
 # Backend : état et checklist
 
-Application : `clone/`. Périmètre de cette étape : Postgres, comptes, e-mails, file de tâches. Paiements : hors périmètre (aucune ligne de la matrice ne les exige). Google Agenda : **construit mais non vérifié avec le vrai Google** (voir « Google Agenda »). Connexion par Google : pas faite.
+Application : `clone/`. Périmètre de cette étape : Postgres, comptes, e-mails, file de tâches. Paiements : hors périmètre (aucune ligne de la matrice ne les exige). Google Agenda : **construit mais non vérifié avec le vrai Google** (voir « Google Agenda »). Connexion par Google : **construite mais non vérifiée avec le vrai Google** (voir « Connexion par Google »).
 
 ## Ce qui est construit
 
@@ -58,9 +58,38 @@ Choix qui diffèrent de `architecture.md` : comptes gérés par l'application (a
 7. **Mode « Test » du projet** : je crois (à confirmer dans la documentation Google) que les jetons de rafraîchissement y expirent après 7 jours. Pendant vos essais, l'application affichera donc la reconnexion nécessaire une fois par semaine : c'est le comportement prévu, pas une panne.
 8. Portées par défaut : `calendar.freebusy` et `calendar.events`. `calendar.events` donne accès en lecture et écriture à tous les événements ; une portée plus étroite (`calendar.events.owned`, limitée aux agendas dont l'utilisateur est propriétaire) peut exister : vérifiez son nom exact dans la documentation Google, puis renseignez `GOOGLE_CALENDAR_SCOPES` (restreindre les portées facilite la vérification).
 
+## Connexion par Google (S01)
+
+**Construit** (`clone/lib/google-auth.ts`, route de retour `app/api/google/callback`, écrans `/login`, `/signup`, `/signup/google`, `/account`, migration `003_google_signin.sql`) :
+
+| Sujet | Réalisation |
+| --- | --- |
+| Protocole | OpenID Connect, code + PKCE (S256), `nonce` lié au navigateur, choix du compte (`prompt=select_account`), **portées `openid email profile` seulement** (non sensibles) : l'agenda reste un consentement séparé |
+| Jeton d'identité | reçu directement de Google en HTTPS : on vérifie l'émetteur, le destinataire (notre identifiant client), l'expiration (marge d'une minute), le `nonce`, la présence de `sub`, et que **l'adresse est confirmée par Google** (`email_verified`) |
+| Identité | l'identifiant stable `sub`, jamais l'adresse seule. Si l'adresse change chez Google, on retrouve le même compte ; si quelqu'un d'autre récupère l'ancienne adresse (autre `sub`), il n'ouvre pas ce compte |
+| Nouvel utilisateur | rien n'est créé avant l'étape « Terminer l'inscription » (nom, nom public) : l'identité vérifiée attend dans un cookie **chiffré**, `HttpOnly`, valable 15 minutes. Le compte est créé vérifié, sans mot de passe défini |
+| Une seule adresse de retour | la même `<APP_URL>/api/google/callback` que pour l'agenda : rien de plus à déclarer dans Google Cloud. Les deux usages se distinguent par le cookie d'état correspondant |
+
+**Règles de liaison de comptes** (ce qui protège contre la prise de contrôle) :
+
+1. **Jamais de liaison automatique par simple égalité d'adresse.** Un compte local **vérifié** avec la même adresse : message « Un compte existe déjà… », il faut se connecter avec le mot de passe puis lier Google depuis la page Compte.
+2. **Pré-détournement** : un compte local **non vérifié** avec l'adresse de la personne (créé par quelqu'un d'autre pour y garder un mot de passe connu) est **supprimé** quand la vraie propriétaire se connecte avec Google, avec son mot de passe, ses sessions et son lien de vérification. On ne le « reprend » pas : le nom public choisi par l'intrus disparaît aussi.
+3. **Liaison explicite** depuis `/account` (session requise, état lié à l'utilisateur) ; l'adresse Google peut différer de l'adresse du compte. Un compte Google déjà lié à quelqu'un d'autre est refusé ; un seul compte Google par utilisateur.
+4. **Déliaison** refusée si Google est le seul moyen de connexion (l'utilisateur serait verrouillé dehors) : il faut d'abord définir un mot de passe via « Mot de passe oublié ».
+
+**Comptes sans mot de passe** (créés avec Google) : mot de passe aléatoire que personne ne connaît (`password_set = false`). Connexion par mot de passe impossible ; « Mot de passe oublié » permet d'en définir un. **Suppression du compte** : adresse exacte à retaper, et **session de moins de 15 minutes** (une session volée et ancienne ne suffit pas). Faiblesse connue : sans mot de passe, une session volée **récente** pourrait supprimer le compte.
+
+**Limites connues** : pas de logo ni de style officiels du bouton (texte « Continuer avec Google ») ; pas de changement de mot de passe depuis le compte ; pas d'autres fournisseurs (Microsoft, Apple) ; la vérification de signature du jeton d'identité n'est pas refaite (Google indique que ce n'est pas nécessaire quand il est reçu directement de son point d'accès avec le secret du client).
+
+### Ce que vous devez faire pour la connexion par Google
+
+1. **Rien de plus que pour l'agenda** côté configuration : même projet Google Cloud, même identifiant OAuth, même adresse de retour. Les boutons n'apparaissent que si `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET` et `TOKEN_ENCRYPTION_KEY` sont renseignés.
+2. **Essayer avec votre compte** : nouvelle inscription, reconnexion, liaison depuis un compte existant, déliaison, suppression. Comme pour l'agenda, les tests utilisent mon faux Google : seul un essai réel valide les vraies réponses.
+3. Les portées `openid email profile` sont non sensibles : la connexion seule ne demande pas la vérification OAuth de Google (qui reste nécessaire pour l'agenda). L'écran de consentement doit tout de même être configuré (nom, e-mail d'assistance, domaine, politique de confidentialité).
+4. Avant la vérification de l'application, **les règles de marque de Google** peuvent exiger leur bouton officiel (logo, couleurs) : à remplacer dans `components/AuthForms.tsx` (`GoogleButton`).
+
 ## Intégrations restantes
 
-- **Connexion par Google** (se connecter à l'application avec Google) : pas faite. L'infrastructure OAuth existe désormais ; il restera le lien entre un compte Google et un compte local, avec ses propres règles de sécurité (fusion de comptes, adresse non vérifiée…).
 - Webhooks sortants : table `webhook_endpoints` créée, pas de code d'envoi.
 - Paiements (Stripe) : non requis par la matrice.
 
@@ -72,6 +101,7 @@ Choix qui diffèrent de `architecture.md` : comptes gérés par l'application (a
 
 ## Checklist de sécurité (Google Agenda inclus)
 
+- [x] Connexion par Google : `sub` comme identité, jeton d'identité vérifié (émetteur, destinataire, expiration, nonce, adresse confirmée), aucune liaison automatique par adresse, pré-détournement neutralisé, déliaison et suppression adaptées aux comptes sans mot de passe
 - [x] Google : jetons chiffrés au repos (AES-256-GCM, lié à l'utilisateur), état OAuth + PKCE, cookie d'état HttpOnly, retour exigeant la session, aucune adresse de redirection dérivée de l'entrée, pas de jeton ni de corps de réponse Google dans les journaux
 - [x] secrets uniquement en variables d'environnement, `.env*` ignoré par git (sauf `.env.example`), rien dans les bundles client
 - [x] entrées validées côté serveur sur chaque action (`lib/validate.ts`, tests dédiés ; la réservation publique valide dans `bookAction`)

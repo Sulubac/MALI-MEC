@@ -6,7 +6,7 @@ Tests : `cd clone && TEST_DATABASE_URL=… npm test` (48 tests sur Postgres : ca
 | ID | date | état | ce qui manque | plus dur que prévu |
 | --- | --- | --- | --- | --- |
 | Shell | 2026-10-18 | fait | | |
-| S01 | 2026-10-18 | partiel | connexion Google | formulaires React 19 : les champs étaient vidés après une erreur de validation, corrigé (saisie conservée) |
+| S01 | 2026-10-19 | partiel | **connexion par Google non vérifiée avec le vrai Google** (testée contre un faux serveur) ; logo et style officiels du bouton Google (texte seul pour l'instant) ; changement de mot de passe depuis le compte (on passe par « mot de passe oublié ») | plus gros que prévu : la sécurité de la liaison de comptes (pré-détournement, adresse recyclée, compte sans mot de passe à supprimer ou délier, nonce, courses entre deux onglets) a demandé plus de travail que le flux OAuth lui-même ; un test à 390 px a révélé un débordement sur la page Compte avec une adresse Google très longue |
 | S02 | 2026-10-19 | partiel | **non vérifié avec le vrai Google** (tout est testé contre un faux serveur Google) ; Outlook ; plusieurs agendas ; pas de notification push de Google (lecture à la demande, cache de 30 s) | plus gros que prévu : trois pannes qui auraient bloqué toutes les réservations d'un hôte (clé de chiffrement perdue, API Calendar désactivée → 403, Google injoignable) ont demandé une politique explicite ; voir `backend.md` |
 | S03 | 2026-10-18 | fait | état « limite de plan » (pas de plans) | suppression : refusée s'il existe des réservations, comme `on delete restrict` |
 | S04 | 2026-10-18 | non fait | choix du type (group, collective, round robin) : seul one-on-one existe | |
@@ -25,5 +25,5 @@ Tests : `cd clone && TEST_DATABASE_URL=… npm test` (48 tests sur Postgres : ca
 - Les écrans reposent sur la recon **déduite** (sans captures de l'original) : états, tailles et textes à confronter à des captures réelles avant de les considérer comme fidèles.
 - `replica/clone-screens/` contient les captures du clone (1440 et 390 px) pour replica-diff. Pas de captures de référence à comparer pour l'instant.
 - TypeScript est épinglé à la version 5 : la version 7 installée par défaut empêchait Next 15 de lire `tsconfig.json`.
-- S04 et S13 non commencés (types multi-hôtes, API). S01 : manque la connexion Google (l'infrastructure OAuth existe désormais, pas la connexion par Google). S02 : voir sa ligne.
+- S04 et S13 non commencés (types multi-hôtes, API). S01 : voir sa ligne. S02 : voir sa ligne.
 - Les champs de date et d'heure natifs prennent le format du navigateur (12 h ou 24 h selon la langue du système) ; aucun format n'est imposé.

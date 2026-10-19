@@ -28,9 +28,17 @@ export async function requireHost(): Promise<{ user: AuthUser; host: Host }> {
   return { user, host };
 }
 
+const sessionOptions = (expires: Date) => ({ httpOnly: true, secure: secure(), sameSite: "lax" as const, path: "/", expires });
+
 export async function startSession(userId: string): Promise<void> {
   const { token, expiresAt } = await createSession(userId);
-  (await cookies()).set(cookieName(), token, { httpOnly: true, secure: secure(), sameSite: "lax", path: "/", expires: expiresAt });
+  (await cookies()).set(cookieName(), token, sessionOptions(expiresAt));
+}
+
+/** Pour une réponse construite à la main (route de retour de Google) : crée la session et pose le cookie sur cette réponse. */
+export async function startSessionOn(res: { cookies: { set: (name: string, value: string, o: ReturnType<typeof sessionOptions>) => unknown } }, userId: string): Promise<void> {
+  const { token, expiresAt } = await createSession(userId);
+  res.cookies.set(cookieName(), token, sessionOptions(expiresAt));
 }
 
 export async function endSession(): Promise<void> {

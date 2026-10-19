@@ -5,10 +5,11 @@ import { revalidatePath } from "next/cache";
 import { after } from "next/server";
 import { randomUUID } from "node:crypto";
 import {
-  checkCredentials, deleteAccount, deleteAllSessions, reissueVerification, requestPasswordReset, resetPassword, signUp, verifyEmail,
+  checkCredentials, deleteAccount, deleteAccountPasswordless, deleteAllSessions, reissueVerification, requestPasswordReset, resetPassword, signUp, verifyEmail,
 } from "@/lib/auth-core";
 import { disconnect, updateOptions } from "@/lib/calendar";
-import { authorizationUrl, GOOGLE_OAUTH_COOKIE, googleConfig, newOAuthState } from "@/lib/google";
+import { authorizationUrl, GOOGLE_LOGIN_COOKIE, GOOGLE_OAUTH_COOKIE, googleConfig, newOAuthState, signInUrl } from "@/lib/google";
+import { completeGoogleSignup, GOOGLE_SIGNUP_COOKIE, openPending, unlinkGoogle } from "@/lib/google-auth";
 import { clearSessionCookie, clientIp, endSession, requireHost, requireUser, startSession } from "@/lib/auth";
 import { appUrl, sendEmail } from "@/lib/email";
 import * as T from "@/lib/email-templates";
@@ -18,7 +19,7 @@ import {
   setEventTypeActive, updateEventType,
 } from "@/lib/store";
 import { CalendarUnavailableError, SlotTakenError, SlotUnavailableError } from "@/lib/types";
-import { parseAvailability, parseEventTypeForm, parseSignup, validatePassword } from "@/lib/validate";
+import { parseAvailability, parseEventTypeForm, parseGoogleProfile, parseSignup, validatePassword } from "@/lib/validate";
 import { processDueJobs } from "@/lib/worker";
 
 export type FormState = { error?: string; fieldErrors?: Record<string, string>; saved?: boolean; unverifiedEmail?: string };
@@ -120,8 +121,15 @@ export async function deleteAccountAction(_prev: FormState, fd: FormData): Promi
   const user = await requireUser();
   if (fd.get("confirm") !== "on") return { fieldErrors: { confirm: "Cochez la case pour confirmer." } };
   if (!(await allowed([[`delete:user:${user.id}`, 5, 3600]]))) return { error: TOO_MANY };
-  // Après vérification du mot de passe seulement : on retire l'accès de l'application à l'agenda Google avant d'effacer.
-  if (!(await deleteAccount(user.id, str(fd)("password"), () => disconnect(user.id)))) return { fieldErrors: { password: "Mot de passe incorrect." } };
+  if (!user.hasPassword) {
+    // Compte créé avec Google : pas de mot de passe à confirmer. On exige l'adresse exacte, et une session récente
+    // (une session volée et ancienne ne suffit pas à supprimer le compte).
+    if (user.sessionAgeSec > 15 * 60) return { error: "Pour supprimer votre compte, reconnectez-vous d'abord : votre session date de plus de 15 minutes." };
+    if (!(await deleteAccountPasswordless(user.id, str(fd)("email"), () => disconnect(user.id)))) return { fieldErrors: { email: "Cette adresse ne correspond pas à celle du compte." } };
+  } else if (!(await deleteAccount(user.id, str(fd)("password"), () => disconnect(user.id)))) {
+    // Après vérification du mot de passe seulement : on retire l'accès de l'application à l'agenda Google avant d'effacer.
+    return { fieldErrors: { password: "Mot de passe incorrect." } };
+  }
   await clearSessionCookie();
   redirect("/signup?deleted=1");
 }
@@ -256,4 +264,55 @@ export async function disconnectGoogleAction() {
   await disconnect(host.id);
   revalidatePath("/integrations");
   redirect("/integrations?disconnected=1");
+}
+
+// ---------- Connexion par Google ----------
+const cookieBase = { httpOnly: true, sameSite: "lax" as const, secure: process.env.NODE_ENV === "production" };
+
+async function startGoogleFlow(purpose: "login" | "link", userId?: string): Promise<never> {
+  const cfg = googleConfig();
+  const back = purpose === "link" ? "/account" : "/login";
+  if (!cfg) redirect(`${back}?error=google_failed`);
+  if (!(await allowed([[`gsignin:ip:${await clientIp()}`, 20, 3600]]))) redirect(`${back}?error=google_rate`);
+  const s = newOAuthState();
+  const nonce = newOAuthState().state;
+  (await cookies()).set(GOOGLE_LOGIN_COOKIE, Buffer.from(JSON.stringify({ state: s.state, verifier: s.verifier, nonce, purpose, userId, exp: Date.now() + 10 * 60_000 })).toString("base64url"),
+    { ...cookieBase, path: "/api/google", maxAge: 600 });
+  redirect(signInUrl(cfg, { state: s.state, challenge: s.challenge, nonce }));
+}
+
+export async function googleSignInAction() {
+  await startGoogleFlow("login");
+}
+
+export async function linkGoogleAction() {
+  const user = await requireUser();
+  await startGoogleFlow("link", user.id);
+}
+
+export async function unlinkGoogleAction() {
+  const user = await requireUser();
+  const r = await unlinkGoogle(user.id);
+  revalidatePath("/account");
+  redirect(r === "needs_password" ? "/account?error=needs_password" : "/account?unlinked=1");
+}
+
+/** Dernière étape de la première connexion avec Google : le profil. L'identité vient du cookie scellé, jamais du formulaire. */
+export async function completeGoogleSignupAction(_prev: FormState, fd: FormData): Promise<FormState> {
+  const pending = openPending((await cookies()).get(GOOGLE_SIGNUP_COOKIE)?.value);
+  if (!pending) redirect("/signup?error=google_expired");
+  if (!(await allowed([[`gsignup:ip:${await clientIp()}`, 10, 3600]]))) return { error: TOO_MANY };
+  const parsed = parseGoogleProfile(str(fd));
+  if (!parsed.ok) return { fieldErrors: parsed.errors };
+  const r = await completeGoogleSignup(pending, parsed.value);
+  if (r.status === "username_taken") return { fieldErrors: { username: "Ce nom est déjà pris." } };
+  (await cookies()).set(GOOGLE_SIGNUP_COOKIE, "", { ...cookieBase, path: "/signup", maxAge: 0 });
+  if (r.status === "email_in_use") redirect("/login?error=google_exists");
+  await startSession(r.userId);
+  redirect("/event-types");
+}
+
+export async function cancelGoogleSignupAction() {
+  (await cookies()).set(GOOGLE_SIGNUP_COOKIE, "", { ...cookieBase, path: "/signup", maxAge: 0 });
+  redirect("/signup");
 }
