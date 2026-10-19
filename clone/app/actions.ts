@@ -1,4 +1,5 @@
 "use server";
+import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { after } from "next/server";
@@ -6,6 +7,8 @@ import { randomUUID } from "node:crypto";
 import {
   checkCredentials, deleteAccount, deleteAllSessions, reissueVerification, requestPasswordReset, resetPassword, signUp, verifyEmail,
 } from "@/lib/auth-core";
+import { disconnect, updateOptions } from "@/lib/calendar";
+import { authorizationUrl, GOOGLE_OAUTH_COOKIE, googleConfig, newOAuthState } from "@/lib/google";
 import { clearSessionCookie, clientIp, endSession, requireHost, requireUser, startSession } from "@/lib/auth";
 import { appUrl, sendEmail } from "@/lib/email";
 import * as T from "@/lib/email-templates";
@@ -14,7 +17,7 @@ import {
   cancelBooking, createBooking, createEventType, deleteEventType, getEventTypeBySlug, getHostByUsername, saveAvailability,
   setEventTypeActive, updateEventType,
 } from "@/lib/store";
-import { SlotTakenError, SlotUnavailableError } from "@/lib/types";
+import { CalendarUnavailableError, SlotTakenError, SlotUnavailableError } from "@/lib/types";
 import { parseAvailability, parseEventTypeForm, parseSignup, validatePassword } from "@/lib/validate";
 import { processDueJobs } from "@/lib/worker";
 
@@ -117,7 +120,8 @@ export async function deleteAccountAction(_prev: FormState, fd: FormData): Promi
   const user = await requireUser();
   if (fd.get("confirm") !== "on") return { fieldErrors: { confirm: "Cochez la case pour confirmer." } };
   if (!(await allowed([[`delete:user:${user.id}`, 5, 3600]]))) return { error: TOO_MANY };
-  if (!(await deleteAccount(user.id, str(fd)("password")))) return { fieldErrors: { password: "Mot de passe incorrect." } };
+  // Après vérification du mot de passe seulement : on retire l'accès de l'application à l'agenda Google avant d'effacer.
+  if (!(await deleteAccount(user.id, str(fd)("password"), () => disconnect(user.id)))) return { fieldErrors: { password: "Mot de passe incorrect." } };
   await clearSessionCookie();
   redirect("/signup?deleted=1");
 }
@@ -165,7 +169,7 @@ const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 export type BookResult =
   | { ok: true; token: string; redirectUrl?: string }
-  | { ok: false; code: "slot_taken" | "slot_unavailable" | "invalid" | "rate_limited"; message: string; fieldErrors?: Record<string, string> };
+  | { ok: false; code: "slot_taken" | "slot_unavailable" | "invalid" | "rate_limited" | "calendar_unavailable"; message: string; fieldErrors?: Record<string, string> };
 
 export async function bookAction(input: {
   username: string; slug: string; startAt: string; guestName: string; guestEmail: string; guestTimezone: string;
@@ -204,6 +208,7 @@ export async function bookAction(input: {
   } catch (e) {
     if (e instanceof SlotTakenError) return { ok: false, code: "slot_taken", message: "Ce créneau vient d'être pris. Choisissez-en un autre." };
     if (e instanceof SlotUnavailableError) return { ok: false, code: "slot_unavailable", message: "Ce créneau n'est plus proposé. Choisissez-en un autre." };
+    if (e instanceof CalendarUnavailableError) return { ok: false, code: "calendar_unavailable", message: "Impossible de vérifier l'agenda de l'organisateur pour le moment. Réessayez dans quelques instants : votre créneau est conservé." };
     throw e;
   }
 }
@@ -223,4 +228,32 @@ export async function cancelBookingAsHostAction(fd: FormData) {
   await cancelBooking(String(fd.get("token")), "host", "", host.id);
   flushJobs();
   revalidatePath("/bookings");
+}
+
+// ---------- Agenda Google (hôte connecté) ----------
+/** Démarre la connexion : état et vérificateur PKCE dans un cookie à durée courte, puis redirection vers Google. */
+export async function connectGoogleAction() {
+  const { user } = await requireHost();
+  const cfg = googleConfig();
+  if (!cfg) redirect("/integrations?error=not_configured");
+  if (!(await allowed([[`gconnect:${user.id}`, 10, 3600]]))) redirect("/integrations?error=rate");
+  const s = newOAuthState();
+  (await cookies()).set(GOOGLE_OAUTH_COOKIE, Buffer.from(JSON.stringify({ state: s.state, verifier: s.verifier, userId: user.id, exp: Date.now() + 10 * 60_000 })).toString("base64url"), {
+    httpOnly: true, sameSite: "lax", secure: process.env.NODE_ENV === "production", path: "/api/google", maxAge: 600, // lax : le retour de Google est une navigation de premier niveau
+  });
+  redirect(authorizationUrl(cfg, { state: s.state, challenge: s.challenge }));
+}
+
+export async function saveCalendarOptionsAction(_prev: FormState, fd: FormData): Promise<FormState> {
+  const { host } = await requireHost();
+  await updateOptions(host.id, { checkBusy: fd.get("checkBusy") === "on", writeBookings: fd.get("writeBookings") === "on" });
+  revalidatePath("/integrations");
+  return { saved: true };
+}
+
+export async function disconnectGoogleAction() {
+  const { host } = await requireHost();
+  await disconnect(host.id);
+  revalidatePath("/integrations");
+  redirect("/integrations?disconnected=1");
 }

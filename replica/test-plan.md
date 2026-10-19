@@ -4,7 +4,7 @@ Build : b28a833 + cartes mobiles (voir bugs.md)   Date : 2026-10-18   Env : loca
 
 Le plan suit les flux de `replica/recon.md` (F01 à F04), plus deux blocs transverses (comptes et sécurité, e-mails). Chaque ligne est un test automatisé dans `clone/e2e/`. Les colonnes « steps » et « expected » du modèle sont fondues dans « cas » : le titre du test dit l'action, puis le résultat attendu. Contrôles ajoutés à **chaque** test : échec sur une erreur JavaScript de page, une erreur de console ou une réponse 5xx (hors 4xx attendus dans les cas négatifs).
 
-Résultat : **81 réussis sur 81** à la dernière exécution complète (82 tests au total avec une capture visuelle non bloquante). Tests unitaires et base : 54 sur 54 (`npm test`). Voir « Stabilité » : une exécution intermédiaire a échoué à cause d'un test, corrigé ensuite.
+Résultat : **99 réussis sur 99** à la dernière exécution complète (101 tests au total avec deux captures visuelles non bloquantes). Tests unitaires et base : 89 sur 89 (`npm test`). Voir « Stabilité » : une exécution intermédiaire a échoué à cause d'un test, corrigé ensuite.
 
 | case | flow | type | cas | auto | result |
 | --- | --- | --- | --- | --- | --- |
@@ -89,6 +89,24 @@ Résultat : **81 réussis sur 81** à la dernière exécution complète (82 test
 | E-E1 | E-mails et file de tâches (transverse) | limite | réservation annulée avant le rappel : aucun rappel, seule l'annulation est envoyée | e2e | réussi |
 | E-E2 | E-mails et file de tâches (transverse) | limite | une erreur d'envoi est retentée puis visible dans la file, sans bloquer la réservation | e2e | réussi |
 | E-E3 | E-mails et file de tâches (transverse) | limite | un invité qui n'a rien réservé ne reçoit rien ; aucune réservation = aucun e-mail | e2e | réussi |
+| G-H1 | S02 agenda Google (faux Google) | nominal | connexion complète : état et PKCE en cookie HttpOnly, retour sur la page, compte affiché, réglages par défaut | e2e | réussi |
+| G-H2 | S02 agenda Google (faux Google) | nominal | un événement Google retire le créneau chez l'invité | e2e | réussi |
+| G-H3 | S02 agenda Google (faux Google) | nominal | réservation : événement créé dans Google (titre, description) ; annulation : événement supprimé | e2e | réussi |
+| G-E1 | S02 agenda Google (faux Google) | limite | événement ajouté pendant que l'invité remplit le formulaire : message clair, créneau retiré, aucune réservation | e2e | réussi |
+| G-E2 | S02 agenda Google (faux Google) | limite | Google injoignable au moment de confirmer : message, sélection conservée, réessayer fonctionne | e2e | réussi |
+| G-E3 | S02 agenda Google (faux Google) | limite | consentement refusé : message clair, rien n'est connecté | e2e | réussi |
+| G-E4 | S02 agenda Google (faux Google) | limite | consentement partiel : lecture seule, option d'écriture désactivée et expliquée | e2e | réussi |
+| G-E5 | S02 agenda Google (faux Google) | limite | aucune autorisation de lecture accordée : refus explicite | e2e | réussi |
+| G-E6 | S02 agenda Google (faux Google) | limite | retour falsifié ou expiré : état invalide refusé, rien n'est enregistré | e2e | réussi |
+| G-E7 | S02 agenda Google (faux Google) | limite | retour sans session : renvoi vers la connexion | e2e | réussi |
+| G-E8 | S02 agenda Google (faux Google) | limite | pas de jeton de rafraîchissement renvoyé : message dédié | e2e | réussi |
+| G-E9 | S02 agenda Google (faux Google) | limite | réglages : décocher la lecture ignore l'agenda, décocher l'écriture n'ajoute plus d'événements | e2e | réussi |
+| G-E10 | S02 agenda Google (faux Google) | limite | accès retiré chez Google : bandeau de reconnexion, e-mail, créneaux non filtrés, reconnexion possible | e2e | réussi |
+| G-E11 | S02 agenda Google (faux Google) | limite | déconnexion : confirmation, accès révoqué chez Google, retour à l'état initial | e2e | réussi |
+| G-E12 | S02 agenda Google (faux Google) | limite | cloisonnement : la connexion d'un hôte est invisible pour un autre | e2e | réussi |
+| G-E13 | S02 agenda Google (faux Google) | limite | suppression du compte : l'accès Google est révoqué | e2e | réussi |
+| G-E14 | S02 agenda Google (faux Google) | limite | la page exige une session | e2e | réussi |
+| G-A | S02 agenda Google (faux Google) | accessibilité | accessibilité et mobile : non connecté, connecté, reconnexion ; 390 px sans débordement | e2e | réussi |
 
 ## Listes de contrôle appliquées à chaque flux
 
@@ -103,6 +121,8 @@ La première exécution complète a révélé 8 échecs (7 vrais bugs, 1 test in
 Trois tests dépendaient de l'heure d'exécution (`F01-H3`, `F01-H5`, `F02-E14` : ils supposaient que le premier créneau du jour n'est pas encore passé). Ils ont échoué ou auraient échoué selon l'heure, ont été rendus déterministes (choix d'une journée située plus loin) et passent. Je n'ai pas pu simuler l'horloge du serveur : les autres tests ne sont pas prouvés indépendants de l'heure à toute heure de la journée.
 
 ## Non automatisé : passe manuelle à faire
+
+- [ ] **Google Agenda avec le vrai Google** (priorité) : les tests de S02 tournent contre un faux serveur écrit par moi (`clone/e2e/fake-google.ts`), qui reproduit ma lecture de la documentation. Ils prouvent que NOTRE code se comporte bien, pas que Google répond comme prévu. À vérifier avec un compte Google réel : consentement (y compris le refus d'une portée), noms de portées, lecture des plages occupées, création et suppression d'événements, retrait de l'accès depuis le compte Google.
 
 Ces points dépendent de services réels ou d'appareils, et n'ont **pas** été vérifiés :
 

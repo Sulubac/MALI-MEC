@@ -3,10 +3,11 @@
 import { query } from "./db.ts";
 import { appUrl, sendEmail } from "./email.ts";
 import * as T from "./email-templates.ts";
-import type { EmailJob } from "./queue.ts";
+import { runCalendarJob } from "./calendar.ts";
+import type { CalendarJob, EmailJob } from "./queue.ts";
 import { getBookingContext } from "./store.ts";
 
-type Job = { id: string; kind: string; payload: EmailJob; attempts: number; max_attempts: number };
+type Job = { id: string; kind: string; payload: EmailJob | CalendarJob; attempts: number; max_attempts: number };
 
 async function claim(): Promise<Job | null> {
   const r = await query<Job>(
@@ -21,6 +22,14 @@ async function claim(): Promise<Job | null> {
 
 /** Envoie l'e-mail d'une tâche. Renvoie « skipped » quand il n'a plus lieu d'être. */
 export async function runEmailJob(p: EmailJob): Promise<"sent" | "skipped"> {
+  if (p.template === "calendar_reconnect") {
+    const u = await query<{ email: string }>("select email from users where id = $1", [p.userId]);
+    if (!u[0]) return "skipped";
+    const still = await query("select 1 from calendar_connections where user_id = $1 and status = 'revoked'", [p.userId]);
+    if (!still.length) return "skipped"; // déjà reconnectée entre-temps
+    await sendEmail({ to: u[0].email, ...T.calendarReconnect(appUrl("/integrations")) });
+    return "sent";
+  }
   const r = await query<{ manage_token: string }>("select manage_token from bookings where id = $1", [p.bookingId]);
   if (!r[0]) return "skipped"; // réservation supprimée (compte supprimé)
   const ctx = await getBookingContext(r[0].manage_token);
@@ -67,8 +76,9 @@ export async function processDueJobs(limit = 25): Promise<{ done: number; retrie
     const job = await claim();
     if (!job) break;
     try {
-      if (job.kind !== "email") throw new Error(`type de tâche non géré : ${job.kind}`);
-      await runEmailJob(job.payload);
+      if (job.kind === "email") await runEmailJob(job.payload as EmailJob);
+      else if (job.kind === "calendar_write") await runCalendarJob(job.payload as CalendarJob);
+      else throw new Error(`type de tâche non géré : ${job.kind}`);
       await query("update jobs set status = 'done', finished_at = now(), last_error = null where id = $1", [job.id]);
       out.done++;
     } catch (e) {

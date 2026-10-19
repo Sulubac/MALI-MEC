@@ -7,7 +7,7 @@ Tests : `cd clone && TEST_DATABASE_URL=… npm test` (48 tests sur Postgres : ca
 | --- | --- | --- | --- | --- |
 | Shell | 2026-10-18 | fait | | |
 | S01 | 2026-10-18 | partiel | connexion Google | formulaires React 19 : les champs étaient vidés après une erreur de validation, corrigé (saisie conservée) |
-| S02 | 2026-10-18 | non fait | connexion calendrier (OAuth, replica-backend) | |
+| S02 | 2026-10-19 | partiel | **non vérifié avec le vrai Google** (tout est testé contre un faux serveur Google) ; Outlook ; plusieurs agendas ; pas de notification push de Google (lecture à la demande, cache de 30 s) | plus gros que prévu : trois pannes qui auraient bloqué toutes les réservations d'un hôte (clé de chiffrement perdue, API Calendar désactivée → 403, Google injoignable) ont demandé une politique explicite ; voir `backend.md` |
 | S03 | 2026-10-18 | fait | état « limite de plan » (pas de plans) | suppression : refusée s'il existe des réservations, comme `on delete restrict` |
 | S04 | 2026-10-18 | non fait | choix du type (group, collective, round robin) : seul one-on-one existe | |
 | S05 | 2026-10-18 | fait | | éditeur de questions (liste de choix, ordre) et aperçu en direct |
@@ -25,5 +25,5 @@ Tests : `cd clone && TEST_DATABASE_URL=… npm test` (48 tests sur Postgres : ca
 - Les écrans reposent sur la recon **déduite** (sans captures de l'original) : états, tailles et textes à confronter à des captures réelles avant de les considérer comme fidèles.
 - `replica/clone-screens/` contient les captures du clone (1440 et 390 px) pour replica-diff. Pas de captures de référence à comparer pour l'instant.
 - TypeScript est épinglé à la version 5 : la version 7 installée par défaut empêchait Next 15 de lire `tsconfig.json`.
-- S02, S04, S13 non commencés : ils dépendent d'OAuth Google, des types multi-hôtes ou d'une API. S01 : manque la connexion Google.
+- S04 et S13 non commencés (types multi-hôtes, API). S01 : manque la connexion Google (l'infrastructure OAuth existe désormais, pas la connexion par Google). S02 : voir sa ligne.
 - Les champs de date et d'heure natifs prennent le format du navigateur (12 h ou 24 h selon la langue du système) ; aucun format n'est imposé.

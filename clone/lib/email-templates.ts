@@ -29,6 +29,13 @@ export function resetPassword(link: string) {
   };
 }
 
+export function calendarReconnect(link: string) {
+  return {
+    subject: "Reconnectez votre agenda Google",
+    text: `Bonjour,\n\nL'accès de Planifier à votre agenda Google ne fonctionne plus (accès retiré, autorisation expirée ou insuffisante).\nTant qu'il n'est pas rétabli, vos rendez-vous ne tiennent plus compte de vos événements Google et ne s'y ajoutent plus.\n\nPour le reconnecter :\n${link}\n`,
+  };
+}
+
 export function bookingConfirmation({ booking: b, eventType: e, host: h, baseUrl }: Ctx) {
   return {
     subject: clean(`Rendez-vous confirmé : ${e.name} avec ${h.displayName}`),

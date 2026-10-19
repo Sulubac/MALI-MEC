@@ -54,6 +54,10 @@ export type Booking = {
 export class SlotTakenError extends Error {
   constructor() { super("slot_taken"); }
 }
+/** L'agenda externe de l'hôte n'a pas pu être consulté : on refuse plutôt que de risquer une double réservation. */
+export class CalendarUnavailableError extends Error {
+  constructor() { super("calendar_unavailable"); }
+}
 export class SlotUnavailableError extends Error {
   constructor() { super("slot_unavailable"); }
 }

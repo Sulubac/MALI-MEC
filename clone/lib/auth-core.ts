@@ -158,9 +158,10 @@ export async function getEmailTokenStatus(token: string, purpose: "verify_email"
 }
 
 /** Supprime réellement le compte et tout ce qui en dépend (cascade) après vérification du mot de passe. */
-export async function deleteAccount(userId: string, password: string): Promise<boolean> {
+export async function deleteAccount(userId: string, password: string, beforeDelete?: () => Promise<void>): Promise<boolean> {
   const r = await query<{ password_hash: string }>("select password_hash from users where id = $1", [userId]);
   if (!r[0] || !(await verifyPassword(password, r[0].password_hash))) return false;
+  if (beforeDelete) await beforeDelete(); // appelé seulement après vérification du mot de passe (ex. révoquer l'accès Google)
   await query("delete from users where id = $1", [userId]);
   return true;
 }

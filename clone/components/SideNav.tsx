@@ -6,6 +6,7 @@ const LINKS = [
   { href: "/event-types", label: "Types d'événements" },
   { href: "/availability", label: "Disponibilités" },
   { href: "/bookings", label: "Réunions" },
+  { href: "/integrations", label: "Calendrier" },
   { href: "/account", label: "Compte" },
 ];
 

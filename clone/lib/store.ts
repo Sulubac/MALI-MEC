@@ -4,7 +4,8 @@ import { randomUUID } from "node:crypto";
 import type { PoolClient } from "pg";
 import { computeSlots, type Override, type Rule } from "./availability.ts";
 import { isExclusionViolation, isUniqueViolation, pool, query, tx, type Q } from "./db.ts";
-import { enqueueEmail } from "./queue.ts";
+import { assertCalendarFree, calendarChecksBusy, externalBusy } from "./calendar.ts";
+import { enqueueCalendarWrite, enqueueEmail } from "./queue.ts";
 import {
   SlotTakenError, SlotUnavailableError,
   type Booking, type EventType, type EventTypeInput, type Host, type Question,
@@ -179,11 +180,11 @@ export async function getBookingContext(token: string): Promise<{ booking: Booki
   return { booking, eventType: toEt(et[0]), host };
 }
 
-async function slotsWith(db: Q, host: Host, et: EventType, now: number): Promise<string[]> {
+async function slotsWith(db: Q, host: Host, et: EventType, now: number, extraBusy: { start: number; end: number }[] = []): Promise<string[]> {
   const busyRows = await db.query(
     `select start_at, end_at from bookings where host_id = $1 and status = 'confirmed' and end_at >= $2`,
     [host.id, new Date(now - 8 * 24 * 3600_000)]);
-  const busy = busyRows.rows.map((b: { start_at: Date; end_at: Date }) => ({ start: b.start_at.getTime(), end: b.end_at.getTime() }));
+  const busy = [...busyRows.rows.map((b: { start_at: Date; end_at: Date }) => ({ start: b.start_at.getTime(), end: b.end_at.getTime() })), ...extraBusy];
   return computeSlots({
     rules: await getRules(host.id, db), overrides: await getOverrides(host.id, db), hostTz: host.timezone, busy, now,
     slot: {
@@ -194,8 +195,10 @@ async function slotsWith(db: Q, host: Host, et: EventType, now: number): Promise
   });
 }
 
-export function listSlots(host: Host, et: EventType, now = Date.now()): Promise<string[]> {
-  return slotsWith(poolQ, host, et, now);
+export async function listSlots(host: Host, et: EventType, now = Date.now()): Promise<string[]> {
+  // Plages occupées de l'agenda externe (si connecté). Affichage seulement : le contrôle qui fait autorité se fait à la réservation.
+  const ext = await externalBusy(host.id, now - 24 * 3600_000, now + (et.maxDaysAhead + 2) * 24 * 3600_000);
+  return slotsWith(poolQ, host, et, now, ext.busy);
 }
 
 /**
@@ -209,6 +212,11 @@ export async function createBooking(
   now = Date.now(),
 ): Promise<Booking> {
   const start = Date.parse(input.startAt);
+  if (await calendarChecksBusy(host.id)) {
+    // Contrôle de l'agenda externe, hors transaction (pas d'appel réseau sous verrou). D'abord le contrôle local, peu coûteux.
+    if (!(await slotsWith(poolQ, host, et, now)).includes(new Date(start).toISOString())) throw new SlotUnavailableError();
+    await assertCalendarFree(host.id, start, start + et.durationMinutes * 60_000, et.bufferBeforeMinutes * 60_000, et.bufferAfterMinutes * 60_000);
+  }
   try {
     return await tx(async (c: PoolClient) => {
       await c.query("select pg_advisory_xact_lock(hashtext($1))", [host.id]);
@@ -225,7 +233,10 @@ export async function createBooking(
           "select id from bookings where manage_token = $1 and host_id = $2 and status = 'confirmed' and lower(guest_email) = lower($3) for update",
           [input.rescheduleToken, host.id, input.guestEmail]);
         previousId = old.rows[0]?.id ?? null;
-        if (previousId) await c.query("update bookings set status='cancelled', cancelled_by='guest', cancel_reason=$2 where id = $1", [previousId, "Remplacé par un nouveau créneau"]);
+        if (previousId) {
+          await c.query("update bookings set status='cancelled', cancelled_by='guest', cancel_reason=$2 where id = $1", [previousId, "Remplacé par un nouveau créneau"]);
+          await enqueueCalendarWrite(c, host.id, "delete", previousId);
+        }
       }
       const r = await c.query<BkRow>(
         `insert into bookings (event_type_id, host_id, start_at, end_at, guest_name, guest_email, guest_timezone, answers, rescheduled_from)
@@ -235,6 +246,7 @@ export async function createBooking(
       const b = toBk(r.rows[0]);
       await enqueueEmail(c, { template: "booking_confirmation", bookingId: b.id, audience: "guest" });
       await enqueueEmail(c, { template: "booking_host_notification", bookingId: b.id, audience: "host" });
+      await enqueueCalendarWrite(c, host.id, "create", b.id);
       const remindAt = new Date(start - 24 * 3600_000);
       if (remindAt.getTime() > now) await enqueueEmail(c, { template: "booking_reminder", bookingId: b.id, audience: "guest" }, { runAt: remindAt });
       return b;
@@ -258,6 +270,7 @@ export async function cancelBooking(token: string, by: "host" | "guest", reason:
       [b.id, by, reason || null]);
     await enqueueEmail(c, { template: "booking_cancelled", bookingId: b.id, audience: "guest" });
     await enqueueEmail(c, { template: "booking_cancelled", bookingId: b.id, audience: "host" });
+    await enqueueCalendarWrite(c, b.hostId, "delete", b.id);
     return toBk(u.rows[0]);
   });
 }
