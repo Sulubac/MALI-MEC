@@ -274,10 +274,11 @@ test.describe("F02 réservation par l'invité", () => {
     const et = await makeType(host);
     const page = await (await newContext(browser, { tz: "Europe/Paris" })).newPage();
     await open(page, `/${username}/${et.slug}`);
-    await page.locator("section[aria-label='Choisir une date'] button[aria-pressed]:not([disabled])").first().click();
+    // 5e jour disponible : une journée entière, quelle que soit l'heure à laquelle le test s'exécute
+    await page.locator("section[aria-label='Choisir une date'] button[aria-pressed]:not([disabled])").nth(4).click();
     const parisFirst = await page.locator("section[aria-label^='Créneaux'] ul button").first().textContent();
     await page.getByLabel("Votre fuseau horaire").selectOption("Asia/Tokyo");
-    await page.locator("section[aria-label='Choisir une date'] button[aria-pressed]:not([disabled])").first().click();
+    await page.locator("section[aria-label='Choisir une date'] button[aria-pressed]:not([disabled])").nth(4).click();
     const tokyoFirst = await page.locator("section[aria-label^='Créneaux'] ul button").first().textContent();
     expect(parisFirst).toBe("09:00");
     expect(tokyoFirst).not.toBe(parisFirst);

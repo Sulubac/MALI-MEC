@@ -1,5 +1,5 @@
 // F04 : l'hôte consulte et gère ses réunions ; cloisonnement entre comptes ; session
-import { test, expect } from "./fixtures.ts";
+import { test, expect, expectAccessible } from "./fixtures.ts";
 import { bookDirect, login, makeHost, makeType, newContext, sql, waitForMail } from "./helpers.ts";
 
 test.describe("F04 tableau de bord de l'hôte", () => {
@@ -99,11 +99,55 @@ test.describe("F04 tableau de bord de l'hôte", () => {
     await page.goto("/bookings");
     const cancel = await page.getByRole("button", { name: /Annuler la réunion/ }).first().boundingBox();
     expect(cancel!.height, "le bouton « Annuler » ne doit pas s'empiler lettre par lettre").toBeLessThan(60);
-    const lines = await page.locator("tbody tr").first().locator("td").first().evaluate((td) => {
+    const lines = await page.getByRole("row").first().getByRole("cell").first().evaluate((td) => {
       const r = document.createRange();
       r.selectNodeContents(td);
       return new Set([...r.getClientRects()].map((x) => Math.round(x.top))).size; // nombre de lignes de texte
     });
     expect(lines, "la date ne doit pas être coupée au milieu des mots (lignes de texte)").toBeLessThanOrEqual(6);
+  });
+
+  test("F04-E7 réunions : cartes empilées sur mobile (sans en-têtes), tableau sur grand écran", async ({ browser }) => {
+    const { host, email } = await makeHost();
+    const et = await makeType(host);
+    await bookDirect(host, et, 0, "un@example.test");
+    await bookDirect(host, et, 3, "deux@example.test");
+    const small = await (await newContext(browser, { width: 390, height: 800 })).newPage();
+    await login(small, email);
+    await small.goto("/bookings");
+    await expect(small.getByRole("columnheader", { name: "Quand" })).toBeHidden();
+    const rows = small.getByRole("row");
+    await expect(rows).toHaveCount(2); // une carte par réunion, pas de ligne d'en-tête
+    const card = (await rows.first().boundingBox())!;
+    expect(card.width, "la carte occupe la largeur de l'écran").toBeGreaterThan(390 - 64);
+    const btn = (await small.getByRole("button", { name: /Annuler la réunion/ }).first().boundingBox())!;
+    expect(btn.width, "le bouton « Annuler » est pleine largeur sur mobile").toBeGreaterThan(card.width * 0.7);
+    expect(await small.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+    expect(await small.locator("main .overflow-x-auto").count(), "plus de défilement horizontal interne").toBe(0);
+
+    const wide = await (await newContext(browser, { width: 1280, height: 800 })).newPage();
+    await login(wide, email);
+    await wide.goto("/bookings");
+    for (const h of ["Quand", "Invité", "Type"]) await expect(wide.getByRole("columnheader", { name: h })).toBeVisible();
+    await expect(wide.getByRole("row")).toHaveCount(3); // en-tête + 2 réunions
+    const wbtn = (await wide.getByRole("button", { name: /Annuler la réunion/ }).first().boundingBox())!;
+    expect(wbtn.width, "sur grand écran le bouton garde sa taille naturelle").toBeLessThan(200);
+  });
+
+  test("F04-A accessibilité de la liste des réunions (cartes et tableau)", async ({ browser }) => {
+    const { host, email } = await makeHost();
+    const et = await makeType(host, { questions: [{ id: "q1", label: "Sujet", kind: "text", options: [], required: false }] });
+    const { createBooking, listSlots } = await import("../lib/store.ts");
+    await createBooking(host, et, { startAt: (await listSlots(host, et))[0], guestName: "Ada", guestEmail: "ada@example.test", guestTimezone: "UTC", answers: { q1: "Un sujet" } });
+    await bookDirect(host, et, 3);
+    for (const width of [390, 1280]) {
+      const page = await (await newContext(browser, { width, height: 800 })).newPage();
+      await login(page, email);
+      for (const vue of ["a-venir", "annulees"]) {
+        await page.goto(`/bookings?vue=${vue}`);
+        await expect(page.getByRole("heading", { name: "Réunions" })).toBeVisible();
+        await expectAccessible(page);
+      }
+    }
   });
 });

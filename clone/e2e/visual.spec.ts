@@ -20,4 +20,8 @@ test("captures visuelles", async ({ browser }) => {
     await page.goto(p); await page.waitForTimeout(300);
     await page.screenshot({ path: `${OUT}/host-${n}-390.png`, fullPage: true });
   }
+  const wide = await (await newContext(browser, { width: 1280, height: 800 })).newPage();
+  await login(wide, email);
+  await wide.goto("/bookings");
+  await wide.screenshot({ path: `${OUT}/host-bookings-1280.png`, fullPage: true });
 });

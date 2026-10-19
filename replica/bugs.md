@@ -11,7 +11,7 @@ Build testé : `b6220e5` (état avant la suite de tests), corrigés dans **b28a8
 | BUG-005 | S3 | Fichier .ics : « ; » non échappé et lignes non pliées | corrigé (b28a833) |
 | BUG-006 | S4 | E-mail « un compte existe déjà » envoyé à l'adresse telle que saisie | corrigé (b28a833) |
 | BUG-007 | S4 | Toutes les pages ont le même titre « Planifier » | corrigé (b28a833) |
-| BUG-008 | S3 | Tableau des réunions illisible à 390 px | corrigé (b28a833) |
+| BUG-008 | S3 | Tableau des réunions illisible à 390 px | corrigé (b28a833), refait en cartes (voir ci-dessous) |
 
 ### BUG-001: boutons « Retirer » et « Copier sur lun.–ven. » : le nom accessible ne contient pas le texte visible
 
@@ -136,7 +136,7 @@ Steps
 Expected: date lisible, bouton « Annuler » lisible, adresse sur une ligne.
 Actual: (a) avec une règle globale `overflow-wrap: anywhere`, la date et « Annuler » s'empilaient lettre par lettre ; (b) même sans cela, les colonnes étroites coupaient `court@exampl e.test`. (a) est une régression introduite par le premier correctif de BUG-002, trouvée à la passe visuelle.
 Evidence: `replica/test-screens/host-bookings-390.png`, tests `F04-E5` (géométrie du bouton et lignes de la date) et `F04-E6`.
-Status: fixed in b28a833 (règle limitée au contenu utilisateur, tableau à largeur minimale avec défilement interne).
+Status: fixed in b28a833 (règle limitée au contenu utilisateur, tableau à largeur minimale avec défilement interne). Cette solution gardait un défilement horizontal interne et des colonnes serrées : remplacée ensuite par des cartes empilées sous 768 px (tableau au-delà), un seul DOM avec rôles ARIA de tableau. Tests : `F04-E7` (cartes sur mobile, en-têtes sur grand écran, bouton pleine largeur, pas de défilement interne), `F04-A` (axe aux deux largeurs), `F04-E5` et `F04-E6` conservés. Captures : `replica/test-screens/host-bookings-390.png` et `-1280.png`.
 
 ## À vérifier (non reproduit ou hors de portée)
 

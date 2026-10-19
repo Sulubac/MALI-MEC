@@ -64,7 +64,7 @@ test.describe("F01 mise en place de l'hôte", () => {
     const enabled = g.locator("section[aria-label='Choisir une date'] button[aria-pressed]:not([disabled])");
     await expect(enabled.first()).toBeVisible();
     for (const label of await enabled.evaluateAll((els) => els.map((e) => e.getAttribute("aria-label")))) expect(label).toMatch(/^lundi/);
-    await enabled.first().click();
+    await enabled.nth(1).click(); // le 2e lundi : jamais la journée en cours, dont les premiers créneaux ont pu passer
     await expect(g.locator("section[aria-label^='Créneaux'] ul button")).toHaveText(["10:00", "10:30"]);
   });
 
@@ -86,16 +86,20 @@ test.describe("F01 mise en place de l'hôte", () => {
   test("F01-H5 changer de fuseau décale les créneaux proposés", async ({ page }) => {
     const { host, email } = await makeHost("Europe/Paris");
     const et = await makeType(host);
-    const { listSlots } = await import("../lib/store.ts");
-    const before = (await listSlots(host, et))[0];
+    const { listSlots, getHostById } = await import("../lib/store.ts");
+    // Premier créneau d'une journée située au moins 3 jours plus loin : indépendant de l'heure d'exécution du test
+    const firstOfDay = (slots: string[]) => {
+      const day = slots.find((x) => Date.parse(x) > Date.now() + 3 * 24 * 3600_000)!.slice(0, 10);
+      return slots.find((x) => x.startsWith(day))!;
+    };
+    const before = firstOfDay(await listSlots(host, et));
+    expect([7, 8]).toContain(new Date(before).getUTCHours()); // 09:00 à Paris = 07:00 ou 08:00 UTC selon la saison
     await login(page, email);
     await page.goto("/availability");
     await page.getByLabel("Votre fuseau horaire").selectOption("Asia/Tokyo");
     await page.getByRole("button", { name: "Enregistrer" }).click();
     await expect(page.getByText("Disponibilités enregistrées")).toBeVisible();
-    const { getHostById } = await import("../lib/store.ts");
-    const after = (await listSlots((await getHostById(host.id))!, et))[0];
-    expect(after).not.toBe(before);
+    const after = firstOfDay(await listSlots((await getHostById(host.id))!, et));
     expect(new Date(after).getUTCHours()).toBe(0); // 09:00 à Tokyo = 00:00 UTC
   });
 

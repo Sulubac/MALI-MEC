@@ -74,7 +74,7 @@ Toast
 DataTable (réunions planifiées)
   states    chargement, vide, filtré, ligne annulée (barrée + libellé), tri, pagination
   tokens    border, surface en-tête
-  a11y      <table> sémantique, <th scope>, tri annoncé, cartes empilées sous 640px
+  a11y      sémantique de tableau conservée via rôles ARIA (table, row, columnheader, cell) ; sous 768px chaque ligne devient une carte empilée (date en tête, invité, type, bouton pleine largeur), sans en-têtes ni défilement horizontal
   used on   S12
 
 SideNav / Header

@@ -1,10 +1,10 @@
 # Plan de test : Planifier (clone de planification)
 
-Build : b28a833   Date : 2026-10-18   Env : local, Postgres 16 jetable, serveur de production (`next start`), Chromium (Playwright 1.56)
+Build : b28a833 + cartes mobiles (voir bugs.md)   Date : 2026-10-18   Env : local, Postgres 16 jetable, serveur de production (`next start`), Chromium (Playwright 1.56)
 
 Le plan suit les flux de `replica/recon.md` (F01 à F04), plus deux blocs transverses (comptes et sécurité, e-mails). Chaque ligne est un test automatisé dans `clone/e2e/`. Les colonnes « steps » et « expected » du modèle sont fondues dans « cas » : le titre du test dit l'action, puis le résultat attendu. Contrôles ajoutés à **chaque** test : échec sur une erreur JavaScript de page, une erreur de console ou une réponse 5xx (hors 4xx attendus dans les cas négatifs).
 
-Résultat : **79 réussis sur 79** à la dernière exécution complète (80 tests au total avec une capture visuelle non bloquante). Tests unitaires et base : 54 sur 54 (`npm test`). Voir « Stabilité » : une exécution intermédiaire a échoué à cause d'un test, corrigé ensuite.
+Résultat : **81 réussis sur 81** à la dernière exécution complète (82 tests au total avec une capture visuelle non bloquante). Tests unitaires et base : 54 sur 54 (`npm test`). Voir « Stabilité » : une exécution intermédiaire a échoué à cause d'un test, corrigé ensuite.
 
 | case | flow | type | cas | auto | result |
 | --- | --- | --- | --- | --- | --- |
@@ -65,6 +65,8 @@ Résultat : **79 réussis sur 79** à la dernière exécution complète (80 test
 | F04-E4 | F04 l'hôte gère ses réunions | limite | déconnexion dans un onglet : l'autre onglet est renvoyé à la connexion au prochain clic | e2e | réussi |
 | F04-E6 | F04 l'hôte gère ses réunions | limite | tableau des réunions à 390 px : une adresse e-mail courte reste sur une ligne | e2e | réussi |
 | F04-E5 | F04 l'hôte gère ses réunions | limite | nom d'invité très long sans espace : pas de débordement horizontal à 390 px | e2e | réussi |
+| F04-E7 | F04 l'hôte gère ses réunions | limite | réunions : cartes empilées sur mobile (sans en-têtes), tableau sur grand écran | e2e | réussi |
+| F04-A | F04 l'hôte gère ses réunions | accessibilité | accessibilité de la liste des réunions (cartes et tableau) | e2e | réussi |
 | A-H1 | Comptes et sécurité (transverse) | nominal | lien de confirmation : à usage unique, un nouveau lien invalide l'ancien, le simple chargement ne le consomme pas | e2e | réussi |
 | A-H2 | Comptes et sécurité (transverse) | nominal | mot de passe oublié : même réponse pour une adresse inconnue, lien unique, sessions coupées | e2e | réussi |
 | A-E1 | Comptes et sécurité (transverse) | limite | e-mail saisi avec majuscules et espaces : la connexion fonctionne | e2e | réussi |
@@ -95,6 +97,10 @@ Vide, très long (80 à 120 caractères sans espace), accents et emoji, adresse 
 ## Stabilité
 
 La première exécution complète a révélé 8 échecs (7 vrais bugs, 1 test instable sur le titre de page). Après correction, deux tests se sont révélés instables **à cause des tests** (attente d'un rafraîchissement de la liste de créneaux ; adresses réutilisées déclenchant la limite de débit lors des répétitions) : corrigés, puis `F02-E1` et `F02-N4` répétés 6 fois sans échec, et une dernière exécution complète entièrement verte. Aucun test n'est ignoré ni désactivé. Le nombre d'exécutions complètes consécutives reste faible : relancer la suite plusieurs fois avant de la considérer comme stable.
+
+## Tests dépendants de l'heure
+
+Trois tests dépendaient de l'heure d'exécution (`F01-H3`, `F01-H5`, `F02-E14` : ils supposaient que le premier créneau du jour n'est pas encore passé). Ils ont échoué ou auraient échoué selon l'heure, ont été rendus déterministes (choix d'une journée située plus loin) et passent. Je n'ai pas pu simuler l'horloge du serveur : les autres tests ne sont pas prouvés indépendants de l'heure à toute heure de la journée.
 
 ## Non automatisé : passe manuelle à faire
 
