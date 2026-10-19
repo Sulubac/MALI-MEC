@@ -21,5 +21,5 @@ Webhooks (créé/annulé),integrations,could,yes,no,
 Workflows (rappels et suivis),notifications,could,yes,no,Plans payants
 Formulaires de routage,teams,could,yes,no,Plan Teams
 Paiement à la réservation,payments,could,yes,no,À vérifier
-SSO / administration d'équipe,enterprise,skip,yes,no,Hors périmètre
-Réseau d'utilisateurs et marque Calendly,brand,skip,yes,no,Non clonable
+SSO / administration d'équipe,enterprise,could,yes,skip,"Hors périmètre : entreprise, hors cible de ce clone"
+Réseau d'utilisateurs et marque Calendly,brand,could,yes,skip,"Non clonable : le réseau, la marque et les contenus appartiennent à l'original"
