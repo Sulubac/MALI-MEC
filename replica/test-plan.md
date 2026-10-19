@@ -1,10 +1,10 @@
 # Plan de test : Planifier (clone de planification)
 
-Build : b28a833 + cartes mobiles (voir bugs.md)   Date : 2026-10-18   Env : local, Postgres 16 jetable, serveur de production (`next start`), Chromium (Playwright 1.56)
+Build : bcddb6c (deuxième passe après Google Agenda)   Date : 2026-10-18   Env : local, Postgres 16 jetable, serveur de production (`next start`), Chromium (Playwright 1.56)
 
 Le plan suit les flux de `replica/recon.md` (F01 à F04), plus deux blocs transverses (comptes et sécurité, e-mails). Chaque ligne est un test automatisé dans `clone/e2e/`. Les colonnes « steps » et « expected » du modèle sont fondues dans « cas » : le titre du test dit l'action, puis le résultat attendu. Contrôles ajoutés à **chaque** test : échec sur une erreur JavaScript de page, une erreur de console ou une réponse 5xx (hors 4xx attendus dans les cas négatifs).
 
-Résultat : **99 réussis sur 99** à la dernière exécution complète (101 tests au total avec deux captures visuelles non bloquantes). Tests unitaires et base : 89 sur 89 (`npm test`). Voir « Stabilité » : une exécution intermédiaire a échoué à cause d'un test, corrigé ensuite.
+Résultat : **113 réussis sur 113** à la dernière exécution complète (115 tests au total avec deux captures visuelles non bloquantes). Tests unitaires et base : 95 sur 95 (dont 38 sur Google : client, OAuth, plages occupées, écriture, révocation, concurrence, changement d'heure) (`npm test`). Voir « Stabilité » : une exécution intermédiaire a échoué à cause d'un test, corrigé ensuite.
 
 | case | flow | type | cas | auto | result |
 | --- | --- | --- | --- | --- | --- |
@@ -107,6 +107,20 @@ Résultat : **99 réussis sur 99** à la dernière exécution complète (101 tes
 | G-E13 | S02 agenda Google (faux Google) | limite | suppression du compte : l'accès Google est révoqué | e2e | réussi |
 | G-E14 | S02 agenda Google (faux Google) | limite | la page exige une session | e2e | réussi |
 | G-A | S02 agenda Google (faux Google) | accessibilité | accessibilité et mobile : non connecté, connecté, reconnexion ; 390 px sans débordement | e2e | réussi |
+| G2-E1 | S02 agenda Google, passe 2 (faux Google) | limite | Google très lent : la page publique reste réactive (moins de 5 s), les créneaux s'affichent | e2e | réussi |
+| G2-E2 | S02 agenda Google, passe 2 (faux Google) | limite | paramètre d'erreur hostile ou inconnu (__proto__, constructor, balises) : aucun message vide ni injecté | e2e | réussi |
+| G2-E3 | S02 agenda Google, passe 2 (faux Google) | limite | adresse de compte Google très longue : pas de débordement à 390 px, connecté comme révoqué | e2e | réussi |
+| G2-E4 | S02 agenda Google, passe 2 (faux Google) | limite | le cookie d'état d'un autre utilisateur ne sert à rien (lié à l'utilisateur) | e2e | réussi |
+| G2-E5 | S02 agenda Google, passe 2 (faux Google) | limite | cookie d'état expiré : refusé | e2e | réussi |
+| G2-E6 | S02 agenda Google, passe 2 (faux Google) | limite | rejouer l'adresse de retour après une connexion réussie : refusé, la connexion reste intacte | e2e | réussi |
+| G2-E7 | S02 agenda Google, passe 2 (faux Google) | limite | reconnexion avec un autre compte Google : le nouveau compte est affiché et reçoit les événements | e2e | réussi |
+| G2-E8 | S02 agenda Google, passe 2 (faux Google) | limite | limite de débit de la connexion : au-delà de 10 essais par heure, message clair | e2e | réussi |
+| G2-E9 | S02 agenda Google, passe 2 (faux Google) | limite | l'hôte annule depuis son tableau de bord : l'événement Google est supprimé | e2e | réussi |
+| G2-E10 | S02 agenda Google, passe 2 (faux Google) | limite | replanification par l'invité : l'ancien événement disparaît, le nouveau est créé | e2e | réussi |
+| G2-E11 | S02 agenda Google, passe 2 (faux Google) | limite | clavier seul : connecter, régler, enregistrer, sans souris | e2e | réussi |
+| G2-E12 | S02 agenda Google, passe 2 (faux Google) | limite | enregistrer les réglages hors ligne : message clair, la saisie est conservée | e2e | réussi |
+| G2-E13 | S02 agenda Google, passe 2 (faux Google) | limite | le détail technique d'une erreur Google n'est jamais montré à l'utilisateur ni écrit dans les journaux d'erreur HTTP | e2e | réussi |
+| G2-A | S02 agenda Google, passe 2 (faux Google) | accessibilité | accessibilité des messages d'erreur et d'état de la page Calendrier | e2e | réussi |
 
 ## Listes de contrôle appliquées à chaque flux
 
@@ -119,6 +133,10 @@ La première exécution complète a révélé 8 échecs (7 vrais bugs, 1 test in
 ## Tests dépendants de l'heure
 
 Trois tests dépendaient de l'heure d'exécution (`F01-H3`, `F01-H5`, `F02-E14` : ils supposaient que le premier créneau du jour n'est pas encore passé). Ils ont échoué ou auraient échoué selon l'heure, ont été rendus déterministes (choix d'une journée située plus loin) et passent. Je n'ai pas pu simuler l'horloge du serveur : les autres tests ne sont pas prouvés indépendants de l'heure à toute heure de la journée.
+
+## Deuxième passe (après Google Agenda)
+
+La suite de référence a d'abord été relancée sur le code de Google Agenda : 100 réussis sur 101, un échec d'accessibilité intermittent (titre de page vide pendant une navigation, déjà vu une fois) **qui est un défaut du test, pas de l'application** : l'analyse est désormais précédée d'une attente de titre. Ensuite 14 cas ont été ajoutés (`G2-…`) et 6 tests d'intégration visant des hypothèses de défauts : 5 hypothèses sur 11 se sont révélées exactes (BUG-009 à 013), trois échecs étaient des erreurs de mes tests (corrigées), les autres cas passent. Cas qui passent sans défaut : réservations simultanées avec agenda connecté (une seule réussit, un seul événement), changement d'heure d'automne, accents, emoji et nom de 120 caractères, annulation par l'hôte, replanification, clavier seul, hors ligne, cookie d'état d'un autre utilisateur ou expiré, rejeu de l'adresse de retour, limite de débit, détail technique d'erreur jamais montré.
 
 ## Non automatisé : passe manuelle à faire
 
