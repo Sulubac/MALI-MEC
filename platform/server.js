@@ -201,20 +201,31 @@ const AGENT_NAMES = {
 };
 
 // Optional real LLM call (server-side only — key never leaves the server)
-async function llmSummary(agentId, context){
+// Raw HTTP to match the rest of this file (no SDK dependency on the VPS).
+const CLAUDE_MODEL = process.env.ANTHROPIC_MODEL || 'claude-opus-5-5';
+const ANTHROPIC_URL = (process.env.ANTHROPIC_BASE_URL || 'https://api.anthropic.com') + '/v1/messages';
+async function callClaude({ system, user, maxTokens = 1200, effort = 'low' }){
   const key = process.env.ANTHROPIC_API_KEY;
   if(!key) return null;
   try{
-    const r = await fetch('https://api.anthropic.com/v1/messages', {
+    const body = { model: CLAUDE_MODEL, max_tokens: maxTokens, output_config: { effort },
+      messages: [{ role: 'user', content: user }] };
+    if(system) body.system = system;
+    const r = await fetch(ANTHROPIC_URL, {
       method:'POST',
       headers:{ 'content-type':'application/json', 'x-api-key':key, 'anthropic-version':'2023-06-01' },
-      body: JSON.stringify({ model:'claude-sonnet-5', max_tokens:300,
-        messages:[{ role:'user', content:`Tu es l'agent "${AGENT_NAMES[agentId]}" d'une plateforme événementielle à Djibouti. En 2 phrases max, en français, résume une action utile que tu viens d'accomplir. Contexte: ${context||'—'}` }] })
+      body: JSON.stringify(body)
     });
     if(!r.ok) return null;
     const j = await r.json();
-    return (j.content && j.content[0] && j.content[0].text) ? j.content[0].text.trim() : null;
+    if(j.stop_reason === 'refusal') return null;
+    const txt = (j.content || []).filter(b => b.type === 'text').map(b => b.text).join('').trim();
+    return txt || null;
   }catch(e){ return null; }
+}
+async function llmSummary(agentId, context){
+  return callClaude({ maxTokens: 220,
+    user:`Tu es l'agent "${AGENT_NAMES[agentId]}" d'une plateforme événementielle à Djibouti. En 2 phrases max, en français, résume une action utile que tu viens d'accomplir. Contexte: ${context||'—'}` });
 }
 
 app.post('/api/agents/:id/run', auth, canWrite, async (req, res) => {
@@ -224,6 +235,39 @@ app.post('/api/agents/:id/run', auth, canWrite, async (req, res) => {
   const msg = live || AGENT_OUTPUTS[id];
   const log = store.putDoc('agentLog', { d: store.now(), agent: AGENT_NAMES[id], msg }, req.user.email);
   res.json({ output: msg, live: !!live, log });
+});
+
+/* ---------- IA : rédaction de proposition commerciale (Agents 3 + 5) ---------- */
+app.post('/api/ai/proposal', auth, canWrite, async (req, res) => {
+  const { prospectId, tier='Professionnelle', lang='Français', tone='Commercial', type='Événement' } = req.body || {};
+  const p = store.getCollection('prospects').find(x => x.id === prospectId);
+  if(!p) return res.status(404).json({ error: 'Prospect introuvable' });
+  const opp = store.getCollection('opportunities').find(o => o.id === p.opId) || {};
+  const ctx = `Client: ${p.org}. Contact: ${p.contact} (${p.fonction||'—'}). Secteur: ${p.sector}. Type d'événement: ${type}. Besoin détecté: ${opp.title||'—'}${opp.summary?' — '+opp.summary:''}. Budget estimé: ${p.value} DJF.`;
+  const text = await callClaude({
+    system: `Tu es un expert en organisation d'événements à Djibouti. Tu rédiges des propositions commerciales professionnelles, structurées et convaincantes. Réponds uniquement avec le contenu de la proposition, en ${lang}, sur un ton ${tone}. Utilise des montants en DJF cohérents.`,
+    user: `Rédige une proposition commerciale (formule « ${tier} ») pour ce client.\n${ctx}\n\nStructure attendue : 1) Contexte & compréhension du besoin ; 2) Concept proposé ; 3) Services inclus ; 4) Déroulé / programme ; 5) Budget indicatif (cohérent avec ${p.value} DJF) ; 6) Conditions & prochaines étapes. Personnalise selon le client. Environ 400–600 mots.`,
+    maxTokens: 2000, effort: 'low'
+  });
+  res.json({ live: !!text, text: text || `Proposition « ${tier} » pour ${p.org} — ${type}.\n\n(Brouillon modèle — activez l'IA côté serveur pour une rédaction personnalisée.)` });
+});
+
+/* ---------- IA : rédaction d'un email de prospection (Agent 7) ---------- */
+app.post('/api/ai/outreach', auth, canWrite, async (req, res) => {
+  const { prospectId } = req.body || {};
+  const p = store.getCollection('prospects').find(x => x.id === prospectId);
+  if(!p) return res.status(404).json({ error: 'Prospect introuvable' });
+  const opp = store.getCollection('opportunities').find(o => o.id === p.opId) || {};
+  const text = await callClaude({
+    system: `Tu rédiges des emails de prospection B2B courtois, personnalisés et concis pour une agence événementielle à Djibouti. Réponds en français. Format exact : première ligne « Objet: ... », puis une ligne vide, puis le corps de l'email (120–180 mots).`,
+    user: `Prospect : ${p.org}, contact ${p.contact} (${p.fonction||'—'}). Événement détecté : ${opp.title||'leur événement'} (${opp.type||''}). Propose un rendez-vous de 20 minutes. Signature : ${req.user.name}, Djibouti Event Intelligence.`,
+    maxTokens: 600
+  });
+  if(!text) return res.json({ live:false, subject:`${opp.type||'Votre événement'} à Djibouti — accompagnement`, body:`Bonjour ${p.contact},\n\nNous serions honorés d'accompagner ${p.org}.\n\nCordialement,\n${req.user.name}` });
+  const m = text.match(/^\s*Objet\s*:\s*(.+)/i);
+  const subject = m ? m[1].trim() : `${opp.type||'Votre événement'} à Djibouti`;
+  const bodyTxt = text.replace(/^\s*Objet\s*:.*(\r?\n)?/i, '').trim();
+  res.json({ live:true, subject, body: bodyTxt });
 });
 
 /* veille scan — adds a new opportunity with a computed score (dedup-aware) */

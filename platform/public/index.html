@@ -916,17 +916,21 @@ function openNewProposal(prospectId){
     </div>
   `, [{t:'Annuler',c:'ghost',fn:'closeModal()'},{t:'⚡ Générer (Agents 3+5)',c:'primary',fn:'generateProposal()'}]);
 }
-function generateProposal(){
+async function generateProposal(){
   const pid=$('#pp-prospect').value; const p=DB.prospects.find(x=>x.id===pid);
   const tier=$('#pp-tier').value; const lang=$('#pp-lang').value; const tone=$('#pp-tone').value; const type=$('#pp-type').value;
   const mult = tier==='Premium'?1.35:tier==='Professionnelle'?1:0.72;
   const value = Math.round((p.value*mult)/1000)*1000;
   const margin = tier==='Premium'?27:tier==='Professionnelle'?24:22;
-  const pr={id:uid('prop'), prospectId:pid, title:`${type} — ${p.org} — ${tier}`, tier, lang, tone, value, margin, status:'À vérifier', createdBy:'Agent Writing', validatedBy:null, validatedAt:null, sentAt:null, type};
+  const pr={id:uid('prop'), prospectId:pid, title:`${type} — ${p.org} — ${tier}`, tier, lang, tone, value, margin, status:'À vérifier', createdBy:'Agent Writing', validatedBy:null, validatedAt:null, sentAt:null, type, body:'', aiLive:false};
+  // Rédaction IA (côté serveur). Indicateur de chargement.
+  const btn=document.querySelector('.modal-f .btn.primary'); if(btn){ btn.disabled=true; btn.textContent='⏳ Rédaction IA…'; }
+  try{ const r=await api('POST','/ai/proposal', {prospectId:pid, tier, lang, tone, type}); pr.body=r.text; pr.aiLive=r.live; }
+  catch(e){ /* garde un corps vide, modèle de secours à l'affichage */ }
   DB.proposals.unshift(pr);
   DB.approvals.unshift({id:uid('ap'), kind:'Proposition', ref:pr.title, prospect:p.org, agent:'Writing + Compliance', preparedBy:'IA', checks:{name:true,contact:!!p.email,margin:margin>=DB.settings.marginMin,antispam:true,consent:p.consent!=='À obtenir',legal:true}, status:'À vérifier', created:new Date().toISOString(), risk: margin<DB.settings.marginMin?'Marge sous le seuil':(p.consent==='À obtenir'?'Consentement à confirmer':'—')});
-  DB.agentLog.unshift({d:new Date().toISOString(), agent:'Proposal Strategy + Writing', msg:`Proposition ${tier} générée pour ${p.org} (${lang}, ${tone})`});
-  save(); closeModal(); toast('Proposition générée — en attente de validation'); openProposal(pr.id);
+  DB.agentLog.unshift({d:new Date().toISOString(), agent:'Proposal Strategy + Writing', msg:`Proposition ${tier} ${pr.aiLive?'(rédigée par IA)':'(modèle)'} pour ${p.org} (${lang}, ${tone})`});
+  save(); closeModal(); toast(pr.aiLive?'Proposition rédigée par l\'IA — à valider':'Proposition générée — à valider'); openProposal(pr.id);
 }
 function openProposal(id){
   const pr=DB.proposals.find(x=>x.id===id); const p=DB.prospects.find(x=>x.id===pr.prospectId)||{};
@@ -950,6 +954,7 @@ function openProposal(id){
     <div style="margin-top:14px"><div class="lbl" style="font-weight:700;font-size:12px;margin-bottom:6px">📋 Structure du document généré</div>
       <div style="display:flex;gap:6px;flex-wrap:wrap">${['Couverture','Contexte','Compréhension du besoin','Concept','Programme','Méthodologie','Périmètre','Planning','Équipe','Budget','Conditions','Validité','Prochaines étapes'].map(s=>`<span class="tag">${s}</span>`).join('')}</div>
     </div>
+    ${pr.body?`<div style="margin-top:14px"><div class="lbl" style="font-weight:700;font-size:12px;margin-bottom:6px">${pr.aiLive?'✨ Proposition rédigée par l\'IA':'📝 Proposition (modèle)'}</div><div style="white-space:pre-wrap;font-size:13px;line-height:1.6;padding:14px;background:var(--bg);border:1px solid var(--line);border-radius:10px;max-height:320px;overflow:auto">${(pr.body||'').replace(/</g,'&lt;')}</div></div>`:''}
     ${pr.validatedBy?`<div class="note green" style="margin-top:14px"><span class="i">✅</span><span>Validé par <b>${pr.validatedBy}</b> le ${dateFR(pr.validatedAt)}${pr.sentAt?` · Envoyé le ${dateFR(pr.sentAt)}`:''}</span></div>`:`<div class="note" style="margin-top:14px"><span class="i">⏳</span><span>En attente de validation humaine avant tout envoi.</span></div>`}
   `, [
     {t:'📄 Exporter PDF',c:'ghost',fn:`exportDoc('${pr.id}')`},
@@ -997,10 +1002,20 @@ function prepareOutreach(pid){
   modal('📤 Préparer une communication', `
     <div class="row"><div class="field"><label>Canal</label><select id="ou-chan"><option>Email</option><option>WhatsApp Business (officiel)</option><option>SMS</option><option>Lettre commerciale</option></select></div><div class="field"><label>Destinataire</label><input value="${p.email||p.phone||p.org}" disabled /></div></div>
     <div class="field"><label>Objet</label><input id="ou-subj" value="${o?o.type:'Votre événement'} à Djibouti — proposition d'accompagnement" /></div>
-    <div class="field"><label>Message (généré par Agent 7)</label><textarea id="ou-body" style="min-height:180px">${body}</textarea></div>
+    <div class="field"><label>Message (généré par Agent 7)</label><textarea id="ou-body" style="min-height:180px">${body}</textarea>
+      <button class="btn sm" style="margin-top:7px" id="aiMailBtn" onclick="aiWriteOutreach('${pid}')">✨ Rédiger avec l'IA</button></div>
     <div class="field"><label>Pièces jointes validées</label><div style="display:flex;gap:7px;flex-wrap:wrap"><span class="chip on">Proposition.pdf</span><span class="chip">Portfolio.pdf</span></div></div>
     <div class="note"><span class="i">🛡️</span><span>L'Agent Compliance vérifiera : exactitude du contact, objet, ton, doublons, fréquence de relance, désabonnement, consentement. <b>Envoi impossible sans validation humaine.</b></span></div>
   `, [{t:'Annuler',c:'ghost',fn:'closeModal()'},{t:'✅ Envoyer en validation',c:'primary',fn:`queueOutreach('${pid}')`}]);
+}
+async function aiWriteOutreach(pid){
+  const btn=$('#aiMailBtn'); if(btn){ btn.disabled=true; btn.textContent='⏳ Rédaction IA…'; }
+  try{ const r=await api('POST','/ai/outreach', {prospectId:pid});
+    if($('#ou-subj')) $('#ou-subj').value=r.subject;
+    if($('#ou-body')) $('#ou-body').value=r.body;
+    toast(r.live?'Email rédigé par l\'IA':'Modèle inséré (IA indisponible)', r.live?'ok':'info');
+  }catch(e){ toast(e.message,'err'); }
+  if(btn){ btn.disabled=false; btn.textContent='✨ Rédiger avec l\'IA'; }
 }
 function queueOutreach(pid){
   const p=DB.prospects.find(x=>x.id===pid);
