@@ -503,6 +503,22 @@ function statusBadge(s){ const g={'Gagné':'b-green','Réponse reçue':'b-green'
 
 /* ---------- LOGIN (real auth against the API) ---------- */
 let CUR = null;
+/* ---------- RBAC : vues + capacités par rôle (le serveur applique aussi ces règles) ---------- */
+const ALL_VIEWS = ['dashboard','agents','veille','crm','proposals','outreach','events','finance','validation','audit','users','parametres'];
+const RBAC = {
+  super:   { views:ALL_VIEWS, caps:['manageUsers','write','validate','finance','settings','scan'] },
+  dg:      { views:['dashboard','agents','veille','crm','proposals','outreach','events','finance','validation','audit','parametres'], caps:['write','validate','finance','settings','scan'] },
+  dc:      { views:['dashboard','agents','veille','crm','proposals','outreach','validation','audit'], caps:['write','validate','scan'] },
+  com:     { views:['dashboard','agents','veille','crm','proposals','outreach'], caps:['write','scan'] },
+  event:   { views:['dashboard','crm','proposals','events'], caps:['write'] },
+  projet:  { views:['dashboard','events'], caps:['write'] },
+  finance: { views:['dashboard','crm','finance','audit'], caps:['finance'] },
+  comm:    { views:['dashboard','crm','outreach'], caps:['write'] },
+  op:      { views:['dashboard','events'], caps:['write'] },
+  lecteur: { views:['dashboard','crm','events','finance'], caps:[] },
+};
+function can(cap){ return !!(CUR && RBAC[CUR.role] && RBAC[CUR.role].caps.includes(cap)); }
+function canView(v){ return !!(CUR && RBAC[CUR.role] && RBAC[CUR.role].views.includes(v)); }
 async function doLogin(){
   const btn=$('#loginBtn'), errEl=$('#loginErr');
   errEl.style.display='none';
@@ -529,6 +545,7 @@ async function enterApp(user){
   startPolling();
   toast('Bienvenue, '+user.name);
   if(user.role==='lecteur') toast('Compte en lecture seule : les modifications sont désactivées.','info');
+  if(user.mustChangePw) setTimeout(()=>{ toast('Veuillez changer votre mot de passe.','warn'); openChangePw(); }, 700);
 }
 function logout(){ TOKEN=null; try{localStorage.removeItem('djib_token')}catch(e){} CUR=null; $('#app').classList.remove('on'); $('#login').style.display='grid'; }
 
@@ -551,20 +568,25 @@ const NAV = [
   {grp:'Gouvernance', items:[
     {id:'validation', ic:'✅', name:'Validation humaine', badgeKey:'appr', warn:true},
     {id:'audit', ic:'🗒️', name:'Journal d\'audit'},
+    {id:'users', ic:'🔐', name:'Utilisateurs'},
     {id:'parametres', ic:'⚙️', name:'Paramètres & Sécurité'},
   ]},
 ];
 function pendingApprovals(){ return DB.approvals.filter(a=>a.status==='À vérifier'||a.status==='À corriger').length; }
 function newOpps(){ return DB.opportunities.filter(o=>daysUntil(o.found)>=-1).length; }
 function buildNav(){
-  $('#nav').innerHTML = NAV.map(g=>`<div class="grp">${g.grp}</div>`+g.items.map(it=>{
-    let badge='';
-    if(it.badge) badge=`<span class="badge">${it.badge}</span>`;
-    if(it.badgeKey==='appr'){ const n=pendingApprovals(); if(n) badge=`<span class="badge red">${n}</span>`; }
-    if(it.badgeKey==='opps'){ const n=DB.opportunities.filter(o=>!o.converted).length; if(n) badge=`<span class="badge">${n}</span>`; }
-    return `<a data-view="${it.id}" onclick="go('${it.id}')"><span class="ico">${it.ic}</span><span>${it.name}</span>${badge}</a>`;
-  }).join('')).join('');
-  const n=pendingApprovals(); $('#valDot').style.display = n?'block':'none';
+  $('#nav').innerHTML = NAV.map(g=>{
+    const items = g.items.filter(it=>canView(it.id));
+    if(!items.length) return '';
+    return `<div class="grp">${g.grp}</div>`+items.map(it=>{
+      let badge='';
+      if(it.badge) badge=`<span class="badge">${it.badge}</span>`;
+      if(it.badgeKey==='appr'){ const n=pendingApprovals(); if(n) badge=`<span class="badge red">${n}</span>`; }
+      if(it.badgeKey==='opps'){ const n=DB.opportunities.filter(o=>!o.converted).length; if(n) badge=`<span class="badge">${n}</span>`; }
+      return `<a data-view="${it.id}" onclick="go('${it.id}')"><span class="ico">${it.ic}</span><span>${it.name}</span>${badge}</a>`;
+    }).join('');
+  }).join('');
+  const n=pendingApprovals(); $('#valDot').style.display = (n && can('validate'))?'block':'none';
 }
 
 let CURRENT='dashboard';
@@ -579,9 +601,11 @@ const TITLES = {
   finance:['Finance & Rentabilité','Marges et alertes (Agent 11)'],
   validation:['Validation humaine obligatoire','Conformité et approbation (Agent 6, 12)'],
   audit:['Journal d\'audit','Traçabilité de toutes les actions'],
+  users:['Gestion des utilisateurs','Comptes, rôles et permissions (RBAC) — Super administrateur'],
   parametres:['Paramètres & Sécurité','Intégrations, rôles, anti-spam, conformité'],
 };
 function go(v){
+  if(!canView(v)){ toast('Accès non autorisé pour votre rôle','err'); v='dashboard'; }
   CURRENT=v;
   document.querySelectorAll('#nav a').forEach(a=>a.classList.toggle('active', a.dataset.view===v));
   $('#pgTitle').textContent = TITLES[v][0]; $('#pgSub').textContent = TITLES[v][1];
@@ -1150,6 +1174,91 @@ VIEWS.audit = () => {
   </div>`;
 };
 
+/* ---------- UTILISATEURS (RBAC, via API serveur) ---------- */
+let _usersCache=null, _rolesCache=null, _meId=null;
+VIEWS.users = () => {
+  if(!can('manageUsers')) return `<div class="empty"><div class="big">🔒</div>Accès réservé au Super administrateur.</div>`;
+  if(!_usersCache) return `<div class="empty"><div class="big">⏳</div>Chargement des utilisateurs…</div>`;
+  return renderUsersView();
+};
+AFTER.users = async () => {
+  if(!can('manageUsers')) return;
+  try{ const r=await api('GET','/users'); _usersCache=r.users; _rolesCache=r.roles; _meId=r.me;
+    if(CURRENT==='users') $('#content').innerHTML = renderUsersView();
+  }catch(e){ if(e.message!=='unauthorized') toast(e.message,'err'); }
+};
+async function reloadUsers(){ try{ const r=await api('GET','/users'); _usersCache=r.users; _rolesCache=r.roles; _meId=r.me; if(CURRENT==='users') $('#content').innerHTML = renderUsersView(); }catch(e){} }
+function renderUsersView(){
+  const us=_usersCache||[], roles=_rolesCache||{};
+  const rn = id => roles[id]||id;
+  return `
+  <div class="note" style="margin-bottom:16px"><span class="i">🔐</span><span><b>Contrôle d'accès basé sur les rôles (RBAC).</b> Vous seul (Super administrateur) créez les comptes et attribuez les rôles. Les droits sont appliqués <b>côté serveur</b>.</span></div>
+  <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px;flex-wrap:wrap">
+    <div class="kpi" style="--accent:#6366f1;flex:1;min-width:170px"><div class="kl"><span class="ki" style="background:#6366f1">👥</span>Utilisateurs</div><div class="kv">${us.length}</div><div class="kd">${us.filter(u=>u.active).length} actif(s)</div></div>
+    <div class="kpi" style="--accent:#22c55e;flex:1;min-width:170px"><div class="kl"><span class="ki" style="background:#22c55e">🛡️</span>Super admins</div><div class="kv">${us.filter(u=>u.role==='super').length}</div><div class="kd">Accès total</div></div>
+    <button class="btn primary" style="flex:none" onclick="openUserForm()">+ Nouvel utilisateur</button>
+  </div>
+  <div class="card"><div class="tbl-wrap" style="border:none">
+    <table class="tbl"><thead><tr><th>Nom</th><th>Email</th><th>Rôle</th><th>Statut</th><th>Créé par</th><th>Actions</th></tr></thead><tbody>
+    ${us.map(u=>`<tr>
+      <td class="name">${u.name}${u.id===_meId?' <span class="tag">vous</span>':''}${u.must_change_pw?' <span class="badge-s b-amber" title="Doit changer son mot de passe">⚠︎</span>':''}</td>
+      <td style="font-size:12.5px">${u.email}</td>
+      <td><span class="badge-s ${u.role==='super'?'b-violet':'b-blue'}">${rn(u.role)}</span></td>
+      <td>${u.active?'<span class="badge-s b-green">Actif</span>':'<span class="badge-s b-gray">Désactivé</span>'}</td>
+      <td style="font-size:11.5px;color:var(--muted)">${u.created_by||'—'}</td>
+      <td><div style="display:flex;gap:5px;flex-wrap:wrap">
+        <button class="btn sm" onclick="openUserForm('${u.id}')">Modifier</button>
+        <button class="btn sm ghost" onclick="resetUserPw('${u.id}')">Mot de passe</button>
+        <button class="btn sm ghost" onclick="toggleUserActive('${u.id}',${u.active?0:1})">${u.active?'Désactiver':'Activer'}</button>
+        <button class="btn sm danger" onclick="deleteUser('${u.id}','${(u.email||'').replace(/'/g,"")}')">Suppr.</button>
+      </div></td>
+    </tr>`).join('')}
+    </tbody></table></div></div>
+  <div class="card" style="margin-top:16px">
+    <div class="card-h"><h3>🗺️ Matrice des rôles &amp; permissions</h3></div>
+    <div class="tbl-wrap" style="border:none"><table class="tbl"><thead><tr><th>Rôle</th><th>Sections</th><th>Capacités</th></tr></thead><tbody>
+    ${ROLES.map(r=>{ const c=RBAC[r.id]||{views:[],caps:[]}; const L={manageUsers:'Gérer utilisateurs',write:'Créer/Modifier',validate:'Valider',finance:'Finance',settings:'Paramètres',scan:'Veille'}; return `<tr><td class="name">${r.name}</td><td style="font-size:11.5px;color:var(--muted)">${c.views.length===ALL_VIEWS.length?'Toutes':c.views.length+' sections'}</td><td>${c.caps.length?c.caps.map(x=>`<span class="tag">${L[x]||x}</span>`).join(' '):'<span class="tag">Lecture seule</span>'}</td></tr>`; }).join('')}
+    </tbody></table></div>
+  </div>`;
+}
+function openUserForm(id){
+  if(!can('manageUsers')) return;
+  const u = id ? (_usersCache||[]).find(x=>x.id===id) : null;
+  const roleOpts = ROLES.map(r=>`<option value="${r.id}" ${u&&u.role===r.id?'selected':''}>${r.name}</option>`).join('');
+  modal(u?'✏️ Modifier l\'utilisateur':'➕ Nouvel utilisateur', `
+    <div class="row"><div class="field"><label>Nom complet *</label><input id="u-name" value="${u?u.name:''}" /></div>
+    <div class="field"><label>Email *</label><input id="u-email" value="${u?u.email:''}" ${u?'disabled':''} /></div></div>
+    <div class="field"><label>Rôle *</label><select id="u-role">${roleOpts}</select></div>
+    <div class="field"><label>${u?'Nouveau mot de passe (vide = inchangé)':'Mot de passe *'}</label><input id="u-pass" type="text" placeholder="${u?'•••••••• (inchangé)':'Au moins 6 caractères'}" /></div>
+    ${u?'':'<div class="note"><span class="i">👤</span><span>Le nouvel utilisateur se connecte avec cet email et ce mot de passe, puis pourra le changer.</span></div>'}
+  `, [{t:'Annuler',c:'ghost',fn:'closeModal()'},{t:u?'Enregistrer':'Créer',c:'primary',fn:`saveUser(${u?`'${u.id}'`:'null'})`}]);
+}
+async function saveUser(id){
+  const name=$('#u-name').value.trim(), role=$('#u-role').value, pass=$('#u-pass').value;
+  if(!name){ toast('Nom requis','err'); return; }
+  try{
+    if(id){ await api('PUT','/users/'+id, {name, role, password: pass||undefined}); toast('Utilisateur mis à jour'); }
+    else{ const email=$('#u-email').value.trim(); await api('POST','/users', {name, email, role, password:pass}); toast('Utilisateur créé'); }
+    closeModal(); await reloadUsers();
+  }catch(e){ toast(e.message,'err'); }
+}
+async function toggleUserActive(id, active){ try{ await api('POST','/users/'+id+'/active', {active:!!active}); await reloadUsers(); toast(active?'Compte activé':'Compte désactivé','info'); }catch(e){ toast(e.message,'err'); } }
+async function resetUserPw(id){ const np=prompt('Nouveau mot de passe (min. 6 caractères) :'); if(np===null) return; if(np.length<6){ toast('6 caractères minimum','err'); return; } try{ await api('POST','/users/'+id+'/password', {password:np}); toast('Mot de passe réinitialisé'); }catch(e){ toast(e.message,'err'); } }
+async function deleteUser(id, email){ if(!confirm('Supprimer définitivement '+email+' ?')) return; try{ await api('DELETE','/users/'+id); await reloadUsers(); toast('Utilisateur supprimé','info'); }catch(e){ toast(e.message,'err'); } }
+function openChangePw(){
+  modal('🔒 Changer mon mot de passe', `
+    <div class="field"><label>Mot de passe actuel</label><input id="cp-old" type="password" /></div>
+    <div class="field"><label>Nouveau mot de passe (min. 6)</label><input id="cp-new" type="password" /></div>
+    <div class="field"><label>Confirmer</label><input id="cp-new2" type="password" /></div>
+  `, [{t:'Annuler',c:'ghost',fn:'closeModal()'},{t:'Changer',c:'primary',fn:'changeMyPw()'}]);
+}
+async function changeMyPw(){
+  const n=$('#cp-new').value; if(n.length<6){ toast('6 caractères minimum','err'); return; }
+  if(n!==$('#cp-new2').value){ toast('La confirmation ne correspond pas','err'); return; }
+  try{ await api('POST','/account/password', {oldPassword:$('#cp-old').value, newPassword:n}); closeModal(); toast('Mot de passe changé'); }
+  catch(e){ toast(e.message,'err'); }
+}
+
 /* ---------- PARAMETRES ---------- */
 VIEWS.parametres = () => {
   const cats=[...new Set(INTEGRATIONS.map(i=>i.cat))];
@@ -1160,7 +1269,12 @@ VIEWS.parametres = () => {
       <div class="stat-row"><span class="lbl">Utilisateur</span><span class="v">${CUR.name}</span></div>
       <div class="stat-row"><span class="lbl">Email</span><span class="v" style="font-size:12px">${CUR.email}</span></div>
       <div class="stat-row"><span class="lbl">Rôle</span><span class="v">${CUR.roleName}</span></div>
-      <div style="margin-top:12px;display:flex;gap:8px"><button class="btn danger" onclick="logout()">Déconnexion</button><button class="btn ghost" onclick="reset()">Réinitialiser la démo</button></div>
+      <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap">
+        <button class="btn" onclick="openChangePw()">🔒 Changer mon mot de passe</button>
+        ${can('manageUsers')?`<button class="btn" onclick="go('users')">🔐 Gérer les utilisateurs</button>`:''}
+        <button class="btn danger" onclick="logout()">Déconnexion</button>
+        ${can('settings')?`<button class="btn ghost" onclick="reset()">Réinitialiser la démo</button>`:''}
+      </div>
     </div>
     <div class="card">
       <div class="card-h"><h3>🛡️ Sécurité</h3><span class="desc">Contrôles actifs</span></div>

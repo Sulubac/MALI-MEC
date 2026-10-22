@@ -15,7 +15,10 @@ db.exec(`
   CREATE TABLE IF NOT EXISTS users (
     id TEXT PRIMARY KEY, email TEXT UNIQUE NOT NULL, name TEXT NOT NULL,
     role TEXT NOT NULL, role_name TEXT NOT NULL, pass_hash TEXT NOT NULL,
-    created_at TEXT NOT NULL
+    created_at TEXT NOT NULL,
+    active INTEGER NOT NULL DEFAULT 1,
+    must_change_pw INTEGER NOT NULL DEFAULT 0,
+    created_by TEXT
   );
   CREATE TABLE IF NOT EXISTS docs (
     collection TEXT NOT NULL, id TEXT NOT NULL, data TEXT NOT NULL,
@@ -59,21 +62,51 @@ function fullState(){
   return state;
 }
 
+/* ---------- migration: add newer user columns to existing databases ---------- */
+(function migrateUsers(){
+  const cols = db.prepare(`PRAGMA table_info(users)`).all().map(c => c.name);
+  if(!cols.includes('active'))         db.exec(`ALTER TABLE users ADD COLUMN active INTEGER NOT NULL DEFAULT 1`);
+  if(!cols.includes('must_change_pw')) db.exec(`ALTER TABLE users ADD COLUMN must_change_pw INTEGER NOT NULL DEFAULT 0`);
+  if(!cols.includes('created_by'))     db.exec(`ALTER TABLE users ADD COLUMN created_by TEXT`);
+})();
+
 /* ---------- users ---------- */
-const insUser = db.prepare(`INSERT INTO users (id,email,name,role,role_name,pass_hash,created_at)
-  VALUES (@id,@email,@name,@role,@role_name,@pass_hash,@created_at)`);
+const insUser = db.prepare(`INSERT INTO users (id,email,name,role,role_name,pass_hash,created_at,active,must_change_pw,created_by)
+  VALUES (@id,@email,@name,@role,@role_name,@pass_hash,@created_at,@active,@must_change_pw,@created_by)`);
 const findUser = db.prepare(`SELECT * FROM users WHERE email=?`);
-const listUsers = db.prepare(`SELECT id,email,name,role,role_name,created_at FROM users`);
-function createUser({email,name,role,roleName,password}){
+const findUserById = db.prepare(`SELECT * FROM users WHERE id=?`);
+const listUsers = db.prepare(`SELECT id,email,name,role,role_name,created_at,active,must_change_pw,created_by FROM users ORDER BY created_at`);
+const countActiveSupers = db.prepare(`SELECT COUNT(*) n FROM users WHERE role='super' AND active=1`);
+const countSupers = db.prepare(`SELECT COUNT(*) n FROM users WHERE role='super'`);
+
+function createUser({email,name,role,roleName,password,createdBy,mustChangePw}){
   const u = {id:'u'+Math.random().toString(36).slice(2,9), email:email.toLowerCase(), name, role, role_name:roleName,
-    pass_hash:bcrypt.hashSync(password,10), created_at:now()};
+    pass_hash:bcrypt.hashSync(password,10), created_at:now(), active:1, must_change_pw: mustChangePw?1:0, created_by: createdBy||null};
   insUser.run(u); return u;
 }
+function updateUser(id, {name, role, roleName, password}){
+  const u = findUserById.get(id); if(!u) throw new Error('Utilisateur introuvable');
+  const nm = name!=null ? name : u.name;
+  const rl = role!=null ? role : u.role;
+  const rln = roleName!=null ? roleName : u.role_name;
+  const ph = password ? bcrypt.hashSync(password,10) : u.pass_hash;
+  const mcp = password ? 0 : u.must_change_pw;
+  db.prepare(`UPDATE users SET name=?, role=?, role_name=?, pass_hash=?, must_change_pw=? WHERE id=?`).run(nm, rl, rln, ph, mcp, id);
+  return findUserById.get(id);
+}
+function setUserActive(id, active){ db.prepare(`UPDATE users SET active=? WHERE id=?`).run(active?1:0, id); }
+function setUserPassword(id, password, mustChange){ db.prepare(`UPDATE users SET pass_hash=?, must_change_pw=? WHERE id=?`).run(bcrypt.hashSync(password,10), mustChange?1:0, id); }
+function deleteUserById(id){ db.prepare(`DELETE FROM users WHERE id=?`).run(id); }
+function getUserById(id){ return findUserById.get(id); }
+function activeSuperCount(){ return countActiveSupers.get().n; }
+function superCount(){ return countSupers.get().n; }
+
 function verifyUser(email,password){
   const u = findUser.get((email||'').toLowerCase());
   if(!u) return null;
   if(!bcrypt.compareSync(password, u.pass_hash)) return null;
-  return {id:u.id, email:u.email, name:u.name, role:u.role, roleName:u.role_name};
+  if(u.active === 0) return { disabled:true };
+  return {id:u.id, email:u.email, name:u.name, role:u.role, roleName:u.role_name, mustChangePw: !!u.must_change_pw};
 }
 
 /* ============================================================
@@ -174,4 +207,5 @@ function seedIfEmpty(){
 }
 
 module.exports = { db, COLLECTIONS, putDoc, removeDoc, getCollection, fullState, setKv, getKvVal,
-  createUser, verifyUser, listUsers, findUser, seedIfEmpty, now };
+  createUser, updateUser, setUserActive, setUserPassword, deleteUserById, getUserById,
+  activeSuperCount, superCount, verifyUser, listUsers, findUser, seedIfEmpty, now };

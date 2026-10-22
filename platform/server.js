@@ -52,16 +52,90 @@ function canWrite(req, res, next){
   next();
 }
 function isAdmin(req){ return ['super','dg'].includes(req.user.role); }
+function requireSuper(req, res, next){
+  if(req.user.role !== 'super') return res.status(403).json({ error: 'Réservé au Super administrateur' });
+  next();
+}
+/* Role catalogue (server-side source of truth for role labels) */
+const ROLE_LABELS = {
+  super:'Super administrateur', dg:'Directeur Général', dc:'Directeur Commercial', com:'Commercial',
+  event:'Event Manager', projet:'Chef de projet', finance:'Responsable Financier', comm:'Resp. Communication',
+  op:'Opérateur', lecteur:'Lecteur'
+};
 
 /* ---------- auth ---------- */
 app.post('/api/auth/login', (req, res) => {
   const { email, password } = req.body || {};
   const user = store.verifyUser(email, password);
   if(!user) return res.status(401).json({ error: 'Email ou mot de passe incorrect' });
+  if(user.disabled) return res.status(403).json({ error: 'Ce compte est désactivé. Contactez votre administrateur.' });
   res.json({ token: sign(user), user });
 });
 app.get('/api/auth/me', auth, (req, res) => res.json({ user: {
   id:req.user.sub, email:req.user.email, role:req.user.role, roleName:req.user.roleName, name:req.user.name } }));
+
+/* ---------- gestion des utilisateurs (RBAC — super administrateur) ---------- */
+app.get('/api/users', auth, (req, res) => res.json({ users: store.listUsers.all(), roles: ROLE_LABELS, me: req.user.sub }));
+
+app.post('/api/users', auth, requireSuper, (req, res) => {
+  const { name, email, role, password } = req.body || {};
+  if(!name || !email || !role || !password) return res.status(400).json({ error: 'Champs requis manquants' });
+  if(!ROLE_LABELS[role]) return res.status(400).json({ error: 'Rôle invalide' });
+  if(!/.+@.+\..+/.test(email)) return res.status(400).json({ error: 'Email invalide' });
+  if(password.length < 6) return res.status(400).json({ error: 'Mot de passe : 6 caractères minimum' });
+  if(store.findUser.get(email.toLowerCase())) return res.status(400).json({ error: 'Un utilisateur avec cet email existe déjà' });
+  const u = store.createUser({ email, name, role, roleName: ROLE_LABELS[role], password, createdBy: req.user.email, mustChangePw: true });
+  store.putDoc('audit', { id:'au'+Date.now(), d: store.now(), who: req.user.name, act:'Création utilisateur', obj: email, detail:'Rôle : '+ROLE_LABELS[role] }, req.user.email);
+  res.json({ ok:true, id:u.id });
+});
+
+app.put('/api/users/:id', auth, requireSuper, (req, res) => {
+  const u = store.getUserById(req.params.id); if(!u) return res.status(404).json({ error:'Introuvable' });
+  const { name, role, password } = req.body || {};
+  if(role && !ROLE_LABELS[role]) return res.status(400).json({ error:'Rôle invalide' });
+  if(password && password.length < 6) return res.status(400).json({ error:'Mot de passe : 6 caractères minimum' });
+  // prevent demoting the last active super
+  if(u.role === 'super' && role && role !== 'super' && store.activeSuperCount() <= 1)
+    return res.status(400).json({ error:"Impossible : c'est le dernier super administrateur actif" });
+  store.updateUser(req.params.id, { name, role, roleName: role?ROLE_LABELS[role]:null, password });
+  res.json({ ok:true });
+});
+
+app.post('/api/users/:id/active', auth, requireSuper, (req, res) => {
+  const u = store.getUserById(req.params.id); if(!u) return res.status(404).json({ error:'Introuvable' });
+  const active = !!(req.body && req.body.active);
+  if(!active && u.id === req.user.sub) return res.status(400).json({ error:'Vous ne pouvez pas désactiver votre propre compte' });
+  if(!active && u.role==='super' && store.activeSuperCount() <= 1) return res.status(400).json({ error:"Dernier super administrateur actif" });
+  store.setUserActive(req.params.id, active);
+  res.json({ ok:true });
+});
+
+app.post('/api/users/:id/password', auth, requireSuper, (req, res) => {
+  const u = store.getUserById(req.params.id); if(!u) return res.status(404).json({ error:'Introuvable' });
+  const np = (req.body && req.body.password) || '';
+  if(np.length < 6) return res.status(400).json({ error:'Mot de passe : 6 caractères minimum' });
+  store.setUserPassword(req.params.id, np, true);
+  res.json({ ok:true });
+});
+
+app.delete('/api/users/:id', auth, requireSuper, (req, res) => {
+  const u = store.getUserById(req.params.id); if(!u) return res.status(404).json({ error:'Introuvable' });
+  if(u.id === req.user.sub) return res.status(400).json({ error:'Vous ne pouvez pas supprimer votre propre compte' });
+  if(u.role==='super' && store.superCount() <= 1) return res.status(400).json({ error:'Dernier super administrateur' });
+  store.deleteUserById(req.params.id);
+  store.putDoc('audit', { id:'au'+Date.now(), d: store.now(), who: req.user.name, act:'Suppression utilisateur', obj: u.email, detail:'' }, req.user.email);
+  res.json({ ok:true });
+});
+
+/* changer son propre mot de passe (tous les rôles) */
+app.post('/api/account/password', auth, (req, res) => {
+  const { oldPassword, newPassword } = req.body || {};
+  if(!newPassword || newPassword.length < 6) return res.status(400).json({ error:'Nouveau mot de passe : 6 caractères minimum' });
+  const check = store.verifyUser(req.user.email, oldPassword || '');
+  if(!check || check.disabled) return res.status(400).json({ error:'Mot de passe actuel incorrect' });
+  store.setUserPassword(req.user.sub, newPassword, false);
+  res.json({ ok:true });
+});
 
 /* ---------- shared state ---------- */
 app.get('/api/state', auth, (req, res) => res.json(store.fullState()));
@@ -178,9 +252,6 @@ app.post('/api/admin/reset', auth, (req, res) => {
   store.seedIfEmpty();
   res.json({ ok: true });
 });
-
-/* list team members (for display) */
-app.get('/api/users', auth, (req, res) => res.json({ users: store.listUsers.all() }));
 
 /* health */
 app.get('/api/health', (req, res) => res.json({ ok:true, llm: !!process.env.ANTHROPIC_API_KEY }));
