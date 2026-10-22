@@ -758,13 +758,22 @@ function renderKw(){ const el=$('#kwList'); if(!el)return; el.innerHTML = DB.key
 function addKw(){ const v=$('#kwNew').value.trim(); if(v){ DB.keywords.push(v); $('#kwNew').value=''; save(); renderKw(); } }
 function rmKw(i){ DB.keywords.splice(i,1); save(); renderKw(); }
 async function runScan(){
-  const btn=$('#scanBtn'); if(btn){ btn.disabled=true; btn.textContent='⏳ Analyse des sources publiques…'; }
+  const btn=$('#scanBtn'); if(btn){ btn.disabled=true; btn.textContent='🌐 Recherche web en cours (IA)…'; }
   try{
-    const res = await api('POST','/veille/scan');
+    // Veille RÉELLE : recherche web via l'IA. Peut prendre 20–60 s.
+    const res = await api('POST','/veille/search');
     await loadState();
-    if(res.added) toast(`Nouvelle opportunité détectée : ${res.opportunity.org} (score ${res.score})`);
-    else toast(res.reason || 'Aucune nouvelle opportunité','info');
-  }catch(e){ toast(e.message,'err'); }
+    if(res.added>0) toast(`🌐 Veille web : ${res.added} nouvelle(s) opportunité(s) détectée(s) !`);
+    else toast('Veille web terminée — aucune nouvelle opportunité','info');
+  }catch(e){
+    // Repli sur la veille de démonstration si l'IA/web n'est pas disponible
+    if(/IA non configurée|web_tool_unsupported|502|API 4/.test(e.message)){
+      if(btn) btn.textContent='⏳ Mode démonstration…';
+      try{ const r=await api('POST','/veille/scan'); await loadState();
+        toast(r.added? `Démo : ${r.opportunity.org}` : 'Aucune nouvelle opportunité','info');
+      }catch(e2){ toast(e2.message,'err'); }
+    } else { toast('Veille : '+e.message,'err'); }
+  }
   render();
 }
 function openOpp(id){

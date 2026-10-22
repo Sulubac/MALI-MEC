@@ -289,6 +289,70 @@ app.post('/api/veille/scan', auth, canWrite, (req, res) => {
   res.json({ added: true, opportunity: o, score });
 });
 
+/* ---------- Veille RÉELLE : recherche web via l'outil de recherche d'Anthropic ---------- */
+function scoreOpp(budget, urgency){
+  return Math.min(96, 52 + Math.round(((+budget||0)/1000000)*3) + (urgency==='Haute'?14:urgency==='Moyenne'?7:0));
+}
+async function webSearchEvents(keywords){
+  const key = process.env.ANTHROPIC_API_KEY;
+  if(!key) return { error: 'IA non configurée' };
+  const system = `Tu es l'agent de veille "Opportunity Intelligence" d'une agence événementielle à Djibouti. Tu cherches sur le web des ÉVÉNEMENTS À VENIR à Djibouti (conférences, forums, séminaires, ateliers, salons, lancements de produit, inaugurations, cérémonies officielles, galas, réceptions diplomatiques, remises de diplômes, assemblées générales, etc.) annoncés sur des sources PUBLIQUES (sites officiels, ministères, ambassades, organisations internationales, chambre de commerce, médias, universités, grandes entreprises). N'utilise que des sources publiques et cite l'URL de la source.`;
+  const user = `Trouve jusqu'à 6 événements À VENIR à Djibouti qui pourraient nécessiter un prestataire événementiel. Mots-clés indicatifs : ${(keywords||[]).join(', ')}.
+Réponds UNIQUEMENT avec un tableau JSON valide (rien d'autre, pas de texte avant/après), au format exact :
+[{"org":"organisation","title":"titre de l'événement","type":"type d'événement","eventDate":"AAAA-MM-JJ ou null","sourceUrl":"https://...","contact":"contact public ou null","participants":<nombre estimé>,"budget":<estimation en DJF>,"urgency":"Haute|Moyenne|Basse","summary":"résumé en 1-2 phrases","signals":["signal1","signal2"]}]`;
+  const tools = [{ type:'web_search_20260209', name:'web_search', max_uses: 5 }];
+  let messages = [{ role:'user', content: user }], text = '', guard = 0;
+  try{
+    while(guard++ < 5){
+      const r = await fetch(ANTHROPIC_URL, { method:'POST',
+        headers:{ 'content-type':'application/json', 'x-api-key':key, 'anthropic-version':'2023-06-01' },
+        body: JSON.stringify({ model: CLAUDE_MODEL, max_tokens: 3500, system, tools, messages }) });
+      if(!r.ok){
+        const t = await r.text();
+        // Fallback automatique si l'outil web n'est pas disponible pour ce modèle/compte
+        if(r.status===400 && /web_search|tool/i.test(t)) return { error: 'web_tool_unsupported' };
+        return { error: `API ${r.status}` };
+      }
+      const j = await r.json();
+      text += (j.content||[]).filter(b=>b.type==='text').map(b=>b.text).join('');
+      if(j.stop_reason === 'pause_turn'){ messages.push({ role:'assistant', content: j.content }); continue; }
+      break;
+    }
+  }catch(e){ return { error: e.message }; }
+  // Extraction tolérante du tableau JSON
+  let arr = null;
+  try{ const a=text.indexOf('['), b=text.lastIndexOf(']'); if(a>=0&&b>a) arr = JSON.parse(text.slice(a, b+1)); }catch(e){ arr = null; }
+  if(!Array.isArray(arr)) return { error: 'parse', raw: text.slice(0,300) };
+  return { events: arr };
+}
+app.post('/api/veille/search', auth, canWrite, async (req, res) => {
+  const keywords = store.getKvVal('keywords', []);
+  const out = await webSearchEvents(keywords);
+  if(out.error) return res.status(out.error==='IA non configurée'?400:502).json({ error: out.error, raw: out.raw });
+  const existing = store.getCollection('opportunities');
+  const norm = s => (s||'').toLowerCase().trim();
+  let added = [];
+  for(const ev of out.events){
+    if(!ev || !ev.org || !ev.title) continue;
+    if(existing.some(o => norm(o.org)===norm(ev.org) && norm(o.title)===norm(ev.title))) continue;
+    if(added.some(o => norm(o.org)===norm(ev.org) && norm(o.title)===norm(ev.title))) continue;
+    let eventDate = null;
+    if(ev.eventDate && ev.eventDate!=='null'){ const d=new Date(ev.eventDate); if(!isNaN(d)) eventDate=d.toISOString(); }
+    if(!eventDate) eventDate = new Date(Date.now() + 35*86400000).toISOString();
+    const score = scoreOpp(ev.budget, ev.urgency);
+    const o = store.putDoc('opportunities', {
+      org:String(ev.org).slice(0,120), title:String(ev.title).slice(0,160), type:ev.type||'Événement',
+      source:'Recherche web (IA)', sourceUrl:ev.sourceUrl||'#', found: store.now(), eventDate,
+      score, budget:+ev.budget||0, participants:+ev.participants||0, urgency:ev.urgency||'Moyenne',
+      contact:ev.contact||'—', converted:false, summary:ev.summary||'', signals:Array.isArray(ev.signals)?ev.signals:[]
+    }, req.user.email);
+    added.push(o);
+  }
+  if(added.length) store.putDoc('agentLog', { d: store.now(), agent:'Opportunity Intelligence',
+    msg:`Veille web : ${added.length} nouvelle(s) opportunité(s) détectée(s)` }, req.user.email);
+  res.json({ added: added.length, opportunities: added });
+});
+
 /* ---------- Envoi réel d'emails (SMTP, après validation humaine) ---------- */
 let _mailer = null, _mailerKey = '';
 function getMailer(){
