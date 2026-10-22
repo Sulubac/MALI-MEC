@@ -289,6 +289,53 @@ app.post('/api/veille/scan', auth, canWrite, (req, res) => {
   res.json({ added: true, opportunity: o, score });
 });
 
+/* ---------- Envoi réel d'emails (SMTP, après validation humaine) ---------- */
+let _mailer = null, _mailerKey = '';
+function getMailer(){
+  const host = process.env.SMTP_HOST, user = process.env.SMTP_USER, pass = process.env.SMTP_PASS;
+  const key = [process.env.SMTP_JSON, host, process.env.SMTP_PORT, process.env.SMTP_SECURE, user].join('|');
+  if(_mailer && _mailerKey === key) return _mailer;
+  const nodemailer = require('nodemailer');
+  if(process.env.SMTP_JSON === '1'){ _mailer = nodemailer.createTransport({ jsonTransport: true }); _mailerKey = key; return _mailer; }
+  if(!host || !user || !pass) return null;
+  _mailer = nodemailer.createTransport({
+    host, port: parseInt(process.env.SMTP_PORT || '465', 10),
+    secure: (process.env.SMTP_SECURE || 'true') !== 'false',
+    auth: { user, pass }
+  });
+  _mailerKey = key;
+  return _mailer;
+}
+function emailConfigured(){ return process.env.SMTP_JSON === '1' || !!(process.env.SMTP_HOST && process.env.SMTP_USER && process.env.SMTP_PASS); }
+const emailFrom = () => process.env.SMTP_FROM || process.env.SMTP_USER || 'no-reply@techiftiin.online';
+
+app.get('/api/email/status', auth, (req, res) =>
+  res.json({ configured: emailConfigured(), from: emailConfigured() ? emailFrom() : null }));
+
+app.post('/api/email/send', auth, canWrite, async (req, res) => {
+  const { to, subject, body } = req.body || {};
+  if(!to || !/.+@.+\..+/.test(to)) return res.status(400).json({ error: 'Destinataire (email) invalide' });
+  if(!subject) return res.status(400).json({ error: "Objet requis" });
+  const m = getMailer();
+  if(!m) return res.status(400).json({ error: "Envoi d'emails non configuré (SMTP). Voir Paramètres → Email." });
+  try{
+    const info = await m.sendMail({ from: emailFrom(), to, subject, text: body || '' });
+    store.putDoc('audit', { id:'au'+Date.now(), d: store.now(), who: req.user.name, act:'Email envoyé', obj: subject, detail:'→ '+to }, req.user.email);
+    res.json({ ok: true, id: info.messageId || null });
+  }catch(e){ res.status(502).json({ error: 'Échec SMTP : ' + e.message }); }
+});
+
+app.post('/api/email/test', auth, canWrite, async (req, res) => {
+  const to = (req.body && req.body.to) || req.user.email;
+  const m = getMailer();
+  if(!m) return res.status(400).json({ error: 'SMTP non configuré (renseignez SMTP_HOST / SMTP_USER / SMTP_PASS dans .env)' });
+  try{
+    await m.sendMail({ from: emailFrom(), to, subject: 'Test — Djibouti Event Intelligence',
+      text: "Ceci est un email de test. Votre configuration SMTP fonctionne ✅" });
+    res.json({ ok: true, to });
+  }catch(e){ res.status(502).json({ error: 'Échec SMTP : ' + e.message }); }
+});
+
 /* admin: reset demo data */
 app.post('/api/admin/reset', auth, (req, res) => {
   if(!isAdmin(req)) return res.status(403).json({ error: 'Réservé au DG / administrateur' });

@@ -1019,8 +1019,10 @@ async function aiWriteOutreach(pid){
 }
 function queueOutreach(pid){
   const p=DB.prospects.find(x=>x.id===pid);
-  DB.approvals.unshift({id:uid('ap'), kind:'Email de prospection', ref:$('#ou-subj').value, prospect:p.org, agent:'Outreach + Compliance', preparedBy:'IA', checks:{name:true,contact:!!p.email,margin:true,antispam:true,consent:p.consent!=='À obtenir',legal:true}, status:'À vérifier', created:new Date().toISOString(), risk: p.consent==='À obtenir'?'Consentement à confirmer':'—'});
-  DB.audit.unshift({d:new Date().toISOString(), who:'Agent Outreach', act:'Mise en file', obj:$('#ou-subj').value, detail:'En attente de validation humaine'});
+  const chan=($('#ou-chan')&&$('#ou-chan').value)||'Email';
+  const subj=$('#ou-subj').value, body=$('#ou-body')?$('#ou-body').value:'';
+  DB.approvals.unshift({id:uid('ap'), kind:'Email de prospection', ref:subj, prospect:p.org, agent:'Outreach + Compliance', preparedBy:'IA', checks:{name:true,contact:!!p.email,margin:true,antispam:true,consent:p.consent!=='À obtenir',legal:true}, status:'À vérifier', created:new Date().toISOString(), risk: p.consent==='À obtenir'?'Consentement à confirmer':'—', channel:chan, to:(chan==='Email'?p.email:''), subject:subj, body});
+  DB.audit.unshift({d:new Date().toISOString(), who:'Agent Outreach', act:'Mise en file', obj:subj, detail:'En attente de validation humaine'});
   save(); closeModal(); toast('Communication mise en file de validation','info'); go('validation');
 }
 
@@ -1045,15 +1047,23 @@ VIEWS.validation = () => {
     </tbody></table></div>
   </div>`;
 };
-function approve(id){
+async function approve(id){
   const a=DB.approvals.find(x=>x.id===id);
   if(!Object.values(a.checks).every(Boolean)){ toast('Tous les contrôles doivent être au vert','err'); return; }
+  // Si c'est un email avec destinataire → envoi RÉEL via SMTP (après cette validation humaine).
+  if(a.channel==='Email' && a.to){
+    try{
+      await api('POST','/email/send', {to:a.to, subject:a.subject||a.ref, body:a.body||''});
+      toast('📤 Email réellement envoyé à '+a.to);
+    }catch(e){
+      toast('Email non envoyé : '+e.message,'err');
+      return; // on ne marque pas "Envoyé" si l'envoi a échoué
+    }
+  }
   a.status='Envoyé';
-  DB.audit.unshift({d:new Date().toISOString(), who:CUR.roleName, act:'Validation', obj:a.ref, detail:`Validé et exécuté par ${CUR.roleName}`});
-  DB.audit.unshift({d:new Date().toISOString(), who:'Agent Outreach', act:'Envoi', obj:a.ref, detail:'Exécuté après validation humaine'});
-  // update linked proposal
-  const pr=DB.proposals.find(x=>x.title===a.ref); if(pr){ pr.status='Envoyé'; pr.validatedBy=CUR.roleName; pr.validatedAt=new Date().toISOString(); pr.sentAt=new Date().toISOString(); }
-  save(); toast('Validé et exécuté ✅'); render();
+  DB.audit.unshift({d:new Date().toISOString(), who:CUR.roleName||CUR.name, act:'Validation', obj:a.ref, detail:`Validé par ${CUR.name}`});
+  const pr=DB.proposals.find(x=>x.title===a.ref); if(pr){ pr.status='Envoyé'; pr.validatedBy=CUR.name; pr.validatedAt=new Date().toISOString(); pr.sentAt=new Date().toISOString(); }
+  save(); toast('Validé ✅'); render();
 }
 function reject(id){
   const a=DB.approvals.find(x=>x.id===id); a.status='À corriger';
@@ -1313,6 +1323,13 @@ VIEWS.parametres = () => {
   </div>
 
   <div class="card" style="margin-bottom:16px">
+    <div class="card-h"><h3>📧 Envoi réel d'emails (SMTP)</h3><span class="desc">Les emails validés partent réellement</span></div>
+    <div id="smtpStatus" class="stat-row"><span class="lbl">Statut</span><span class="v">⏳ Vérification…</span></div>
+    <div class="note blue" style="margin-top:10px"><span class="i">⚙️</span><span>Configuration côté serveur dans <b>.env</b> (jamais dans le navigateur) :<br><code>SMTP_HOST</code>, <code>SMTP_PORT</code>, <code>SMTP_SECURE</code>, <code>SMTP_USER</code>, <code>SMTP_PASS</code>, <code>SMTP_FROM</code>.<br>Pour un email Hostinger : host <b>smtp.hostinger.com</b>, port <b>465</b>, secure <b>true</b>.</span></div>
+    <div class="row" style="margin-top:10px"><div class="field"><label>Envoyer un email de test à</label><input id="smtp-test-to" placeholder="vous@exemple.com"></div><div class="field" style="display:flex;align-items:flex-end"><button class="btn" onclick="sendTestEmail()">✉️ Tester l'envoi</button></div></div>
+  </div>
+
+  <div class="card" style="margin-bottom:16px">
     <div class="card-h"><h3>🔌 Intégrations</h3><span class="desc">Clés API stockées côté serveur — jamais exposées au navigateur</span></div>
     ${cats.map(c=>`<div style="font-size:11px;font-weight:700;color:var(--faint);text-transform:uppercase;letter-spacing:.6px;margin:14px 0 8px">${c}</div><div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:9px">${INTEGRATIONS.filter(i=>i.cat===c).map(i=>{ const on=DB.integrations[i.id]; return `<div class="check-item" style="text-decoration:none;justify-content:space-between"><span style="display:flex;align-items:center;gap:9px"><span style="font-size:16px">${i.icon}</span>${i.name}</span><span class="badge-s ${on?'b-green':'b-gray'}" style="cursor:pointer" onclick="toggleInt('${i.id}')">${on?'Connecté':'Inactif'}</span></div>`; }).join('')}</div>`).join('')}
     <div class="note" style="margin-top:14px"><span class="i">🔒</span><span>Aucune clé API n'est stockée ni exposée côté client. LinkedIn / Facebook / Instagram uniquement via API officielle autorisée.</span></div>
@@ -1326,9 +1343,21 @@ VIEWS.parametres = () => {
     </div>
   </div>`;
 };
-function setNum(k,v){ DB.settings[k]=+v||0; save(); toast('Paramètre enregistré','info'); }
-function setDelays(v){ DB.settings.followupDelays=v.split(',').map(x=>parseInt(x.trim())).filter(x=>!isNaN(x)); save(); toast('Délais mis à jour','info'); }
+function setNum(k,v){ DB.settings[k]=+v||0; save(); toast('Paramètre enregistré','info'); }function setDelays(v){ DB.settings.followupDelays=v.split(',').map(x=>parseInt(x.trim())).filter(x=>!isNaN(x)); save(); toast('Délais mis à jour','info'); }
 function toggleInt(id){ DB.integrations[id]=!DB.integrations[id]; save(); render(); }
+AFTER.parametres = async () => {
+  const el=$('#smtpStatus'); if(!el) return;
+  try{ const s=await api('GET','/email/status');
+    el.innerHTML = s.configured
+      ? `<span class="lbl">Statut</span><span class="v"><span class="badge-s b-green">✅ Configuré</span> ${s.from||''}</span>`
+      : `<span class="lbl">Statut</span><span class="v"><span class="badge-s b-amber">Non configuré</span> — les emails restent en file</span>`;
+  }catch(e){ el.innerHTML='<span class="lbl">Statut</span><span class="v">—</span>'; }
+};
+async function sendTestEmail(){
+  const to=($('#smtp-test-to')&&$('#smtp-test-to').value.trim())||'';
+  try{ const r=await api('POST','/email/test', to?{to}:{}); toast('✉️ Email de test envoyé à '+r.to); }
+  catch(e){ toast(e.message,'err'); }
+}
 
 /* ---------- GLOBAL SEARCH ---------- */
 function globalSearchGo(){
