@@ -300,8 +300,11 @@ async function webSearchEvents(keywords){
   if(!key) return { error: 'IA non configurée' };
   const system = `Tu es l'agent de veille "Opportunity Intelligence" d'une agence événementielle à Djibouti. Tu cherches sur le web des ÉVÉNEMENTS À VENIR à Djibouti (conférences, forums, séminaires, ateliers, salons, lancements de produit, inaugurations, cérémonies officielles, galas, réceptions diplomatiques, remises de diplômes, assemblées générales, etc.) annoncés sur des sources PUBLIQUES (sites officiels, ministères, ambassades, organisations internationales, chambre de commerce, médias, universités, grandes entreprises). N'utilise que des sources publiques et cite l'URL de la source.`;
   const user = `Trouve jusqu'à 6 événements À VENIR à Djibouti qui pourraient nécessiter un prestataire événementiel. Mots-clés indicatifs : ${(keywords||[]).join(', ')}.
-Réponds UNIQUEMENT avec un tableau JSON valide (rien d'autre, pas de texte avant/après), au format exact :
-[{"org":"organisation","title":"titre de l'événement","type":"type d'événement","eventDate":"AAAA-MM-JJ ou null","sourceUrl":"https://...","contact":"contact public ou null","participants":<nombre estimé>,"budget":<estimation en DJF>,"urgency":"Haute|Moyenne|Basse","summary":"résumé en 1-2 phrases","signals":["signal1","signal2"]}]`;
+
+Effectue d'abord tes recherches web, PUIS termine ta réponse par le résultat.
+Le résultat DOIT être un tableau JSON valide et RIEN d'autre après : pas de commentaire, pas de bloc de code markdown, pas de numéros de citation. Commence le tableau par [ et termine par ]. Format exact de chaque objet :
+[{"org":"organisation","title":"titre de l'événement","type":"type d'événement","eventDate":"AAAA-MM-JJ ou null","sourceUrl":"https://...","contact":"contact public ou null","participants":<nombre estimé>,"budget":<estimation en DJF>,"urgency":"Haute|Moyenne|Basse","summary":"résumé en 1-2 phrases","signals":["signal1","signal2"]}]
+Si tu ne trouves aucun événement, réponds exactement : []`;
   const tools = [{ type:'web_search_20260209', name:'web_search', max_uses: 5 }];
   let messages = [{ role:'user', content: user }], text = '', guard = 0;
   try{
@@ -321,11 +324,25 @@ Réponds UNIQUEMENT avec un tableau JSON valide (rien d'autre, pas de texte avan
       break;
     }
   }catch(e){ return { error: e.message }; }
-  // Extraction tolérante du tableau JSON
-  let arr = null;
-  try{ const a=text.indexOf('['), b=text.lastIndexOf(']'); if(a>=0&&b>a) arr = JSON.parse(text.slice(a, b+1)); }catch(e){ arr = null; }
+  // Extraction robuste du tableau JSON (gère le texte autour, les citations [1], les ```json)
+  const arr = extractJsonArray(text);
   if(!Array.isArray(arr)) return { error: 'parse', raw: text.slice(0,300) };
   return { events: arr };
+}
+function extractJsonArray(text){
+  if(!text) return null;
+  let t = String(text).replace(/```+\s*json/gi, '').replace(/```+/g, '').trim();
+  const candidates = [];
+  // 1) un tableau d'OBJETS (ignore les citations type [1], [2] grâce au "[{")
+  const m = t.match(/\[\s*\{[\s\S]*\}\s*\]/);
+  if(m) candidates.push(m[0]);
+  // 2) repli : du premier [ au dernier ]
+  const a = t.indexOf('['), b = t.lastIndexOf(']');
+  if(a >= 0 && b > a) candidates.push(t.slice(a, b + 1));
+  for(const c of candidates){
+    try{ const parsed = JSON.parse(c); if(Array.isArray(parsed)) return parsed; }catch(e){}
+  }
+  return null;
 }
 app.post('/api/veille/search', auth, canWrite, async (req, res) => {
   const keywords = store.getKvVal('keywords', []);

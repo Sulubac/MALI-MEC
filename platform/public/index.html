@@ -771,13 +771,16 @@ async function runScan(){
     if(res.added>0) toast(`🌐 Veille web : ${res.added} nouvelle(s) opportunité(s) détectée(s) !`);
     else toast('Veille web terminée — aucune nouvelle opportunité','info');
   }catch(e){
+    const msg=e.message||'';
+    // Résultat illisible ou vide → message clair, pas de jargon
+    if(/parse/.test(msg)){ toast('La recherche n\'a pas renvoyé de résultats exploitables — réessayez.','warn'); render(); return; }
     // Repli sur la veille de démonstration si l'IA/web n'est pas disponible
-    if(/IA non configurée|web_tool_unsupported|502|API 4/.test(e.message)){
+    if(/IA non configurée|web_tool_unsupported|502|API 4/.test(msg)){
       if(btn) btn.textContent='⏳ Mode démonstration…';
       try{ const r=await api('POST','/veille/scan'); await loadState();
         toast(r.added? `Démo : ${r.opportunity.org}` : 'Aucune nouvelle opportunité','info');
       }catch(e2){ toast(e2.message,'err'); }
-    } else { toast('Veille : '+e.message,'err'); }
+    } else { toast('Veille : '+msg,'err'); }
   }
   render();
 }
