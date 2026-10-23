@@ -783,9 +783,9 @@ async function runScan(){
     else toast('🌐 Veille web terminée — aucun événement trouvé sur le web pour ces mots-clés.','info');
   }catch(e){
     const msg=e.message||'';
-    if(/brave_no_results/.test(msg)) toast('Aucun résultat web pour ces mots-clés — essayez d\'en ajouter/changer.','info');
-    else if(/parse/.test(msg)) toast('La recherche web est bridée côté fournisseur. Configurez une clé Brave Search (Paramètres → Veille) pour une veille fiable.','warn');
-    else if(/web_tool_unsupported/.test(msg)) toast('Recherche web Anthropic indisponible sur ce compte — configurez une clé Brave Search.','warn');
+    if(/(tavily|brave)_no_results/.test(msg)) toast('Aucun résultat web pour ces mots-clés — essayez d\'en ajouter/changer.','info');
+    else if(/parse/.test(msg)) toast('La recherche web est bridée côté fournisseur. Configurez une clé Tavily (gratuite, sans carte) côté serveur pour une veille fiable.','warn');
+    else if(/web_tool_unsupported/.test(msg)) toast('Recherche web Anthropic indisponible sur ce compte — configurez une clé Tavily (gratuite, sans carte).','warn');
     else if(/IA non configurée/.test(msg)) toast('IA non configurée côté serveur.','err');
     else toast('Veille : '+msg,'err');
   }

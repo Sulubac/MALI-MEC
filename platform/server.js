@@ -295,12 +295,26 @@ app.post('/api/veille/scan', auth, canWrite, (req, res) => {
 function scoreOpp(budget, urgency){
   return Math.min(96, 52 + Math.round(((+budget||0)/1000000)*3) + (urgency==='Haute'?14:urgency==='Moyenne'?7:0));
 }
-/* Choix du moteur : Brave Search si une clé est configurée (fiable, gratuit),
-   sinon l'outil de recherche web d'Anthropic (limité selon le compte). */
+/* Choix du moteur de veille, par ordre de préférence :
+   1) Tavily Search  — offre gratuite SANS carte bancaire (recommandé) : https://app.tavily.com
+   2) Brave Search   — fiable mais l'inscription demande une carte bancaire
+   3) Recherche web intégrée d'Anthropic — repli (limitée selon le compte).
+   Dans tous les cas, l'IA n'extrait des événements QU'À PARTIR des URL réelles renvoyées. */
 async function veilleFindEvents(keywords){
-  if(process.env.BRAVE_API_KEY) return veilleViaBrave(keywords);
+  if(process.env.TAVILY_API_KEY) return veilleViaWeb('tavily', tavilySearch, keywords);
+  if(process.env.BRAVE_API_KEY)  return veilleViaWeb('brave',  braveSearch,  keywords);
   return webSearchEvents(keywords);
 }
+/* Requêtes de recherche communes à tous les fournisseurs. */
+function veilleQueries(keywords){
+  const year = new Date().getFullYear();
+  return [
+    `événements à venir Djibouti ${year}`,
+    `conférence forum séminaire Djibouti ${year}`,
+    `inauguration cérémonie gala salon Djibouti`,
+  ].concat((keywords||[]).slice(0,2));
+}
+/* Brave Search API — renvoie [{title,url,description}]. */
 const BRAVE_URL = (process.env.BRAVE_BASE_URL || 'https://api.search.brave.com') + '/res/v1/web/search';
 async function braveSearch(query){
   const r = await fetch(BRAVE_URL + '?count=5&q=' + encodeURIComponent(query),
@@ -309,20 +323,26 @@ async function braveSearch(query){
   const j = await r.json();
   return ((j.web && j.web.results) || []).map(x => ({ title:x.title, url:x.url, description:x.description || '' }));
 }
-async function veilleViaBrave(keywords){
+/* Tavily Search API — renvoie [{title,url,description}]. Gratuit, sans carte bancaire. */
+const TAVILY_URL = (process.env.TAVILY_BASE_URL || 'https://api.tavily.com') + '/search';
+async function tavilySearch(query){
+  const r = await fetch(TAVILY_URL, { method:'POST',
+    headers:{ 'content-type':'application/json', 'Authorization':'Bearer ' + process.env.TAVILY_API_KEY },
+    body: JSON.stringify({ query, max_results: 5, search_depth: 'basic' }) });
+  if(!r.ok) throw new Error('Tavily ' + r.status);
+  const j = await r.json();
+  return ((j.results) || []).map(x => ({ title:x.title, url:x.url, description:x.content || '' }));
+}
+/* Moteur générique : lance les requêtes via searchFn puis demande à l'IA d'en extraire les événements. */
+async function veilleViaWeb(label, searchFn, keywords){
   try{
-    const year = new Date().getFullYear();
-    const queries = [
-      `événements à venir Djibouti ${year}`,
-      `conférence forum séminaire Djibouti ${year}`,
-      `inauguration cérémonie gala salon Djibouti`,
-    ].concat((keywords||[]).slice(0,2));
+    const queries = veilleQueries(keywords);
     let results = [];
-    for(const q of queries){ try{ results = results.concat(await braveSearch(q)); }catch(e){ console.error('[veille] brave', e.message); } }
+    for(const q of queries){ try{ results = results.concat(await searchFn(q)); }catch(e){ console.error('[veille] '+label, e.message); } }
     const seen = new Set();
     results = results.filter(r => r.url && !seen.has(r.url) && seen.add(r.url)).slice(0, 25);
-    console.error('[veille] brave: '+results.length+' résultats web');
-    if(!results.length) return { error: 'brave_no_results' };
+    console.error('[veille] '+label+': '+results.length+' résultats web');
+    if(!results.length) return { error: label + '_no_results' };
     const list = results.map((r,i) => `${i+1}. ${r.title} | ${r.url} | ${r.description}`).join('\n');
     const text = await callClaude({
       system: `Tu es l'agent de veille d'une agence événementielle à Djibouti. À partir de résultats de recherche web, tu identifies des ÉVÉNEMENTS à Djibouti (à venir ou récurrents/annuels) pouvant nécessiter un prestataire. N'invente JAMAIS d'URL : utilise uniquement les URL fournies.`,
@@ -330,10 +350,10 @@ async function veilleViaBrave(keywords){
       maxTokens: 2800, effort: 'low'
     });
     const arr = extractJsonArray(text);
-    console.error('[veille] brave → événements:', Array.isArray(arr) ? arr.length : 'PARSE_FAIL', '| extrait:', JSON.stringify((text||'').slice(0,160)));
+    console.error('[veille] '+label+' → événements:', Array.isArray(arr) ? arr.length : 'PARSE_FAIL', '| extrait:', JSON.stringify((text||'').slice(0,160)));
     if(!Array.isArray(arr)) return { error: 'parse', raw: (text||'').slice(0,300) };
     return { events: arr };
-  }catch(e){ console.error('[veille] brave exception', e.message); return { error: e.message }; }
+  }catch(e){ console.error('[veille] '+label+' exception', e.message); return { error: e.message }; }
 }
 async function webSearchEvents(keywords){
   const key = process.env.ANTHROPIC_API_KEY;
