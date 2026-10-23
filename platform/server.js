@@ -121,7 +121,7 @@ app.post('/api/users/:id/password', auth, requireSuper, (req, res) => {
 app.delete('/api/users/:id', auth, requireSuper, (req, res) => {
   const u = store.getUserById(req.params.id); if(!u) return res.status(404).json({ error:'Introuvable' });
   if(u.id === req.user.sub) return res.status(400).json({ error:'Vous ne pouvez pas supprimer votre propre compte' });
-  if(u.role==='super' && store.superCount() <= 1) return res.status(400).json({ error:'Dernier super administrateur' });
+  if(u.role==='super') return res.status(400).json({ error:'Un super administrateur ne peut pas être supprimé.' });
   store.deleteUserById(req.params.id);
   store.putDoc('audit', { id:'au'+Date.now(), d: store.now(), who: req.user.name, act:'Suppression utilisateur', obj: u.email, detail:'' }, req.user.email);
   res.json({ ok:true });

@@ -1248,8 +1248,8 @@ function renderUsersView(){
       <td><div style="display:flex;gap:5px;flex-wrap:wrap">
         <button class="btn sm" onclick="openUserForm('${u.id}')">Modifier</button>
         <button class="btn sm ghost" onclick="resetUserPw('${u.id}')">Mot de passe</button>
-        <button class="btn sm ghost" onclick="toggleUserActive('${u.id}',${u.active?0:1})">${u.active?'Désactiver':'Activer'}</button>
-        <button class="btn sm danger" onclick="deleteUser('${u.id}','${(u.email||'').replace(/'/g,"")}')">Suppr.</button>
+        <button class="btn sm ghost" onclick="toggleUserActive('${u.id}',${u.active?0:1})" ${u.role==='super'?'disabled title="Un super admin ne peut pas être désactivé"':''}>${u.active?'Désactiver':'Activer'}</button>
+        ${(u.role==='super'||u.id===_meId)?'':`<button class="btn sm danger" onclick="deleteUser('${u.id}','${(u.email||'').replace(/'/g,"")}')">Suppr.</button>`}
       </div></td>
     </tr>`).join('')}
     </tbody></table></div></div>
