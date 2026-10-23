@@ -778,8 +778,9 @@ async function runScan(){
     // Veille RÉELLE : recherche web via l'IA. Peut prendre 20–60 s.
     const res = await api('POST','/veille/search');
     await loadState();
-    if(res.added>0) toast(`🌐 Veille web : ${res.added} nouvelle(s) opportunité(s) détectée(s) !`);
-    else toast('Veille web terminée — aucune nouvelle opportunité','info');
+    if(res.added>0) toast(`🌐 Veille web : ${res.added} nouvelle(s) sur ${res.found} trouvée(s) !`);
+    else if(res.found>0) toast(`🌐 ${res.found} événement(s) trouvé(s), mais déjà présents (doublons).`,'info');
+    else toast('🌐 Veille web terminée — aucun événement trouvé sur le web pour ces mots-clés.','info');
   }catch(e){
     const msg=e.message||'';
     // Résultat illisible ou vide → message clair, pas de jargon

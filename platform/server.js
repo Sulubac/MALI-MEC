@@ -299,21 +299,24 @@ async function webSearchEvents(keywords){
   const key = process.env.ANTHROPIC_API_KEY;
   if(!key) return { error: 'IA non configurée' };
   const system = `Tu es l'agent de veille "Opportunity Intelligence" d'une agence événementielle à Djibouti. Tu cherches sur le web des ÉVÉNEMENTS À VENIR à Djibouti (conférences, forums, séminaires, ateliers, salons, lancements de produit, inaugurations, cérémonies officielles, galas, réceptions diplomatiques, remises de diplômes, assemblées générales, etc.) annoncés sur des sources PUBLIQUES (sites officiels, ministères, ambassades, organisations internationales, chambre de commerce, médias, universités, grandes entreprises). N'utilise que des sources publiques et cite l'URL de la source.`;
-  const user = `Trouve jusqu'à 6 événements À VENIR à Djibouti qui pourraient nécessiter un prestataire événementiel. Mots-clés indicatifs : ${(keywords||[]).join(', ')}.
+  const today = new Date().toISOString().slice(0,10);
+  const user = `Nous sommes le ${today}. Trouve jusqu'à 8 événements à Djibouti (à venir dans les 12 prochains mois, OU récurrents/annuels dont une prochaine édition est probable) qui pourraient nécessiter un prestataire événementiel. Inclure aussi les événements annoncés récemment dans la presse locale. Mots-clés indicatifs : ${(keywords||[]).join(', ')}.
+Fais plusieurs recherches web (ministères, ambassades, ONU/organisations internationales, chambre de commerce, universités, grandes entreprises, presse : lanationdj.com, adi.dj).
 
 Effectue d'abord tes recherches web, PUIS termine ta réponse par le résultat.
 Le résultat DOIT être un tableau JSON valide et RIEN d'autre après : pas de commentaire, pas de bloc de code markdown, pas de numéros de citation. Commence le tableau par [ et termine par ]. Format exact de chaque objet :
-[{"org":"organisation","title":"titre de l'événement","type":"type d'événement","eventDate":"AAAA-MM-JJ ou null","sourceUrl":"https://...","contact":"contact public ou null","participants":<nombre estimé>,"budget":<estimation en DJF>,"urgency":"Haute|Moyenne|Basse","summary":"résumé en 1-2 phrases","signals":["signal1","signal2"]}]
-Si tu ne trouves aucun événement, réponds exactement : []`;
-  const tools = [{ type:'web_search_20260209', name:'web_search', max_uses: 5 }];
-  let messages = [{ role:'user', content: user }], text = '', guard = 0;
+[{"org":"organisation","title":"titre de l'événement","type":"type d'événement","eventDate":"AAAA-MM-JJ ou null si inconnue","sourceUrl":"https://... (URL réelle de la page)","contact":"contact public ou null","participants":<nombre estimé>,"budget":<estimation en DJF>,"urgency":"Haute|Moyenne|Basse","summary":"résumé en 1-2 phrases","signals":["signal1","signal2"]}]
+Estime une date et un budget plausibles si non précisés. Si vraiment aucun événement pertinent, réponds exactement : []`;
+  const tools = [{ type:'web_search_20260209', name:'web_search', max_uses: 8 }];
+  let messages = [{ role:'user', content: user }], text = '', guard = 0, apiError = null;
   try{
-    while(guard++ < 5){
+    while(guard++ < 6){
       const r = await fetch(ANTHROPIC_URL, { method:'POST',
         headers:{ 'content-type':'application/json', 'x-api-key':key, 'anthropic-version':'2023-06-01' },
-        body: JSON.stringify({ model: CLAUDE_MODEL, max_tokens: 3500, system, tools, messages }) });
+        body: JSON.stringify({ model: CLAUDE_MODEL, max_tokens: 4000, system, tools, messages }) });
       if(!r.ok){
         const t = await r.text();
+        console.error('[veille] API non-OK', r.status, t.slice(0,300));
         // Fallback automatique si l'outil web n'est pas disponible pour ce modèle/compte
         if(r.status===400 && /web_search|tool/i.test(t)) return { error: 'web_tool_unsupported' };
         return { error: `API ${r.status}` };
@@ -323,9 +326,10 @@ Si tu ne trouves aucun événement, réponds exactement : []`;
       if(j.stop_reason === 'pause_turn'){ messages.push({ role:'assistant', content: j.content }); continue; }
       break;
     }
-  }catch(e){ return { error: e.message }; }
+  }catch(e){ console.error('[veille] exception', e.message); return { error: e.message }; }
   // Extraction robuste du tableau JSON (gère le texte autour, les citations [1], les ```json)
   const arr = extractJsonArray(text);
+  console.error('[veille] texte reçu ('+text.length+' car.), extrait:', JSON.stringify(text.slice(0,200)), '→ événements:', Array.isArray(arr)?arr.length:'PARSE_FAIL');
   if(!Array.isArray(arr)) return { error: 'parse', raw: text.slice(0,300) };
   return { events: arr };
 }
@@ -369,7 +373,7 @@ app.post('/api/veille/search', auth, canWrite, async (req, res) => {
   }
   if(added.length) store.putDoc('agentLog', { d: store.now(), agent:'Opportunity Intelligence',
     msg:`Veille web : ${added.length} nouvelle(s) opportunité(s) détectée(s)` }, req.user.email);
-  res.json({ added: added.length, opportunities: added });
+  res.json({ added: added.length, found: out.events.length, duplicates: out.events.filter(e=>e&&e.org&&e.title).length - added.length, opportunities: added });
 });
 
 /* ---------- Envoi réel d'emails (SMTP, après validation humaine) ---------- */
