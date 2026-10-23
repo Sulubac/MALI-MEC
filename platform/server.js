@@ -35,7 +35,9 @@ store.seedIfEmpty();
 
 const app = express();
 app.use(express.json({ limit: '4mb' }));
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'public'), {
+  setHeaders: (res, p) => { if(p.endsWith('.html')) res.setHeader('Cache-Control', 'no-cache, must-revalidate'); }
+}));
 
 /* ---------- helpers ---------- */
 const READ_ONLY_ROLES = ['lecteur'];
@@ -414,6 +416,7 @@ app.get('/api/health', (req, res) => res.json({ ok:true, llm: !!process.env.ANTH
 /* SPA fallback (Express 5 — use a catch-all middleware, not '*') */
 app.use((req, res) => {
   if(req.path.startsWith('/api/')) return res.status(404).json({ error: 'Endpoint introuvable' });
+  res.setHeader('Cache-Control', 'no-cache, must-revalidate');
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
