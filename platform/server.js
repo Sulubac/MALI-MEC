@@ -295,6 +295,46 @@ app.post('/api/veille/scan', auth, canWrite, (req, res) => {
 function scoreOpp(budget, urgency){
   return Math.min(96, 52 + Math.round(((+budget||0)/1000000)*3) + (urgency==='Haute'?14:urgency==='Moyenne'?7:0));
 }
+/* Choix du moteur : Brave Search si une clé est configurée (fiable, gratuit),
+   sinon l'outil de recherche web d'Anthropic (limité selon le compte). */
+async function veilleFindEvents(keywords){
+  if(process.env.BRAVE_API_KEY) return veilleViaBrave(keywords);
+  return webSearchEvents(keywords);
+}
+const BRAVE_URL = (process.env.BRAVE_BASE_URL || 'https://api.search.brave.com') + '/res/v1/web/search';
+async function braveSearch(query){
+  const r = await fetch(BRAVE_URL + '?count=5&q=' + encodeURIComponent(query),
+    { headers: { 'Accept':'application/json', 'X-Subscription-Token': process.env.BRAVE_API_KEY } });
+  if(!r.ok) throw new Error('Brave ' + r.status);
+  const j = await r.json();
+  return ((j.web && j.web.results) || []).map(x => ({ title:x.title, url:x.url, description:x.description || '' }));
+}
+async function veilleViaBrave(keywords){
+  try{
+    const year = new Date().getFullYear();
+    const queries = [
+      `événements à venir Djibouti ${year}`,
+      `conférence forum séminaire Djibouti ${year}`,
+      `inauguration cérémonie gala salon Djibouti`,
+    ].concat((keywords||[]).slice(0,2));
+    let results = [];
+    for(const q of queries){ try{ results = results.concat(await braveSearch(q)); }catch(e){ console.error('[veille] brave', e.message); } }
+    const seen = new Set();
+    results = results.filter(r => r.url && !seen.has(r.url) && seen.add(r.url)).slice(0, 25);
+    console.error('[veille] brave: '+results.length+' résultats web');
+    if(!results.length) return { error: 'brave_no_results' };
+    const list = results.map((r,i) => `${i+1}. ${r.title} | ${r.url} | ${r.description}`).join('\n');
+    const text = await callClaude({
+      system: `Tu es l'agent de veille d'une agence événementielle à Djibouti. À partir de résultats de recherche web, tu identifies des ÉVÉNEMENTS à Djibouti (à venir ou récurrents/annuels) pouvant nécessiter un prestataire. N'invente JAMAIS d'URL : utilise uniquement les URL fournies.`,
+      user: `Nous sommes le ${new Date().toISOString().slice(0,10)}. Résultats de recherche web (numéro. titre | url | description) :\n${list}\n\nExtrais jusqu'à 8 événements à Djibouti pertinents. Réponds UNIQUEMENT par un tableau JSON (rien d'autre, pas de markdown), format : [{"org":"","title":"","type":"","eventDate":"AAAA-MM-JJ ou null","sourceUrl":"UNE des URL ci-dessus","contact":null,"participants":200,"budget":3000000,"urgency":"Haute|Moyenne|Basse","summary":"","signals":[]}]. Si aucun événement pertinent, réponds exactement : []`,
+      maxTokens: 2800, effort: 'low'
+    });
+    const arr = extractJsonArray(text);
+    console.error('[veille] brave → événements:', Array.isArray(arr) ? arr.length : 'PARSE_FAIL', '| extrait:', JSON.stringify((text||'').slice(0,160)));
+    if(!Array.isArray(arr)) return { error: 'parse', raw: (text||'').slice(0,300) };
+    return { events: arr };
+  }catch(e){ console.error('[veille] brave exception', e.message); return { error: e.message }; }
+}
 async function webSearchEvents(keywords){
   const key = process.env.ANTHROPIC_API_KEY;
   if(!key) return { error: 'IA non configurée' };
@@ -350,8 +390,11 @@ function extractJsonArray(text){
 }
 app.post('/api/veille/search', auth, canWrite, async (req, res) => {
   const keywords = store.getKvVal('keywords', []);
-  const out = await webSearchEvents(keywords);
-  if(out.error) return res.status(out.error==='IA non configurée'?400:502).json({ error: out.error, raw: out.raw });
+  const out = await veilleFindEvents(keywords);
+  if(out.error){
+    const code = out.error==='IA non configurée' ? 400 : 502;
+    return res.status(code).json({ error: out.error, raw: out.raw });
+  }
   const existing = store.getCollection('opportunities');
   const norm = s => (s||'').toLowerCase().trim();
   let added = [];

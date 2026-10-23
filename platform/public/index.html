@@ -783,15 +783,11 @@ async function runScan(){
     else toast('🌐 Veille web terminée — aucun événement trouvé sur le web pour ces mots-clés.','info');
   }catch(e){
     const msg=e.message||'';
-    // Résultat illisible ou vide → message clair, pas de jargon
-    if(/parse/.test(msg)){ toast('La recherche n\'a pas renvoyé de résultats exploitables — réessayez.','warn'); render(); return; }
-    // Repli sur la veille de démonstration si l'IA/web n'est pas disponible
-    if(/IA non configurée|web_tool_unsupported|502|API 4/.test(msg)){
-      if(btn) btn.textContent='⏳ Mode démonstration…';
-      try{ const r=await api('POST','/veille/scan'); await loadState();
-        toast(r.added? `Démo : ${r.opportunity.org}` : 'Aucune nouvelle opportunité','info');
-      }catch(e2){ toast(e2.message,'err'); }
-    } else { toast('Veille : '+msg,'err'); }
+    if(/brave_no_results/.test(msg)) toast('Aucun résultat web pour ces mots-clés — essayez d\'en ajouter/changer.','info');
+    else if(/parse/.test(msg)) toast('La recherche web est bridée côté fournisseur. Configurez une clé Brave Search (Paramètres → Veille) pour une veille fiable.','warn');
+    else if(/web_tool_unsupported/.test(msg)) toast('Recherche web Anthropic indisponible sur ce compte — configurez une clé Brave Search.','warn');
+    else if(/IA non configurée/.test(msg)) toast('IA non configurée côté serveur.','err');
+    else toast('Veille : '+msg,'err');
   }
   render();
 }
