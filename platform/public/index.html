@@ -503,6 +503,16 @@ const initials = s => s.split(' ').map(w=>w[0]).slice(0,2).join('').toUpperCase(
 const uid = p => p + Math.random().toString(36).slice(2,8);
 function toast(msg,type='ok'){ const t=document.createElement('div'); t.className='toast '+(type==='ok'?'':type); t.innerHTML=`<span>${type==='err'?'⛔':type==='warn'?'⚠️':type==='info'?'ℹ️':'✅'}</span><span>${msg}</span>`; $('#toasts').appendChild(t); setTimeout(()=>{t.style.opacity='0';t.style.transition='.3s';setTimeout(()=>t.remove(),300)},3200); }
 function scoreClass(s){ return s>=75?'hi':s>=60?'mid':'lo'; }
+/* Lien cliquable vers la source (site de l'organisation/événement) */
+function isUrl(u){ return typeof u==='string' && /^https?:\/\/.+\..+/.test(u.trim()); }
+function hostOf(u){ try{ return new URL(u).hostname.replace(/^www\./,''); }catch(e){ return u; } }
+function sourceLink(o){
+  const label = o.source || (isUrl(o.sourceUrl)?hostOf(o.sourceUrl):'—');
+  if(isUrl(o.sourceUrl)){
+    return `<a href="${o.sourceUrl}" target="_blank" rel="noopener noreferrer" title="${o.sourceUrl}" onclick="event.stopPropagation()" style="color:var(--brand);text-decoration:none">🔗 ${label}</a>`;
+  }
+  return `<span style="color:var(--muted)">${label}</span>`;
+}
 function priBadge(p){ const m={'Très prioritaire':'b-red','Prioritaire':'b-amber','À développer':'b-blue','À surveiller':'b-gray','Non pertinent':'b-gray','Information insuffisante':'b-gray'}; return `<span class="badge-s ${m[p]||'b-gray'}">${p}</span>`; }
 function statusBadge(s){ const g={'Gagné':'b-green','Réponse reçue':'b-green','Validé':'b-green','Autorisé à envoyer':'b-green','Envoyé':'b-blue','Négociation':'b-violet','À vérifier':'b-amber','À corriger':'b-red','En attente':'b-amber','À relancer':'b-amber','Perdu':'b-red','Archivé':'b-gray','Brouillon IA':'b-gray'}; return `<span class="badge-s ${g[s]||'b-gray'}">${s}</span>`; }
 
@@ -752,7 +762,7 @@ VIEWS.veille = () => {
       <td><span class="badge-s ${daysUntil(o.eventDate)<25?'b-amber':'b-blue'}">J-${daysUntil(o.eventDate)}</span></td>
       <td style="font-weight:700">${moneyShort(o.budget)}</td>
       <td><span class="badge-s ${o.urgency==='Haute'?'b-red':o.urgency==='Moyenne'?'b-amber':'b-gray'}">${o.urgency}</span></td>
-      <td style="font-size:11.5px;color:var(--muted)">${o.source}</td>
+      <td style="font-size:11.5px">${sourceLink(o)}</td>
       <td><button class="btn sm" onclick="openOpp('${o.id}')">Ouvrir</button></td>
     </tr>`).join('')}
     </tbody></table></div>
@@ -799,7 +809,7 @@ function openOpp(id){
       <div class="stat-row"><span class="lbl">Source</span><span class="v" style="font-size:12px">${o.source}</span></div>
     </div>
     <div style="margin-top:12px"><span class="lbl" style="font-size:12px;color:var(--muted);font-weight:700">Signaux commerciaux</span><div style="margin-top:6px;display:flex;gap:6px;flex-wrap:wrap">${(o.signals||[]).map(s=>`<span class="tag">${s}</span>`).join('')}</div></div>
-    <div class="note blue" style="margin-top:14px"><span class="i">🔗</span><span>Source publique : ${o.sourceUrl} · Dernière vérification : ${dateFR(o.found)} · Fiabilité estimée : élevée</span></div>
+    <div class="note blue" style="margin-top:14px"><span class="i">🔗</span><span>Source publique : ${isUrl(o.sourceUrl)?`<a href="${o.sourceUrl}" target="_blank" rel="noopener noreferrer" style="color:var(--brand)">${o.sourceUrl}</a>`:(o.source||'—')} · Dernière vérification : ${dateFR(o.found)} · Fiabilité estimée : élevée</span></div>
   `, converted ? [{t:'Voir le prospect',c:'primary',fn:`closeModal();goProspectByOpp('${id}')`}] : [{t:'Annuler',c:'ghost',fn:'closeModal()'},{t:'➡️ Convertir en prospect',c:'primary',fn:`convertOpp('${id}')`}]);
 }
 function goProspectByOpp(opId){ const p=DB.prospects.find(x=>x.opId===opId); if(p){ go('crm'); setTimeout(()=>openProspect(p.id),200); } }
