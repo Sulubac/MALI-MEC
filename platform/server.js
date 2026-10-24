@@ -439,6 +439,57 @@ app.post('/api/veille/search', auth, canWrite, async (req, res) => {
   res.json({ added: added.length, found: out.events.length, duplicates: out.events.filter(e=>e&&e.org&&e.title).length - added.length, opportunities: added });
 });
 
+/* ---------- Veille assistée : l'utilisateur colle un lien / un texte, l'IA structure l'opportunité ----------
+   100 % fiable, sans service de recherche externe. La source reste celle fournie par l'utilisateur. */
+function extractJsonObject(text){
+  if(!text) return null;
+  let t = String(text).replace(/```+\s*json/gi, '').replace(/```+/g, '').trim();
+  const candidates = [];
+  const m = t.match(/\{[\s\S]*\}/);
+  if(m) candidates.push(m[0]);
+  const a = t.indexOf('{'), b = t.lastIndexOf('}');
+  if(a >= 0 && b > a) candidates.push(t.slice(a, b + 1));
+  for(const c of candidates){ try{ const p = JSON.parse(c); if(p && typeof p==='object' && !Array.isArray(p)) return p; }catch(e){} }
+  return null;
+}
+app.post('/api/veille/assist', auth, canWrite, async (req, res) => {
+  const raw = (req.body && (req.body.text || req.body.url) || '').toString().trim();
+  if(!raw) return res.status(400).json({ error: 'Collez un lien ou une description d\'événement.' });
+  if(!process.env.ANTHROPIC_API_KEY) return res.status(400).json({ error: 'IA non configurée côté serveur.' });
+  // Détecte une URL dans le texte collé (servira de source cliquable).
+  const urlMatch = raw.match(/https?:\/\/[^\s)]+/);
+  const providedUrl = urlMatch ? urlMatch[0] : '';
+  let obj;
+  try{
+    const text = await callClaude({
+      system: `Tu es l'agent "Opportunity Intelligence" d'une agence événementielle à Djibouti. À partir d'un texte ou d'un lien fourni par un utilisateur, tu structures UNE opportunité d'événement. N'invente pas d'URL : si une URL est fournie, utilise-la comme source ; sinon laisse sourceUrl vide.`,
+      user: `Nous sommes le ${new Date().toISOString().slice(0,10)}. Voici ce que l'utilisateur a collé (lien et/ou description) :\n"""\n${raw.slice(0,4000)}\n"""\n\nStructure UNE opportunité. Réponds UNIQUEMENT par un objet JSON (rien d'autre, pas de markdown), format exact :\n{"org":"organisation ou organisateur","title":"titre de l'événement","type":"type (conférence, forum, gala, inauguration, ...)","eventDate":"AAAA-MM-JJ ou null si inconnue","sourceUrl":"${providedUrl || 'laisser vide si aucune URL fournie'}","contact":"contact public ou null","participants":<nombre estimé>,"budget":<estimation en DJF>,"urgency":"Haute|Moyenne|Basse","summary":"résumé en 1-2 phrases","signals":["indice1","indice2"]}\nEstime une date et un budget plausibles si non précisés.`,
+      maxTokens: 1200, effort: 'low'
+    });
+    obj = extractJsonObject(text);
+    if(!obj) return res.status(502).json({ error: 'parse', raw: (text||'').slice(0,300) });
+  }catch(e){ console.error('[veille] assist', e.message); return res.status(502).json({ error: e.message }); }
+  if(!obj.org || !obj.title) return res.status(422).json({ error: 'L\'IA n\'a pas pu identifier d\'événement dans ce texte. Ajoutez plus de détails.' });
+  const existing = store.getCollection('opportunities');
+  const norm = s => (s||'').toLowerCase().trim();
+  if(existing.some(o => norm(o.org)===norm(obj.org) && norm(o.title)===norm(obj.title)))
+    return res.status(409).json({ error: 'Cette opportunité existe déjà.' });
+  let eventDate = null;
+  if(obj.eventDate && obj.eventDate!=='null'){ const d=new Date(obj.eventDate); if(!isNaN(d)) eventDate=d.toISOString(); }
+  if(!eventDate) eventDate = new Date(Date.now() + 35*86400000).toISOString();
+  const sourceUrl = providedUrl || (/^https?:\/\//.test(obj.sourceUrl||'') ? obj.sourceUrl : '#');
+  const o = store.putDoc('opportunities', {
+    org:String(obj.org).slice(0,120), title:String(obj.title).slice(0,160), type:obj.type||'Événement',
+    source:'Ajout assisté (IA)', sourceUrl, found: store.now(), eventDate,
+    score: scoreOpp(obj.budget, obj.urgency), budget:+obj.budget||0, participants:+obj.participants||0,
+    urgency:obj.urgency||'Moyenne', contact:obj.contact||'—', converted:false,
+    summary:obj.summary||'', signals:Array.isArray(obj.signals)?obj.signals:[]
+  }, req.user.email);
+  store.putDoc('agentLog', { d: store.now(), agent:'Opportunity Intelligence',
+    msg:`Ajout assisté : « ${o.title} » structuré par l'IA` }, req.user.email);
+  res.json({ opportunity: o });
+});
+
 /* ---------- Envoi réel d'emails (SMTP, après validation humaine) ---------- */
 let _mailer = null, _mailerKey = '';
 function getMailer(){

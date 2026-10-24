@@ -751,6 +751,13 @@ VIEWS.veille = () => {
     </div>
   </div>
 
+  <div class="card" style="margin-bottom:16px;border:1.5px solid var(--accent)">
+    <div class="card-h"><h3>➕ Ajout assisté par IA</h3><span class="desc">Fiable — sans service externe</span></div>
+    <p style="font-size:12.5px;color:var(--muted);margin:2px 0 10px">Collez le <b>lien d'un événement</b> (annonce officielle, article, page d'inscription…) ou décrivez-le en quelques lignes. L'IA le structure en opportunité (titre, date, budget estimé) et conserve votre lien comme <b>source cliquable</b>.</p>
+    <div class="field"><textarea id="assistText" rows="3" placeholder="Ex : https://lanationdj.com/forum-2026  —  ou  —  « Forum économique organisé par la Chambre de commerce, mars 2026, env. 300 participants »"></textarea></div>
+    <button class="btn primary" onclick="assistAdd()" id="assistBtn">✨ Ajouter via l'IA</button>
+  </div>
+
   <div class="card">
     <div class="card-h"><h3>🎯 Opportunités détectées</h3><span class="desc">Triées par score</span></div>
     <div class="tbl-wrap" style="border:none">
@@ -788,6 +795,24 @@ async function runScan(){
     else if(/web_tool_unsupported/.test(msg)) toast('Recherche web Anthropic indisponible sur ce compte — configurez une clé Tavily (gratuite, sans carte).','warn');
     else if(/IA non configurée/.test(msg)) toast('IA non configurée côté serveur.','err');
     else toast('Veille : '+msg,'err');
+  }
+  render();
+}
+async function assistAdd(){
+  const ta=$('#assistText'); const txt=(ta&&ta.value||'').trim();
+  if(!txt){ toast('Collez un lien ou une description d\'événement.','info'); return; }
+  const btn=$('#assistBtn'); if(btn){ btn.disabled=true; btn.textContent='✨ Analyse par l\'IA…'; }
+  try{
+    const res=await api('POST','/veille/assist',{ text: txt });
+    await loadState();
+    toast(`✅ Opportunité ajoutée : « ${res.opportunity.title} »`);
+  }catch(e){
+    const msg=e.message||'';
+    if(/existe déjà/.test(msg)) toast('Cette opportunité existe déjà.','info');
+    else if(/n'a pas pu identifier|identifier d'événement/.test(msg)) toast('L\'IA n\'a pas pu identifier d\'événement — ajoutez plus de détails.','warn');
+    else if(/IA non configurée/.test(msg)) toast('IA non configurée côté serveur.','err');
+    else if(/parse/.test(msg)) toast('Réponse IA illisible, réessayez.','warn');
+    else toast('Ajout : '+msg,'err');
   }
   render();
 }
