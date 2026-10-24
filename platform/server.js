@@ -364,13 +364,17 @@ async function webSearchEvents(keywords){
 Fais plusieurs recherches web (ministères, ambassades, ONU/organisations internationales, chambre de commerce, universités, grandes entreprises, presse : lanationdj.com, adi.dj).
 
 Effectue d'abord tes recherches web, PUIS termine ta réponse par le résultat.
+IMPORTANT : même si une recherche échoue ou que tu atteins la limite de recherches, tu DOIS TOUJOURS terminer ta réponse par le tableau JSON des événements déjà trouvés. Ne réponds JAMAIS uniquement par une explication ou une excuse sans le tableau.
 Le résultat DOIT être un tableau JSON valide et RIEN d'autre après : pas de commentaire, pas de bloc de code markdown, pas de numéros de citation. Commence le tableau par [ et termine par ]. Format exact de chaque objet :
 [{"org":"organisation","title":"titre de l'événement","type":"type d'événement","eventDate":"AAAA-MM-JJ ou null si inconnue","sourceUrl":"https://... (URL réelle de la page)","contact":"contact public ou null","participants":<nombre estimé>,"budget":<estimation en DJF>,"urgency":"Haute|Moyenne|Basse","summary":"résumé en 1-2 phrases","signals":["signal1","signal2"]}]
 Estime une date et un budget plausibles si non précisés. Si vraiment aucun événement pertinent, réponds exactement : []`;
-  const tools = [{ type:'web_search_20260209', name:'web_search', max_uses: 8 }];
-  let messages = [{ role:'user', content: user }], text = '', guard = 0, apiError = null;
+  // Variante BASIQUE de recherche web : fonctionne sur TOUS les modèles (dont Haiku), sans exécution de code.
+  // allowed_callers "direct" = pas de filtrage dynamique (évite les limites liées à Haiku). max_uses relevé.
+  const tools = [{ type:'web_search_20250305', name:'web_search', max_uses: 12,
+    user_location:{ type:'approximate', city:'Djibouti', country:'DJ', timezone:'Africa/Djibouti' } }];
+  let messages = [{ role:'user', content: user }], text = '', guard = 0;
   try{
-    while(guard++ < 6){
+    while(guard++ < 8){
       const r = await fetch(ANTHROPIC_URL, { method:'POST',
         headers:{ 'content-type':'application/json', 'x-api-key':key, 'anthropic-version':'2023-06-01' },
         body: JSON.stringify({ model: CLAUDE_MODEL, max_tokens: 4000, system, tools, messages }) });
@@ -378,10 +382,15 @@ Estime une date et un budget plausibles si non précisés. Si vraiment aucun év
         const t = await r.text();
         console.error('[veille] API non-OK', r.status, t.slice(0,300));
         // Fallback automatique si l'outil web n'est pas disponible pour ce modèle/compte
-        if(r.status===400 && /web_search|tool/i.test(t)) return { error: 'web_tool_unsupported' };
+        if(r.status===400 && /web_search|tool|caller/i.test(t)) return { error: 'web_tool_unsupported' };
         return { error: `API ${r.status}` };
       }
       const j = await r.json();
+      // Diagnostic : repère une erreur d'outil de recherche (ex. too_many_requests, max_uses_exceeded)
+      for(const b of (j.content||[])){
+        if(b.type==='web_search_tool_result' && b.content && b.content.error_code)
+          console.error('[veille] web_search erreur:', b.content.error_code);
+      }
       text += (j.content||[]).filter(b=>b.type==='text').map(b=>b.text).join('');
       if(j.stop_reason === 'pause_turn'){ messages.push({ role:'assistant', content: j.content }); continue; }
       break;
