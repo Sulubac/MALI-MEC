@@ -548,6 +548,24 @@ app.post('/api/admin/reset', auth, (req, res) => {
 /* health */
 app.get('/api/health', (req, res) => res.json({ ok:true, llm: !!process.env.ANTHROPIC_API_KEY }));
 
+/* Diagnostic : teste en direct l'API Anthropic principale (indépendante de l'outil de recherche web).
+   Réservé aux utilisateurs connectés (évite les appels anonymes qui coûtent). */
+app.get('/api/ai/ping', auth, async (req, res) => {
+  if(!process.env.ANTHROPIC_API_KEY) return res.json({ ok:false, configured:false, error:'Clé ANTHROPIC_API_KEY absente côté serveur.' });
+  const t0 = Date.now();
+  try{
+    const r = await fetch(ANTHROPIC_URL, { method:'POST',
+      headers:{ 'content-type':'application/json', 'x-api-key':process.env.ANTHROPIC_API_KEY, 'anthropic-version':'2023-06-01' },
+      body: JSON.stringify({ model: CLAUDE_MODEL, max_tokens: 16, output_config:{ effort:'low' },
+        messages:[{ role:'user', content:'Réponds uniquement par le mot: OK' }] }) });
+    const ms = Date.now() - t0;
+    if(!r.ok){ const t = await r.text(); return res.json({ ok:false, configured:true, status:r.status, ms, error:t.slice(0,300) }); }
+    const j = await r.json();
+    const sample = (j.content||[]).filter(b=>b.type==='text').map(b=>b.text).join('').trim();
+    res.json({ ok:true, configured:true, status:200, ms, model: CLAUDE_MODEL, sample });
+  }catch(e){ res.json({ ok:false, configured:true, error:e.message, ms: Date.now()-t0 }); }
+});
+
 /* SPA fallback (Express 5 — use a catch-all middleware, not '*') */
 app.use((req, res) => {
   if(req.path.startsWith('/api/')) return res.status(404).json({ error: 'Endpoint introuvable' });
