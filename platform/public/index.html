@@ -791,8 +791,8 @@ async function runScan(){
   }catch(e){
     const msg=e.message||'';
     if(/(tavily|brave)_no_results/.test(msg)) toast('Aucun résultat web pour ces mots-clés — essayez d\'en ajouter/changer.','info');
-    else if(/parse/.test(msg)) toast('La recherche web est bridée côté fournisseur. Configurez une clé Tavily (gratuite, sans carte) côté serveur pour une veille fiable.','warn');
-    else if(/web_tool_unsupported/.test(msg)) toast('Recherche web Anthropic indisponible sur ce compte — configurez une clé Tavily (gratuite, sans carte).','warn');
+    else if(/parse/.test(msg)) toast('La recherche web a répondu mais le résultat était illisible. Réessayez, ou utilisez « Ajout assisté par IA » ci-dessous.','warn');
+    else if(/web_tool_unsupported/.test(msg)) toast('La recherche web n\'est pas disponible pour ce modèle/compte. En attendant, utilisez « Ajout assisté par IA » ci-dessous (fiable).','warn');
     else if(/IA non configurée/.test(msg)) toast('IA non configurée côté serveur.','err');
     else toast('Veille : '+msg,'err');
   }

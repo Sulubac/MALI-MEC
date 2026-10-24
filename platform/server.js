@@ -358,6 +358,9 @@ async function veilleViaWeb(label, searchFn, keywords){
 async function webSearchEvents(keywords){
   const key = process.env.ANTHROPIC_API_KEY;
   if(!key) return { error: 'IA non configurée' };
+  // L'outil de recherche web n'est pas supporté par tous les modèles (ex. Haiku).
+  // La veille utilise donc un modèle capable (Sonnet par défaut), indépendant du modèle principal.
+  const SEARCH_MODEL = process.env.VEILLE_SEARCH_MODEL || 'claude-sonnet-5-5';
   const system = `Tu es l'agent de veille "Opportunity Intelligence" d'une agence événementielle à Djibouti. Tu cherches sur le web des ÉVÉNEMENTS À VENIR à Djibouti (conférences, forums, séminaires, ateliers, salons, lancements de produit, inaugurations, cérémonies officielles, galas, réceptions diplomatiques, remises de diplômes, assemblées générales, etc.) annoncés sur des sources PUBLIQUES (sites officiels, ministères, ambassades, organisations internationales, chambre de commerce, médias, universités, grandes entreprises). N'utilise que des sources publiques et cite l'URL de la source.`;
   const today = new Date().toISOString().slice(0,10);
   const user = `Nous sommes le ${today}. Trouve jusqu'à 8 événements à Djibouti (à venir dans les 12 prochains mois, OU récurrents/annuels dont une prochaine édition est probable) qui pourraient nécessiter un prestataire événementiel. Inclure aussi les événements annoncés récemment dans la presse locale. Mots-clés indicatifs : ${(keywords||[]).join(', ')}.
@@ -377,10 +380,10 @@ Estime une date et un budget plausibles si non précisés. Si vraiment aucun év
     while(guard++ < 8){
       const r = await fetch(ANTHROPIC_URL, { method:'POST',
         headers:{ 'content-type':'application/json', 'x-api-key':key, 'anthropic-version':'2023-06-01' },
-        body: JSON.stringify({ model: CLAUDE_MODEL, max_tokens: 4000, system, tools, messages }) });
+        body: JSON.stringify({ model: SEARCH_MODEL, max_tokens: 4000, system, tools, messages }) });
       if(!r.ok){
         const t = await r.text();
-        console.error('[veille] API non-OK', r.status, t.slice(0,300));
+        console.error('[veille] API non-OK ('+SEARCH_MODEL+')', r.status, t.slice(0,300));
         // Fallback automatique si l'outil web n'est pas disponible pour ce modèle/compte
         if(r.status===400 && /web_search|tool|caller/i.test(t)) return { error: 'web_tool_unsupported' };
         return { error: `API ${r.status}` };
